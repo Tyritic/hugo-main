@@ -4,9 +4,10 @@ draft = false
 title = '博客使用指南'
 image ="OpenGraph.jpg"
 categories = ["博客相关"]
-tags =["后端开发"]
+tags =[""]
 description="博客的使用指南"
 lastmod = '2024-10-31T21:34:35+08:00'
+
 +++
 
 # 博客使用教程
@@ -57,7 +58,7 @@ hugo new content post\<FileName>/index.md
 
 - description：文章的描述
 
-# 创建分组
+## 创建分组（categories）
 
 在 `content/categories/分类名` 下新建文件 `_index.md`
 
@@ -69,7 +70,22 @@ hugo new content categories/<分组名>/_index.md
 
 <img src="微信截图_20241031214934.png" alt="微信截图_20241031214934" style="zoom:80%;" />
 
-##### 参数解释
+### 参数解释
 
 - categories：所有分组的所在目录
+- _index.md：分组的配置文件
+
+## 创建标签（Tags)
+
+在 `content/tags/分类名` 下新建文件 `_index.md`
+
+可以使用命令行工具
+
+```
+hugo new content tags/<分组名>/_index.md
+```
+
+### 参数解释
+
+- tags：所有标签所在的目录
 - _index.md：分组的配置文件
