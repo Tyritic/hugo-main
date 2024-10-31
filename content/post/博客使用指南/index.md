@@ -4,7 +4,7 @@ draft = false
 title = '博客使用指南'
 image ="OpenGraph.jpg"
 categories = ["博客相关"]
-tags =[""]
+tags =["后端开发"]
 description="博客的使用指南"
 lastmod = '2024-10-31T21:34:35+08:00'
 +++
@@ -27,17 +27,13 @@ hugo new content post\<FileName>/index.md
 
 #### 参数解释
 
-<SECTIONNAME>为当前文章保存的文件路径
+**post**：所有文章保存的文件路径
 
 <FileName>为当前文章所在的文件夹名
 
-<FORMAT> 为当前文章的语言格式
+**index.md**为当前文章的markdown文件
 
-​	中文：index.zh-cn.md
-
-​	英文：index.md
-
-![微信截图_20241031192624](微信截图_20241031192624.png)
+<img src="微信截图_20241031192624.png" alt="微信截图_20241031192624" style="zoom: 80%;" />
 
 ## 文章内修改
 
@@ -71,4 +67,9 @@ hugo new content post\<FileName>/index.md
 hugo new content categories/<分组名>/_index.md
 ```
 
-![微信截图_20241031214934](微信截图_20241031214934.png)
+<img src="微信截图_20241031214934.png" alt="微信截图_20241031214934" style="zoom:80%;" />
+
+##### 参数解释
+
+- categories：所有分组的所在目录
+- _index.md：分组的配置文件
