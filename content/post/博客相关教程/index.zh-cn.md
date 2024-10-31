@@ -7,11 +7,15 @@ slug: test-chinese
 
 # 博客使用教程
 
+------
+
 ## 文章存储位置
 
 本博客的所有文章都存放在E/MyBlog/content/post文件夹中![image-20241031190526917](image-20241031190526917.png)
 
 ## 如何添加文章
+
+------
 
 ### 命令行操作
 
@@ -36,6 +40,8 @@ hugo new content <SECTIONNAME>\<FileName>/<FORMAT>
 ![微信截图_20241031192624#pic_left](微信截图_20241031192624.png)
 
 ## 文章内修改
+
+------
 
 ###  插入照片
 
