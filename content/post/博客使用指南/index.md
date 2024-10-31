@@ -22,7 +22,7 @@ lastmod = '2024-10-31T21:34:35+08:00'
 在MyBlog主文件夹的cmd中运行以下命令
 
 ```
-hugo new content <SECTIONNAME>\<FileName>/<FORMAT>
+hugo new content post\<FileName>/index.md
 ```
 
 #### 参数解释
@@ -61,4 +61,14 @@ hugo new content <SECTIONNAME>\<FileName>/<FORMAT>
 
 - description：文章的描述
 
-  
+# 创建分组
+
+在 `content/categories/分类名` 下新建文件 `_index.md`
+
+可以使用命令行工具
+
+```
+hugo new content categories/<分组名>/_index.md
+```
+
+![微信截图_20241031214934](微信截图_20241031214934.png)
