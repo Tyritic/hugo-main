@@ -3,7 +3,7 @@ date = '2024-10-31T21:07:07+08:00'
 draft = false
 title = '博客使用指南'
 image ="OpenGraph.jpg"
-categories = [""]
+categories = ["博客相关"]
 tags =[""]
 description="博客的使用指南"
 +++
