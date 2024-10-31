@@ -6,6 +6,7 @@ image ="OpenGraph.jpg"
 categories = ["博客相关"]
 tags =[""]
 description="博客的使用指南"
+lastmod = '2024-10-31T21:34:35+08:00'
 +++
 
 # 博客使用教程

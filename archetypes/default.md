@@ -6,4 +6,5 @@ image =""
 categories= [""]
 tags= [""]
 description=""
+lastmod= '{{ .Date }}'
 +++
