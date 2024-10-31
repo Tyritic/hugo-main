@@ -1,13 +1,14 @@
----
-title: 博客相关教程
-description: 搭建教程和使用教程
-date: 2024-10-31
-slug: test-chinese
----
++++
+date = '2024-10-31T21:07:07+08:00'
+draft = false
+title = '博客使用指南'
+image ="OpenGraph.jpg"
+categories = [""]
+tags =[""]
+description="博客的使用指南"
++++
 
 # 博客使用教程
-
-------
 
 ## 文章存储位置
 
@@ -37,12 +38,28 @@ hugo new content <SECTIONNAME>\<FileName>/<FORMAT>
 
 ​	英文：index.md
 
-![微信截图_20241031192624#pic_left](微信截图_20241031192624.png)
+![微信截图_20241031192624](微信截图_20241031192624.png)
 
 ## 文章内修改
-
-------
 
 ###  插入照片
 
 将需要的图片放入文章的文件夹中即可
+
+### 头文字参数
+
+- data：创建时间
+
+- draft：是否草稿
+
+- title：文章标题
+
+- image：博客网站的开头图片
+
+- categories：文章的分类
+
+- tags：文章的标签
+
+- description：文章的描述
+
+  
