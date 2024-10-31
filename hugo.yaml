@@ -203,7 +203,7 @@ menu:
   social:
     - identifier: github
       name: GitHub
-      url: https://Tyritic.github.io/
+      url: https://github.com/Tyritic/Tyritic.github.io.git
       params:
         icon: brand-github
 
