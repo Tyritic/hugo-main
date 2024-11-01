@@ -45,3 +45,38 @@
 .widget.archives .widget-archive--list:hover {
   transform: scale(1.05, 1.05);
 }
+/*-----------归档页面----------*/
+//归档页面卡片缩放
+.article-list--tile article {
+  transition: 0.6s ease;
+}
+
+.article-list--tile article:hover {
+  transform: scale(1.03, 1.03);
+}
+//搜索菜单动画
+.search-form.widget {
+  transition: transform 0.6s ease;
+  &:hover {
+    transform: scale(1.1, 1.1);
+  }
+}
+//---------------------------------------------------
+// 文章内容图片圆角阴影
+.article-page .main-article .article-content {
+  img {
+    max-width: 96% !important;
+    height: auto !important;
+    border-radius: 8px;
+  }
+}
+//右侧标签放大动画
+.tagCloud .tagCloud-tags a {
+  border-radius: 10px;
+  font-size: 1.4rem;
+  transition: transform 0.3s ease;
+}
+
+.tagCloud .tagCloud-tags a:hover {
+  transform: scale(1.1, 1.1);
+}

@@ -19,7 +19,7 @@ languages:
     weight: 1
     params:
       sidebar:
-        subtitle: 永远不要一颗低估冠军的心。
+        subtitle: 永远不要低估一颗冠军的心。
   en:
     languageName: English
     title: Tyritic
