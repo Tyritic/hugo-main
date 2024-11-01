@@ -2,7 +2,7 @@
 date : '2024-11-01T15:28:47+08:00'
 draft : false
 title : '博客使用指南'
-image : "https://picsum.photos/800/600.webp?random={{ substr (md5 (.Date)) 4 8 }}"
+image : ""
 categories : ["博客相关"]
 tags : [""]
 description : "博客的使用指南"

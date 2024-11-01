@@ -80,3 +80,13 @@
 .tagCloud .tagCloud-tags a:hover {
   transform: scale(1.1, 1.1);
 }
+//右侧分组放大动画
+.category .category-label a {
+  border-radius: 10px;
+  font-size: 1.4rem;
+  transition: transform 0.3s ease;
+}
+
+.category .category-label a:hover {
+  transform: scale(1.1, 1.1);
+}
