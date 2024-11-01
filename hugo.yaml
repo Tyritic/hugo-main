@@ -70,7 +70,7 @@ params:
 
   comments:
     enabled: true
-    provider: giscus
+    provider: waline
 
     disqusjs:
       shortname:
@@ -105,8 +105,8 @@ params:
 
     # Waline client configuration see: https://waline.js.org/en/reference/component.html
     waline:
-      serverURL:
-      lang:
+      serverURL: https://vercel.com/tyritic-projects/waline-blog/4gEDTASdVbQxwqxW59F8QcedBHhf
+      lang: "zh-CN"
       pageview:
       emoji:
         - https://unpkg.com/@waline/emojis@1.0.1/weibo
@@ -116,7 +116,7 @@ params:
         - url
       locale:
         admin: Admin
-        placeholder:
+        placeholder: "Leave your comment here"
 
     twikoo:
       envId:
@@ -131,15 +131,15 @@ params:
       siteName: "" # You must insert a unique identifier here matching the one you registered (See https://cactus.chat/docs/getting-started/quick-start/#register-your-site)
 
     giscus:
-      repo: Tyritic/Tyritic.github.io
-      repoID: R_kgDONIdVLQ
-      category: Announcements
-      categoryID: DIC_kwDONIdVLc4Cj4F1
-      mapping: pathname
-      lightTheme: preferred_color_scheme
-      darkTheme: preferred_color_scheme
-      reactionsEnabled: 1
-      emitMetadata: 0
+      repo: "Tyritic/Tyritic.github.io"
+      repoID: "R_kgDONIdVLQ"
+      category: "Announcements"
+      categoryID: "DIC_kwDONIdVLc4Cj4F1"
+      mapping: "pathname"
+      lightTheme: "preferred_color_scheme"
+      darkTheme: "preferred_color_scheme"
+      reactionsEnabled: "1"
+      emitMetadata: "0"
 
     gitalk:
       owner:

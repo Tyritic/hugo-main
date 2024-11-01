@@ -1,14 +1,15 @@
 +++
-date = '2024-10-31T21:07:07+08:00'
+date = '2024-11-01T13:28:03+08:00'
 draft = false
-title = '博客使用指南'
+title = 'Test'
 image =""
-categories = ["博客相关"]
-tags =[""]
-description="博客的使用指南"
-lastmod = '2024-10-31T21:34:35+08:00'
-
+categories= [""]
+tags= [""]
+description=""
+lastmod= '2024-11-01T13:28:03+08:00'
 +++
+
+# 博客使用教程
 
 ## 文章存储位置
 
@@ -31,8 +32,6 @@ hugo new content post\<FileName>/index.md
 **FileName**为当前文章所在的文件夹名
 
 **index.md**为当前文章的markdown文件
-
-<img src="微信截图_20241031192624.png" alt="微信截图_20241031192624" style="zoom: 80%;" />
 
 ## 文章内修改
 
@@ -65,8 +64,6 @@ hugo new content post\<FileName>/index.md
 ```
 hugo new content categories/<分组名>/_index.md
 ```
-
-<img src="微信截图_20241031214934.png" alt="微信截图_20241031214934" style="zoom:80%;" />
 
 ### 参数解释
 

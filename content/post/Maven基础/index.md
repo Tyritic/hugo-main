@@ -10,7 +10,7 @@ lastmod= '2024-10-31T22:53:02+08:00'
 
 +++
 
-# Maven的作用
+## Maven的作用
 
 - 依赖管理：方便快捷地管理依赖
 
@@ -18,7 +18,7 @@ lastmod= '2024-10-31T22:53:02+08:00'
 
 - 项目构建：提供了标准的跨平台项目构建方式
 
-# Maven项目的结构
+## Maven项目的结构
 
 ```
 Maven-name/
@@ -33,8 +33,7 @@ Maven-name/
 |--target（打包后的jar包存放地）
 ```
 
-<img src="Maven项目结构图.png" alt="Maven项目结构图"  />
+<img src="Maven项目结构图.png" alt="Maven项目结构图" style="zoom:67%;" />
 
-
-# Maven项目构建过程
+## Maven项目的构建过程
 
