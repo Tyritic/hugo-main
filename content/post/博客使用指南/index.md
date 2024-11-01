@@ -30,7 +30,7 @@ hugo new content post\<FileName>/index.md
 
 **post**：所有文章保存的文件路径
 
-<FileName>为当前文章所在的文件夹名
+**FileName**为当前文章所在的文件夹名
 
 **index.md**为当前文章的markdown文件
 
@@ -44,19 +44,19 @@ hugo new content post\<FileName>/index.md
 
 ### 头文字参数
 
-- data：创建时间
+- **data**：创建时间
 
-- draft：是否草稿
+- **draft**：是否草稿
 
-- title：文章标题
+- **title**：文章标题
 
-- image：博客网站的开头图片
+- **image**：博客网站的开头图片
 
-- categories：文章的分类
+- **categories**：文章的分类
 
-- tags：文章的标签
+- **tags**：文章的标签
 
-- description：文章的描述
+- **description**：文章的描述
 
 ## 创建分组（categories）
 
@@ -72,8 +72,8 @@ hugo new content categories/<分组名>/_index.md
 
 ### 参数解释
 
-- categories：所有分组的所在目录
-- _index.md：分组的配置文件
+- **categories**：所有分组的所在目录
+- **_index.md**：分组的配置文件
 
 ## 创建标签（Tags)
 
@@ -82,10 +82,10 @@ hugo new content categories/<分组名>/_index.md
 可以使用命令行工具
 
 ```
-hugo new content tags/<分组名>/_index.md
+hugo new content tags/<标签名>/_index.md
 ```
 
 ### 参数解释
 
-- tags：所有标签所在的目录
-- _index.md：分组的配置文件
+- **tags**：所有标签所在的目录
+- **_index.md**：分组的配置文件

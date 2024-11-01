@@ -20,4 +20,21 @@ lastmod= '2024-10-31T22:53:02+08:00'
 
 # Maven项目的结构
 
-<img src="691190aa78122fc50477509b3077fe04.png" alt="img" style="zoom: 67%;" />
+```
+Maven-name/
+|--src（源代码）
+|	|--main（项目实际资源）
+|		|--java（java代码）
+|		|--resource（资源文件）
+|	|--test（测试代码资源）
+|		|--java
+|		|--resource
+|--pom.xml（依赖配置文件）
+|--target（打包后的jar包存放地）
+```
+
+<img src="Maven项目结构图.png" alt="Maven项目结构图"  />
+
+
+# Maven项目构建过程
+
