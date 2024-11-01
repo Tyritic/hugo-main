@@ -2,7 +2,7 @@
 date : '2024-11-01T15:28:45+08:00'
 draft : false
 title : 'Maven基础'
-image : ""
+image : "https://picsum.photos/800/600.webp?random={{ substr (md5 (.Date)) 4 8 }}"
 categories : ["SpringBoot"]
 tags : ["后端开发"]
 description : ""

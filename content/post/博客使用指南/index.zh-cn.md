@@ -2,7 +2,7 @@
 date : '2024-11-01T15:28:47+08:00'
 draft : false
 title : '博客使用指南'
-image : ""
+image : "https://picsum.photos/800/600.webp?random={{ substr (md5 (.Date)) 4 8 }}"
 categories : ["博客相关"]
 tags : [""]
 description : "博客的使用指南"
@@ -32,6 +32,9 @@ hugo new content post\<FileName>/index.md
 **FileName**为当前文章所在的文件夹名
 
 **index.md**为当前文章的markdown文件
+
+- **index.en.md**：英文文章
+- **index.zh-cn.md**：中文文章
 
 <img src="微信截图_20241031192624.png" alt="微信截图_20241031192624" style="zoom: 80%;" />
 
@@ -73,6 +76,9 @@ hugo new content categories/<分组名>/_index.md
 
 - **categories**：所有分组的所在目录
 - **_index.md**：分组的配置文件
+  - **_ndex.en.md**：英文分组
+  - **_index.zh-cn.md**：中文分组
+
 
 ## 创建标签（Tags)
 
@@ -87,4 +93,21 @@ hugo new content tags/<标签名>/_index.md
 ### 参数解释
 
 - **tags**：所有标签所在的目录
+
 - **_index.md**：分组的配置文件
+  - **index.en.md**：英文标签
+  - **index.zh-cn.md**：中文标签
+
+
+## 创建友情链接（Links)
+
+在 `content/page/links` 下修改文件 `_index.md`，创建与GitHub同级的元素
+
+<img src="微信截图_20241101170036.png" alt="微信截图_20241101170036" style="zoom: 150%;" />
+
+### 参数列表
+
+- **title**：博客显示该网站的名字
+- **description**：博客对该网站的描述
+- **website**：网站链接
+- **image**：网站的icon
