@@ -1,20 +1,21 @@
-+++
-date = '2024-10-31T21:07:07+08:00'
-draft = false
-title = '博客使用指南'
-image =""
-categories = ["博客相关"]
-tags =[""]
-description="博客的使用指南"
-lastmod = '2024-10-31T21:34:35+08:00'
-
-+++
+---
+date : '2024-11-01T15:28:47+08:00'
+draft : false
+title : '博客使用指南'
+image : ""
+categories : ["博客相关"]
+tags : [""]
+description : "博客的使用指南"
+lastmod : '2024-11-01T15:28:47+08:00'
+---
 
 ## 文章存储位置
 
 本博客的所有文章都存放在E/MyBlog/content/post文件夹中![image-20241031190526917](image-20241031190526917.png)
 
 ## 如何添加文章
+
+在 `content/tags/文章名` 下新建文件 `index.md`
 
 ### 命令行操作
 

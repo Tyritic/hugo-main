@@ -1,14 +1,13 @@
-+++
-date = '2024-10-31T22:53:02+08:00'
-draft = false
-title = 'Maven基础'
-image =""
-categories= ["SpringBoot"]
-tags= ["后端开发"]
-description="对Maven基本概念的认识"
-lastmod= '2024-10-31T22:53:02+08:00'
-
-+++
+---
+date : '2024-11-01T15:28:45+08:00'
+draft : false
+title : 'Maven基础'
+image : ""
+categories : ["SpringBoot"]
+tags : ["后端开发"]
+description : ""
+lastmod : '2024-11-01T15:28:45+08:00'
+---
 
 ## Maven的作用
 
@@ -36,4 +35,3 @@ Maven-name/
 <img src="Maven项目结构图.png" alt="Maven项目结构图" style="zoom:67%;" />
 
 ## Maven项目的构建过程
-
