@@ -7,4 +7,4 @@ menu:
             icon: user
 ---
 
-Welcome to Tyritic's Blog.
+.欢迎来到Tyritic的博客。
