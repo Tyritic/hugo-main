@@ -86,6 +86,10 @@ hugo new content post\<FileName>/index.md
 
 VIDEO_ID：BV1BPSdYHEbj
 
+{{< notice tip >}}
+This is a very good tip.
+{{< /notice >}}
+
 
 
 ## 创建分组（categories）
