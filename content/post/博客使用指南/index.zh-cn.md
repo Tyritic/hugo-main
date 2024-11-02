@@ -38,6 +38,8 @@ hugo new content post\<FileName>/index.md
 
 <img src="微信截图_20241031192624.png" alt="微信截图_20241031192624" style="zoom: 80%;" />
 
+
+
 ## 文章内修改
 
 ###  插入照片
@@ -84,40 +86,7 @@ hugo new content post\<FileName>/index.md
 
 VIDEO_ID：BV1BPSdYHEbj
 
-#### 插入Notice
 
-Notice分为以下几类
-
-- **Tip**：提示
-- **Warning**：警告
-- **Info**：信息
-- **Note**：注释
-
-在markdown文件中使用短代码来嵌入
-
-**Tip**
-
-{{< notice tip >}}
-This is a very good tip.
-{{< /notice >}}
-
-**Warning**
-
-{{< notice warning >}}
-
-This is a bad warning!
-
-{{< /notice >}}
-
-**Info**
-{{< notice info >}}
-Some information
-{{< /notice >}}
-
-**Note**
-{{< notice note >}}
-Some note
-{{< /notice >}}
 
 ## 创建分组（categories）
 
