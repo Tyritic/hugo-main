@@ -144,6 +144,14 @@ This is a very good note.
 This is a very bad note.
 {{< /notice >}}
 
+
+
+### 插入参考博客
+
+直接将参考博客的网址复制到markdown文件中
+
+[Tyritic的个人博客](https://tyritic.github.io/)
+
 ## 创建分组（categories）
 
 在 `content/categories/分类名` 下新建文件 `_index.md`
