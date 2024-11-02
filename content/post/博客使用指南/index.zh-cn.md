@@ -84,13 +84,66 @@ hugo new content post\<FileName>/index.md
 
 可以在B站视频的url中找到`Video_ID``https://www.bilibili.com/video/BV1BPSdYHEbj/?spm_id_from=333.1007.tianma.1-2-2.click&vd_source=7db50a55b19a59c42ee778836913c04f`
 
-VIDEO_ID：BV1BPSdYHEbj
+其中VIDEO_ID：BV1BPSdYHEbj
+
+#### 插入hugo notice
+
+hugo notice有以下几个类别
+
+- **tip**：提示
+- **info**：引言
+- **warning**：警告
+- **note**：注解
+
+创建方法为在markdown文件中插入短代码，使用时将{}改为{{}}
+
+##### 创建Tip
+
+```
+{< notice tip >}
+This is a very good tip.
+{< /notice >}
+```
 
 {{< notice tip >}}
 This is a very good tip.
 {{< /notice >}}
 
+##### 创建Info
 
+```
+{< notice info >}
+This is a very good info.
+{< /notice >}
+```
+
+{{< notice info >}}
+This is a very good info.
+{{< /notice >}}
+
+##### 创建warning
+
+```
+{< notice warning >}
+This is a very bad warning.
+{< /notice >}
+```
+
+{{< notice warning >}}
+This is a very bad warning.
+{{< /notice >}}
+
+##### 创建note
+
+```
+{< notice note >}
+This is a very good note.
+{< /notice >}
+```
+
+{{< notice note >}}
+This is a very bad note.
+{{< /notice >}}
 
 ## 创建分组（categories）
 

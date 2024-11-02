@@ -65,3 +65,8 @@ footer:
 
   designedBy:
     other: 主题 {{ .Theme }} 由 {{ .DesignedBy }} 设计
+
+warning: "警告"
+note: "注解"
+info: "引言"
+tip: "提示"
