@@ -6,7 +6,6 @@ image : ""
 categories : ["博客相关"]
 tags : [""]
 description : "博客的使用指南"
-lastmod : '2024-11-01T15:28:47+08:00'
 ---
 
 ## 文章存储位置
@@ -121,7 +120,7 @@ This is a very good info.
 This is a very good info.
 {{< /notice >}}
 
-##### 创建warning
+##### 创建Warning
 
 ```
 {< notice warning >}
@@ -133,7 +132,7 @@ This is a very bad warning.
 This is a very bad warning.
 {{< /notice >}}
 
-##### 创建note
+##### 创建Note
 
 ```
 {< notice note >}
