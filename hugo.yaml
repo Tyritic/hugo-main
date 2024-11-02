@@ -1,6 +1,6 @@
 baseurl: https://Tyritic.github.io
 languageCode: en-us
-theme: hugo-theme-stack
+theme: ["hugo-theme-stack", "hugo-notice"]
 title: Example Site
 copyright: Tyritic
 

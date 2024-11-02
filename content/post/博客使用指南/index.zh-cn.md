@@ -60,6 +60,65 @@ hugo new content post\<FileName>/index.md
 
 - **description**：文章的描述
 
+### 短代码
+
+#### 文章引用
+
+在markdown文件中插入以下短代码，使用时将{}改为{{}}
+
+```
+{< quote author="作者" url="作品的来源（可不填）" source="作品名" >}
+引用内容
+{< /quote >}
+```
+
+#### 插入B站视频
+
+在markdown文件中插入以下短代码，使用时将{}改为{{}}
+
+```
+{< bilibili VIDEO_ID PART_NUMBER >}
+```
+
+可以在B站视频的url中找到`Video_ID``https://www.bilibili.com/video/BV1BPSdYHEbj/?spm_id_from=333.1007.tianma.1-2-2.click&vd_source=7db50a55b19a59c42ee778836913c04f`
+
+VIDEO_ID：BV1BPSdYHEbj
+
+#### 插入Notice
+
+Notice分为以下几类
+
+- **Tip**：提示
+- **Warning**：警告
+- **Info**：信息
+- **Note**：注释
+
+在markdown文件中使用短代码来嵌入
+
+**Tip**
+
+{{< notice tip >}}
+This is a very good tip.
+{{< /notice >}}
+
+**Warning**
+
+{{< notice warning >}}
+
+This is a bad warning!
+
+{{< /notice >}}
+
+**Info**
+{{< notice info >}}
+Some information
+{{< /notice >}}
+
+**Note**
+{{< notice note >}}
+Some note
+{{< /notice >}}
+
 ## 创建分组（categories）
 
 在 `content/categories/分类名` 下新建文件 `_index.md`
@@ -93,7 +152,6 @@ hugo new content tags/<标签名>/_index.md
 ### 参数解释
 
 - **tags**：所有标签所在的目录
-
 - **_index.md**：分组的配置文件
   - **index.en.md**：英文标签
   - **index.zh-cn.md**：中文标签
