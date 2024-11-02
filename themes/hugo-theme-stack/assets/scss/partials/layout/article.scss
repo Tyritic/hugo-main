@@ -185,12 +185,14 @@
     margin-right: 15px;
     flex-shrink: 0;
     overflow: hidden;
-    width: 250px;
-    height: 150px;
+    width: 150px;
+    height: 80px;
+    box-shadow: var(--shadow-l2); //加个卡片阴影
 
     .article-title {
-      font-size: 1.8rem;
-      margin: 0;
+      font-size: 1.4rem;
+      margin: auto;
+      justify-content: center; //居中
     }
 
     &.has-image {
@@ -294,6 +296,7 @@
     padding: 2px 4px;
     border-radius: var(--category-border-radius);
     font-family: var(--code-font-family);
+    word-wrap: break-word; //允许长单词或 URL 地址换行到下一行
   }
 
   a,
