@@ -342,3 +342,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 ```
 
+## 项目配置层
+
+**根目录**：**src/main/resource**
+
+**application.yml**：项目的整体配置文件
+
+**mapper**：数据库映射文件
