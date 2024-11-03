@@ -4,7 +4,7 @@ draft : false
 title : 'Maven Basic Knowledge'
 image : ""
 categories : ["SpringBoot"]
-tags : ["后端开发"]
+tags : ["Back-end development"]
 description : ""
 ---
 

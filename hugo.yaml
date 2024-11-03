@@ -74,6 +74,7 @@ params:
     license:
       enabled: false
       default: Licensed under CC BY-NC-SA 4.0
+    wordCount: true
 
   comments:
     enabled: true

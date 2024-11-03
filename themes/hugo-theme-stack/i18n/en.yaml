@@ -33,6 +33,9 @@ article:
     one: "{{ .Count }} minute read"
     other: "{{ .Count }} minute read"
 
+  wordCount:
+    other: "{{.Count}} words"
+
 notFound:
   title:
     other: Not Found

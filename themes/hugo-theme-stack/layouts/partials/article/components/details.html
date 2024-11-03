@@ -44,6 +44,17 @@
                     {{ T "article.readingTime" .ReadingTime }}
                 </time>
             </div>
+
+	{{ if .Site.Params.article.readingTime }} 
+            <div>
+                {{ partial "helper/icon" "file-description" }}
+                <time class="article-words">
+                     {{ T "article.wordCount" .WordCount }}
+                </time>
+            </div>
+
+ {{ end }}
+
         {{ end }}
     </footer>
     {{ end }}
