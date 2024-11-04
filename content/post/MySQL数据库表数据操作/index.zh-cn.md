@@ -1,7 +1,7 @@
 ---
 date : '2024-11-04T14:57:14+08:00'
 draft : false
-title : 'MySQL数据量表数据操作'
+title : 'MySQL数据库表数据操作'
 image : ""
 categories : ["MySQL"]
 tags : ["数据库"]
