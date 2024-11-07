@@ -113,7 +113,7 @@ params:
 
     # Waline client configuration see: https://waline.js.org/en/reference/component.html
     waline:
-      serverURL: https://vercel.com/tyritic-projects/waline-blog/4gEDTASdVbQxwqxW59F8QcedBHhf
+      serverURL: https://waline-blog-gamma.vercel.app/
       lang: "zh-CN"
       pageview:
       emoji:
