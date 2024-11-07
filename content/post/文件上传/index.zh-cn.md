@@ -125,7 +125,7 @@ spring:
            String region = aliyunOSSProperties.getRegion();
            String accessKeyId = aliyunOSSProperties.getAccessKeyId();
            String accessKeySecret = aliyunOSSProperties.getAccessKeySecret();
-           String fileName=d_url.substring(d_url.lastIndexOf("/")+1);//从url中获取b
+           String fileName=d_url.substring(d_url.lastIndexOf("/")+1);//从url中获取bucket中的文件名
            // 创建OSSClient实例
            ClientBuilderConfiguration clientBuilderConfiguration = new ClientBuilderConfiguration();
            CredentialsProvider defaultCredentialProvider = new DefaultCredentialProvider(accessKeyId, accessKeySecret);
