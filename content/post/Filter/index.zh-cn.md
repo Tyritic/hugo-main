@@ -18,41 +18,41 @@ Filter 过滤器是JavaWeb 三大组件(Servlet、Filter、Listener)之一。
 ## 具体实现
 
 1. 定义Filter类：实现 Filter接口，并重写其所有方法。
+
+   ```java
+   @WebFilter(urlPatterns ="/*")
+   public class DemoFilter implements Filter {
+        //初始化方法,Web服务器启动,创建Filter时调用，只调用一次
+   	public void init (Filterconfig filterconfig)throws ServletException {
+          Filter.super.init(filterConfig);
+       }
+       ///拦截到请求时,调用该方法,可调用多次
+   	public void doFilter (ServletRequest request, servletResponse response, Filterchain chain){
+           System.out.println("拦截方法执行，拦截到了请求...");
+           System.out.println("执行放行前的逻辑...");
+       	chain.doFilter(request,response);// 放行请求
+           System.out.println("执行放行后的逻辑...");
+       }
+       //销毁方法，服务器关闭时调用，只调用一次
+       public void destroy(){
+           Filter.super.destroy();
+       }
+   }
+   ```
 2. 配置Filter：使用@WebFilter注解，配置拦截资源的路径。
 3. 引导类上加 @ServletComponentscan 开启Servlet组件支持。
 
-示例代码
+   ```java
+   @ServletComponentScan
+   @SpringBootApplication
+   public class TliasWebManagementApplication{public static void main(stringl] args){
+   	SpringApplication.run(TliasWebManagementApplication.class, args);
+   }
+   ```
 
-```java
-@WebFilter(urlPatterns ="/*")
-public class DemoFilter implements Filter {
-     //初始化方法,Web服务器启动,创建Filter时调用，只调用一次
-	public void init (Filterconfig filterconfig)throws ServletException {
-       Filter.super.init(filterConfig);
-    }
-    ///拦截到请求时,调用该方法,可调用多次
-	public void doFilter (ServletRequest request, servletResponse response, Filterchain chain){
-        System.out.println("拦截方法执行，拦截到了请求...");
-        System.out.println("执行放行前的逻辑...");
-    	chain.doFilter(request,response);// 放行请求
-        System.out.println("执行放行后的逻辑...");
-    }
-    //销毁方法，服务器关闭时调用，只调用一次
-    public void destroy(){
-        Filter.super.destroy();
-    }
-}
-```
+   
 
-<br>
 
-```java
-@ServletComponentScan
-@SpringBootApplication
-public class TliasWebManagementApplication{public static void main(stringl] args){
-	SpringApplication.run(TliasWebManagementApplication.class, args);
-}
-```
 
 ## 执行流程
 
