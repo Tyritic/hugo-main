@@ -17,6 +17,10 @@ links:
     description: SpringBoot's doc
     website: https://docs.spring.io/spring-boot/index.html
     image: springboot-144.png
+  - title: MyBatis
+    description: MyBatis's doc
+    website: https://mybatis.org/mybatis-3/index.html
+    image: mybatis-logo.jpg
 menu:
     main: 
         weight: -50

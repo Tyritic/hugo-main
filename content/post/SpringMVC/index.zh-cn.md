@@ -269,7 +269,9 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
     // 配置全局跨域资源共享（CORS）
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**").allowedOrigins("http://localhost:8080");
+       registry.addMapping("/user/*") // 映射服务器中那些http接口运行跨域访问
+		.allowedOrigins("http://localhost:8081") // 配置哪些来源有权限跨域
+		.allowedMethods("GET","POST","DELETE","PUT"); // 配置运行跨域访问的请求方法
     }
  
     // 配置文件上传

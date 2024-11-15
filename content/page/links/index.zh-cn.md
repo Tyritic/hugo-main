@@ -14,9 +14,13 @@ links:
     website: https://gitee.com
     image: gitee.png
   - title: SpringBoot
-    description: SpringBoot 官方文档
-    website: https://springdoc.cn/spring-boot/getting-started.html
+    description: SpringBoot 中文官方文档
+    website: https://springdoc.cn/spring-boot/index.html
     image: springboot-144.png
+  - title: MyBatis
+    description: MyBatis 中文官方文档
+    website: https://mybatis.org/mybatis-3/zh_CN/index.html
+    image: mybatis-logo.jpg
 menu:
     main: 
         weight: -50

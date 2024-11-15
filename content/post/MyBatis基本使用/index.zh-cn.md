@@ -253,3 +253,103 @@ from emp
 </select>
 ```
 
+#### \< trim \>标签
+
+- prefix：将trim标签中内容前面添加指定内容
+- suffix：将trim标签中内容前面添加指定内容
+- prefixOverride：将trim标签中内容前面去除指定内容
+- suffixOverride：将trim标签中内容后面去除指定内容
+
+#### \<choose\>,\<when\>,\<otherwise\>
+
+相当于switch，if，else
+
+```xml
+<choose>
+    <when test="满足的条件">
+    </when>
+    <otherwise>
+    </otherwise>
+</choose>
+```
+
+## 字段名和属性名的映射关系
+
+通常情况下当数据表中的字段名和实体类的属性名对应相等时，MyBatis会将查询出的字段数据自动赋值给实体类
+
+### 当字段名和属性名不一致时
+
+- 在sql语句中给字段名起别名使得字段名与属性名相同
+
+- 通过resultMap解决，其他的sql语句设置resultMap属性来确定映射关系
+
+  ```xml
+  <resultMap id="resultMap_name",type="实体类">
+      <id property="属性名",column="主键字段名"></id>
+      <result property="属性名",column="其他字段名"></result>
+  </resultMap>
+  ```
+
+  
+
+### 多对一的映射关系
+
+示例：查询员工及其对应部门信息时，将员工的did和dname合并为一个dept对象，作为emp对象的成员变量
+
+- 通过resultMap中的级联属性解决，其他的sql语句设置resultMap属性来确定映射关系
+
+  - resultMap使用级联属性对应成员对象名
+
+    ```xml
+    <resultMap id="empAndDeptResultMapone" type="Emp">
+        <id property="eid" column="eid"></id>
+        <result property="empName" column="emp name"></result>
+        <result property="age"column="age"></result>
+        <result property="sex" column="sex"></result>
+        <result property="email" column="email"></result>
+        <result property="dept.did" column="did"></result>
+        <result property="dept.deptName" column="dept_name"></result>
+    </resultMap>
+    ```
+
+- 通过resultMap中的association标签解决，其他的sql语句设置resultMap属性来确定映射关系
+
+  - association具有两个属性，property对应实体类中的成员对象名，javaType对应该成员对象的java类型
+
+    ```xml
+    <resultMap id="empAndDeptResultMapone" type="Emp">
+        <id property="eid" column="eid"></id>
+        <result property="empName" column="emp name"></result>
+        <result property="age"column="age"></result>
+        <result property="sex" column="sex"></result>
+        <result property="email" column="email"></result>
+        <association property="dept" javaType="Dept">
+            <id property="did" column="did"></id>
+            <result property="dept.deptName" column="dept_name"></result>
+        </association>
+    </resultMap>
+    ```
+
+    
+
+### 一对多的映射方式
+
+示例：查询部门及其下属员工时，一个部门作为实体类具有一个员工对象的集合作为成员变量
+
+- 通过resultMap的collection标签解决，其他的sql语句设置resultMap属性来确定映射关系
+
+  - collection具有两个属性，property对应实体类中的成员对象名，ofType对应该成员对象的java类型
+
+    ```xml
+    <resultMap id="empAndDeptResultMapone" type="Emp">
+        <collection property="成员变量名" ofType="集合内的泛型">
+             <id property="eid" column="eid"></id>
+        	<result property="empName" column="emp name"></result>
+        	<result property="age"column="age"></result>
+        	<result property="sex" column="sex"></result>
+        	<result property="email" column="email"></result>
+        </association>
+    </resultMap>
+    ```
+
+    
