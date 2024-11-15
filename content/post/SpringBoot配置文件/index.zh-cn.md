@@ -45,6 +45,34 @@ SpringBoot提供了多种属性配置方式
 
 优先级从高到低：properties>yml>yaml
 
+外部配置文件的优先级（从低到高）
+
+1. classpath（resource文件夹）
+2. classpath根config
+3. 项目根目录（对于存在继承/聚合关系的maven项目项目根目录是父工程的根目录）
+4. 项目根目录/config
+5. 直接子目录/config
+
+## 多配置文件的加载
+
+Profile意思是配置，不同环境可能需要不同的配置需要
+
+SpringBoot框架提供了多profile的管理功能，我们可以使用profile文件来区分不同环境的配置
+
+### 基本语法
+
+如果需要创建自定义的yml文件时，可以用application-{profile}.yml的命名方式
+
+切换不同环境的yml文件时在application.yml中配置
+
+```yml
+spring:
+  profiles:
+    active: profile
+```
+
+
+
 ## yml文件语法
 
 ### 基本语法
@@ -107,9 +135,9 @@ pubiic class AliossUti1s{
 }
 ```
 
-### 使用自定义配置文件进行参数配置化
+### 使用自定义配置类进行参数配置化
 
-自定义properties文件使用@Component注册为Bean对象，使用@ConfigurationProperties注解批量的将外部的属性配置注入到Bean对象的属性中，@ConfigurationProperties的prefix属性指定application.yml的属性
+自定义properties文件使用@Component注册为Bean对象，使用 **@ConfigurationProperties** 注解批量的将yml配置文件的属性和Bean对象属性绑定，**@ConfigurationProperties** 的prefix属性指定application.yml的子节点，该节点中的子节点将自动和属性进行绑定
 
 示例代码
 
@@ -126,3 +154,23 @@ public class AliyunOSSProperties {
 }
 ```
 
+**@ConfigurationProperties** 支持jsr-300数据校验使用 **@Validate**
+
+{{<notice tip>}}
+
+​	jsr-300数据校验
+
+- @Null：被注释的元素必须为 null
+- @NotNull：被注释的元素必须不为nu11
+- @AssertTrue：被注释的元素必须为true
+- @AssertFalse：被注释的元素必须为false
+- @Min(value)：被注释的元素必须是一个数字，其值必须大于等于指定的最小值
+- @Max(value)：被注释的元素必须是一个数字，其值必须小于等于指定的最大值
+- @DecimalMin(value)：被注释的元素必须是一个数字，其值必须大于等于指定的最小值
+- @DecimalMax(value)：被注释的元素必须是一个数字，其值必须小于等于指定的最大值
+- @Size(max，min)：被注释的元素的大小必须在指定的范围内
+- @Digits (integer,fraction)：被注释的元素必须是一个数字，其值必须在可接受的范围内
+- @Past：被注释的元素必须是一个过去的日期
+- @Future：被注释的元素必须是一个未来的日期
+
+{{</notice>}}

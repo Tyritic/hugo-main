@@ -13,6 +13,10 @@ links:
     description: Gitee is a large software development platform.
     website: https://gitee.com
     image: gitee.png
+  - title: SpringBoot
+    description: SpringBoot's doc
+    website: https://docs.spring.io/spring-boot/index.html
+    image: springboot-144.png
 menu:
     main: 
         weight: -50
