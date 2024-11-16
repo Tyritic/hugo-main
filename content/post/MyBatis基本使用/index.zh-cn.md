@@ -4,7 +4,7 @@ draft : false
 title : 'MyBatis基本使用'
 image : ""
 categories : ["MyBatis"]
-tags : ["数据库"]
+tags : ["数据库","后端开发"]
 description : "MyBatis框架的基本使用"
 ---
 
@@ -14,6 +14,28 @@ description : "MyBatis框架的基本使用"
 
 ```java
 #{参数名}
+```
+
+如果mapper接口中的方法参数名和mapper.xml中sql语句中的字段名一致，spring会自动进行封装
+
+### 设置mappper接口方法参数名和mapper.xml中的sql语句中的字段一致
+
+如果mapper接口中的方法参数名和mapper.xml中sql语句中的字段名不一致，需要通过注解@Param来指定对应关系
+
+```java
+@Param(Sql语句中的字段名) 方法参数名
+```
+
+示例
+
+```java
+User selectUser(@param(“name”)String personName);
+```
+
+```xml
+<select id=" selectUser" resultMap="BaseResultMap">  
+   select  *  from user  where user_name = #{name} 
+</select>
 ```
 
 

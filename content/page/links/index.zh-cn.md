@@ -21,6 +21,10 @@ links:
     description: MyBatis 中文官方文档
     website: https://mybatis.org/mybatis-3/zh_CN/index.html
     image: mybatis-logo.jpg
+  - title: MyBatis-Plus
+    description: MyBatis-Plus 中文官方文档
+    website: https://baomidou.com/introduce/
+    image: mybatis-plus-logo.png
 menu:
     main: 
         weight: -50
