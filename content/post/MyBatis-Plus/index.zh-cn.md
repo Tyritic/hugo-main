@@ -23,6 +23,184 @@ description : "MyBatis-Plus框架的使用"
 - **内置性能分析插件**：可输出 SQL 语句以及其执行时间，建议开发测试时启用该功能，能快速揪出慢查询
 - **内置全局拦截插件**：提供全表 delete 、 update 操作智能分析阻断，也可自定义拦截规则，预防误操作
 
+## MyBatis和MyBatis-Plus开发流程的区别
+
+### MyBatis开发流程
+
+1. 引入相关依赖
+
+2. 定义被@Mapper注解修饰mapper接口以及相关方法
+
+   ```java
+   @Mapper
+   public interface DistrictMapper {
+       List<District>searchAll(String tname);
+   }
+   ```
+
+   
+
+3. 在对应mapper.xml文件中书写对应的SQL语句或者在mapper接口中使用注解书写SQL语句
+
+   ```xml
+   <?xml version="1.0" encoding="UTF-8" ?>
+   <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+           "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+   <mapper namespace="org.example.operator.mapper.DistrictMapper">
+       <select id="searchAll" resultType="org.example.operator.pojo.entity.District">
+           select did,dname,tdid,content,d_url,district.tid
+           from district left join theme
+           on district.tid = theme.tid
+           where theme.tname = #{tname}
+       </select>
+   </mapper>
+   ```
+
+   
+
+4. 在Service层中创建对应的Service接口
+
+   ```java
+   package org.example.operator.service;
+   import org.example.operator.pojo.dto.District.DistrictDTO;
+   
+   
+   public interface DistrictDetailService {
+       public void updateDistrictDetail(DistrictDTO districtDTO,String oldName);
+   }
+   
+   ```
+
+   
+
+5. 以及Service接口的实现类注入Mapper对象实现业务逻辑
+
+   ```java
+   package org.example.operator.service.impl;
+   
+   import org.example.operator.common.exception.District.DistrictNotFound;
+   import org.example.operator.common.exception.Theme.ThemeNotFound;
+   import org.example.operator.common.utils.AliyunOSSUtils;
+   import org.example.operator.mapper.DistrictMapper;
+   import org.example.operator.mapper.ThemeMapper;
+   import org.example.operator.pojo.dto.District.DistrictDTO;
+   import org.example.operator.pojo.entity.District;
+   import org.example.operator.pojo.entity.Theme;
+   import org.example.operator.service.DistrictDetailService;
+   import org.springframework.beans.factory.annotation.Autowired;
+   import org.springframework.stereotype.Service;
+   import org.springframework.transaction.annotation.Transactional;
+   
+   @Service
+   public class DistrictDetailServiceImpl implements DistrictDetailService {
+       @Autowired
+       private ThemeMapper themeMapper;
+   
+       @Autowired
+       private DistrictMapper districtMapper;
+   
+       @Autowired
+       private AliyunOSSUtils aliyunOSSUtils;
+       @Transactional
+       @Override
+       public void updateDistrictDetail(DistrictDTO districtDTO, String oldName) {
+           String tname = districtDTO.getTname();
+           Theme theme = themeMapper.getThemeByName(tname);
+           if (theme == null) {
+               throw new ThemeNotFound("主题不存在");
+           }
+           District district = districtMapper.getDistrictByName(oldName);
+           if (district == null) {
+               throw new DistrictNotFound("展品不存在");
+           }
+           String durl = district.getD_url();
+           aliyunOSSUtils.deleteExhibitImage(durl);
+           Long did = district.getDid();
+           Long tid = themeMapper.getThemeIdByName(districtDTO.getTname());
+           districtDTO.setDid(did);
+           districtDTO.setTid(tid);
+           districtMapper.updateDistrictDetail(districtDTO);
+           districtMapper.updateDistrictTdid(districtDTO);
+       }
+   }
+   ```
+
+   
+
+6. 在Controller层使用Service接口对象进行响应
+
+   ```java
+   import org.springframework.beans.factory.annotation.Autowired;
+   import org.springframework.web.bind.annotation.RequestMapping;
+   import org.springframework.web.bind.annotation.RequestParam;
+   import org.springframework.web.bind.annotation.RestController;
+   import org.springframework.web.multipart.MultipartFile;
+   
+   @RestController
+   @Slf4j
+   @RequestMapping("Operator/productDetail")
+   public class DistrictDetailController {
+       @Autowired
+       private DistrictSummeryService districtSummeryService;
+       @Autowired
+       private AliyunOSSUtils aliyunOSSUtils;
+       @Autowired
+       private DistrictDetailService districtDetailService;
+   
+       @RequestMapping("/getProduct")
+       public Result<DistrictDetailVO> getProduct(String dname) {
+           try{
+               DistrictDetailVO districtDetailVO = districtSummeryService.getDistrictDetail(dname);
+               log.info("展品详情：{}", districtDetailVO);
+               return Result.success("查询展品详情成功",districtDetailVO);
+           }
+           catch (Exception e){
+               log.error("查询展品详情失败");
+               return Result.error("查询展品详情失败");
+           }
+       }
+   }
+   ```
+
+   
+
+### MyBatis-Plus开发流程
+
+1. 引入相关依赖
+
+2. 自定义Mapper继承MyBatis-Plus提供的接口**BaseMapper**，对于自定义SQL语句可以在对应mapper.xml文件中书写
+
+   ```java
+   public interface UserMapper extends BaseMapper<User>{
+       
+   }
+   ```
+
+   
+
+3. 在Service层自定义Service接口继承**IService**接口
+
+   ```java
+   public interface IUserService extends IService<User>{
+       
+   }
+   ```
+
+   
+
+4. 自定义Service实现类，实现自定义接口并继承Servicelmpl类，注入Mapper对象实现业务逻辑（Wrapper条件构造器在这里使用）
+
+   ```java
+   @Service
+   public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements IUserService{
+   
+   }
+   ```
+
+   
+
+5. 在Controller层使用Service接口对象进行响应
+
 ## 具体使用
 
 1. **引入依赖**（参见[官方文档](https://baomidou.com/introduce/) ），MyBatisPlus官方提供了starter，其中集成了Mybatis和MybatisPlus的所有功能，并且实现了自动装配效果。因此我们可以用MybatisPlus的starter代替Mybatis的starter:
@@ -35,7 +213,7 @@ description : "MyBatis-Plus框架的使用"
    </dependency>
    ```
 
-2. **定义Mapper**：自定义Mapper继承MyBatis-P;us提供的接口**BaseMapper**
+2. **定义Mapper**：自定义Mapper继承MyBatis-Plus提供的接口**BaseMapper**
 
    ```java
    public interface UserMapper extends BaseMapper<User>{
