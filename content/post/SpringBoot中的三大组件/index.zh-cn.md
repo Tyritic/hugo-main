@@ -361,6 +361,39 @@ SpringBoot中内嵌的Servlet容器是Tomcat服务器
 
 SpringBoot包含了对Tomcat,Jetty（Socket)等服务器的支持
 
-通过修改pom.xml的依赖即可排除相关依赖即可
+通过修改pom.xml的依赖即可排除相关依赖并添加相关依赖即可
 
-### 
+1. 排除原有的tomcat依赖
+
+   ```xml
+   <dependency>
+   	 <groupId>org.springframework.boot</groupId>
+   	 <artifactId>spring‐boot‐starter‐web</artifactId>
+   	 <!‐‐1.排除tomcat‐‐>
+   	 <exclusions>
+   		 <exclusion>
+   		 <artifactId>spring‐boot‐starter‐tomcat</artifactId>
+   		 <groupId>org.springframework.boot</groupId>
+   	 	 </exclusion>
+   	 </exclusions>
+   </dependency>
+   ```
+
+2. 引入相关依赖
+
+   ```xml
+   <!‐‐2.依赖jetty -->
+   <dependency>
+   	<artifactId>spring‐boot‐starter‐jetty</artifactId>
+   	<groupId>org.springframework.boot</groupId>
+   </dependency>
+   
+   <!‐‐3.依赖undertow ‐‐>
+   <dependency>
+   	<artifactId>spring‐boot‐starter‐undertow</artifactId>
+   	<groupId>org.springframework.boot</groupId>
+   </dependency>
+   ```
+
+   
+

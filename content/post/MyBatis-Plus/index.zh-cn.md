@@ -285,7 +285,7 @@ public class Demo06_LambdaQueryMapper {
    List<User> userList = userMapper.selectByCustomSql(queryWrapper);
    ```
 
-## Service层接口IService
+## Service层接口（IService）
 
 MyBatis提供了Service层接口IService和默认实现类ServiceImpl
 

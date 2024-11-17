@@ -32,7 +32,7 @@ description : "SpringBoot框架的热部署和日志结构"
 
 为了解决这个问题，就是在日志框架和应用程序之间架设一个沟通的桥梁，对于应用程序来说，无论底层的日志框架如何变，都不需要有任何感知。只要门面服务做的足够好，随意换另外一个日志框架，应用程序不需要修改任意一行代码，就可以直接上线。总而言之，日志门面用于整合不同日志框架的日志（类似接口），不实现具体日志
 
-#### 常见的日志门面
+常见的日志门面
 
 - JCL（Java Common Logging）：Java自带的日志门面
 - SLF4J：目前最常用的日志门面
@@ -43,7 +43,8 @@ description : "SpringBoot框架的热部署和日志结构"
 
 JCL默认的情况下，会使用JUL日志框架做日志的记录操作。
 
-JCL使用原则：如果有log4j，优先使用log4j，如果没有任何第三方日志框架的时候，使用的就是JUL。
+JCL使用原则：如果有log4j，优先使用log4j，如果没有任何第三方日志框架的时候，使用的就是JUL。再没有则使用JCL内部提供的
+SimpleLog 实现
 
 **具体实现**
 
@@ -55,7 +56,7 @@ JCL使用原则：如果有log4j，优先使用log4j，如果没有任何第三�
    public class JulMain
    {
        public static void main(String[] args){
-           Log 1og= LogFactory.getLog(JulMain.class)
+           Log log= LogFactory.getLog(JulMain.class)
            log.info("Hello world");
        }
    }
@@ -301,3 +302,35 @@ logging:
 		max-history: 日志文件保留的时间
 ```
 
+### 切换日志框架
+
+将SpringBoot底层默认日志框架logback修改为log4j2
+
+1. 排除logback的场景启动器
+
+   ```xml
+   <dependencies>
+   	<dependency>
+   	<!‐‐starter‐web里面自动添加starter‐logging 也就是logback的依赖‐‐>
+   		 <groupId>org.springframework.boot</groupId>
+   		 <artifactId>spring‐boot‐starter‐web</artifactId>
+   		 <exclusions>
+   	<!‐‐排除starter‐logging 也就是logback的依赖‐‐>
+   		 	<exclusion>
+   			 	<artifactId>spring‐boot‐starter‐logging</artifactId>
+   			 	<groupId>org.springframework.boot</groupId>
+   		 	</exclusion>
+   		 </exclusions>
+    	</dependency>
+   </dependencies>
+   ```
+
+2. 添加log4j2的场景启动器
+
+   ```xml
+   <!‐‐Log4j2的场景启动器‐‐>
+   <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring‐boot‐starter‐log4j2</artifactId>
+   </dependency>
+   ```

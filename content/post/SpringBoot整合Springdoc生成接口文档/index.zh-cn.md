@@ -1,7 +1,7 @@
 ---
 date : '2024-11-12T10:01:20+08:00'
 draft : false
-title : 'SpringBoot整合Springdoc-OpenApi生成接口文档'
+title : 'SpringBoot整合Springdoc-OpenApi'
 image : ""
 categories : ["SpringBoot"]
 tags : ["后端开发"]
