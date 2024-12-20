@@ -136,7 +136,10 @@ alter table table_name
 
 ```mysql
 alter table table_name
-	drop column 字段名;
+	drop column 字段名; 
+#column可以不填写
+alter table table_name
+	drop 字段名; 
 ```
 
 修改表名
@@ -147,7 +150,7 @@ rename table 旧表名 to 新表名;
 
 ## 删除表结构
 
+删除表中所有元组以及表的结构
 ```mysql
 drop table 表名;
 ```
-

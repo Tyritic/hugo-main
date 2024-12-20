@@ -43,7 +43,14 @@ update table_name set 字段1=v值1,..字段n=值n [where condition]
 
 ## 删除元组
 
+删除表中的元组但是不删除表（当不存在条件时为删除所有元组
 ```mysql
 delete from table_name [where condition]
+```
+
+删除表中的所有元组但是保留表结构（同时按照原来的建表语句重新建立表）
+
+```mysql
+truncate table table_name
 ```
 
