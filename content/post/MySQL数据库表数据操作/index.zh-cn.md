@@ -38,7 +38,7 @@ insert into table_name values(值1,...值n),..(值1,...值n);
 更新符合指定条件的元组
 
 ```mysql
-update table_name set 字段1=v值1,..字段n=值n [where condition]
+update table_name set 字段1=值1,..字段n=值n [where condition]
 ```
 
 ## 删除元组

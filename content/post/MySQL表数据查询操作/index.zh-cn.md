@@ -94,10 +94,13 @@ where >聚合函数 >having
 示例代码：
 
 ```mysql
+#隐式笛卡尔积
 table a,table b
+#显式笛卡尔积
+table a join table b
 ```
 
-**内连接**：查询A表和B表相交的部分
+**内连接**：查询A表和B表相交的部分（有条件的笛卡尔积）
 
 语法：
 
