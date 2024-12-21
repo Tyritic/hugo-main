@@ -17,6 +17,9 @@ create table table_name(
 	字段1 字段类型[约束] [comment '关于字段的描述'],
 	...
 	字段n 字段类型[约束] [comment '关于字段的描述']
+    <完整性约束>,
+    ...
+    <完整性约束>
 )[comment 关于表的描述]
 ```
 
