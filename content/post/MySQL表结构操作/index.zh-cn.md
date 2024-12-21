@@ -1,7 +1,7 @@
 ---
 date : '2024-11-03T18:46:17+08:00'
 draft : false
-title : 'MySQL数据库表结构操作'
+title : 'MySQL表结构操作'
 image : ""
 categories : ["MySQL"]
 tags : ["数据库"]
@@ -13,6 +13,7 @@ description : "对数据库表结构的基本操作"
 ### 代码结构
 
 ```mysql
+# 创建一个新的表
 create table table_name(
 	字段1 字段类型[约束] [comment '关于字段的描述'],
 	...
@@ -21,6 +22,14 @@ create table table_name(
     ...
     <完整性约束>
 )[comment 关于表的描述]
+
+#创建与现有的某个表的模式相同的表
+create table new_table like old_name
+
+#将查询结果保存为一张表,默认插入数据
+create table new_table as
+<查询表达式>;
+
 ```
 
 ### 约束
@@ -37,19 +46,24 @@ create table table_name(
 | 唯一约束 |      保证该字段的所有数据都是唯一，不存在重复      |   **unique**    |
 | 主键约束 |      主键是一个元组的唯一标识，要求非空且唯一      | **primary key** |
 | 默认约束 |      保存数据时要是未指定该字段值则存入默认值      |   **default**   |
+| 谓词约束 |             保证所有数据都满足条件谓词             |    **check**    |
 | 外键约束 | 通过外键建立两张表的联系，保证数据的一致性和完整性 | **foreign key** |
+
+
 
 **示例代码**
 
 ```mysql
 create table student
 (ID varchar (5) comment['唯一标识符'], 
- name varchar (20) not null,
+ name varchar (20) not null,unique
  dept_name varchar (20),
  tot_cred numeric (3,0) check (tot_cred >= 0),
+ age int default 18 #默认约束
  primary key (ID), #主键约束
- foreign key (dept_name) references department(dept_name)
-     on delete set null); #外键约束
+ foreign key (dept_name) references department(dept_name) #外键约束
+     on delete set null) #违反约束的方法：置为null
+ unique(name,age); #多列唯一约束
 ```
 
 ### 数据类型
@@ -91,6 +105,28 @@ create table student
 |   year    |      1       |        YYYY         |                1901到2155                 |          年份值          |
 | datetime  |      8       | YYYY-MM-DD HH:MM:SS | 1000-01-01 00:00:00到 9999-12-31 23:59:59 |     混合日期和时间值     |
 | timestamp |      4       | YYYY-MM-DD HH:MM:SS | 1000-01-01 00:00:00到 9999-12-31 23:59:59 | 混合日期和时间值，时间戳 |
+
+时间域的提取
+
+```mysql
+extract(unit from date)
+## unit为所提取的时间域
+## date为字符串
+```
+
+字符串转时间类型
+
+```mysql
+cast('2024-12-21' as date) 
+```
+
+#### 大对象类型
+
+- 大对象类型
+
+  - 字符数据：clob
+
+  - 二进制数据：blob
 
 ## 查询表结构
 
