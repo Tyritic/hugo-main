@@ -21,7 +21,7 @@ description : "博客的使用指南"
 在MyBlog主文件夹的cmd中运行以下命令
 
 ```
-hugo new content post\<FileName>/index.md
+hugo new content post/<FileName>/index.md
 ```
 
 #### 参数解释

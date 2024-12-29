@@ -6,6 +6,7 @@ image : ""
 categories : ["SpringBoot"]
 tags : ["后端开发","框架原理"]
 description : "Bean对象在IOC容器的管理过程"
+math : true
 ---
 
 ## Bean对象的获取
