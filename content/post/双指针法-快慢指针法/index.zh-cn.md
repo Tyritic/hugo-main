@@ -13,16 +13,18 @@ math : true
 
 通常当使用蛮力法需要两个for循环时，将两个for循环削减成一个for循环的优化方法。时间复杂度$O(n^2)$可以优化为$O(n)$
 
-## 方法步骤
+## 算法模板
+
+### 方法步骤
 
 双指针法（快慢指针法）： **通过一个快指针和慢指针在一个for循环下完成两个for循环的工作。**
 
+新数组指在旧数组的基础上修改后的数组
+
 定义快慢指针
 
-- 快指针：寻找新数组的元素 ，新数组就是不含有目标元素的数组
+- 快指针：通过遍历旧数组来寻找新数组的元素 ，新数组就是不含有目标元素的数组
 - 慢指针：指向更新后新数组下标的位置
-
-## 算法模板
 
 ### 代码模板
 
@@ -33,7 +35,7 @@ class solution{
         int slowIndex=0;
         for(int fastIndex=0;fastIndex<nums.length;fastIndex++)
         {
-            //题目要求的操作,用于构建新数组
+            //题目要求的操作,用于构建新数组，if条件内是符合新数组要求的谓词
             //fastIndex用于遍历原数组
             //slowIndex用于插入新数组
         }
@@ -282,4 +284,54 @@ class Solution {
 - `1 <= s.length, t.length <= 200`
 - `s` 和 `t` 只含有小写字母以及字符 `'#'`
 
- 
+#### 思路解析
+
+基本思路
+
+- 将s和t经过退格操作后的字符串求解出（封装成一个函数）
+- 对比求解后的字符串来判断（主函数中进行）
+
+退格操作的求解思路
+
+- 定义快慢指针fastIndex和slowIndex
+- fastIndex从左往右遍历
+  - 当遇到非退格符号时slowIndex正常记录数组元素
+  - 当遇到退格符号时slowIndex向后退一位
+
+#### 参考代码
+
+```java
+class Solution {
+    public boolean backspaceCompare(String s, String t) {
+        String s1=checked(s);
+        String s2=checked(t);
+        if(s1.equals(s2))
+        {
+            return true;
+        }
+        return false;
+    }
+    
+	//求解退格处理后的字符串
+    public static String checked(String s)
+    {
+        char[]chars=s.toCharArray(s);
+        int slowIndex=0;
+        for(int fastIndex=0;fastIndex<chars.length;fastIndex++)
+        {
+            //遍历旧数组，不为退格符#的字符保留
+            if(chars[fastIndex]!='#')
+                chars[slowIndex++]=chars[fastIndex];
+            //遍历旧数组，为退格符#的字符进行退格处理
+            else if(chars[fastIndex]=='#')
+            {
+                //slowIndex是新数组的长度
+                if(slowIndex>0)
+                    slowIndex--;
+            }
+        }
+        return new String(chars).substring(0,slow);
+    }
+}
+```
+
