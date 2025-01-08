@@ -1,7 +1,7 @@
 ---
 date : '2025-01-07T15:43:24+08:00'
 draft : false
-title : '分布式批处理计算平台（二）批处理算法组件模型'
+title : '分布式批处理计算平台（二）组件模型'
 image : ""
 categories : [个人项目]
 tags : [""]
@@ -229,8 +229,94 @@ math : true
 
 因此在完成各个组件的独立开发后，还需要允许用户根据具体需求选择组件，并对多个组件进行编排，通过复用已有组件，处理复杂的数据处理任务。
 
-### 编排模型的结构设计
+### 组件编排模型的结构设计
 
 在组件编排模型中，多个组件之间以有向无环图（DAG）的方式进行编排
 
 有向箭头表示组件之间的依赖关系，例如，组件A指向组件B的有向箭头表示组件B需要在组件A的运行结果的基础上进行数据处理和分析，即组件A的运行输出结果作为组件B的运行输入数据。
+
+### 组件编排模型的结构实现
+
+组件编排信息通过规范化的 **Json** 语言进行描述
+
+- **connections**：组件执行顺序
+  - **fromIndex**：起始组件序号
+  - **toIndex**：结束组件序号
+- **components**：组件列表
+  - **componentId**：组件唯一标识
+  - **index**：组件序号
+  - **mode**：组件运行模式
+  - **machine**：执行组件的计算节点名称
+  - **args**：组件数据处理参数
+
+示例
+
+```json
+{ 
+    "connections": [ 
+        { 
+            "fromIndex": 0, 
+            "toIndex": 1 
+        }, 
+        { 
+            "fromIndex": 1, 
+            "toIndex": 2 
+        } 
+    ], 
+    "components": [ 
+        { 
+            // 道路水平面切片生成组件 
+            "componentId": "", 
+            "index": 0, 
+            "mode": "algorithm", 
+            "machine": "", 
+            "args": 
+            { 
+                "input": "",
+                "output": "", 
+                "secatt": 1, 
+                "canvasrl": 30, 
+                "canvasrw": 30, 
+                "begins": [ 30, 61, 90, 120 ], 
+                "ends": [ 40, 71, 100, 130 ], 
+                "canvasstep": 1, 
+                "interratiol": 4, 
+                "interratiow": 6, 
+                "centralFilepath": "#", 
+            } 
+        },
+        { 
+            // 道路裂缝识别组件 
+            "componentId": "", 
+            "index": 1, 
+            "mode": "algorithm", 
+            "machine": "", 
+            "args": { 
+                "input": "", 
+                "output": "", 
+                "alpha":"0.3" 
+            } 
+        }, 
+        { 
+            // 裂缝线状形态拟合组件 
+            "componentId": "",
+            "index": 2, 
+            "mode": "algorithm", 
+            "machine": "", 
+            "args": 
+            { 
+                "input": "", 
+                "output": "", 
+                "rho": 0.8, 
+                "theta": 180, 
+                "threshold": 40, 
+                "minLineLength": 40, 
+                "maxLineGap": 10, 
+                "delta1": 0.1, 
+                "delta2": 40 
+            } 
+        } 
+    ] 
+}
+```
+
