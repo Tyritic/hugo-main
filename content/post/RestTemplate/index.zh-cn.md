@@ -4,7 +4,7 @@ draft : false
 title : 'RestTemplate'
 image : ""
 categories : ["SpringBoot"]
-tags : ["后端框架"]
+tags : ["后端开发"]
 description : "RestTemplate在web开发中的使用以及REST服务"
 ---
 
