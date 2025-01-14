@@ -3,9 +3,9 @@ date : '2025-01-02T14:24:41+08:00'
 draft : false
 title : 'Object类的作用和相关方法'
 image : ""
-categories : [""]
-tags : [""]
-description : ""
+categories : ["互联网面试题"]
+tags : ["JavaSE"]
+description : "Java中Object类的作用"
 math : true
 ---
 
