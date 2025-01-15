@@ -3,9 +3,9 @@ date : '2024-11-15T09:35:34+08:00'
 draft : false
 title : 'Java中的代码块'
 image : ""
-categories : [""]
-tags : [""]
-description : ""
+categories : ["Java基础"]
+tags : ["JavaSE"]
+description : "手写笔记转换"
 math : true
 ---
 
