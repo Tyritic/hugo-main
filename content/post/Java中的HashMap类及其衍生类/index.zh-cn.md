@@ -305,9 +305,9 @@ JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。�
 - 根据要添加的键的哈希码（`hashcode`方法）计算在数组中的位置（索引）
 - 检查该位置是否为空（即没有键值对存在）
   - 如果为空，则直接在该位置创建一个新的Entry对象来存储键值对。将要添加的键值对作为该Entry的键和值，并保存在数组的对应位置。
-  - 如果不为空则检查该位置的第一个键值对的键是否与要添加的键值对的键相同（`equals`方法）
+  - 如果不为空则遍历链表或者红黑树检查键值对的键是否与要添加的键值对的键相同（`equals`方法）
     - 如果相同，则表示找到了相同的键，直接将新的值替换旧的值，完成更新操作。
-    - 若不相同，则需要遍历链表或红黑树来查找是否有相同的键，然后根据对应的数据结构进行插入工作
+    - 若不相同，根据对应的数据结构进行插入工作
 - 检查链表长度是否达到阈值（默认为8）：如果链表长度超过阈值，且HashMap的数组长度大于等于64，则会将链表转换为红黑树，以提高查询效率
 - 检查负载因子是否超过阈值（默认为0.75）：如果键值对的数量（size）与数组的长度的比值大于阈值，则需要进行扩容操作
 - 扩容操作：
@@ -715,3 +715,165 @@ TreeMap 内部是通过红黑树实现的，可以让 key 的实现 Comparable �
 - TreeMap 的查找效率是 `O(logn)`。并且保证了元素的顺序，因此适用于需要大量范围查找或者有序遍历的场景。
 
 ### 示例
+
+```java
+import java.util.Comparator;
+import java.util.TreeSet;
+
+class Person {
+    String name;
+    int age;
+
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{name='" + name + "', age=" + age + "}";
+    }
+}
+
+public class TreeSetExample2 {
+    public static void main(String[] args) {
+        // 自定义排序规则：按名字字典序排列
+        Comparator<Person> nameComparator = (p1, p2) -> p1.name.compareTo(p2.name);
+
+        TreeSet<Person> treeSet = new TreeSet<>(nameComparator);
+        treeSet.add(new Person("Alice", 30));
+        treeSet.add(new Person("Charlie", 35));
+        treeSet.add(new Person("Bob", 25));
+
+        for (Person person : treeSet) {
+            System.out.println(person);
+        }
+    }
+}
+```
+
+## HashMap的衍生类——ConcurrentHashMap类
+
+`ConcurrentHashMap` 是 Java 提供的一种线程安全的哈希表实现，位于 `java.util.concurrent` 包中，广泛用于高并发环境下。它与传统的 `HashMap` 不同，能够在多个线程并发操作时保持高效性和一致性。
+
+### 特点
+
+- **线程安全**：
+  - 多线程可以同时操作不同的桶（bucket），提高并发性能。
+- **高效性**：
+  - 通过细粒度锁或无锁机制（CAS），在高并发场景下效率比 `Hashtable` 更高。
+- **不允许 `null` 键和值**：
+  - 如果尝试插入 `null` 键或 `null` 值，会抛出 `NullPointerException`。
+- **支持部分并发操作**：
+  - 可以在迭代期间执行插入或删除操作，不会抛出 `ConcurrentModificationException`。
+- **不支持键或值为null**：
+
+### 构造方法
+
+- `public ConcurrentHashMap()`：创建一个默认的 `ConcurrentHashMap` 实例
+
+- `public ConcurrentHashMap(int initialCapacity, float loadFactor, int concurrencyLevel)`
+
+  - `initialCapacity`：初始容量。
+
+    `loadFactor`：负载因子。
+
+    `concurrencyLevel`：并发级别（用于估计并发线程数，JDK 1.8 后不再显式使用）。
+
+### 底层实现
+
+#### JDK 1.7之前
+
+在 JDK 1.7 中它使用的是数组加链表的形式实现的
+
+**实现思想**
+
+基于 **分段锁机制（Segmented Locking）**，其核心思想是将整个哈希表分成多个段（`Segment`），每个段独立加锁，从而实现线程安全的高效访问。默认是 16 个 `Segment`，所以最多有 16 个线程可以并发执行。
+
+**核心数据结构**
+
+一个 ConcurrentHashMap 里包含一个 `Segment` 数组，一个 `Segment` 里包含一个 `HashEntry` 数组，每个 HashEntry 是一个链表结构的元素。
+
+- **`Segment`**：一种可重入锁，继承了 `ReentrantLock`，在 **`ConcurrentHashMap`** 里扮演锁的角色用来保护段内的数据安全。
+- **`HashEntry`**：表示一个键值对节点，类似于 `HashMap` 的链表节点
+
+![示意图](1721807523151-41ad316a-6264-48e8-9704-5b362bc0083c.webp)
+
+分段锁技术将数据分成一段一段的存储，然后给每一段数据配一把锁，不同 Segment 之间的操作互不影响，从而提高并发性能。。当一个线程占用锁访问其中一个段数据的时候，其他段的数据也能被其他线程访问，能够实现真正的并发访问。
+
+- 先通过 `key` 的 `hash` 判断得到 `Segment` 数组的下标，将这个 `Segment` 上锁
+- 再次通过 `key` 的 `hash` 得到 `Segment` 里 `HashEntry` 数组的下标
+
+![分段锁示意图](20220219203435_mianshiya.png)
+
+可以简化理解：每个 Segment 数组存放的就是一个单独的 **HashMap**
+
+**缺陷**
+
+ **`Segment`** 数组一旦初始化了之后不会扩容，只有 **`HashEntry`** 数组会扩容，这就导致并发度过于死板，不能随着数据的增加而提高并发度
+
+#### JDK 1.7以后
+
+`ConcurrentHashMap` 做了更细粒度的锁控制，可以理解为 HashMap 的节点数组的每个位置都是一把锁，这样扩容了锁也会变多，并发度也会增加。
+
+![内存示意图](1721807523128-7b1419e7-e6ba-47e6-aba0-8b29423a8ce7.webp)
+
+### 加锁机制
+
+#### **分段锁加锁机制（JDK 1.7以前）**
+
+在 ConcurrentHashMap 中，将整个数据结构分为多个 Segment，每个 **Segment** 都类似于一个小的 HashMap，每个 Segment 都有自己的锁，不同 **Segment** 之间的操作互不影响，从而提高并发性能。
+
+- 不同 Segment 的并发写入（可以并发执行）
+- 同一 Segment 的一写一读（可以并发执行）
+- 同一 Segment 的并发写入（同一 Segment 的并发写入会被阻塞）
+
+在 ConcurrentHashMap 中，对于插入、更新、删除等操作，需要先定位到具体的 Segment，然后再在该 Segment 上加锁，而不是像传统的 HashMap 一样对整个数据结构加锁。这样可以使得不同 Segment 之间的操作并行进行，提高了并发性能。
+
+**get操作（读操作）**
+
+​	**get**操作是无锁的。读操作不会阻塞写操作，从而提高了并发性能
+
+- 通过 `volatile` 保证 `HashEntry` 的可见性，允许多个线程同时读取。
+- 遍历链表或红黑树时无需加锁。
+
+**put/remove操作（写操作）**
+
+写操作如 `put` 和 `remove` 需要加锁，以确保写入时的线程安全性和一致性
+
+- 根据哈希值找到目标 `Segment`。
+- 使用 `lock()` 方法（可重入锁）锁定该 `Segment`。
+- 在加锁状态下，检查是否存在相同键：
+  - 存在：更新值。
+  - 不存在：插入新节点。
+
+**扩容机制**
+
+- **基于 Segment**：`ConcurrentHashMap` 是由多个 `Segment` 组成的，每个 `Segment` 中包含一个 `HashMap`。当某个 `Segment` 内的 `HashMap` 达到扩容阈值时，单独为该 `Segment` 进行扩容，而不会影响其他 `Segment`。
+- **扩容过程**：每个 `Segment` 维护自己的负载因子，当 `Segment` 中的元素数量超过阈值时，该 `Segment` 的 `HashMap` 会扩容，整体的 `ConcurrentHashMap` 并不是一次性全部扩容。
+
+####  **悲观锁和乐观锁（JDK 1.7以后）**
+
+**get操作（读操作）**
+
+​		**get**操作是无锁的。
+
+- 直接定位到目标桶，读取链表或红黑树中的数据。
+- 由于数据节点的 `value` 是 `volatile` 修饰的，确保多线程下读取的数据一致性。
+
+**put操作（写操作）**
+
+- 计算键的哈希值，定位目标桶。
+- 如果桶为空，尝试使用`volatile` 和 `CAS`（乐观锁） 创建新节点。
+- 如果 `CAS` 失败或桶非空，使用`synchronized`（悲观锁）锁定该桶：
+  - 遍历链表或者红黑树检查键值对的键是否与要添加的键值对的键相同（`equals`方法）
+    - 如果相同，则表示找到了相同的键，直接将新的值替换旧的值，完成更新操作。
+    - 若不相同，根据对应的数据结构进行插入工作
+- 如果链表长度超过阈值（8），将链表转换为红黑树。
+
+**扩容机制**
+
+- **全局扩容**：`ConcurrentHashMap` 取消了 `Segment`，变成了一个全局的数组（类似于 `HashMap`）。因此，当 `ConcurrentHashMap` 中任意位置的元素超过阈值时，整个 `ConcurrentHashMap` 的数组都会被扩容。
+- **基于 CAS 的扩容**：在扩容时，`ConcurrentHashMap` 采用了类似 `HashMap` 的方式，但通过**CAS 操作**确保线程安全，避免了锁住整个数组。在扩容时，多个线程可以同时帮助完成扩容操作。
+- **渐进式扩容**：JDK 1.8 的 `ConcurrentHashMap` 引入了渐进式扩容机制，扩容时并不是一次性将所有数据重新分配，而是多个线程共同参与，逐步迁移旧数据到新数组中，降低了扩容时的性能开销。
+
