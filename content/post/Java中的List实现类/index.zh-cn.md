@@ -16,7 +16,7 @@ math : true
 ### 特点
 
 - **动态数组：**
-  - **`ArrayList`** 的大小是可变的，默认容量为 10。当元素数量超过当前容量时，`ArrayList` 会自动扩容，通常以 1.5 倍的速度增长。
+  - **`ArrayList`** 的大小是可变的，默认容量为 10。当元素数量超过当前容量时，**`ArrayList`** 会自动扩容，通常以 1.5 倍的速度增长。
 - **有序：**
   - 元素按照插入的顺序存储，可以通过索引访问，顺序不会改变（除非显式调整）。
 - **允许重复元素：**
@@ -331,14 +331,14 @@ public boolean remove(Object o) {
 - **有序：**
   - 元素按照插入的顺序存储，可以通过索引访问，顺序不会改变（除非显式调整）。
 - **允许重复元素：**
-  - **`ArrayList`** 允许存储重复的元素。
+  - **`LinkedList`** 允许存储重复的元素。
 
 ### 常见方法
 
 #### 构造方法
 
 - **`public LinkedList()`**：创建一个空的 `LinkedList` 实例
-- **`public LinkedList(Collection<? extends E> c)`**：使用指定集合中的所有元素初始化 `LinkedList`
+- **`public LinkedList(Collection<? extends E> c)`**：使用指定集合中的所有元素初始化 **`LinkedList`**
 
 #### 添加元素
 
@@ -540,7 +540,7 @@ public E set(int index, E element) {
 }
 ```
 
-**`node()`**方法用于定位要替换的节点
+**`node()`** 方法用于定位要替换的节点
 
 ```java
 /**
@@ -569,11 +569,11 @@ Node<E> node(int index) {
 
 ## Stack类
 
-**`Stack`** 是 Java 集合框架中的一个类，位于 **`java.util`** 包中，作为 **`Vector`** 的子类间接实现了List接口，用于实现**栈（Stack）**数据结构
+**`Stack`** 是 Java 集合框架中的一个类，位于 **`java.util`** 包中，作为 **`Vector`** 的子类间接实现了List接口，用于实现 **栈（Stack）** 数据结构
 
 ### 特点
 
-- **`Stack`** 类继承自 **`Vector`** 类，因此它是一种**同步的（线程安全的）**集合。
+- **`Stack`** 类继承自 **`Vector`** 类，因此它是一种 **同步的（线程安全的）** 集合。
 
 ### 常用方法
 
@@ -736,7 +736,7 @@ public E get(int index) {
 
 优点：
 
-- 方便：简单一个方法就可以将 List 变为线程安全版本，非常方便。
+- 方便：简单一个方法就可以将 **`List`** 变为线程安全版本，非常方便。
 
 缺点：
 
