@@ -247,5 +247,5 @@ public class HashSetExample {
 - 对于字符类型默认采用ASCII码排序
 - 对于字符串类型采用字典序进行排列
 - 自定义规则
-  - 让元素实现**`Comparable`**接口
-  - 创建集合时传递**`Comparator`**指定规则
+  - 让元素实现 **`Comparable`** 接口
+  - 创建集合时传递 **`Comparator`** 指定规则

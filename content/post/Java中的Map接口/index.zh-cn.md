@@ -11,27 +11,27 @@ math : true
 
 ## Map接口的定义
 
-`Map` 接口是 Java 集合框架中的一部分，用于存储键值对（`key-value`）的映射关系。`Map` 中的键是唯一的，而值可以重复。
+**`Map`** 接口是 Java 集合框架中的一部分，用于存储键值对（**`key-value`**）的映射关系。**`Map`** 中的键是唯一的，而值可以重复。
 
 ## Map集合的特点
 
 - **键值对存储**：
-  - 每个元素由一个键（`key`）和一个值（`value`）组成。
+  - 每个元素由一个键（**`key`**）和一个值（**`value`**）组成。
   - 键必须唯一，但值可以重复。
 - **键的唯一性**：
-  - 键的唯一性是通过调用键的 `hashCode()` 和 `equals()` 方法来保证的。
+  - 键的唯一性是通过调用键的 **`hashCode()`** 和 **`equals()`** 方法来保证的。
 - **允许的值**：
-  - 键和值都可以为 null，但实现类的行为可能不同：
-    - `HashMap`：允许一个 `null` 键和多个 `null` 值。
-    - `TreeMap`：不允许 `null` 键。
-    - `Hashtable`：不允许 `null` 键或 `null` 值。
+  - 键和值都可以为 **`null`**，但实现类的行为可能不同：
+    - **`HashMap`**：允许一个 **`null`** 键和多个 **`null`** 值。
+    - **`TreeMap`**：不允许 **`null`** 键。
+    - **`Hashtable`**：不允许 **`null`** 键或 **`null`** 值。
 - **无序或有序**：
-  - `HashMap` 是无序的。
-  - `LinkedHashMap` 按插入顺序或访问顺序存储。
-  - `TreeMap` 按键的自然顺序或自定义排序存储。
+  - **`HashMap`** 是无序的。
+  - **`LinkedHashMap`** 按插入顺序或访问顺序存储。
+  - **`TreeMap`** 按键的自然顺序或自定义排序存储。
 - **线程安全性**：
-  - `HashMap` 和 `TreeMap` 是非线程安全的。
-  - `Hashtable` 和 `ConcurrentHashMap` 是线程安全的。
+  - **`HashMap`** 和 **`TreeMap`** 是非线程安全的。
+  - **`Hashtable`** 和 **`ConcurrentHashMap`** 是线程安全的。
 
 ## Map接口的实现类
 
@@ -117,7 +117,7 @@ boolean containsValue(Object value)
 default boolean replace(K key, V oldValue, V newValue)
 ```
 
-- 如果键的当前值等于 `oldValue`，则替换为 `newValue`。
+- 如果键的当前值等于 **`oldValue`**，则替换为 **`newValue`**。
 
 ```java
 default V replace(K key, V value)
