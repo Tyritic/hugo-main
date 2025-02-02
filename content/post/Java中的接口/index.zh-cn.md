@@ -13,7 +13,7 @@ math : true
 
 **接口 (Interface)** 是 Java 中一种特殊的引用类型，类似于类，但是接口只定义方法的签名，而不包含方法的实现。接口用于定义类应该遵循的行为规范，即一组方法的集合，而具体的实现由实现接口的类来完成。
 
-可以理解为特殊的类，接口的所有字段为`public static final`，不包含构造方法，成员方法中除了**默认方法 (default methods)** 和**静态方法 (static methods)**以外都是抽象方法
+可以理解为特殊的类，接口的所有字段为 **`public static final`** ，不包含构造方法，成员方法中除了 **默认方法 (default methods)** 和**静态方法 (static methods)** 以外都是抽象方法
 
 ## 接口的主要特点
 

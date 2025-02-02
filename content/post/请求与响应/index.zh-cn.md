@@ -31,7 +31,7 @@ public String getParam(String param)
 }
 ```
 
-#### 方法二：参数名和形参名不匹配使用@RequestParam注解的name属性将参数名映射到形参
+#### 方法二：参数名和形参名不匹配使用`@RequestParam` 注解的name属性将参数名映射到形参
 
 ```java
 @RequestMapping("/simpleParam")
@@ -45,7 +45,7 @@ public String getParam(@RequestParam(name=“username")String param)
 
 {{<notice tip>}}
 
-**@RequestParam**
+**`@RequestParam`**
 
 作用：建立请求参数和controller形参的映射关系
 
@@ -96,7 +96,7 @@ public User getParam(String[]array)
 
 #### 集合参数
 
-请求参数名与形参数组名称相同且请求参数为多个，**@RequestParam**绑定参数关系
+请求参数名与形参数组名称相同且请求参数为多个，**`@RequestParam`** 绑定参数关系
 
 ```
 @RequestMapping("/listParam")
@@ -110,7 +110,7 @@ public User getParam(@RequestParam List<String>param)
 
 ### 日期参数
 
-使用**@DateTimeFormat**注解完成日期格式转换
+使用 **`@DateTimeFormat`** 注解完成日期格式转换
 
 ```java
 @RequestMapping("/dateParam")
@@ -122,7 +122,7 @@ public String getParam(@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDateT
 
 {{<notice tip>}}
 
-**@DateTimeFormat**
+**`@DateTimeFormat`**
 
 pattern属性用于指定时间格式
 
@@ -130,7 +130,7 @@ pattern属性用于指定时间格式
 
 ### Json参数
 
-JSON数据键名与形参对象属性名相同，定义pojo类型形参即可接收参数，需要使用 **@RequestBody**标识
+JSON数据键名与形参对象属性名相同，定义pojo类型形参即可接收参数，需要使用 **`@RequestBody`** 标识
 
 ```java
 @RequestMapping("/jsonParam")
@@ -144,7 +144,7 @@ public String getParam(@RequestBody User user)
 
 ### 路径参数
 
-通过请求URL直接传递参数，使用{..}来标识该路径参数，需要使用 **@PathVariable** 获取路径参数
+通过请求URL直接传递参数，使用{..}来标识该路径参数，需要使用 **`@PathVariable`** 获取路径参数
 
 ![](微信截图_20241103131056.png)
 
@@ -163,4 +163,4 @@ public String getParam(@PathVariable Integer id)
 - **类型**：方法注解，类注解
 - **位置**：controller类/方法上
 - **作用**：将方法返回值直接响应，如果返回值类型是 实体对象/集合，将会转换为JSON格式响应
-- **说明**：@RequestController=@RequestBody+@Controller
+- **说明**：**`@RequestController=@RequestBody+@Controller`**

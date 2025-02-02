@@ -47,7 +47,7 @@ public class UserApplication {
 }
 ```
 
-其中@SpringBootApplication用于标识SpringBoot项目的入口类
+其中 **`@SpringBootApplication`** 用于标识SpringBoot项目的入口类
 
 {{</notice>}}
 
@@ -119,7 +119,7 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 
 **作用**：访问数据库，向数据库发送sql语句，完成数据的增删改查任务
 
-**功能实现**：通过@Mapper注解接口来建立java方法和sql语句的映射关系
+**功能实现**：通过 **`@Mapper`** 注解接口来建立java方法和sql语句的映射关系
 
 ```java
 @Mapper
@@ -167,7 +167,7 @@ VO在实际开发中通常作为controller类方法的形参从而起到封装�
 
 **作用**：**以java类代替yaml文件进行Bean对象配置**
 
-**功能实现**：通过**@Configuration**注解一个java类
+**功能实现**：通过 **`@Configuration`** 注解一个java类
 
 ```java
 @Configuration
@@ -192,7 +192,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
 **作用**：**以java实体类代替yaml文件进行参数配置**
 
-**功能实现**：通过**@ConfigurationProperties**注解一个java类
+**功能实现**：通过 **`@ConfigurationProperties`** 注解一个java类
 
 ```java
 @Data
@@ -218,13 +218,13 @@ public class AliyunOSSProperties {
 过滤器工作在 Servlet 容器容中，它拦截客户端的请求和服务器的响应。过滤器链（Filter Chain）是多个过滤器按照一定的顺序执行的集合，一个请求可以依次通过多个过滤器，然后到达目标 Servlet，响应也会按相反的顺序经过这些过滤器返回给客户端。
 
 - 生命周期管理
-  - Servlet 容器负责过滤器的生命周期管理。过滤器的生命周期方法包括 `init`（初始化）、`doFilter`（执行过滤操作）和 `destroy`（销毁）。
+  - Servlet 容器负责过滤器的生命周期管理。过滤器的生命周期方法包括 **`init`**（初始化）、**`doFilter`**（执行过滤操作）和 **`destroy`**（销毁）。
 - 请求处理流程
   - 当一个请求到达 Servlet 容器时，容器会根据部署描述符（web.xml）或注解配置，决定是否以及如何调用过滤器链。
-  - 过滤器链是多个过滤器按照一定的顺序执行的集合。容器按照这个顺序依次调用每个过滤器的 `doFilter` 方法。
+  - 过滤器链是多个过滤器按照一定的顺序执行的集合。容器按照这个顺序依次调用每个过滤器的 **`doFilter`** 方法。
 - doFilter 方法
-  - 在 `doFilter` 方法中，开发者可以实现自定义的处理逻辑，比如修改请求头、记录日志等。
-  - `doFilter` 方法中必须调用 `FilterChain` 的 `doFilter` 方法，这样请求才能继续传递给下一个过滤器或目标资源（如 Servlet）。如果不调用，请求处理流程将会停止。
+  - 在 **`doFilter`** 方法中，开发者可以实现自定义的处理逻辑，比如修改请求头、记录日志等。
+  - **`doFilter`** 方法中必须调用 `FilterChain` 的 **`doFilter`** 方法，这样请求才能继续传递给下一个过滤器或目标资源（如 Servlet）。如果不调用，请求处理流程将会停止。
 - 工作机制
   - 过滤器可以修改请求和响应，但它们通常不会生成响应或结束请求，因为这通常是 Servlet 或其他资源的职责
   
@@ -239,14 +239,14 @@ public class AliyunOSSProperties {
 1. 创建过滤器类
 
    - 实现 **javax.servlet.Filter** 接口。
-   - 重写 **init**、**doFilter** 和 **destroy** 方法。
+   - 重写 **`init()`**、**`doFilter()`** 和 **`destroy()`** 方法。
 2. 配置过滤器
 
-   - 使用注解 `@WebFilter` 进行声明和配置。
+   - 使用注解 **`@WebFilter`** 进行声明和配置。
    - 或者在 web.xml 文件中配置。
 3. 编写过滤逻辑：
 
-   - 在 **doFilter**方法中实现具体的过滤逻辑。
+   - 在 **`doFilter()`**方法中实现具体的过滤逻辑。
 
    **示例代码**
    
@@ -287,7 +287,7 @@ public class AliyunOSSProperties {
 
 ### 拦截器（interceptor）
 
-   **根目录**：src/main/java/interceptor
+   **根目录**：**src/main/java/interceptor**
 
    **作用**：是 Spring MVC 框架中的一个核心组件，用于在处理 HTTP 请求的过程中进行拦截和处理。拦截器主要用于实现跨切面（cross-cutting）的逻辑，如日志记录、性能统计、安全控制、事务处理等。
 
@@ -295,8 +295,8 @@ public class AliyunOSSProperties {
 
 1. **创建拦截器类**：
 
-   - 实现 **HandlerInterceptor**接口或继承 **HandlerInterceptorAdapter**类。
-   - 重写 **preHandle**、**postHandle** 和 **afterCompletion** 方法。
+   - 实现 **`HandlerInterceptor`**接口或继承 **`HandlerInterceptorAdapter`**类。
+   - 重写 **`preHandle()`**、**`postHandle()`**  和 **`afterCompletion()`** 方法。
 
 2. **注册拦截器**：
 
@@ -305,7 +305,7 @@ public class AliyunOSSProperties {
 
 3. **编写拦截逻辑**：
 
-   - 在 **preHandle**、**postHandle** 和 **afterCompletion**方法中实现具体的拦截逻辑。
+   - 在 **`preHandle()`**、**`postHandle()`** 和 **`afterCompletion()`**方法中实现具体的拦截逻辑。
 
    **示例代码**
 
