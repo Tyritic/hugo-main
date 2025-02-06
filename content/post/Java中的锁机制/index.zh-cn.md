@@ -5,7 +5,7 @@ title : 'Java中的锁'
 image : ""
 categories : ["Java并发编程","互联网面试题"]
 tags : ["JavaSE"]
-description : "对synchronized关键字的理解"
+description : "对Java锁机制的理解"
 math : true
 ---
 
