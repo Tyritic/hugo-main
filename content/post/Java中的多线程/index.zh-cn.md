@@ -139,7 +139,11 @@ public static void main(String[] args) {
 
 ### 实现 **`Callable`** 接口与 **`FutureTask`**
 
-实现 **`Callable`** 接口的 **`call()`** 方法，使用 **`FutureTask`** 包装 **`Callable`** 对象，再通过 **`Thread`** 包裹 **`FutureTask`** 对象。方法的返回值通过 **`FutureTask`** 的 **`get()`** 方法获取
+- 实现 **`Callable`** 接口的 **`call()`** 方法
+
+- 使用 **`FutureTask`** 包装 **`Callable`** 对象
+- 再通过 **`Thread`** 包裹 **`FutureTask`** 对象。
+- 方法的返回值通过 **`FutureTask`** 的 **`get()`** 方法获取
 
 ```java
 class MyCallable implements Callable<Integer> {
