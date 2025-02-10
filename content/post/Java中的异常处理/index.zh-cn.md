@@ -45,12 +45,12 @@ java.lang.Object
 
 ![层次结构图](1720683900898-1d0ce69d-4b5d-41a6-a5df-022e42f8f4c5.webp)
 
-### `Throwable`类
+### `Throwable` 类
 
 - 所有错误和异常的超类。
 - 定义了 `printStackTrace()`、`getMessage()` 和 `toString()` 等常用方法。
 
-### `Error`类
+### `Error` 类
 
 - **定义**：表示程序运行时的严重问题，通常是 JVM 无法处理的情况。
 - 特点
@@ -62,7 +62,7 @@ java.lang.Object
   - **`StackOverflowError`**：递归调用过深导致栈溢出。
   - **`InternalError`**：JVM 内部错误。
 
-### `Exception`类
+### `Exception` 类
 
 **定义**：表示程序中可预料的问题，可以通过代码进行捕获和处理。
 
@@ -338,16 +338,16 @@ public class MultiResourceExample {
 
 ### 抛出异常
 
-在方法声明中使用 `throws` 关键字
+在方法声明中使用 **`throws`** 关键字
 
-在方法体中使用`throw`手动抛出异常
+在方法体中使用 **`throw`** 手动抛出异常
 
 #### `throws`关键字
 
 - **作用**：声明一个方法可能抛出的异常，用于通知调用该方法的代码，必须处理这些异常
 - **语法**：放在方法签名中，位于参数列表和方法体之间。
 - **适用范围**：主要用于**受检异常**（Checked Exception）。
-- **支持多个异常**：可以在 `throws` 后列出多个异常类型，用逗号分隔。
+- **支持多个异常**：可以在 **`throws`** 后列出多个异常类型，用逗号分隔。
 
 **语法格式**
 
@@ -374,7 +374,7 @@ public static void myMethod1() throws ArithmeticException, NullPointerException{
 }
 ```
 
-#### `throw`关键字
+#### `throw` 关键字
 
 - **作用**：在方法体或代码块中，实际抛出一个异常对象，用于在代码中触发异常处理逻辑
 - **语法**：后面必须紧跟一个异常对象的实例（`new ExceptionType(...)`）。
@@ -391,9 +391,9 @@ public static void myMethod1() throws ArithmeticException, NullPointerException{
 
 **继承现有异常类**：
 
-- 通常从 `Exception` 或 `RuntimeException` 类派生。
-- 如果希望异常必须被显式捕获（受检异常），继承 `Exception`。
-- 如果希望异常可以被选择性捕获（非受检异常），继承 `RuntimeException`。
+- 通常从 **`Exception`** 或 **`RuntimeException`** 类派生。
+- 如果希望异常必须被显式捕获（受检异常），继承 **`Exception`** 。
+- 如果希望异常可以被选择性捕获（非受检异常），继承 **`RuntimeException`** 。
 
 **提供构造函数**：
 

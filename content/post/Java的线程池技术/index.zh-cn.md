@@ -229,7 +229,7 @@ public class CustomRejectedExecutionHandler implements RejectedExecutionHandler 
 - **DelayQueue**：一个无界队列，队列中的元素必须实现 `Delayed` 接口，只有当元素的延迟时间到期时，才能被取出。常用于延迟任务调度。
 - **SynchronousQueue**：一个没有内部容量的队列，每个插入操作必须等待对应的移除操作，反之亦然。常用于在线程之间的直接传递任务，而不是存储任务。
 
-常见往期博客
+参见[往期博客](https://tyritic.github.io/p/java%E7%9A%84%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/)
 
 ## 核心线程的执行策略
 
