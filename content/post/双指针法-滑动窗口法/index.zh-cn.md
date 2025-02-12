@@ -85,6 +85,12 @@ class solution{
 }
 ```
 
+### 固定滑动窗口
+
+#### 题目前提
+
+题目中出现显式的窗口长度或字符串长度可以考虑使用
+
 ## 经典例题
 
 ### leetcode 209. 长度最小的子数组
@@ -252,8 +258,6 @@ class Solution {
 
 给你一个字符串 `s` 、一个字符串 `t` 。返回 `s` 中涵盖 `t` 所有字符的最小子串。如果 `s` 中不存在涵盖 `t` 所有字符的子串，则返回空字符串 `""` 。
 
- 
-
 **注意：**
 
 - 对于 `t` 中重复字符，我们寻找的子字符串中该字符数量必须不少于 `t` 中该字符数量。
@@ -356,6 +360,81 @@ class Solution {
             }
         }
         return true;
+    }
+}
+```
+
+### leetcode 438 找到字符串中所有的字母异位词
+
+#### 题目描述
+
+[题目链接](https://leetcode.cn/problems/find-all-anagrams-in-a-string/description/)
+
+给定两个字符串 `s` 和 `p`，找到 `s` 中所有 `p` 的 
+
+**异位词** 的子串，返回这些子串的起始索引。不考虑答案输出的顺序。
+
+**示例 1:**
+
+```
+输入: s = "cbaebabacd", p = "abc"
+输出: [0,6]
+解释:
+起始索引等于 0 的子串是 "cba", 它是 "abc" 的异位词。
+起始索引等于 6 的子串是 "bac", 它是 "abc" 的异位词。
+```
+
+ **示例 2:**
+
+```
+输入: s = "abab", p = "ab"
+输出: [0,1,2]
+解释:
+起始索引等于 0 的子串是 "ab", 它是 "ab" 的异位词。
+起始索引等于 1 的子串是 "ba", 它是 "ab" 的异位词。
+起始索引等于 2 的子串是 "ab", 它是 "ab" 的异位词。
+```
+
+**提示:**
+
+- `1 <= s.length, p.length <= 3 * 104`
+- `s` 和 `p` 仅包含小写字母
+
+#### 思路解析
+
+可以考虑设置一个长度为字符串p的长度的滑动窗口，移动滑动窗口比较窗口内的子串是否是p的字母异位词
+
+#### 参考代码
+
+```java
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer>ans=new ArrayList<>();
+        int sLen=s.length();
+        int pLen=p.length();
+        if(sLen<pLen)return ans;
+        // 设置两个哈希表，分别记录s和p的字母出现次数
+        int[]sCount=new int[26];
+        int[]pCount=new int[26];
+        // 比较起始位置是否是字母异位词
+        for(int i=0;i<pLen;i++)
+        {
+            sCount[s.charAt(i)-'a']++;
+            pCount[p.charAt(i)-'a']++;
+        }
+        if(Arrays.equals(sCount,pCount))
+        {
+            ans.add(0);
+        }
+        // 移动固定滑动窗口，再进行比较
+        for(int i=0;i<sLen-pLen;i++)
+        {
+            sCount[s.charAt(i)-'a']--;
+            sCount[s.charAt(i+pLen)-'a']++;
+            if(Arrays.equals(sCount,pCount))
+                ans.add(i+1);
+        }
+        return ans;
     }
 }
 ```
