@@ -1,7 +1,7 @@
 ---
 date : '2024-06-09T10:51:40+08:00'
 draft : false
-title : '应用层和HTTP协议'
+title : '应用层协议'
 image : ""
 categories : ["计算机网络","互联网面试题"]
 tags : ["计算机基础"]

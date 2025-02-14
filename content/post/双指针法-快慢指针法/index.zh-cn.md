@@ -157,23 +157,26 @@ for (int i = 0; i < k; i++) {
 
 题目条件中**原地**一词提示使用快慢指针法，将$O(n^2)$的操作转变为$O(n)$的操作
 
+**`slow`** 指针指向新数组中被更新元素下一个位置
+
+**`fast`** 指针遍历原数组
+
+根据题意，第一个元素 **`nums[0]`** 一定会被保留故 **`slow`** 从 **1** 开始，于是 **fast** 从 **1** 开始，当遇到与新数组的最后一个有效元素不重复的元素就更新数组
+
 #### 参考代码
 
 ```java
 class Solution {
     public int removeDuplicates(int[] nums) {
-        int slowIndex=0; 
-        int fast=0;
-        for(int fastIndex=0;fastIndex<nums.length-1;fastIndex++)
+        int slow=1;
+        for(int fast=1;fast<nums.length;fast++)
         {
-            if(nums[fastIndex]!=nums[fastIndex+1])
+            if(nums[fast]!=nums[slow-1])
             {
-                nums[slowIndex++]=nums[fastIndex];
+                nums[slow++]=nums[fast];
             }
-            fast=fastIndex; // 1.跟踪快指针下标
         }
-        nums[slowIndex]=nums[fast+1]; // 2.slowIndex为下一个操作的数组下标，nums[fast+1]为数组最后一个元素（保证不与其他元素重复）
-        return slowIndex+1;
+        return slow;
     }
 }
 ```

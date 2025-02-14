@@ -800,3 +800,155 @@ class Solution {
 }
 ```
 
+## 字符串同构问题
+
+### 问题描述
+
+给定两个字符串 `s` 和 `t` ，判断它们是否是同构的。
+
+如果 `s` 中的字符可以按某种映射关系替换得到 `t` ，那么这两个字符串是同构的。
+
+每个出现的字符都应当映射到另一个字符，同时不改变字符的顺序。不同字符不能映射到同一个字符上，相同字符只能映射到同一个字符上，字符可以映射到自己本身。
+
+### 思路解析
+
+维护两张哈希表，一张哈希表以第一个字符串中字符为键，映射至第二个字符串的字符为值，第二张哈希表以第二个字符串中的字符为键，映射至第一个字符串的字符为值。从左至右遍历两个字符串的字符，不断更新两张哈希表，如果出现冲突时说明两个字符串无法构成同构，返回 false。
+
+### 经典例题
+
+#### leetcode 205 同构字符串
+
+**题目描述**
+
+给定两个字符串 `s` 和 `t` ，判断它们是否是同构的。
+
+如果 `s` 中的字符可以按某种映射关系替换得到 `t` ，那么这两个字符串是同构的。
+
+每个出现的字符都应当映射到另一个字符，同时不改变字符的顺序。不同字符不能映射到同一个字符上，相同字符只能映射到同一个字符上，字符可以映射到自己本身。
+
+ 
+
+**示例 1:**
+
+```
+输入：s = "egg", t = "add"
+输出：true
+```
+
+**示例 2：**
+
+```
+输入：s = "foo", t = "bar"
+输出：false
+```
+
+**示例 3：**
+
+```
+输入：s = "paper", t = "title"
+输出：true
+```
+
+
+
+**提示：**
+
+- `1 <= s.length <= 5 * 104`
+- `t.length == s.length`
+- `s` 和 `t` 由任意有效的 ASCII 字符组成
+
+**思路解析**
+
+维护两张哈希表，第一张哈希表以 s 中字符为键，映射至 t 的字符为值，第二张哈希表以 t 中字符为键，映射至 s 的字符为值。从左至右遍历两个字符串的字符，不断更新两张哈希表，如果出现冲突时说明两个字符串无法构成同构，返回 false。
+
+如果遍历结束没有出现冲突，则表明两个字符串是同构的，返回 true 即可。
+
+**参考代码**
+
+```java
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        HashMap<Character,Character>st=new HashMap<>();
+        HashMap<Character,Character>ts=new HashMap<>();
+        for(int i=0;i<s.length();i++)
+        {
+            char s_ch=s.charAt(i);
+            char t_ch=t.charAt(i);
+            if((st.containsKey(s_ch)&&st.get(s_ch)!=t_ch)||(ts.containsKey(t_ch)&&ts.get(t_ch)!=s_ch))
+            {
+                return false;
+            }
+            st.put(s_ch,t_ch);
+            ts.put(t_ch,s_ch);
+        }
+        return true;
+    }
+}
+```
+
+#### leetcode 290 单词规律
+
+**题目描述**
+
+给定一种规律 `pattern` 和一个字符串 `s` ，判断 `s` 是否遵循相同的规律。
+
+这里的 **遵循** 指完全匹配，例如， `pattern` 里的每个字母和字符串 `s` 中的每个非空单词之间存在着双向连接的对应规律。 
+
+**示例1:**
+
+```
+输入: pattern = "abba", s = "dog cat cat dog"
+输出: true
+```
+
+**示例 2:**
+
+```
+输入:pattern = "abba", s = "dog cat cat fish"
+输出: false
+```
+
+**示例 3:**
+
+```
+输入: pattern = "aaaa", s = "dog cat cat dog"
+输出: false
+```
+
+**参考代码**
+
+```java
+class Solution {
+    public boolean wordPattern(String pattern, String s) {
+        HashMap<Character,String>ps=new HashMap<>();
+        HashMap<String,Character>sp=new HashMap<>();
+        // 记录每个单词的起始位置
+        int index=0;
+        for(int i=0;i<pattern.length();i++)
+        {
+            char p_ch=pattern.charAt(i);
+            // 针对单个单词
+            if (index >= s.length()) {
+                return false;
+            }
+            int j=index;
+            while(j<s.length()&&s.charAt(j)!=' ')
+            {
+                j++;
+            }
+            // 截取单词
+            String s_string=s.substring(index,j);
+            if((ps.containsKey(p_ch)&&!ps.get(p_ch).equals(s_string))||(sp.containsKey(s_string)&&sp.get(s_string)!=p_ch))
+            {
+                return false;
+            }
+            ps.put(p_ch,s_string);
+            sp.put(s_string,p_ch);
+            index=j+1;
+        }
+        System.out.println(index);
+        return index>=s.length();
+    }
+}
+```
+
