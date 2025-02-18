@@ -137,7 +137,7 @@ pubiic class AliossUti1s{
 
 ### 使用自定义配置类进行参数配置化
 
-自定义properties文件使用@Component注册为Bean对象，使用 **@ConfigurationProperties** 注解批量的将yml配置文件的属性和Bean对象属性绑定，**@ConfigurationProperties** 的prefix属性指定application.yml的子节点，该节点中的子节点将自动和属性进行绑定
+自定义properties文件使用 **`@Component`** 注册为Bean对象，使用 **`@ConfigurationProperties`** 注解批量的将yml配置文件的属性和Bean对象属性绑定，**@ConfigurationProperties** 的prefix属性指定application.yml的子节点，该节点中的子节点将自动和属性进行绑定
 
 示例代码
 
