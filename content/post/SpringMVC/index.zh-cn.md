@@ -1,11 +1,11 @@
 ---
 date : '2024-11-14T16:21:47+08:00'
 draft : false
-title : 'SpringMVC'
+title : 'SpringMVC模块'
 image : ""
-categories : ["SpringBoot"]
+categories : ["SpringBoot","Spring","SpringMVC"]
 tags : ["后端开发"]
-description : "SpringBoot中对SpringMVC的集成"
+description : "Web开发中的SpringMVC的集成"
 ---
 
 ## MVC设计模式
@@ -17,7 +17,7 @@ MVC 是一种常见的软件设计模式，用于分离应用程序的不同部�
 - 控制器（Controller）：处理用户交互并更新模型和视图。控制器负责接收来自视图的用户输入，对模型进行相应的操作，并更新视图以反映更改。
 
 MVC 模式的优点是可以将代码分离成三个独立的组件，使得应用程序更易于维护和扩展。例如，如果要更改视图的外观，可以修改视图而不影响模型和控制器；如果要更改数据存储方式，可以修改模型而不影响视图和控制器。同时，MVC 模式还有助于降低应用程序中的耦合度，使得各组件更加独立和可重用。
-## SpringMVC框架
+## SpringMVC模块
 
 ### 概述：
 
@@ -33,10 +33,15 @@ MVC 模式的优点是可以将代码分离成三个独立的组件，使得应�
 
 具体流程：
 
-- DispatcherServlet 首先收到请求，将请求映射到对应的处理器（controller）上，映射到controller的时候会触发拦截器
-- 处理器处理完后封装数据模型，交给视图解析器将数据模型解析为对应的视图返回给前端。
+- **客户端请求**：用户通过浏览器发送 HTTP 请求，所有请求都被 DispatcherServlet 接收。
+- **执行拦截器的 `preHandle()`**：如果配置了拦截器，Spring MVC 会首先执行 `preHandle()` 方法。如果返回 `false`，请求处理终止；否则，继续处理。 
+- **请求映射**：**`DispatcherServlet`** 根据配置的处理器映射器（**`HandlerMapping`**）查找与请求 URL 对应的控制器**`Controller`**。
+- **调用控制器方法** ：找到控制器后，**`DispatcherServlet`** 将使用 **`HandlerAdapter`** 来调用 **`Controller`** 的处理方法。转发给对应的控制器方法进行处理。控制器方法处理业务逻辑后，通常返回一个 **`ModelAndView`** 对象，包含数据模型和视图名称。 
+- **执行拦截器的 `postHandle()`**：如果返回视图，拦截器的 `postHandle()` 方法会在视图渲染之前执行。对于 JSON 响应，该方法仍然会执行。
+- **视图解析**：**`DispatcherServlet`** 根据控制器返回的视图名称，使用视图解析器（ **`ViewResolver`** ）将逻辑视图名称解析为实际的视图
+- **视图渲染返回**：视图渲染引擎根据数据模型渲染视图，并将生成的 HTML 响应返回给客户端
 
-### SpringMVC组件
+### 结构组件
 
 #### 控制器controller
 
@@ -135,6 +140,24 @@ MVC 模式的优点是可以将代码分离成三个独立的组件，使得应�
 
 - Spring MVC 中的 View（视图）用于展示数据的，视图技术的使用是可插拔的。无论选择使用 thymleaf、jsp 还是其他技术，classpath 有 jar 就能使用视图了。开发者主要就是更改配置。SpringBoot3 不推荐使用 FreeMarker、JSP 这些了。建议使用 Thymeleaf。
 
+## SpringMVC的核心组件
+
+- **`DispatcherServlet`**：**核心的中央处理器**，负责接收请求、分发，并给予客户端响应。
+  - 当客户端发送请求时，**`DispatcherServlet`** 会先接收请求。
+  - 然后，它会根据请求 URL 通过 **`HandlerMapping`** 找到合适的处理器（Controller）。
+  - 处理完请求后，它会根据 **`ViewResolver`** 找到对应的视图，将处理结果发送回客户端。
+
+- **`HandlerMapping`**：**处理器映射器**，根据 URL 去匹配查找能处理的 `Handler` ，并会将请求涉及到的拦截器和 `Handler` 一起封装。
+- **`HandlerAdapter`**：**处理器适配器**，根据 `HandlerMapping` 找到的 `Handler` ，适配执行对应的 `Handler`；
+- **`Handler`**：**请求处理器**，处理实际请求的处理器。
+  - 接收来自 `DispatcherServlet` 的请求，处理业务逻辑，并将处理结果返回给视图层。
+
+- **`ViewResolver`**：**视图解析器**，根据 `Handler` 返回的逻辑视图 / 视图，解析并渲染真正的视图，并传递给 `DispatcherServlet` 响应客户端
+  - 根据控制器返回的视图名称找到对应的视图文件
+
+- **`ModelAndView`** ：控制器返回的对象，包含模型数据和视图名称。模型部分包含业务数据，视图部分指定渲染该数据的视图
+- **`HandlerInterceptor`** ：在请求处理的各个阶段（如控制器方法执行前后）进行拦截。它可以用于实现日志记录、权限验证等功能。模板。
+
 ## SpringBoot框架中对SpringMVC框架的集成
 
 - 自动配置：SpringBoot会自动配置一个嵌入式的Servlet容器（如Tomcat），并为我们提供默认的SpringMVC配置。这样我们无需手动配置Servlet容器和SpringMVC，只需添加相应的依赖即可快速搭建一个Web应用。
@@ -203,7 +226,7 @@ spring:
 
 #### 方法二：编写一个被注解@WebMvcConfiguration修饰的Java配置类
 
-**WebMvcConfigurer**接口是Spring提供的一个用于自定义Spring MVC配置的接口，主要提供了WebMvcConfigurer接口是Spring提供的一个用于自定义Spring MVC配置的接口，主要提供了多个回调方法，包括添加或修改Spring MVC的配置，如添加拦截器，自定义消息转换器等。具体来说，WebMvcConfigurer接口的主要方法包括：
+**WebMvcConfigurer** 接口是Spring提供的一个用于自定义Spring MVC配置的接口，主要提供了WebMvcConfigurer接口是Spring提供的一个用于自定义Spring MVC配置的接口，主要提供了多个回调方法，包括添加或修改Spring MVC的配置，如添加拦截器，自定义消息转换器等。具体来说，**`WebMvcConfigurer`** 接口的主要方法包括：
 
 - configurePathMatch（S）：此方法用于配置路由请求规则。
 - configureContentNegotiation（S）：该方法用于内容协商配置。

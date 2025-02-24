@@ -31,7 +31,7 @@ math : true
       left与right的逻辑处理;         // 中 
       ```
   
-  - 如果要搜索其中一条符合条件的路径，那么递归一定需要返回值，因为遇到符合条件的路径了就要及时返回。
+  - 如果要搜索其中一条符合条件的路径，那么递归一定需要返回值boolean，因为遇到符合条件的路径了就要及时返回。
   
 - **确定终止条件：** 写完了递归算法, 运行的时候，经常会遇到栈溢出的错误，就是没写终止条件或者终止条件写的不对，操作系统也是用一个栈的结构来保存每一层递归的信息，如果递归没有终止，操作系统的内存栈必然就会溢出。
 - **确定单层递归的逻辑：** 确定每一层递归需要处理的信息。在这里也就会重复调用自己来实现递归的过程。
@@ -2203,15 +2203,14 @@ class Solution {
         // 终止条件
         if(root==null||root==p||root==q)
             return root;
-        // 单层遍历-后序遍历
-        TreeNode left=lowestCommonAncestor(root.left,p,q); // 递归处理左节点
-        TreeNode right=lowestCommonAncestor(root.right,p,q);// 递归处理右节点
-        // 处理中间节点
-        if(root.left!=null&&root.right==null)
-            return root.left;
-        else if(root.left==null&&root.right!=null)
-            return root.right;
-        else if(root.left==null&&root.right==null)
+        // 后序遍历
+        TreeNode left=lowestCommonAncestor(root.left,p,q);
+        TreeNode right=lowestCommonAncestor(root.right,p,q);
+        if(left!=null&&right==null)
+            return left;
+        else if(left==null&&right!=null)
+            return right;
+        else if(left==null&&right==null)
             return null;
         else
             return root;
@@ -2282,6 +2281,211 @@ class Solution {
         if(root.val<p.val&&root.val<q.val)
             return dfs(root.right,p,q);
         return root;
+    }
+}
+```
+
+## 二叉树与链表转换问题
+
+### leetcode 114 二叉树展开为链表
+
+#### 题目描述
+
+[题目链接](https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/description/)
+
+给你二叉树的根结点 `root` ，请你将它展开为一个单链表：
+
+- 展开后的单链表应该同样使用 `TreeNode` ，其中 `right` 子指针指向链表中下一个结点，而左子指针始终为 `null` 。
+- 展开后的单链表应该与二叉树 [**先序遍历**](https://baike.baidu.com/item/先序遍历/6442839?fr=aladdin) 顺序相同。
+
+
+
+**示例 1：**
+
+![img](flaten.jpg)
+
+```
+输入：root = [1,2,5,3,4,null,6]
+输出：[1,null,2,null,3,null,4,null,5,null,6]
+```
+
+**示例 2：**
+
+```
+输入：root = []
+输出：[]
+```
+
+**示例 3：**
+
+```
+输入：root = [0]
+输出：[0]
+```
+
+
+
+**提示：**
+
+- 树中结点数在范围 `[0, 2000]` 内
+- `-100 <= Node.val <= 100`
+
+
+
+**进阶：**你可以使用原地算法（`O(1)` 额外空间）展开这棵树吗？
+
+#### 思路解析
+
+利用递归的方法将树的前序遍历结果放入结果集合中，然后再基于结果集重新构建链表
+
+#### 参考代码
+
+```java
+class Solution {
+    List<TreeNode>res;
+    public void flatten(TreeNode root) {
+        res=new ArrayList<>();
+        dfs(root);
+        for(int i=1;i<res.size();i++)
+        {
+            TreeNode prev=res.get(i-1);
+            TreeNode curr=res.get(i);
+            prev.left=null;
+            prev.right=curr;
+        }
+    }
+
+    public void dfs(TreeNode root)
+    {
+        if(root==null)
+            return;
+        res.add(root);
+        dfs(root.left);
+        dfs(root.right);
+    }
+}
+```
+
+### BM30 二叉搜索树与双向链表
+
+#### 题目描述
+
+[题目链接](https://www.nowcoder.com/practice/947f6eb80d944a84850b0538bf0ec3a5?tpId=295&tqId=23253&sourceUrl=%2Fexam%2Foj%3FquestionJobId%3D10%26subTabName%3Donline_coding_page)
+
+输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。如下图所示
+
+![img](https://uploadfiles.nowcoder.com/images/20210605/557336_1622886924427/E1F1270919D292C9F48F51975FD07CE2)
+
+数据范围：输入二叉树的节点数 0≤n≤10000≤*n*≤1000，二叉树中每个节点的值 0≤val≤10000≤*v**a**l*≤1000
+要求：空间复杂度O(1)*O*(1)（即在原树上操作），时间复杂度 O(n)*O*(*n*)
+
+注意:
+
+1.要求不能创建任何新的结点，只能调整树中结点指针的指向。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继
+2.返回链表中的第一个节点的指针
+3.函数返回的TreeNode，有左右指针，其实可以看成一个双向链表的数据结构
+
+4.你不用输出双向链表，程序会根据你的返回值自动打印输出
+
+**输入描述：**
+
+二叉树的根节点
+
+**返回值描述：**
+
+双向链表的其中一个头节点。
+
+示例1
+
+输入：
+
+```
+{10,6,14,4,8,12,16}
+```
+
+返回值：
+
+```
+From left to right are:4,6,8,10,12,14,16;From right to left are:16,14,12,10,8,6,4;
+```
+
+说明：
+
+```
+输入题面图中二叉树，输出的时候将双向链表的头节点返回即可。     
+```
+
+**示例2**
+
+输入：
+
+```
+{5,4,#,3,#,2,#,1}
+```
+
+返回值：
+
+```
+From left to right are:1,2,3,4,5;From right to left are:5,4,3,2,1;
+```
+
+说明：
+
+```
+                    5
+                  /
+                4
+              /
+            3
+          /
+        2
+      /
+    1
+树的形状如上图
+```
+
+#### 思路解析
+
+- 使用一个指针preNode指向当前结点root的前继
+- 确定递归函数返回值以及参数
+  - 返回值为void，不需要利用递归值
+- 终止条件
+  - 遇到空的话，返回空
+- 单层递归逻辑：使用中序遍历
+  - 处理左节点
+    - 递归处理左节点
+  - 处理中节点
+    - 对于当前结点root，有root->left要指向前继preNode
+    - preNode->right要指向当前结点
+    - 更新preNode
+  - 处理右节点
+    - 递归处理右节点
+
+#### 参考代码
+
+```java
+public class Solution {
+    TreeNode preRoot;
+    public TreeNode Convert(TreeNode pRootOfTree) {
+        if (pRootOfTree == null)
+            return null;
+        TreeNode root = pRootOfTree;
+        while (root.left != null) {
+            root = root.left;
+        }
+        inorder(pRootOfTree);
+        return root;
+    }
+    public void inorder(TreeNode root) {
+        if (root == null)
+            return;
+        inorder(root.left);
+        root.left = preRoot;
+        if (preRoot != null) {
+            preRoot.right = root;
+        }
+        preRoot = root;
+        inorder(root.right);
     }
 }
 ```

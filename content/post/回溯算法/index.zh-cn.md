@@ -1216,3 +1216,316 @@ class Solution {
 }
 ```
 
+### leetcode 332 重新安排行程
+
+#### 题目描述
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/reconstruct-itinerary/)
+
+给定一个机票的字符串二维数组 [from, to]，子数组中的两个成员分别表示飞机出发和降落的机场地点，对该行程进行重新规划排序。所有这些机票都属于一个从 JFK（肯尼迪国际机场）出发的先生，所以该行程必须从 JFK 开始。
+
+提示：
+
+- 如果存在多种有效的行程，请你按字符自然排序返回最小的行程组合。例如，行程 ["JFK", "LGA"] 与 ["JFK", "LGB"] 相比就更小，排序更靠前
+- 所有的机场都用三个大写字母表示（机场代码）。
+- 假定所有机票至少存在一种合理的行程。
+- 所有的机票必须都用一次 且 只能用一次。
+
+示例 1：
+
+- 输入：[["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]
+- 输出：["JFK", "MUC", "LHR", "SFO", "SJC"]
+
+示例 2：
+
+- 输入：[["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
+- 输出：["JFK","ATL","JFK","SFO","ATL","SFO"]
+- 解释：另一种有效的行程是 ["JFK","SFO","ATL","JFK","ATL","SFO"]。但是它自然排序更大更靠后。
+
+#### 思路解析
+
+本题的难点在于如何确定起点和重点的映射关系，同时还要按照字符的自然排序
+
+可以考虑使用一个嵌套的map，键为起点，值为一个键是终点，值为航班次数的treeMap。
+
+本题的目的是寻找一条符合条件的路径，不需要遍历完整个树，因此返回值为 **`boolean`**
+
+#### 参考代码
+
+```java
+class Solution {
+    List<String>res=new LinkedList<>();
+    Map<String,Map<String,Integer>>map=new HashMap<>();
+    public List<String> findItinerary(List<List<String>> tickets) {
+        // 建立映射关系(起点:(终点:航班次数))
+        for(List<String>ticket:tickets)
+        {
+            // 获取起点和终点
+            String src=ticket.get(0);
+            String des=ticket.get(1);
+            Map<String,Integer>temp;
+            if(map.containsKey(src))
+            {
+                temp=map.get(src);
+                temp.put(des,temp.getOrDefault(des,0)+1);
+            }else{
+                temp=new TreeMap<>();
+                temp.put(des,1);
+            }
+            map.put(src,temp);
+        }
+        res.add("JFK");
+        backtrack(tickets.size());
+        return res;
+    }
+
+    public boolean backtrack(int ticketNum){
+        // 终止条件
+        if(res.size()==ticketNum+1)
+        {
+            return true;
+        }
+        // 获取队尾
+        String last=res.getLast();
+        // 查找以他为起点的航班情况
+        Map<String,Integer>target=map.get(last);
+        for(String t:target.keySet())
+        {
+            int count=target.get(t);
+            if(count>0)
+            {
+                // 处理节点
+                res.add(t);
+                target.put(t,count-1);
+                if(backtrack(ticketNum))
+                    return true;
+                res.remove(res.size()-1);
+                target.put(t,count);
+            }
+        }
+        return false;
+    }
+
+}
+```
+
+
+
+## 一维递归
+
+### leetcode 51 N皇后问题
+
+#### 题目描述
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/n-queens/)
+
+n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+
+给你一个整数 n ，返回所有不同的 n 皇后问题 的解决方案。
+
+每一种解法包含一个不同的 n 皇后问题 的棋子放置方案，该方案中 'Q' 和 '.' 分别代表了皇后和空位。
+
+示例 1：
+
+![img](https://code-thinking-1253855093.file.myqcloud.com/pics/20211020232201.png)
+
+- 输入：n = 4
+- 输出：[[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
+- 解释：如上图所示，4 皇后问题存在两个不同的解法。
+
+示例 2：
+
+- 输入：n = 1
+- 输出：[["Q"]]
+
+#### 思路解析
+
+![51.N皇后](20210130182532303.jpg)
+
+- 递归函数参数
+  - 定义全局变量二维数组result来记录最终结果。
+  - 形参
+    - 参数n是棋盘的大小，
+    - row来记录当前遍历到棋盘的第几层了。
+- 终止条件
+  - 遍历到最后一行停止
+- 单层遍历
+  - 遍历每一列
+    - 若放入皇后后棋盘合法则
+      - 处理节点
+      - 递归处理
+      - 回溯
+
+#### 参考代码
+
+```java
+class Solution {
+    List<List<String>>res;
+    public List<List<String>> solveNQueens(int n) {
+        res=new ArrayList<>();
+        char[][]chessboard=new char[n][n];
+        for(char[] ch:chessboard)
+        {
+            Arrays.fill(ch,'.');
+        }
+        backtrack(n,0,chessboard);
+        return res;
+    }
+    public void backtrack(int n,int row,char[][]chessboard)
+    {
+        // 终止条件
+        if(row==n){
+            res.add(ArrayToList(chessboard));
+            return;
+        }
+        // 遍历每一列
+        for(int col=0;col<n;col++)
+        {
+            // 判断是否合法
+            if(isValid(row,col,n,chessboard))
+            {
+                chessboard[row][col]='Q';
+                backtrack(n,row+1,chessboard);
+                chessboard[row][col]='.';
+            }
+        }
+    }
+    // 检验假设放入皇后之后的棋盘是否合法
+    public boolean isValid(int row,int col,int n,char[][]chessboard)
+    {
+        // 检验同一列
+        for(int i=0;i<row;i++)
+        {
+            if(chessboard[i][col]=='Q')
+                return false;
+        }
+
+        // 检验左上对角线
+        for (int i=row-1, j=col-1; i>=0 && j>=0; i--, j--) {
+            if (chessboard[i][j] == 'Q') {
+                return false;
+            }
+        }
+        // 检验右上对角线
+        for (int i=row-1, j=col+1; i>=0 && j<=n-1; i--, j++) {
+            if (chessboard[i][j] == 'Q') {
+                return false;
+            }
+        }
+        return true;
+    }
+	
+    // 将棋盘数字转换为List
+    public List<String> ArrayToList(char[][]chessboard)
+    {
+        List<String>ans=new ArrayList<>();
+        for(char[] ch:chessboard)
+        {
+            ans.add(new String(ch));
+        }
+        return ans;
+    }
+}
+```
+
+## 二维递归
+
+#### 题目描述
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/sudoku-solver/)
+
+编写一个程序，通过填充空格来解决数独问题。
+
+一个数独的解法需遵循如下规则： 数字 1-9 在每一行只能出现一次。 数字 1-9 在每一列只能出现一次。 数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。 空白格用 '.' 表示。
+
+![解数独](202011171912586.png)
+
+一个数独。
+
+![解数独](https://code-thinking-1253855093.file.myqcloud.com/pics/20201117191340669.png)
+
+答案被标成红色。
+
+提示：
+
+- 给定的数独序列只包含数字 1-9 和字符 '.' 。
+- 你可以假设给定的数独只有唯一解。
+- 给定数独永远是 9x9 形式的。
+
+#### 思路解析
+
+相比于N皇后，数独问题需要在一个位置选择9个数字中的一个。同时在检验中如何保证数字 `1-9` 在每一个以粗实线分隔的 `3x3` 宫内只能出现一次也是难点。对于保证数字 `1-9` 在每一个以粗实线分隔的 `3x3` 宫内只能出现一次。要向确定每个`3x3` 的起始行和起始列。
+
+```java
+int startRow = (row / 3) * 3;
+int startCol = (col / 3) * 3;
+```
+
+可以用来标识起始行和起始列
+
+回溯函数的参数为boolean，因为本题只要找到一个符合的条件（就在树的叶子节点上）立刻就返回，相当于找从根节点到叶子节点一条唯一路径。
+
+#### 参考代码
+
+```java
+class Solution {
+    public void solveSudoku(char[][] board) {
+        backtrack(board);
+    }
+
+    public boolean backtrack(char[][]board)
+    {
+        // 确定每一个位置
+        for(int i=0;i<9;i++)
+        {
+            for(int j=0;j<9;j++)
+            {
+                // 已经放入数组则跳过下面操作
+                if(board[i][j]!='.')
+                    continue;
+                for(char k='1';k<='9';k++)
+                {
+                    if(isValid(i,j,k,board))
+                    {
+                        board[i][j]=k;
+                        if(backtrack(board))
+                            return true;
+                        board[i][j]='.';
+                    }
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 检验放入数字前棋盘是否合法
+    public boolean isValid(int row,int col,char val,char[][]board)
+    {
+        // 同行是否重复
+        for (int i = 0; i < 9; i++){
+            if (board[row][i] == val){
+                return false;
+            }
+        }
+        // 同列是否重复
+        for (int j = 0; j < 9; j++){
+            if (board[j][col] == val){
+                return false;
+            }
+        }
+        // 9宫格里是否重复
+        int startRow = (row / 3) * 3;
+        int startCol = (col / 3) * 3;
+        for (int i = startRow; i < startRow + 3; i++){
+            for (int j = startCol; j < startCol + 3; j++){
+                if (board[i][j] == val){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+```
+

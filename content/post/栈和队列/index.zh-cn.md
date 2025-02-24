@@ -680,3 +680,92 @@ class Solution {
 }
 ```
 
+### **BM48** **数据流中的中位数**
+
+#### 题目描述
+
+[题目链接](https://www.nowcoder.com/share/jump/1895918791740295185624)
+
+如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。我们使用Insert()方法读取数据流，使用GetMedian()方法获取当前读取数据的中位数。
+
+数据范围：数据流中数个数满足 1≤n≤1000 1≤*n*≤1000 ，大小满足 1≤val≤1000 1≤*v**a**l*≤1000 
+
+进阶： 空间复杂度 O(n) *O*(*n*) ， 时间复杂度 O(nlogn) *O*(*n**l**o**g**n*) 
+
+示例1
+
+输入：
+
+```
+[5,2,3,4,1,6,7,0,8]
+```
+
+返回值：
+
+```
+"5.00 3.50 3.00 3.50 3.00 3.50 4.00 3.50 4.00 "
+```
+
+说明：
+
+```
+数据流里面不断吐出的是5,2,3...,则得到的平均数分别为5,(5+2)/2,3...   
+```
+
+示例2
+
+输入：
+
+```
+[1,1,1]
+```
+
+返回值：
+
+```
+"1.00 1.00 1.00 "
+```
+
+#### 思路解析
+
+中位数的特征，它是数组中间个数字或者两个数字的均值，它是数组较小的一半元素中最大的一个，同时也是数组较大的一半元素中最小的一个。那我们只要每次维护最小的一半元素和最大的一半元素，并能快速得到它们的最大值和最小值，那不就可以了嘛。这时候就可以想到了堆排序的优先队列。
+
+- step 1：我们可以维护两个堆，分别是大顶堆min，用于存储较小的值，其中顶部最大；小顶堆max，用于存储较大的值，其中顶部最小，则中位数只会在两个堆的堆顶出现。
+- step 2：我们可以约定奇数个元素时取大顶堆的顶部值，偶数个元素时取两堆顶的平均值，则可以发现两个堆的数据长度要么是相等的，要么奇数时大顶堆会多一个。
+- step 3：每次输入的数据流先进入大顶堆排序，然后将小顶堆的最大值弹入大顶堆中，完成整个的排序。
+- step 4：但是因为大顶堆的数据不可能会比小顶堆少一个，因此需要再比较二者的长度，若是小顶堆长度小于大顶堆，需要从大顶堆中弹出最小值到大顶堆中进行平衡。
+
+#### 参考代码
+
+```java
+public class Solution {
+    // 小顶堆
+    PriorityQueue<Integer>max_que = new PriorityQueue<>();
+    // 大顶堆
+    PriorityQueue<Integer>min_que = new PriorityQueue<>(new Comparator<Integer>() {
+        @Override
+        public int compare(Integer o1, Integer o2) {
+            return o2 - o1;
+        }
+    });
+    public void Insert(Integer num) {
+        min_que.offer(num);
+        max_que.offer(min_que.poll());
+        if (min_que.size() < max_que.size()) {
+            min_que.offer(max_que.poll());
+        }
+    }
+
+    public Double GetMedian() {
+        // 奇数个
+        if (min_que.size() > max_que.size())
+            return (double)min_que.peek();
+        else {
+            return (double)(min_que.peek() + max_que.peek()) / 2;
+        }
+    }
+
+
+}
+```
+

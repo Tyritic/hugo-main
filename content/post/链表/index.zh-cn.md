@@ -274,7 +274,7 @@ class Solution {
 
 ### 经典例题
 
-#### leetcode 206. 翻装链表
+#### leetcode 206. 翻转链表
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/reverse-linked-list/)
 
@@ -301,6 +301,91 @@ class Solution {
     }
 }
 ```
+
+#### **BM2** **链表内指定区间反转**
+
+**题目描述**
+
+将一个节点数为 size 链表 m 位置到 n 位置之间的区间反转，要求时间复杂度 O(n)*O*(*n*)，空间复杂度 O(1)*O*(1)。
+例如：
+给出的链表为 1→2→3→4→5→NULL1→2→3→4→5→*N**U**L**L*, m=2,n=4*m*=2,*n*=4,
+返回 1→4→3→2→5→NULL1→4→3→2→5→*N**U**L**L*.
+
+
+
+数据范围： 链表长度 0<size≤10000<*s**i**z**e*≤1000，0<m≤n≤size0<*m*≤*n*≤*s**i**z**e*，链表中每个节点的值满足 ∣val∣≤1000∣*v**a**l*∣≤1000
+
+要求：时间复杂度 O(n)*O*(*n*) ，空间复杂度 O(n)*O*(*n*)
+
+进阶：时间复杂度 O(n)*O*(*n*)，空间复杂度 O(1)*O*(1)
+
+示例1
+
+输入：
+
+```
+{1,2,3,4,5},2,4
+```
+
+返回值：
+
+```
+{1,4,3,2,5}
+```
+
+示例2
+
+输入：
+
+```
+{5},1,1
+```
+
+返回值：
+
+```
+{5}
+```
+
+**思路解析**
+
+- 固定子区间外的节点。
+- 在需要反转的区间里，每遍历到一个节点，让这个新节点来到反转部分的起始位置。
+- 变量解释
+  - pre：待反转的区间之前的一个节点
+  - curr：待反转区间的第一个节点
+  - temp：curr的后驱节点，将temp节点反转到起始位置
+
+**参考代码**
+
+```java
+public ListNode reverseBetween (ListNode head, int m, int n) {
+        // write code here
+    	// 虚拟头节点
+        ListNode dummy=new ListNode(0);
+        dummy.next=head;
+        ListNode pre=dummy;
+        ListNode curr=head;
+    	// 求出pre和curr
+        for(int i=1;i<m;i++)
+        {
+            pre=curr;
+            curr=curr.next;
+        }
+        for(int i=m;i<n;i++)
+        {
+            ListNode temp=curr.next;
+            // 跳过一个节点
+            curr.next=temp.next;
+            // temp指向待反转区间的第一个节点
+            temp.next=pre.next;
+            pre.next=temp;
+        }
+        return dummy.next;
+    }
+```
+
+
 
 ## 判断链表是否相交
 

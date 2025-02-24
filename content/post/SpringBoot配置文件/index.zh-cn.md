@@ -109,6 +109,8 @@ spring:
 
 **@Value 注解**通常用于外部配置的属性注入，具体用法为: @Value("${配置文件中的key}")
 
+在 Spring 框架中，**`@Value`** 注解用于注入外部化的配置值到 Spring 管理的 Bean 中。通过 @Value 注解，可以将属性文件、环境变量、系统属性等外部资源中的值注入到 Spring Bean 的字段、方法参数或构造函数参数中。
+
 示例代码
 
 ```properties

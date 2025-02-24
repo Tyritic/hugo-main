@@ -1,21 +1,21 @@
 ---
 date : '2024-11-07T15:49:32+08:00'
 draft : false
-title : 'Interceptor'
+title : '拦截器Interceptor'
 image : ""
-categories : ["SpringBoot"]
+categories : ["SpringBoot","SpringMVC","Spring"]
 tags : ["后端开发"]
 description : "Interceptor组件"
 ---
 
 ## 简介
 
-Spring框架中提供的，用来动态拦截控制器方法的执行。
-**作用**:拦截请求，在指定的方法调用前后，根据业务需要执行预先设定的代码。
+Spring框架中提供的，用来动态拦截控制器方法的执行。拦截器可以用于实现诸如**权限验证**、**日志记录**、**性能监控**等功能，而无需将这些逻辑直接耦合在控制器代码中。
+**作用** ：用于在请求处理流程的不同阶段拦截 HTTP 请求和响应，并对其进行预处理或后处理。
 
 ## 具体实现
 
-1. 定义**Interceptor**类，实现**HandlerInterceptor**接口并重写方法
+1. 定义 **Interceptor** 类，实现 **`HandlerInterceptor`** 接口并重写方法
 
    ```java
    @Component
@@ -67,17 +67,19 @@ Spring框架中提供的，用来动态拦截控制器方法的执行。
 
 ![](微信截图_20241107162538.png)
 
-1. 请求先进入过滤器还未进入Spring容器中
-2. 经过过滤器的校验后进入DispatcherServlet
-3. 请求到达拦截器进行校验
+- 请求先进入过滤器还未进入Spring容器中
+- 经过过滤器的校验后进入**`DispatcherServlet`**
+- 请求到达拦截器进行校验
 
 {{<notice tip>}}
+
+过滤器和拦截器的区别
 
 - 接口规范不同:
   - 过滤器需要实现Filter接口
   - 拦截器需要实现Handlerinterceptor接口。
 - 拦截范围不同:
-  - Filter会拦截所有的资源
+  - Filter会拦截所有的资源，它通常用于处理全局的任务，如跨域请求处理（CORS）、编码转换等。
   - Interceptor只会拦截Spring环境中的资源。
 
 {{</notice>}}

@@ -1,7 +1,7 @@
 ---
 date : '2024-11-03T12:09:48+08:00'
 draft : false
-title : 'Java中的键盘输入操作'
+title : 'Java中的标准输入操作'
 image : ""
 categories : ["Java基础"]
 tags : ["JavaSE"]
