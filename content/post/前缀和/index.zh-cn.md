@@ -32,13 +32,33 @@ p[j] - p[i] = vec[i+1] + vec[i+2] + vec[i+3] + ... +vec[j];
 
 ![img](20240627111319.png)
 
+### 代码模板
+
+```java
+// 求解前缀和数组
+int presum = 0;
+for (int i = 0; i < n; i++) {
+    presum += vec[i];
+    p[i] = presum;
+}
+// 求解子区间和
+int sum;
+if (a == 0) {
+     sum = p[b];
+} else {
+     sum = p[b] - p[a - 1];
+ }
+```
+
+
+
 ### 经典例题
 
-#### 题目描述
-
-[题目链接(opens new window)](https://kamacoder.com/problempage.php?pid=1070)
+#### 板子题
 
 题目描述
+
+[题目链接(opens new window)](https://kamacoder.com/problempage.php?pid=1070)
 
 给定一个整数数组 Array，请计算该数组在每个指定区间内元素的总和。
 
@@ -80,7 +100,7 @@ p[j] - p[i] = vec[i+1] + vec[i+2] + vec[i+3] + ... +vec[j];
 
 
 
-#### 参考代码
+**参考代码**
 
 ```java
 import java.util.Scanner;
@@ -114,6 +134,64 @@ public class Main {
         }
 
         scanner.close();
+    }
+}
+```
+
+#### leetcode 560 和为K的子数组
+
+**题目描述**
+
+[题目链接](https://leetcode.cn/problems/subarray-sum-equals-k/description/)
+
+给你一个整数数组 `nums` 和一个整数 `k` ，请你统计并返回 *该数组中和为 `k` 的子数组的个数* 。
+
+子数组是数组中元素的连续非空序列。
+
+**示例 1：**
+
+```
+输入：nums = [1,1,1], k = 2
+输出：2
+```
+
+**示例 2：**
+
+```
+输入：nums = [1,2,3], k = 3
+输出：2
+```
+
+**思路解析**
+
+- 先构造出nums的前缀和数组
+- 根据公式，从区间[i,j]的区间和为p[j]-p[i-1]=k
+- 注意要先在map中放入（0，1），因为当j=0时只有1种可能
+- 因此可以遍历前缀和数组，相当于求解p[j]-k在map中出现多少次
+
+**参考代码**
+
+```java
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        HashMap<Integer,Integer>map=new HashMap<>();
+        int[]preSum=new int[nums.length];
+        int pre=0;
+        int count=0;
+        for(int i=0;i<nums.length;i++){
+            pre+=nums[i];
+            preSum[i]=pre;
+        }
+        map.put(0,1);
+        // 区间[i,j]的区间和为preSum[j]-preSum[i]=k
+        for(int j=0;j<nums.length;j++){
+            int temp=preSum[j]-k;
+            if(map.containsKey(temp)){
+                count+=map.get(temp);
+            }
+            map.put(preSum[j],map.getOrDefault(preSum[j],0)+1);
+        }
+        return count;
     }
 }
 ```

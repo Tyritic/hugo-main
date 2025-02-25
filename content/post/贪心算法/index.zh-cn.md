@@ -807,6 +807,14 @@ class Solution {
   - 若第i个区间的左端点大于第i-1个区间的右端点则两个区间不重叠
   - 否则两个区间重叠，更新两个区间的右区间为重叠区间的右端点的最小值
 
+### 代码模板（求解非重叠区间）
+
+- 将区间按照左端点
+- 先将第一个区间加入结果集合
+- 从i=1开始遍历
+  - 若第i个区间的左端点和结果集的最后一个区间的右端点则两个区间不重叠直接加入结果集合
+  - 否则两个区间重叠，合并两个区间，更新结果集合的最后一个区间（左端点为结果集合的最后一个区间的左端点，右端点为结果集合的最后一个区间的右端点和第i个区间的右端点的较小值）
+
 ### leetcode 452 用最少数量的箭引爆气球
 
 #### 题目描述
@@ -915,6 +923,7 @@ class Solution {
 #### 参考代码
 
 ```java
+// 求解个数
 class Solution {
     public int eraseOverlapIntervals(int[][] intervals) {
         Arrays.sort(intervals, new Comparator<int[]>() {
@@ -932,6 +941,192 @@ class Solution {
             }
         }
         return intervals.length-count;
+    }
+}
+
+// 求解区间
+class Solution {
+    public int eraseOverlapIntervals(int[][] intervals) {
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[0]-o2[0];
+            }
+        });
+        LinkedList<int[]>res=new LinkedList<>();
+        res.add(intervals[0]);
+        for(int i=1;i<intervals.length;i++){
+            if(intervals[i][0]>=res.getLast()[1]){
+                res.add(intervals[i]);
+            }else{
+                res.set(res.size()-1,new int[]{res.getLast()[0],Math.min(res.getLast()[1],intervals[i][1])});
+            }
+        }
+        return intervals.length-res.size();
+    }
+}
+```
+
+### leetcode 763 划分字母区间
+
+#### 题目描述
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/partition-labels/)
+
+字符串 S 由小写字母组成。我们要把这个字符串划分为尽可能多的片段，同一字母最多出现在一个片段中。返回一个表示每个字符串片段的长度的列表。
+
+示例：
+
+- 输入：S = "ababcbacadefegdehijhklij"
+- 输出：[9,7,8] 解释： 划分结果为 "ababcbaca", "defegde", "hijhklij"。 每个字母最多出现在一个片段中。 像 "ababcbacadefegde", "hijhklij" 的划分是错误的，因为划分的片段数较少。
+
+提示：
+
+- S的长度在[1, 500]之间。
+- S只包含小写字母 'a' 到 'z' 。
+
+#### 思路解析
+
+在遍历的过程中相当于是要找每一个字母的边界，**如果找到之前遍历过的所有字母的最远边界，说明这个边界就是分割点了**。此时前面出现过所有字母，最远也就到这个边界了。
+
+- 统计每一个字符最后出现的位置
+- 从头遍历字符，并更新字符的最远出现下标，如果找到字符最远出现位置下标和当前下标相等了，则找到了分割点
+
+#### 参考代码
+
+```java
+class Solution {
+    public List<Integer> partitionLabels(String s) {
+        // 统计每个字符最后出现的位置
+        int[]hash=new int[26];
+        List<Integer>res=new ArrayList<>();
+        for(int i=0;i<s.length();i++){
+            hash[s.charAt(i)-'a']=i;
+        }
+        // 记录区间的起点和终点
+        int start=0;
+        int end=0;
+        for(int i=0;i<s.length();i++){
+            end=Math.max(end,hash[s.charAt(i)-'a']);
+            if(i==end){
+                res.add(end-start+1);
+                start=end+1;
+            }
+        }
+        return res;
+    }
+}
+```
+
+### leetcode 56 合并区间
+
+#### 题目描述
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/merge-intervals/)
+
+给出一个区间的集合，请合并所有重叠的区间。
+
+示例 1:
+
+- 输入: intervals = [[1,3],[2,6],[8,10],[15,18]]
+- 输出: [[1,6],[8,10],[15,18]]
+- 解释: 区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+
+示例 2:
+
+- 输入: intervals = [[1,4],[4,5]]
+- 输出: [[1,5]]
+- 解释: 区间 [1,4] 和 [4,5] 可被视为重叠区间。
+- 注意：输入类型已于2019年4月15日更改。 请重置默认代码定义以获取新方法签名。
+
+#### 思路解析
+
+- 先按左边界排序，让所有的相邻区间尽可能的重叠在一起。
+- 先将第一个区间加入结果集合
+- 从i=1开始遍历，判断和结果集合的最后一个区间的重叠情况
+  - 若不重叠则直接加入结果集合
+  - 若重叠和结果集合的最后一个区间进行合并
+
+#### 参考代码
+
+```java
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[0]-o2[0];
+            }
+        });
+        LinkedList<int[]> res=new LinkedList<>();
+        res.add(intervals[0]);
+        for(int i=1;i<intervals.length;i++){
+            // 不重叠
+            if(intervals[i][0]>res.getLast()[1]){
+                res.add(intervals[i]);
+            }else{
+                int left=res.getLast()[0];
+                int right=Math.max(res.getLast()[1],intervals[i][1]);
+                res.removeLast();
+                res.add(new int[]{left,right});
+            }
+        }
+        return res.toArray(new int[res.size()][]);
+    }
+}
+```
+
+### leetcode 738 单调递增的数字
+
+#### 题目描述
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/monotone-increasing-digits/)
+
+给定一个非负整数 N，找出小于或等于 N 的最大的整数，同时这个整数需要满足其各个位数上的数字是单调递增。
+
+（当且仅当每个相邻位数上的数字 x 和 y 满足 x <= y 时，我们称这个整数是单调递增的。）
+
+示例 1:
+
+- 输入: N = 10
+- 输出: 9
+
+示例 2:
+
+- 输入: N = 1234
+- 输出: 1234
+
+示例 3:
+
+- 输入: N = 332
+- 输出: 299
+
+说明: N 是在 [0, 10^9] 范围内的一个整数。
+
+#### 思路解析
+
+一旦出现strNum[i - 1] > strNum[i]的情况（非单调递增），首先想让strNum[i - 1]--，然后strNum[i]给为9。因此可以这样设计，从后向前遍历，遇到非单调递增的情况将strNum[i - 1]--，然后将转折点的下一个位置以后的位置全部设为9
+
+#### 参考代码
+
+```java
+class Solution {
+    public int monotoneIncreasingDigits(int n) {
+        String str=String.valueOf(n);
+        char[]chars=str.toCharArray();
+        // 记录转折点
+        int start=chars.length;
+        for(int i=chars.length-2;i>=0;i--){
+            // 非d
+            if(chars[i]>chars[i+1]){
+                chars[i]--;
+                start=i+1;
+            }
+        }
+        for(int i=start;i<chars.length;i++){
+            chars[i]='9';
+        }
+        return Integer.valueOf(new String(chars));
     }
 }
 ```

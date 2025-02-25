@@ -116,9 +116,9 @@ class Solution {
 - 按位异或： **`^`** 
 - 按位求非： **`~`**
 
-### leetcode 338 比特位计数
+#### leetcode 338 比特位计数
 
-#### 题目描述
+**题目描述**
 
 给你一个整数 `n` ，对于 `0 <= i <= n` 中的每个 `i` ，计算其二进制表示中 **`1` 的个数** ，返回一个长度为 `n + 1` 的数组 `ans` 作为答案。
 
@@ -149,11 +149,11 @@ class Solution {
 5 --> 101
 ```
 
-#### 思路解析
+**思路解析**
 
 将n与1进行与操作，等价于得到n的二进制位的最后一位，然后再让n右移一位
 
-#### 参考代码
+**参考代码**
 
 ```java
 class Solution {
@@ -174,6 +174,143 @@ class Solution {
             n>>=1;
         }
         return count;
+    }
+}
+```
+
+### 模拟大数加法
+
+#### leetcode 415 字符串相加
+
+**题目描述**
+
+[题目链接](https://leetcode.cn/problems/add-strings/)
+
+给定两个字符串形式的非负整数 `num1` 和`num2` ，计算它们的和并同样以字符串形式返回。
+
+你不能使用任何內建的用于处理大整数的库（比如 `BigInteger`）， 也不能直接将输入的字符串转换为整数形式。
+
+**示例 1：**
+
+```
+输入：num1 = "11", num2 = "123"
+输出："134"
+```
+
+**示例 2：**
+
+```
+输入：num1 = "456", num2 = "77"
+输出："533"
+```
+
+**示例 3：**
+
+```
+输入：num1 = "0", num2 = "0"
+输出："0"
+```
+
+
+
+**思路解析**
+
+将相同数位对齐，从低到高逐位相加，如果当前位和超过 10，则向高位进一位。
+
+定义两个指针 i 和 j 分别指向 num1和num2的末尾，即最低位，同时定义一个变量 add 维护当前是否有进位，然后从末尾到开头逐位相加即可。你可能会想两个数字位数不同怎么处理，这里我们统一在指针当前下标处于负数的时候返回 0，等价于对位数较短的数字进行了补零操作，这样就可以除去两个数字位数不同情况的处理
+
+**参考代码**
+
+```java
+class Solution {
+    public String addStrings(String num1, String num2) {
+        StringBuilder ans=new StringBuilder();
+        int i=num1.length()-1;
+        int j=num2.length()-1;
+        int carry=0;
+        while(i>=0||j>=0){
+            int x=i>=0?num1.charAt(i)-'0':0;
+            int y=j>=0?num2.charAt(j)-'0':0;
+            int sum=x+y+carry;
+            ans.append(sum%10);
+            carry=sum/10;
+            i--;
+            j--;
+        }
+        if(carry==1){
+            ans.append(1);
+        }
+        return ans.reverse().toString();
+    }
+}
+```
+
+### 数位运算
+
+#### leetcode 7 整数反转
+
+**题目描述**
+
+[题目链接](https://leetcode.cn/problems/reverse-integer/description/)
+
+给你一个 32 位的有符号整数 `x` ，返回将 `x` 中的数字部分反转后的结果。
+
+如果反转后整数超过 32 位的有符号整数的范围 `[−231, 231 − 1]` ，就返回 0。
+
+**假设环境不允许存储 64 位整数（有符号或无符号）。**
+
+ 
+
+**示例 1：**
+
+```
+输入：x = 123
+输出：321
+```
+
+**示例 2：**
+
+```
+输入：x = -123
+输出：-321
+```
+
+**示例 3：**
+
+```
+输入：x = 120
+输出：21
+```
+
+**示例 4：**
+
+```
+输入：x = 0
+输出：0
+```
+
+**思路解析**
+
+- 设置res=0为结果
+- 每次取数字的末尾数字temp
+- 为了防止反转后溢出，当res大于整数的最大值/10或者整数的最小值/10则直接返回
+- 将res乘以10+temp
+
+**参考代码**
+
+```java
+class Solution {
+    public int reverse(int x) {
+        int res=0;
+        while(x!=0){
+            int temp=x%10;
+            if(res>Integer.MAX_VALUE/10||res<Integer.MIN_VALUE/10){
+                return 0;
+            }
+            res=res*10+temp;
+            x/=10;
+        }
+        return res;
     }
 }
 ```
