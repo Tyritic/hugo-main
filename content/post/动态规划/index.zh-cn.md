@@ -547,7 +547,7 @@ class Solution {
   - j=0时
     - 背包容量为0，**`dp[i][0]=0`**
 - 确定遍历顺序
-  - 先遍历物品再遍历容量
+  - 先遍历物品再遍历容量，注意判断当背包容量小于物品容量时不放入物品
 
 **代码模板**
 
@@ -578,7 +578,7 @@ public class Main{
             dp[0][i]=value[0];
         }
         for(int i=1;i<M;i++){
-            for(int j=0;j<=N;j++){
+            for(int j=1;j<=N;j++){
                 if(j<weight[i]){
                     dp[i][j]=dp[i-1][j];
                 }else{
@@ -868,6 +868,1183 @@ class Solution {
             }
         }
         return dp[m][n];
+    }
+}
+```
+
+## 完全背包问题
+
+### 题目描述
+
+有n件物品和一个最多能背重量为w 的背包。第i件物品的重量是weight[i]，得到的价值是value[i] 。**每件物品可以使用无数次**，求解将哪些物品装入背包里物品价值总和最大。
+
+### 思路解析
+
+#### 二维dp解法
+
+- 确定dp数组以及下标的含义
+  - 有两个维度需要分别表示：物品 和 背包容量
+  - **`dp[i][j] 表示从下标为[0-i]的物品里任意取，放进容量为j的背包，价值总和最大`**
+- 确定递推公式
+  - 第一种情况：不放物体则 **`dp[i][j]=dp[i-1][j]`**
+  - 第二种情况：放入物体则 **`dp[i][j]=dp[i][j-weight[i]]+value[i]`**
+  - 取上面的较大值
+- dp数组的初始化
+  - i=0时
+    -  `j < weight[0]`的时候，**`dp[0][j]`** 是 0，因为背包容量比编号0的物品重量还小。
+    -  当`j >= weight[0]`时，**`dp[0][j]`** 可以一直装物品0，**`dp[0][j] = dp[0][j - weight[0]] + value[0]`**
+  - j=0时
+    - 背包容量为0，**`dp[i][0]=0`**
+- 确定遍历顺序
+  - 先遍历物品再遍历容量，注意判断当背包容量小于物品容量时不放入物品
+  - 求解组合数的时候，先遍历物品还是先遍历背包容量不重要
+  - 求解排列数的时候，必须先遍历背包再遍历物品
+
+```java
+import java.util.*;
+public class Main{
+    public static void main (String[] args) {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int v=sc.nextInt();
+        int[] weight=new int[n];
+        int[] value=new int[n];
+        for(int i=0;i<n;i++){
+            weight[i]=sc.nextInt();
+            value[i]=sc.nextInt();
+        }
+        int[][]dp=new int[n][v+1];
+        // i=0,初始化
+        for(int i=weight[0];i<=v;i++){
+            dp[0][i]=dp[0][i-weight[0]]+value[0];
+        }
+        for(int i=1;i<n;i++){
+            for(int j=1;j<=v;j++){
+                if(j<weight[i]){
+                    dp[i][j]=dp[i-1][j];
+                }else{
+                    dp[i][j]=Math.max(dp[i-1][j],dp[i][j-weight[i]]+value[i]);
+                }
+            }
+        }
+        System.out.println(dp[n-1][v]); 
+    }
+}
+```
+
+#### 一维dp解法
+
+同理0-1背包问题的一维DP解法，递推公式可以转换为 **`dp[j] = max(dp[j], dp[j - weight[i]] + value[i])`**
+
+- 确定dp数组的定义
+  - dp[j]表示：容量为j的背包，所背的物品价值可以最大为dp[j]。
+- 递推公式
+  - 递推公式为：`dp[j] = max(dp[j], dp[j - weight[i]] + value[i]);`
+- 初始化
+  - 全部初始化为0即可
+- 遍历顺序
+  - 顺序遍历物品，同时顺序遍历容量
+
+```java
+import java.util.*;
+public class Main{
+    public static void main (String[] args) {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int v=sc.nextInt();
+        int[] weight=new int[n];
+        int[] value=new int[n];
+        for(int i=0;i<n;i++){
+            weight[i]=sc.nextInt();
+            value[i]=sc.nextInt();
+        }
+        int[]dp=new int[v+1];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<=v;j++){
+                if(j<weight[i]){
+                    dp[j]=dp[j];
+                }else{
+                    dp[j]=Math.max(dp[j],dp[j-weight[i]]+value[i]);
+                }
+            }
+        }
+        System.out.println(dp[v]); 
+    }
+}
+```
+
+### 经典例题
+
+#### leetcode 518 零钱兑换II
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/coin-change-ii/)
+
+给定不同面额的硬币和一个总金额。写出函数来计算可以凑成总金额的硬币组合数。假设每一种面额的硬币有无限个。
+
+示例 1:
+
+- 输入: amount = 5, coins = [1, 2, 5]
+- 输出: 4
+
+解释: 有四种方式可以凑成总金额:
+
+- 5=5
+- 5=2+2+1
+- 5=2+1+1+1
+- 5=1+1+1+1+1
+
+示例 2:
+
+- 输入: amount = 3, coins = [2]
+- 输出: 0
+- 解释: 只用面额2的硬币不能凑成总金额3。
+
+示例 3:
+
+- 输入: amount = 10, coins = [10]
+- 输出: 1
+
+注意，你可以假设：
+
+- 0 <= amount (总金额) <= 5000
+- 1 <= coin (硬币面额) <= 5000
+- 硬币种类不超过 500 种
+- 结果符合 32 位符号整数
+
+**思路解析**
+
+本题实际上可以转换为完全背包问题。将总金额视为背包的容量，硬币作为重量和价值相同的物品
+
+- 确定dp数组的含义
+  - dp[j]：凑成总金额j的货币组合数为dp[j]
+- 确定递推公式
+  - 不放硬币：**`dp[j]`**
+  - 放入硬币：**`dp[j-coins[i]]`**
+  - **`dp[j] =dp[j] + dp[j - coins[i]]`**
+- 初始化
+  - 装满背包容量为0 的方法是1，即不放任何物品，`dp[0] = 1`
+- 遍历顺序
+  - 本题要求解的是组合数，应当先遍历物品再遍历背包容量
+
+**参考代码**
+
+```java
+class Solution {
+    public int change(int amount, int[] coins) {
+        int n=coins.length;
+        int[]dp=new int[amount+1];
+        // 初始化
+        dp[0]=1;
+        // 求组合数先遍历物品再遍历背包容量
+        for(int i=0;i<n;i++){
+            for(int j=0;j<=amount;j++){
+                // 背包比硬币小，只能不放入硬币
+                if(j<coins[i]){
+                    dp[j]=dp[j];
+                }else{
+                    dp[j]=dp[j]+dp[j-coins[i]];
+                }
+            }
+        }
+        return dp[amount];
+    }
+}
+```
+
+#### leetcode 377 组合总和IV
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/combination-sum-iv/)
+
+难度：中等
+
+给定一个由正整数组成且不存在重复数字的数组，找出和为给定目标正整数的组合的个数。
+
+示例:
+
+- nums = [1, 2, 3]
+- target = 4
+
+所有可能的组合为： (1, 1, 1, 1) (1, 1, 2) (1, 2, 1) (1, 3) (2, 1, 1) (2, 2) (3, 1)
+
+请注意，顺序不同的序列被视作不同的组合。
+
+因此输出为 7。
+
+**思路解析**
+
+本题依然是完全背包问题，将目标正整数视为背包容量，数组中的元素视为重量和价值相同的物品
+
+- 确定dp数组以及下标的含义
+  - **dp[i]: 凑成目标正整数为i的排列个数为dp[i]**
+
+- 确定递推公式
+  - dp[i]有两种可能
+    - 加入nums[j]即由 dp[i - nums[j]]推导
+    - 不加入nums[j]即由dp[i] 推导出来。
+- dp数组如何初始化
+  - 递推公式dp[i] += dp[i - nums[j]]，dp[0]要初始化为1，这样递归其他dp[i]的时候才会有数值基础。
+- 确定遍历顺序
+  - 本题要求的是排列，要求先遍历背包容量再遍历物品
+
+**参考代码**
+
+```java
+class Solution {
+    public int combinationSum4(int[] nums, int target) {
+        int n=nums.length;
+        // p[i]: 凑成目标正整数为i的排列个数为dp[i]
+        int[]dp=new int[target+1];
+        dp[0]=1;
+        // 求排列数先遍历背包容量再遍历物品
+        for(int i=0;i<=target;i++){
+            for(int j=0;j<n;j++){
+                if(i<nums[j]){
+                    dp[i]=dp[i];
+                }else{
+                    dp[i]=dp[i]+dp[i-nums[j]];
+                }
+            }
+        }
+        return dp[target];
+    }
+}
+```
+
+#### leetcode 322 零钱兑换
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/coin-change/)
+
+给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。
+
+你可以认为每种硬币的数量是无限的。
+
+示例 1：
+
+- 输入：coins = [1, 2, 5], amount = 11
+- 输出：3
+- 解释：11 = 5 + 5 + 1
+
+示例 2：
+
+- 输入：coins = [2], amount = 3
+- 输出：-1
+
+示例 3：
+
+- 输入：coins = [1], amount = 0
+- 输出：0
+
+示例 4：
+
+- 输入：coins = [1], amount = 1
+- 输出：1
+
+示例 5：
+
+- 输入：coins = [1], amount = 2
+- 输出：2
+
+提示：
+
+- 1 <= coins.length <= 12
+- 1 <= coins[i] <= 2^31 - 1
+- 0 <= amount <= 10^4
+
+**思路解析**
+
+- 确定dp数组以及下标的含义
+  - **dp[j]：凑足总额为j所需钱币的最少个数为dp[j]**
+
+- 确定递推公式
+  - 凑足总额为j - coins[i]的最少个数为dp[j - coins[i]]，那么只需要加上一个钱币coins[i] 即dp[j - coins[i]] + 1就是dp[j]（考虑coins[i]）
+  - 递推公式：dp[j] = min(dp[j - coins[i]] + 1, dp[j]);
+
+- dp数组初始化
+  - 凑足总金额为0所需钱币的个数一定是0，那么dp[0] = 0;
+  - 其他下标对应的数值，考虑到递推公式的特性，dp[j]必须初始化为一个最大的数，否则就会在min(dp[j - coins[i]] + 1, dp[j])比较的过程中被初始值覆盖。
+- 遍历过程
+  - 本题是求解是组合数（硬币的顺序不重要）
+
+**参考代码**
+
+```java
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int n=coins.length;
+        // 凑足总额为j所需钱币的最少个数为dp[j]
+        int[]dp=new int[amount+1];
+        // 初始化DP数值
+        Arrays.fill(dp,Integer.MAX_VALUE);
+        dp[0]=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<=amount;j++){
+                if(j<coins[i]){
+                    dp[j]=dp[j];
+                }else if(dp[j-coins[i]]!=Integer.MAX_VALUE){
+                    dp[j]=Math.min(dp[j],dp[j-coins[i]]+1);
+                }
+            }
+        }
+        return dp[amount]==Integer.MAX_VALUE?-1:dp[amount];
+    }
+}
+```
+
+#### leetcode 279 完全平方数
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/perfect-squares/)
+
+给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。
+
+给你一个整数 n ，返回和为 n 的完全平方数的 最少数量 。
+
+完全平方数 是一个整数，其值等于另一个整数的平方；换句话说，其值等于一个整数自乘的积。例如，1、4、9 和 16 都是完全平方数，而 3 和 11 不是。
+
+示例 1：
+
+- 输入：n = 12
+- 输出：3
+- 解释：12 = 4 + 4 + 4
+
+示例 2：
+
+- 输入：n = 13
+- 输出：2
+- 解释：13 = 4 + 9
+
+提示：
+
+- 1 <= n <= 10^4
+
+**思路解析**
+
+**完全平方数就是物品（可以无限件使用），凑个正整数n就是背包，问凑满这个背包最少有多少物品？**
+
+- 确定dp数组（dp table）以及下标的含义
+  - **dp[j]：和为j的完全平方数的最少数量为dp[j]**
+- 确定递推公式
+  - dp[j] 可以由dp[j - i * i]推出， dp[j - i * i] + 1 便可以凑成dp[j]。
+  - dp[j] = min(dp[j - i * i] + 1, dp[j]);
+- dp数组如何初始化
+  - dp[0]表示 和为0的完全平方数的最小数量，那么dp[0]一定是0。
+  - 非0下标的dp[j]应该是很大的值，从递归公式dp[j] = min(dp[j - i * i] + 1, dp[j]);中可以看出每次dp[j]都要选最小的，**所以非0下标的dp[j]一定要初始为最大值，这样dp[j]在递推的时候才不会被初始值覆盖**。
+
+- 确定遍历顺序
+  - 本题求解的是组合数就是外层for循环遍历物品，内层for遍历背包。
+
+**参考代码**
+
+```java
+class Solution {
+    public int numSquares(int n) {
+        int[]dp=new int[n+1];
+        Arrays.fill(dp,Integer.MAX_VALUE);
+        dp[0]=0;
+        for(int i=1;i*i<=n;i++){
+            for(int j=1;j<=n;j++){
+                if(j<i*i){
+                    dp[j]=dp[j];
+                }else{
+                    dp[j]=Math.min(dp[j],dp[j-i*i]+1);
+                }
+            }
+        }
+        return dp[n];
+    }
+}
+```
+
+#### leetcode 139 单词拆分
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/word-break/)
+
+给定一个非空字符串 s 和一个包含非空单词的列表 wordDict，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。
+
+说明：
+
+拆分时可以重复使用字典中的单词。
+
+你可以假设字典中没有重复的单词。
+
+示例 1：
+
+- 输入: s = "leetcode", wordDict = ["leet", "code"]
+- 输出: true
+- 解释: 返回 true 因为 "leetcode" 可以被拆分成 "leet code"。
+
+示例 2：
+
+- 输入: s = "applepenapple", wordDict = ["apple", "pen"]
+- 输出: true
+- 解释: 返回 true 因为 "applepenapple" 可以被拆分成 "apple pen apple"。
+- 注意你可以重复使用字典中的单词。
+
+示例 3：
+
+- 输入: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+- 输出: false
+
+**思路解析**
+
+单词就是物品，字符串s就是背包，单词能否组成字符串s，就是问物品能不能把背包装满。
+
+- 确定dp数组以及下标的含义
+  - **dp[i] : 字符串长度为i的话，dp[i]为true，表示可以拆分为一个或多个在字典中出现的单词**。
+
+- 确定递推公式
+  - 如果确定dp[j] 是true，且 [j, i] 这个区间的子串出现在字典里，那么dp[i]一定是true。（j < i ）。
+  - 递推公式是 if([j, i] 这个区间的子串出现在字典里 && dp[j]是true) 那么 dp[i] = true。
+
+- dp数组如何初始化
+  - dp[0]一定要为true，否则递推下去后面都都是false了。
+  - 下标非0的dp[i]初始化为false，只要没有被覆盖说明都是不可拆分为一个或多个在字典中出现的单词。
+
+- 确定遍历顺序
+  - 本题求的是排列数，先遍历背包再遍历物品
+
+**参考代码**
+
+```java
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        int m=wordDict.size();
+        int n=s.length();
+        // 存储字典
+        HashSet<String>set=new HashSet<>(wordDict);
+        // 长度为i的字符串可以被划分
+        boolean[]dp=new boolean[n+1];
+        dp[0]=true;
+        // 先遍历背包容量（字符串长度）
+        // 后遍历物品
+        for(int i=1;i<=n;i++){
+            for(int j=0;j<i;j++){
+                String str=s.substring(j,j+(i-j));
+                if(dp[j]==true&&set.contains(str)){
+                    dp[i]=true;
+                }
+            }
+        }
+        return dp[n];
+    }
+}
+```
+
+## 打劫问题
+
+### leetcode 198 打家劫舍
+
+#### 题目描述
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/house-robber/)
+
+你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+
+给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。
+
+- 示例 1：
+- 输入：[1,2,3,1]
+- 输出：4
+
+解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。  偷窃到的最高金额 = 1 + 3 = 4 。
+
+- 示例 2：
+- 输入：[2,7,9,3,1]
+- 输出：12 解释：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。  偷窃到的最高金额 = 2 + 9 + 1 = 12 。
+
+提示：
+
+- 0 <= nums.length <= 100
+- 0 <= nums[i] <= 400
+
+#### **思路解析**
+
+- 确定dp数组（dp table）以及下标的含义
+  - **dp[i]：考虑下标[0-i]以内的房屋，最多可以偷窃的金额为dp[i]**。
+
+- 确定递推公式
+
+  - 决定dp[i]的因素就是第i房间偷还是不偷。
+  - 如果偷第i房间，那么dp[i] = dp[i - 2] + nums[i] ，即：第i-1房一定是不考虑的，找出 下标i-2（包括i-2）以内的房屋，最多可以偷窃的金额为dp[i-2] 加上第i房间偷到的钱。
+
+  - 如果不偷第i房间，那么dp[i] = dp[i - 1]，即考虑i-1房
+  - dp[i]取最大值，即dp[i] = max(dp[i - 2] + nums[i], dp[i - 1]);
+
+- dp数组如何初始化
+  - 从递推公式dp[i] = max(dp[i - 2] + nums[i], dp[i - 1]);可以看出，递推公式的基础就是dp[0] 和 dp[1]
+  - dp[0] 一定是 nums[0]，dp[1]就是nums[0]和nums[1]的最大值
+- 确定遍历顺序
+  - dp[i] 是根据dp[i - 2] 和 dp[i - 1] 推导出来的，那么一定是从前到后遍历！
+
+#### **参考代码**
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        int n=nums.length;
+        // 从[0-i]房间可以偷的最大金额
+        int[]dp=new int[n];
+        if(n==1)return nums[0];
+        // 数值初始化
+        dp[0]=nums[0];
+        dp[1]=Math.max(nums[0],nums[1]);
+        for(int i=2;i<n;i++){
+            dp[i]=Math.max(dp[i-1],dp[i-2]+nums[i]);
+        }
+        return dp[n-1];
+    }
+}
+```
+
+### leetcode 213 打家劫舍II
+
+#### 题目描述
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/house-robber-ii/)
+
+你是一个专业的小偷，计划偷窃沿街的房屋，每间房内都藏有一定的现金。这个地方所有的房屋都 围成一圈 ，这意味着第一个房屋和最后一个房屋是紧挨着的。同时，相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警 。
+
+给定一个代表每个房屋存放金额的非负整数数组，计算你 在不触动警报装置的情况下 ，能够偷窃到的最高金额。
+
+示例 1：
+
+- 输入：nums = [2,3,2]
+- 输出：3
+- 解释：你不能先偷窃 1 号房屋（金额 = 2），然后偷窃 3 号房屋（金额 = 2）, 因为他们是相邻的。
+- 示例 2：
+- 输入：nums = [1,2,3,1]
+- 输出：4
+- 解释：你可以先偷窃 1 号房屋（金额 = 1），然后偷窃 3 号房屋（金额 = 3）。偷窃到的最高金额 = 1 + 3 = 4 。
+- 示例 3：
+- 输入：nums = [0]
+- 输出：0
+
+提示：
+
+- 1 <= nums.length <= 100
+- 0 <= nums[i] <= 1000
+
+#### 思路解析
+
+对于一个数组，成环的话主要有如下三种情况：
+
+- 考虑不包含首尾元素
+- 考虑包含首元素，不包含尾元素
+- 考虑包含尾元素，不包含首元素
+
+因此可以将上一题的逻辑封装成方法，然后比较后两者方法的较大值
+
+#### 参考代码
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        if(nums.length==1){
+            return nums[0];
+        }
+        int result1=rob(0,nums.length-2,nums);
+        int result2=rob(1,nums.length-1,nums);
+        return Math.max(result1,result2);
+
+
+    }
+    public int rob(int start,int end,int[]nums){
+        if (end == start) return nums[start];
+        int n=nums.length;
+        int[]dp=new int[n];
+        dp[start]=nums[start];
+        dp[start+1]=Math.max(nums[start],nums[start+1]);
+        for(int i=start+2;i<=end;i++){
+            dp[i]=Math.max(dp[i-1],dp[i-2]+nums[i]);
+        }
+        return dp[end];
+    }
+}
+```
+
+## 股票问题
+
+### leetcode 121 买卖股票的最佳时机
+
+#### 题目描述
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/)
+
+给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+
+你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+
+返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+
+- 示例 1：
+- 输入：[7,1,5,3,6,4]
+- 输出：5
+  解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。
+- 示例 2：
+- 输入：prices = [7,6,4,3,1]
+- 输出：0
+  解释：在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+#### 思路解析
+
+- 确定dp数组以及下标的含义
+  - **`dp[i][0]`** 表示第i天持有股票所得最多现金 
+  - **`dp[i][1]`** 表示第i天不持有股票所得最多现金
+
+- 确定递推公式
+
+  - 如果第i天持有股票即 **`dp[i][0]`** ， 那么可以由两个状态推出来
+
+    - 第i-1天就持有股票，那么就保持现状，所得现金就是昨天持有股票的所得现金 即：**`dp[i - 1][0]`**
+
+    - 第i天买入股票，所得现金就是买入今天的股票后所得现金即：-prices[i]
+
+  - 如果第i天不持有股票即 **`dp[i][1]`** ， 也可以由两个状态推出来
+
+    - 第i-1天就不持有股票，那么就保持现状，所得现金就是昨天不持有股票的所得现金 即：**`dp[i - 1][1]`**
+
+    - 第i天卖出股票，所得现金就是按照今天股票价格卖出后所得现金即：**`prices[i] + dp[i - 1][0]`**
+
+- dp数组初始化
+  - 递推公式 **`dp[i][0] = max(dp[i - 1][0], -prices[i]);`** 和 **`dp[i][1] = max(dp[i - 1][1], prices[i] + dp[i - 1][0])`**可以看出基础都是要从 **`dp[0][0]`** 和 **`dp[0][1]`** 推导出来。
+  - **`dp[0][0] -= prices[0]`**
+  - **`dp[0][1]`** 表示第0天不持有股票，不持有股票那么现金就是0，所以 **`dp[0][1] = 0`**
+
+#### 参考代码
+
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length == 0) return 0;
+        int length = prices.length;
+        // dp[i][0]代表第i天持有股票的最大收益
+        // dp[i][1]代表第i天不持有股票的最大收益
+        int[][] dp = new int[length][2];
+        int result = 0;
+        dp[0][0] = -prices[0];
+        dp[0][1] = 0;
+        for (int i = 1; i < length; i++) {
+            dp[i][0] = Math.max(dp[i - 1][0], -prices[i]);
+            dp[i][1] = Math.max(dp[i - 1][0] + prices[i], dp[i - 1][1]);
+        }
+        return dp[length - 1][1];
+    }
+}
+```
+
+### leetcode 122 买卖股票的最佳时机II
+
+#### 题目描述
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/)
+
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+
+设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+- 示例 1:
+- 输入: [7,1,5,3,6,4]
+- 输出: 7
+  解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4。随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+- 示例 2:
+- 输入: [1,2,3,4,5]
+- 输出: 4
+  解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+- 示例 3:
+- 输入: [7,6,4,3,1]
+- 输出: 0
+  解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+提示：
+
+- 1 <= prices.length <= 3 * 10 ^ 4
+- 0 <= prices[i] <= 10 ^ 4
+
+#### 思路解析
+
+与上一题只有递推公式不一样
+
+- 在上一题中因为股票全程只能买卖一次，所以如果买入股票，那么第i天持有股票即**`dp[i][0]`**一定就是 -prices[i]。
+- 而本题，因为一只股票可以买卖多次，所以当第i天买入股票的时候，所持有的现金可能有之前买卖过的利润。、那么第i天持有股票即**`dp[i][0]`**
+- 如果是第i天买入股票，所得现金就是昨天不持有股票的所得现金 减去 今天的股票价格 即：**`dp[i - 1][1] - prices[i]`** 。
+
+#### 参考代码
+
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+        int n=prices.length;
+        // dp[i][0]代表第i天持有股票的最大收益
+        // dp[i][1]代表第i天不持有股票的最大收益
+        int[][]dp=new int[n][2];
+        // 初始化
+        dp[0][0]=-prices[0];
+        dp[0][1]=0;
+        for(int i=1;i<n;i++){
+            dp[i][0]=Math.max(dp[i-1][0],dp[i-1][1]-prices[i]);
+            dp[i][1]=Math.max(dp[i-1][1],dp[i-1][0]+prices[i]);
+        }
+        return dp[n-1][1];
+    }
+}
+```
+
+### leetcode 123 买卖股票的最佳时机III
+
+#### 题目描述
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii/)
+
+给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
+
+设计一个算法来计算你所能获取的最大利润。你最多可以完成 两笔 交易。
+
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+- 示例 1:
+- 输入：prices = [3,3,5,0,0,3,1,4]
+- 输出：6 解释：在第 4 天（股票价格 = 0）的时候买入，在第 6 天（股票价格 = 3）的时候卖出，这笔交易所能获得利润 = 3-0 = 3 。随后，在第 7 天（股票价格 = 1）的时候买入，在第 8 天 （股票价格 = 4）的时候卖出，这笔交易所能获得利润 = 4-1 = 3。
+- 示例 2：
+- 输入：prices = [1,2,3,4,5]
+- 输出：4 解释：在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4。注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+- 示例 3：
+- 输入：prices = [7,6,4,3,1]
+- 输出：0 解释：在这个情况下, 没有交易完成, 所以最大利润为0。
+- 示例 4：
+- 输入：prices = [1] 输出：0
+
+提示：
+
+- 1 <= prices.length <= 10^5
+- 0 <= prices[i] <= 10^5
+
+#### 思路解析
+
+关键在于至多买卖两次，这意味着可以买卖一次，可以买卖两次，也可以不买卖。
+
+接来下我用动态规划五部曲详细分析一下：
+
+- 确定dp数组以及下标的含义
+
+  - 一天共有以下状态
+
+    - 没有操作 （其实我们也可以不设置这个状态）
+
+    - 第一次持有股票
+
+    - 第一次不持有股票
+
+    - 第二次持有股票
+
+    - 第二次不持有股票
+
+  - **`dp[i][j]`** 中 i表示第i天，j为 [0 - 4] 五个状态，**`dp[i][j]`** 表示第i天状态j所剩最大现金。
+
+- 确定递推公式
+
+  - 达到 **`dp[i][1]`** 状态，有两个具体操作：
+
+    - 操作一：第i天买入股票了，那么 **`dp[i][1] = dp[i-1][0] - prices[i]`**
+
+    - 操作二：第i天没有操作，而是沿用前一天买入的状态，即：**`dp[i][1] = dp[i - 1][1]`**
+
+  - **`dp[i][2]`** 也有两个操作：
+
+    - 操作一：第i天卖出股票了，那么 **`dp[i][2] = dp[i - 1][1] + prices[i]`**
+
+    - 操作二：第i天没有操作，沿用前一天卖出股票的状态，即：**`dp[i][2] = dp[i - 1][2]`**
+
+  - 同理可推出剩下状态部分：
+
+    - **`dp[i][3] = max(dp[i - 1][3], dp[i - 1][2] - prices[i]);`**
+
+    - **`dp[i][4] = max(dp[i - 1][4], dp[i - 1][3] + prices[i]);`**
+
+- dp数组如何初始化
+  - 第0天没有操作，这个最容易想到，就是0，即：**`dp[0][0] = 0`**;
+  - 第0天做第一次买入的操作，**`dp[0][1] = -prices[0];`**
+  - 第0天做第一次卖出的操作，初始值可以理解当天买入，当天卖出，**`dp[0][2] = 0`**
+  - 第0天做第二次买入操作，初始化为：**`dp[0][3] = -prices[0]`** ;
+  - 第0天做第二次卖出初始化 **`dp[0][4] = 0`**
+- 遍历顺序
+  - 从前向后遍历
+
+#### 参考代码
+
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+        int n=prices.length;
+        int[][]dp=new int[n][5];
+        // 初始化
+        dp[0][0]=0;
+        dp[0][1]=-prices[0];
+        dp[0][2]=0;
+        dp[0][3]=-prices[0];
+        dp[0][4]=0;
+        for(int i=1;i<n;i++){
+            dp[i][0]=dp[i-1][0];
+            // 第一次持有股票
+            dp[i][1]=Math.max(dp[i-1][1],dp[i-1][0]-prices[i]);
+            // 第一次不持有股票
+            dp[i][2]=Math.max(dp[i-1][2],dp[i-1][1]+prices[i]);
+            // 第二次持有股票
+            dp[i][3]=Math.max(dp[i-1][3],dp[i-1][2]-prices[i]);
+            // 第二次不持有股票
+            dp[i][4]=Math.max(dp[i-1][4],dp[i-1][3]+prices[i]);
+        }
+        return dp[n-1][4];
+    }
+}
+```
+
+### leetcode 188 买卖股票的最佳时机IV
+
+#### 题目描述
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/)
+
+给定一个整数数组 prices ，它的第 i 个元素 prices[i] 是一支给定的股票在第 i 天的价格。
+
+设计一个算法来计算你所能获取的最大利润。你最多可以完成 k 笔交易。
+
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+- 示例 1：
+- 输入：k = 2, prices = [2,4,1]
+- 输出：2 解释：在第 1 天 (股票价格 = 2) 的时候买入，在第 2 天 (股票价格 = 4) 的时候卖出，这笔交易所能获得利润 = 4-2 = 2。
+- 示例 2：
+- 输入：k = 2, prices = [3,2,6,5,0,3]
+- 输出：7 解释：在第 2 天 (股票价格 = 2) 的时候买入，在第 3 天 (股票价格 = 6) 的时候卖出, 这笔交易所能获得利润 = 6-2 = 4。随后，在第 5 天 (股票价格 = 0) 的时候买入，在第 6 天 (股票价格 = 3) 的时候卖出, 这笔交易所能获得利润 = 3-0 = 3 。
+
+提示：
+
+- 0 <= k <= 100
+- 0 <= prices.length <= 1000
+- 0 <= prices[i] <= 1000
+
+#### 思路解析
+
+- 确定dp数组以及下标的含义
+  - 0 表示不操作
+  - 当 j 为奇数则是持有股票
+  - 当 j 为偶数则是不持有股票
+- 确定递推公式
+  - 当 j 为奇数为持有股票，有两种情况
+    - 前一天依然持有股票：**`dp[i-1][j]`**
+    - 前一天不持有股票然后买入股票：**`dp[i-1][j-1]-prices[i]`**
+  - 当 j 为偶数为不持有股票，有两种情况
+    - 前一天依然不持有股票：**`dp[i-1][j]`**
+    - 前一天持有股票然后卖出股票：**`dp[i-1][j-1]+prices[i]`**
+- 数组初始化
+  - 当 j 为奇数为持有股票则 **`dp[0][j]=-prices[0]`**
+  - 当 j 为偶数数为不持有股票则 **`dp[0][j]=0`**
+
+#### 参考代码
+
+```java
+class Solution {
+    public int maxProfit(int k, int[] prices) {
+        int n=prices.length;
+        int[][]dp=new int[n][2*k+1];
+        // 初始化
+        for(int i=0;i<=2*k;i+=2){
+            dp[0][i]=0;
+        }
+        for(int i=1;i<=2*k-1;i+=2){
+            dp[0][i]=-prices[0];
+        }
+        for(int i=1;i<n;i++){
+            for(int j=1;j<2*k+1;j++){
+                if(j%2==1){
+                    dp[i][j]=Math.max(dp[i-1][j],dp[i-1][j-1]-prices[i]);
+                }else{
+                    dp[i][j]=Math.max(dp[i-1][j],dp[i-1][j-1]+prices[i]);
+                }
+            }
+        }
+        return dp[n-1][2*k];
+    }
+}
+```
+
+## 子序列和子数组问题
+
+- 子序列：不要求连续，是序列中删除部分元素或者不删除
+- 子数组：要求连续
+
+### 最长上升子序列
+
+#### leetcode 300 最长上升子序列
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/longest-increasing-subsequence/)
+
+给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
+
+子序列是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。
+
+示例 1：
+
+- 输入：nums = [10,9,2,5,3,7,101,18]
+- 输出：4
+- 解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
+
+示例 2：
+
+- 输入：nums = [0,1,0,3,2,3]
+- 输出：4
+
+示例 3：
+
+- 输入：nums = [7,7,7,7,7,7,7]
+- 输出：1
+
+提示：
+
+- 1 <= nums.length <= 2500
+- -10^4 <= nums[i] <= 104
+
+**思路解析**
+
+- dp[i]的定义
+  - **dp[i]表示以nums[i]结尾的最长递增子序列的长度**
+- 递推方程
+  - 位置i的最长升序子序列等于j从0到i-1各个位置的最长升序子序列 + 1 的最大值。
+  - if (nums[i] > nums[j]) dp[i] = max(dp[i], dp[j] + 1);
+- dp[i]的初始化
+  - 每一个i，对应的dp[i]（即最长递增子序列）起始大小至少都是1.
+- 遍历顺序
+  - dp[i] 是有0到i-1各个位置的最长递增子序列推导而来，那么遍历i一定是从前向后遍历。
+  - j其实就是遍历0到i-1，
+
+**参考代码**
+
+```java
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int n=nums.length;
+        //以下标为i结尾的子序列的最长严格递增子序列长度
+        if(n==0||n==1)return n;
+        int[]dp=new int[n];
+        int res=Integer.MIN_VALUE;
+        Arrays.fill(dp,1);
+        for(int i=1;i<n;i++){
+            for(int j=0;j<i;j++){
+                if(nums[j]<nums[i]){
+                    dp[i]=Math.max(dp[j]+1,dp[i]);
+                }
+                res=Math.max(res,dp[i]);
+            }
+        }
+        return res;
+    }
+}
+```
+
+### 最长连续上升子序列
+
+#### leetcode 674 最长上升连续序列
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/longest-continuous-increasing-subsequence/)
+
+给定一个未经排序的整数数组，找到最长且 连续递增的子序列，并返回该序列的长度。
+
+连续递增的子序列 可以由两个下标 l 和 r（l < r）确定，如果对于每个 l <= i < r，都有 nums[i] < nums[i + 1] ，那么子序列 [nums[l], nums[l + 1], ..., nums[r - 1], nums[r]] 就是连续递增子序列。
+
+示例 1：
+
+- 输入：nums = [1,3,5,4,7]
+- 输出：3
+- 解释：最长连续递增序列是 [1,3,5], 长度为3。尽管 [1,3,5,7] 也是升序的子序列, 但它不是连续的，因为 5 和 7 在原数组里被 4 隔开。
+
+示例 2：
+
+- 输入：nums = [2,2,2,2,2]
+- 输出：1
+- 解释：最长连续递增序列是 [2], 长度为1。
+
+**思路解析**
+
+- 确定dp数组以及下标的含义
+  - **dp[i]：以下标i为结尾的连续递增的子序列长度为dp[i]**。
+
+- 确定递推公式
+  - 如果 nums[i] > nums[i - 1]，那么以 i 为结尾的连续递增的子序列长度 一定等于 以i - 1为结尾的连续递增的子序列长度 + 1 。**`dp[i] = dp[i - 1] + 1`**
+- dp数组初始化
+  - 以下标i为结尾的连续递增的子序列长度最少也应该是1。
+- 确定遍历顺序
+  - 从递推公式上可以看出， dp[i + 1]依赖dp[i]，所以一定是从前向后遍历。
+
+**参考代码**
+
+```java
+class Solution {
+    public int findLengthOfLCIS(int[] nums) {
+        int n=nums.length;
+        if(n==0||n==1)return n;
+        int res=0;
+        // 结尾下标为i的连续递增子序列的长度
+        int[]dp=new int[n];
+        Arrays.fill(dp,1);
+        for(int i=1;i<n;i++){
+            if(nums[i-1]<nums[i]){
+                dp[i]=dp[i-1]+1;
+            }
+            if(res<dp[i]){
+                res=dp[i];
+            }
+        }
+        return res;
+    }
+}
+```
+
+### 最长重复子数组
+
+#### leetcode 718 最长重复子数组
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/)
+
+给两个整数数组 A 和 B ，返回两个数组中公共的、长度最长的子数组的长度。
+
+示例：
+
+输入：
+
+- A: [1,2,3,2,1]
+- B: [3,2,1,4,7]
+- 输出：3
+- 解释：长度最长的公共子数组是 [3, 2, 1] 。
+
+提示：
+
+- 1 <= len(A), len(B) <= 1000
+- 0 <= A[i], B[i] < 100
+
+**思路解析**
+
+- 确定dp数组以及下标的含义
+  - **`dp[i][j]`** ：以下标i - 1为结尾的A，和以下标j - 1为结尾的B，最长重复子数组长度为 **`dp[i][j]`** 。 （**特别注意**： “以下标i - 1为结尾的A” 标明一定是 以A[i-1]为结尾的字符串 ）
+- 确定递推公式
+  - 当A[i - 1] 和B[j - 1]相等的时候，**`dp[i][j] = dp[i - 1][j - 1] + 1`**;
+- dp数组初始化
+  - **`dp[i][0]`** 和 **`dp[0][j]`** 初始化为0
+- 确定遍历顺序
+  - 外层for循环遍历A，内层for循环遍历B
+
+**参考代码**
+
+```java
+class Solution {
+    public int findLength(int[] nums1, int[] nums2) {
+        int m=nums1.length;
+        int n=nums2.length;
+        // 结尾下标为i-1和j-1的公共最长子数组
+        int[][]dp=new int[m+1][n+1];
+        int res=Integer.MIN_VALUE;
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                if(nums1[i-1]==nums2[j-1]){
+                    dp[i][j]=dp[i-1][j-1]+1;
+                }
+                if(res<dp[i][j]){
+                    res=dp[i][j];
+                }
+            }
+        }
+        return res;
+    }
+}
+```
+
+
+
+### 最长公共子序列
+
+#### leetcode 1143 最长公共子序列
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/longest-common-subsequence/)
+
+给定两个字符串 text1 和 text2，返回这两个字符串的最长公共子序列的长度。
+
+一个字符串的 子序列 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。
+
+例如，"ace" 是 "abcde" 的子序列，但 "aec" 不是 "abcde" 的子序列。两个字符串的「公共子序列」是这两个字符串所共同拥有的子序列。
+
+若这两个字符串没有公共子序列，则返回 0。
+
+示例 1:
+
+- 输入：text1 = "abcde", text2 = "ace"
+- 输出：3
+- 解释：最长公共子序列是 "ace"，它的长度为 3。
+
+示例 2:
+
+- 输入：text1 = "abc", text2 = "abc"
+- 输出：3
+- 解释：最长公共子序列是 "abc"，它的长度为 3。
+
+示例 3:
+
+- 输入：text1 = "abc", text2 = "def"
+- 输出：0
+- 解释：两个字符串没有公共子序列，返回 0。
+
+**思路解析**
+
+- 确定dp数组以及下标的含义
+  - **`dp[i][j]`**：长度为[0, i - 1]的字符串text1与长度为[0, j - 1]的字符串text2的最长公共子序列为 **`dp[i][j]`**
+- 确定递推公式
+  - 如果text1[i - 1] 与 text2[j - 1]相同，那么找到了一个公共元素，所以 **`dp[i][j] = dp[i - 1][j - 1] + 1`**;
+  - 如果text1[i - 1] 与 text2[j - 1]不相同，那就看看text1[0, i - 2]与text2[0, j - 1]的最长公共子序列 和 text1[0, i - 1]与text2[0, j - 2]的最长公共子序列，取最大的。
+- dp数组初始化
+  - **`dp[i][0]`**应该0，text1[0, i-1]和空串的最长公共子序列自然是0
+  - 同理 **`dp[0][j]`** 也是0
+
+**参考代码**
+
+```java
+class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        int m=text1.length();
+        int n=text2.length();
+        char[]chars1=text1.toCharArray();
+        char[]chars2=text2.toCharArray();
+        int[][]dp=new int[m+1][n+1];
+        int res=Integer.MIN_VALUE;
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                if(chars1[i-1]==chars2[j-1]){
+                    dp[i][j]=dp[i-1][j-1]+1;
+                }else{
+                    dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
+                }
+                if(res<dp[i][j]){
+                    res=dp[i][j];
+                }
+            }
+        }
+        return res;
     }
 }
 ```

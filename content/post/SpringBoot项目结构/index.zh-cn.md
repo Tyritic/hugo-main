@@ -32,7 +32,7 @@ Maven-name/
 
 **根目录**：**src/main/java**
 
-**作用**：该目录下存放**入口启动类**及程序的开发目录。在这个目录下进行业务开发、创建实体层、控制器层、数据连接层等。
+**作用**：该目录下存放 **入口启动类** 及程序的开发目录。在这个目录下进行业务开发、创建实体层、控制器层、数据连接层等。
 
 {{<notice note>}}
 
@@ -346,6 +346,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 **根目录**：**src/main/resource**
 
-**application.yml**：项目的整体配置文件
+**application.yml** ：项目的整体配置文件
 
-**mapper**：数据库映射文件
+**mapper** ：数据库映射文件

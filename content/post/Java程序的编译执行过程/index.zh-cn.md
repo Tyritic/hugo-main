@@ -53,7 +53,7 @@ Java虚拟机用于解释Java源代码，加载Java程序。针对不同的操�
 
 ### JRE（Java运行时环境）
 
-**JRE**全称**（Java Runtime Environment）**是Java运行时环境，包含了 **JVM**, Java核心类库和其他支持Java程序的文件，但是**不包含任何开发工具**
+**JRE**全称 **（Java Runtime Environment）** 是Java运行时环境，包含了 **JVM** , Java核心类库和其他支持Java程序的文件，但是**不包含任何开发工具**
 
 #### 组成部分
 
@@ -63,7 +63,7 @@ Java虚拟机用于解释Java源代码，加载Java程序。针对不同的操�
 
 ### JDK（Java开发包）
 
-**JDK**全称 **（Java Development Kit）**是一组独立程序构成的集合，是用于开发Java 程序的完整开发环境，**它包含了JRE**，以及用于开发、调试和监控 Java 应用程序的工具。
+**JDK**全称 **（Java Development Kit）** 是一组独立程序构成的集合，是用于开发Java 程序的完整开发环境，**它包含了JRE** ，以及用于开发、调试和监控 Java 应用程序的工具。
 
 #### 组成部分
 

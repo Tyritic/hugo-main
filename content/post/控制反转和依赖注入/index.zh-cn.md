@@ -424,7 +424,7 @@ DI（Dependency Injection，依赖注入）是 Spring 框架中用于实现**控
 @Controller
 public class UserController {
 	private UserService userService;
-	public UserController(){
+	public UserController(){}
 	@Autowired
 	public UserController(UserService userService){
         	this.userService =userService;
@@ -436,14 +436,15 @@ public class UserController {
 }
 ```
 
-优点:
-可以注⼊final修饰的属性
+优点
 
-注⼊的对象不会被修改
+- 可以注⼊ **`final`** 修饰的属性
+- 注⼊的对象不会被修改
 
-依赖对象在使⽤前⼀定会被完全初始化，因为依赖是在类的构造⽅法中执⾏的，⽽构造⽅法是在类加载阶段就会执⾏的⽅法.
+- 依赖对象在使⽤前⼀定会被完全初始化，因为依赖是在类的构造⽅法中执⾏的，⽽构造⽅法是在类加载阶段就会执⾏的⽅法.
 
-通⽤性好,构造⽅法是JDK⽀持的,所以更换任何框架,他都是适⽤的
+- 通⽤性好,构造⽅法是JDK⽀持的,所以更换任何框架,他都是适⽤的
+
 
 缺点:
 注⼊多个对象时,代码会⽐较繁琐

@@ -40,7 +40,7 @@ Filter 过滤器是JavaWeb 三大组件(Servlet、Filter、Listener)之一。
        }
    }
    ```
-2. 配置Filter：使用@WebFilter注解，配置拦截资源的路径。
+2. 配置Filter：使用 **`@WebFilter`** 注解，配置拦截资源的路径。
 3. 引导类上加 @ServletComponentScan 开启Servlet组件支持。
 
    ```java
