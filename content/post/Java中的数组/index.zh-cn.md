@@ -23,7 +23,7 @@ ElementType[][] array_name; // 二维数组
  除非数组被创建否则不能分配任何元素
 
 ```java
-array_name=new ElementType[size];
+Array_name=new ElementType[size];
 ```
 
 ### 初始化数组

@@ -36,7 +36,7 @@ Maven-name/
 
 {{<notice note>}}
 
-入口启动类：运行整个项目**main**方法的类
+入口启动类：运行整个项目 **main** 方法的类
 
 ```java
 @SpringBootApplication
@@ -77,7 +77,9 @@ public class UserController {
 
 **作用**：主要负责业务逻辑应用设计
 
-**功能实现**：首先设计service接口，然后再设计其实现该接口的类(serviceImpl)
+**功能实现**：首先设计Service接口，然后再设计其实现该接口的类(serviceImpl)
+
+**作用目标** ：通常Service接口作用于数据库传输对象（DTO)
 
 ```java
 @Service
@@ -121,6 +123,8 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 
 **功能实现**：通过 **`@Mapper`** 注解接口来建立java方法和sql语句的映射关系
 
+**作用对象** ：通常插入和更新操作针对entity对象
+
 ```java
 @Mapper
 public interface DistrictMapper {
@@ -138,7 +142,7 @@ public interface DistrictMapper {
 
 **根目录**：**src/main/java/dto（或者放入pojo层中）**
 
-**作用**：对**entity**进行封装，不破坏实体类结构，进行层与层之间的数据传输
+**作用**：对 **entity** 进行封装，不破坏实体类结构，进行层与层之间的数据传输
 
 {{<notice tip>}}
 

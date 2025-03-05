@@ -26,7 +26,7 @@ description : "对MyBatis框架的基本理解"
 
 3. 编写sql语句
 
-   1. 在mapper文件夹下编写接口，用@Mapper修饰
+   1. 在mapper文件夹下编写接口，用 **`@Mapper`** 修饰
 
    2. 在每一个函数上根据操作名使用对应的注解修饰sql语句
 

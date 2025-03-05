@@ -1786,7 +1786,7 @@ class Solution {
 
 ### 最长上升子序列
 
-#### leetcode 300 最长上升子序列
+#### leetcode 300 最长上升子序列的长度
 
 **题目描述**
 
@@ -1828,7 +1828,7 @@ class Solution {
   - 每一个i，对应的dp[i]（即最长递增子序列）起始大小至少都是1.
 - 遍历顺序
   - dp[i] 是有0到i-1各个位置的最长递增子序列推导而来，那么遍历i一定是从前向后遍历。
-  - j其实就是遍历0到i-1，
+  - j其实遍历0到i-1，
 
 **参考代码**
 
@@ -1853,6 +1853,84 @@ class Solution {
     }
 }
 ```
+
+#### leetcode 673 最长上升子序列的个数
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/number-of-longest-increasing-subsequence/)
+
+给定一个未排序的整数数组，找到最长递增子序列的个数。
+
+示例 1:
+
+- 输入: [1,3,5,4,7]
+- 输出: 2
+- 解释: 有两个最长递增子序列，分别是 [1, 3, 4, 7] 和[1, 3, 5, 7]。
+
+示例 2:
+
+- 输入: [2,2,2,2,2]
+- 输出: 5
+- 解释: 最长递增子序列的长度是1，并且存在5个子序列的长度为1，因此输出5。
+
+**思路解析**
+
+- 确定dp数组以及下标的含义
+  - 这道题目需要一起维护两个数组。
+    - dp[i]：i之前（包括i）最长递增子序列的长度为dp[i]
+    - count[i]：以nums[i]为结尾的字符串，最长递增子序列的个数为count[i]
+
+- 确定递推公式
+  - 更新dp[i]：在上一题中的状态转移是：if (nums[i] > nums[j]) dp[i] = max(dp[i], dp[j] + 1);
+  - 更新count[i]：
+    - 那么在nums[i] > nums[j]前提下，如果在[0, i-1]的范围内，找到了j，使得dp[j] + 1 > dp[i]，说明找到了一个更长的递增子序列。那么以j为结尾的子串的最长递增子序列的个数，就是最新的以i为结尾的子串的最长递增子序列的个数，即：count[i] = count[j]。
+    - 在nums[i] > nums[j]前提下，如果在[0, i-1]的范围内，找到了j，使得dp[j] + 1 == dp[i]，说明找到了两个相同长度的递增子序列。那么以i为结尾的子串的最长递增子序列的个数 就应该加上以j为结尾的子串的最长递增子序列的个数，即：count[i] += count[j];
+- 数组初始化
+  - count[i]记录了以nums[i]为结尾的字符串，最长递增子序列的个数。最少也就是1个，所以count[i]初始为1。
+  - dp[i]记录了i之前（包括i）最长递增序列的长度。最小的长度也是1，所以dp[i]初始为1。
+- 遍历顺序
+  - 从左往右遍历
+
+**参考代码**
+
+```java
+class Solution {
+    public int findNumberOfLIS(int[] nums) {
+        int res=0;
+        int n=nums.length;
+        if (n <= 1) return nums.length;
+        int[]dp=new int[n];
+        int[]count=new int[n];
+        Arrays.fill(dp,1);
+        Arrays.fill(count,1);
+        int maxCount=0;
+        for(int i=1;i<n;i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    if (dp[j] + 1 > dp[i]) {
+                        count[i] = count[j];
+                    } else if (dp[j] + 1 == dp[i]) {
+                        count[i] += count[j];
+                    }
+                    dp[i] = Math.max(dp[j] + 1, dp[i]);
+                }
+                if(dp[i]>maxCount){
+                    maxCount=dp[i];
+                }
+            }
+        }
+        int result = 0;
+        for (int i = 0; i < n; i++) {
+            if (maxCount == dp[i]) result += count[i];
+        }
+        return result;
+
+    }
+}
+```
+
+
 
 ### 最长连续上升子序列
 
@@ -2045,6 +2123,691 @@ class Solution {
             }
         }
         return res;
+    }
+}
+```
+
+#### leetcode 1035 不相交的线
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/uncrossed-lines/)
+
+在两条独立的水平线上按给定的顺序写下 nums1 和 nums2 中的整数。
+
+现在，可以绘制一些连接两个数字 nums1[i] 和 nums2[j] 的直线，这些直线需要同时满足：
+
+- nums1[i] == nums2[j]
+- 且绘制的直线不与任何其他连线（非水平线）相交。
+
+请注意，连线即使在端点也不能相交：每个数字只能属于一条连线。
+
+以这种方法绘制线条，并返回可以绘制的最大连线数。
+
+![1035.不相交的线](2021032116363533.png)
+
+**思路解析**
+
+**本题表面上是求绘制的最大连线数，其实就是求两个字符串的最长公共子序列的长度！**
+
+**参考代码**
+
+```java
+class Solution {
+    public int maxUncrossedLines(int[] nums1, int[] nums2) {
+        int m=nums1.length;
+        int n=nums2.length;
+        // dp[i][j]是终点下标为i-1的nums1和终点下标为j-1的nums2的最长公共子序列
+        int[][]dp=new int[m+1][n+1];
+        // 递推公式根据dp[i-1][j-1]推理
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                if(nums1[i-1]==nums2[j-1]){
+                    dp[i][j]=dp[i-1][j-1]+1;
+                }else{
+                    dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
+```
+
+### 最大子序和
+
+#### leetcode 53 最大子序和
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/maximum-subarray/)
+
+给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+示例:
+
+- 输入: [-2,1,-3,4,-1,2,1,-5,4]
+- 输出: 6
+- 解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
+
+**思路解析**
+
+- 确定dp数组以及下标的含义
+  - **dp[i]：包括下标i（以nums[i]为结尾）的最大连续子序列和为dp[i]**。
+
+- 确定递推公式：dp[i]只有两个方向可以推出来：
+
+  - dp[i - 1] + nums[i]，即：nums[i]加入当前连续子序列和
+
+  - nums[i]，即：从头开始计算当前连续子序列和
+
+- dp数组如何初始化
+  - 从递推公式可以看出来dp[i]是依赖于dp[i - 1]的状态，dp[0]就是递推公式的基础。根据dp[i]的定义，很明显dp[0]应为nums[0]即dp[0] = nums[0]。
+
+- 确定遍历顺序
+  - 递推公式中dp[i]依赖于dp[i - 1]的状态，需要从前向后遍历。
+
+**参考代码**
+
+```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int res=nums[0];
+        int n=nums.length;
+        if(n==1)return nums[0];
+        if (n == 0) {
+            return 0;
+        }
+        // 以nums[i]结尾的子序列的最大和
+        int[]dp=new int[n];
+        // 数组初始化
+        dp[0]=nums[0];
+        for(int i=1;i<n;i++){
+            dp[i]=Math.max(dp[i-1]+nums[i],nums[i]);
+            if(res<dp[i]){
+                res=dp[i];
+            }
+        }
+        return res;
+    }
+}
+```
+
+### 编辑距离问题
+
+#### leetcode 392 判断子序列
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/is-subsequence/)
+
+给定字符串 s 和 t ，判断 s 是否为 t 的子序列。
+
+字符串的一个子序列是原始字符串删除一些（也可以不删除）字符而不改变剩余字符相对位置形成的新字符串。（例如，"ace"是"abcde"的一个子序列，而"aec"不是）。
+
+示例 1：
+
+- 输入：s = "abc", t = "ahbgdc"
+- 输出：true
+
+示例 2：
+
+- 输入：s = "axc", t = "ahbgdc"
+- 输出：false
+
+提示：
+
+- 0 <= s.length <= 100
+- 0 <= t.length <= 10^4
+
+两个字符串都只由小写字符组成。
+
+**思路解析**
+
+- 确定dp数组（dp table）以及下标的含义
+  - **`dp[i][j]` 表示以下标i-1为结尾的字符串s，和以下标j-1为结尾的字符串t，相同子序列的长度为`dp[i][j]`**。
+
+- 确定递推公式
+
+  - if (s[i - 1] == t[j - 1])：t中找到了一个字符在s中也出现了
+    - **`dp[i][j] = dp[i - 1][j - 1] + 1`** ，因为找到了一个相同的字符，相同子序列长度自然要在 **`dp[i-1][j-1]`** 的基础上加1
+
+  - if (s[i - 1] != t[j - 1])：相当于t要删除元素，继续匹配
+    - 那么 **`dp[i][j]`** 的数值就是 看s[i - 1]与 t[j - 2]的比较结果了，即：**`dp[i][j] = dp[i][j - 1]`**
+
+- dp数组如何初始化
+  - 从递推公式可以看出 **`dp[i][j]`** 都是依赖于**`dp[i - 1][j - 1]`** 和 **`dp[i][j - 1]`**，所以 **`dp[0][0]`** 和 **`dp[i][0]`** 是一定要初始化的。
+  - **`dp[i][0]`** 表示以下标i-1为结尾的字符串，与空字符串的相同子序列长度，所以为0. **`dp[0][j]`** 同理。
+- 遍历顺序
+  - **`dp[i][j]`** 都是依赖于 **`dp[i - 1][j - 1]`** 和 **`dp[i][j - 1]`** ，那么遍历顺序也应该是从上到下，从左到右
+
+**参考代码**
+
+```java
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        int m=s.length();
+        int n=t.length();
+        char[]s_chars=s.toCharArray();
+        char[]t_chars=t.toCharArray();
+        // dp[i][j]为下标为i-1的s和下标为j-1的t的相同子序列的长度
+        int[][]dp=new int[m+1][n+1];
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                if(s_chars[i-1]==t_chars[j-1]){
+                    dp[i][j]=dp[i-1][j-1]+1;
+                }else{
+                    dp[i][j]=dp[i][j-1];
+                }
+            }
+        }
+        return dp[m][n]==m?true:false;
+
+    }
+}
+```
+
+#### leetcode 115 不同的子序列
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/distinct-subsequences/)
+
+给定一个字符串 s 和一个字符串 t ，计算在 s 的子序列中 t 出现的个数。
+
+字符串的一个 子序列 是指，通过删除一些（也可以不删除）字符且不干扰剩余字符相对位置所组成的新字符串。（例如，"ACE" 是 "ABCDE" 的一个子序列，而 "AEC" 不是）
+
+题目数据保证答案符合 32 位带符号整数范围。
+
+![115.不同的子序列示例](115.不同的子序列示例.jpg)
+
+提示：
+
+- 0 <= s.length, t.length <= 1000
+- s 和 t 由英文字母组成
+
+**思路解析**
+
+- 确定dp数组（dp table）以及下标的含义
+
+  - **`dp[i][j]`** ：以i-1为结尾的s子序列中出现以j-1为结尾的t的个数
+
+- 确定递推公式
+
+  - s[i - 1] 与 t[j - 1]相等
+    - 可以用用s[i - 1]来匹配，那么个数为 **`dp[i - 1][j - 1]`** 。即不需要考虑当前s子串和t子串的最后一位字母，所以只需要 **`dp[i-1][j-1]`** 。
+    - 一部分是不用s[i - 1]来匹配，个数为 **`dp[i - 1][j]`** 。
+
+  - s[i - 1] 与 t[j - 1] 不相等
+    - s中删除这个元素即：**`dp[i - 1][j]`**
+
+- dp数组初始化
+
+  - 从递推公式 **`dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j]`** ; 和 **`dp[i][j] = dp[i - 1][j]`** ; 中可以看出dp[i][j] 是从上方和左上方推导而来，如图：，那么 **`dp[i][0]`** 和 **`dp[0][j]`**是一定要初始化的。
+  - **`dp[i][0]`** 都是1，因为也就是把以i-1为结尾的s，删除所有元素，出现空字符串的个数就是1
+  - **`dp[0][j]`** 都是0，s如论如何也变成不了t
+
+- 确定遍历顺序
+
+  - 从递推公式可以看出都是根据左上方和正上方推出来的。
+
+**参考代码**
+
+```java
+class Solution {
+    public int numDistinct(String s, String t) {
+        int m=s.length();
+        int n=t.length();
+        // 以i-1为结尾的s子序列中出现以j-1为结尾的t的个数
+        int[][]dp=new int[m+1][n+1];
+        // 数组初始化
+        for (int i = 0; i <= m; i++) {
+            dp[i][0] = 1;
+        }
+        // 数组遍历
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                if(s.charAt(i-1)==t.charAt(j-1)){
+                    dp[i][j]=dp[i-1][j-1]+dp[i-1][j];
+                }else {
+                    dp[i][j]=dp[i-1][j];
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
+```
+
+#### leetcode 583 两个字符串的删除操作
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/delete-operation-for-two-strings/)
+
+给定两个单词 word1 和 word2，找到使得 word1 和 word2 相同所需的最小步数，每步可以删除任意一个字符串中的一个字符。
+
+示例：
+
+- 输入: "sea", "eat"
+- 输出: 2
+- 解释: 第一步将"sea"变为"ea"，第二步将"eat"变为"ea"
+
+**思路解析**
+
+- 确定dp数组以及下标的含义
+  - **`dp[i][j]`** ：以i-1为结尾的字符串word1，和以j-1位结尾的字符串word2，想要达到相等，所需要删除元素的最少次数。
+
+- 确定递推公式
+
+  - 当word1[i - 1] 与 word2[j - 1]相同的时候：**`dp[i][j] = dp[i - 1][j - 1]`** 两个字符串同时删除
+
+  - 当word1[i - 1] 与 word2[j - 1]不相同的时候
+    - 情况一：删word1[i - 1]，最少操作次数为 **`dp[i - 1][j] + 1`**
+    - 情况二：删word2[j - 1]，最少操作次数为 **`dp[i][j - 1] + 1`**
+    - 情况三：同时删word1[i - 1]和word2[j - 1]，操作的最少次数为 **`dp[i - 1][j - 1] + 2`**
+
+- dp数组如何初始化
+  - 从递推公式中，可以看出来，**`dp[i][0]`** 和 **`dp[0][j]`**是一定要初始化的。
+  - **`dp[i][0]`** ：word2为空字符串，以i-1为结尾的字符串word1要删除多少个元素，才能和word2相同呢，很明显 **`dp[i][0] = i`**。**`dp[0][j]`** 的话同理
+- 遍历顺序
+  - 从递推公式 可以看出 **`dp[i][j]`** 都是根据左上方、正上方、正左方推出来的。
+
+**参考代码**
+
+```java
+class Solution {
+    public int minDistance(String word1, String word2) {
+        int m=word1.length();
+        int n=word2.length();
+        // 以i-1为结尾的字符串word1，和以j-1位结尾的字符串word2，想要达到相等，所需要删除元素的最少次数。
+        int[][]dp=new int[m+1][n+1];
+        // 初始化
+        for(int i=0;i<=m;i++){
+            dp[i][0]=i;
+        }
+        for(int j=0;j<=n;j++){
+            dp[0][j]=j;
+        }
+        // 遍历过程
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                if(word1.charAt(i-1)==word2.charAt(j-1)){
+                    dp[i][j]=dp[i-1][j-1];
+                }else{
+                    dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
+```
+
+#### leetcode 72 编辑距离
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/edit-distance/)
+
+给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。
+
+你可以对一个单词进行如下三种操作：
+
+- 插入一个字符
+- 删除一个字符
+- 替换一个字符
+- 示例 1：
+- 输入：word1 = "horse", word2 = "ros"
+- 输出：3
+- 解释： horse -> rorse (将 'h' 替换为 'r') rorse -> rose (删除 'r') rose -> ros (删除 'e')
+- 示例 2：
+- 输入：word1 = "intention", word2 = "execution"
+- 输出：5
+- 解释： intention -> inention (删除 't') inention -> enention (将 'i' 替换为 'e') enention -> exention (将 'n' 替换为 'x') exention -> exection (将 'n' 替换为 'c') exection -> execution (插入 'u')
+
+提示：
+
+- 0 <= word1.length, word2.length <= 500
+- word1 和 word2 由小写英文字母组成
+
+**思路解析**
+
+- 确定dp数组以及下标的含义
+
+  - **`dp[i][j]` 表示以下标i-1为结尾的字符串word1，和以下标j-1为结尾的字符串word2的最近编辑次数**
+
+- 确定递推公式
+
+  - 若word1[i - 1] == word2[j - 1] 那么不用编辑。**`dp[i][j] = dp[i - 1][j - 1]`**
+  - 若word1[i - 1] != word2[j - 1] 
+    - word1删除一个元素，那么就是以下标i - 2为结尾的word1 与 j-1为结尾的word2的编辑次数再加上一个操作，即 **`dp[i][j] = dp[i - 1][j] + 1`**
+    - word1加入一个元素，相当于word2删除一个元素，那么就是以下标i - 1为结尾的word1 与 j-2为结尾的word2的最近编辑距离 再加上一个操作。**`dp[i][j] = dp[i][j - 1] + 1`**
+    - word1替换一个元素：**`dp[i][j] = dp[i - 1][j - 1] + 1`**
+
+- 数组初始化
+
+  - 从递推公式中，可以看出来，**`dp[i][0]`** 和 **`dp[0][j]`**是一定要初始化的。
+  - **`dp[i][0]`** ：word2为空字符串，以i-1为结尾的字符串word1要删除多少个元素，才能和word2相同呢，很明显 **`dp[i][0] = i`**。**`dp[0][j]`** 的话同理
+
+- 遍历顺序
+
+  - **`dp[i][j]`** 是依赖左方，上方和左上方元素，从左到右，从上到下遍历
+
+**参考代码**
+
+```java
+class Solution {
+    public int minDistance(String word1, String word2) {
+        int m=word1.length();
+        int n=word2.length();
+        // dp[i][j] 表示以下标i-1为结尾的字符串word1，和以下标j-1为结尾的字符串word2的最近编辑次数
+        int[][]dp=new int[m+1][n+1];
+        // 初始化数组
+        for(int i=0;i<=m;i++){
+            dp[i][0]=i;
+        }
+        for(int j=0;j<=n;j++){
+            dp[0][j]=j;
+        }
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                if(word1.charAt(i-1)==word2.charAt(j-1)){
+                    dp[i][j]=dp[i-1][j-1];
+                }else{
+                    dp[i][j]=Math.min(dp[i-1][j]+1,Math.min(dp[i-1][j-1]+1,dp[i][j-1]+1));
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
+```
+
+### 回文子串问题
+
+#### leetcode 647 回文子串
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/palindromic-substrings/)
+
+给定一个字符串，你的任务是计算这个字符串中有多少个回文子串。
+
+具有不同开始位置或结束位置的子串，即使是由相同的字符组成，也会被视作不同的子串。
+
+示例 1：
+
+- 输入："abc"
+- 输出：3
+- 解释：三个回文子串: "a", "b", "c"
+
+示例 2：
+
+- 输入："aaa"
+- 输出：6
+- 解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"
+
+提示：输入的字符串长度不会超过 1000 。
+
+**思路解析**
+
+- 确定dp数组以及下标的含义
+  - 判断一个子字符串（字符串下标范围[i,j]）是否回文，依赖于，子字符串（下标范围[i + 1, j - 1]）） 是否是回文。
+  - **`dp[i][j]`** :区间范围[i,j] （注意是左闭右闭）的子串是否是回文子串
+- 递推公式
+  - 当s[i]与s[j]不相等，**`dp[i][j]`** 一定是false。
+  - 当s[i]与s[j]相等时
+    - 情况一：下标i 与 j相同，同一个字符是回文子串
+    - 情况二：下标i 与 j相差为1，例如aa，也是回文子串
+    - 情况三：下标：i 与 j相差大于1的时候，此时s[i]与s[j]已经相同了，看i到j区间是不是回文子串，那么区间就是 i+1 与 j-1区间，这个区间是不是回文就看 **`dp[i + 1][j - 1]`** 是否为true。
+- dp数组初始化
+  - **`dp[i][j]`** 初始化为false。
+- 遍历顺序
+  - 从递推公式中可以看出依赖于 **`dp[i+1][j-1]`** ,**所以一定要从下到上遍历i，从左到右遍历j**
+
+**参考代码**
+
+```java
+class Solution {
+    public int countSubstrings(String s) {
+        int n=s.length();
+        boolean[][]dp=new boolean[n][n];
+        for(boolean[]t:dp){
+            Arrays.fill(t,false);
+        }
+        int res=0;
+
+        for(int i=n-1;i>=0;i--){
+            for(int j=i;j<n;j++){
+                if(s.charAt(i)==s.charAt(j)) {
+                    if(j-i<=1){
+                        res++;
+                        dp[i][j]=true;
+                    }else if(dp[i+1][j-1]){
+                        res++;
+                        dp[i][j]=true;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
+```
+
+#### leetcode 5 最长回文子串
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/longest-palindromic-substring/)
+
+给你一个字符串 s，找到 s 中最长的回文子串。
+
+示例 1：
+
+- 输入：s = "babad"
+- 输出："bab"
+- 解释："aba" 同样是符合题意的答案。
+
+示例 2：
+
+- 输入：s = "cbbd"
+- 输出："bb"
+
+示例 3：
+
+- 输入：s = "a"
+- 输出："a"
+
+示例 4：
+
+- 输入：s = "ac"
+- 输出："a"
+
+**思路解析**
+
+- 与上一题大致思路一致但是在遍历过程中更新最大长度和起始位置
+
+**参考代码**
+
+```java
+class Solution {
+    public String longestPalindrome(String s) {
+        int n=s.length();
+        if(n<2){
+            return s;
+        }
+        // 初始化
+        boolean[][]dp=new boolean[n][n];
+        for(boolean[]t:dp){
+            Arrays.fill(t,false);
+        }
+        // 起始点的最大长度
+        int maxLen=Integer.MIN_VALUE;
+        int left=0;
+        int right=0;
+        for(int i=n-1;i>=0;i--){
+            for(int j=i;j<n;j++){
+                if(s.charAt(i)==s.charAt(j)){
+                    if(j-i<=1){
+                        dp[i][j]=true;
+                    }else if(dp[i+1][j-1]){
+                        dp[i][j]=true;
+                    }
+                }
+                // 更新回文子串的长度和起始点
+                if(dp[i][j]==true&&j-i+1>maxLen){
+                    maxLen=j-i+1;
+                    left=i;
+                    right=j;
+                }
+            }
+        }
+        return s.substring(left,right+1);
+
+    }
+}
+```
+
+#### leetcode 516 最长回文子串的长度
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/longest-palindromic-subsequence/)
+
+给定一个字符串 s ，找到其中最长的回文子序列，并返回该序列的长度。可以假设 s 的最大长度为 1000 。
+
+示例 1: 输入: "bbbab" 输出: 4 一个可能的最长回文子序列为 "bbbb"。
+
+示例 2: 输入:"cbbd" 输出: 2 一个可能的最长回文子序列为 "bb"。
+
+提示：
+
+- 1 <= s.length <= 1000
+- s 只包含小写英文字母
+
+**思路解析**
+
+- 确定dp数组以及下标的含义
+  - **`dp[i][j]`：字符串s在[i, j]范围内最长的回文子序列的长度为 `dp[i][j]` **。
+
+- 确定递推公式
+
+  - 如果s[i]与s[j]相同，那么 **`dp[i][j] = dp[i + 1][j - 1] + 2`** 
+  - 如果s[i]与s[j]不相同，说明s[i]和s[j]的同时加入 并不能增加[i,j]区间回文子序列的长度，那么分别加入s[i]、s[j]看看哪一个可以组成最长的回文子序列。
+    - 加入s[j]的回文子序列长度为 **`dp[i + 1][j]`**。
+    - 加入s[i]的回文子序列长度为 **`dp[i][j - 1]`**。
+
+- 数组初始化
+
+  - 从递推公式：**`dp[i][j] = dp[i + 1][j - 1] + 2`** 可以看出 递推公式是计算不到 i 和j相同时候的情况。
+
+    当i与j相同，那么 **`dp[i][j]`** 一定是等于1的，即：一个字符的回文子序列长度就是1
+
+- 遍历顺序
+
+  - **遍历i的时候一定要从下到上遍历，这样才能保证下一行的数据是经过计算的**。
+
+**参考代码**
+
+```java
+class Solution {
+    public int longestPalindromeSubseq(String s) {
+        int n=s.length();
+        int[][]dp=new int[n][n];
+        for(int i=0;i<n;i++){
+            dp[i][i]=1;
+        }
+        for(int i=n-1;i>=0;i--){
+            for(int j=i+1;j<n;j++){
+                if(s.charAt(i)==s.charAt(j)){
+                    dp[i][j]=dp[i+1][j-1]+2;
+                }else{
+                    dp[i][j]=Math.max(dp[i+1][j],dp[i][j-1]);
+                }
+            }
+        }
+        return dp[0][n-1];
+    }
+}
+```
+
+#### leetcode 132 分割回文串II
+
+**题目描述**
+
+[力扣题目链接(opens new window)](https://leetcode.cn/problems/palindrome-partitioning-ii/)
+
+给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是回文。
+
+返回符合要求的 最少分割次数 。
+
+示例 1：
+
+输入：s = "aab" 输出：1 解释：只需一次分割就可将 s 分割成 ["aa","b"] 这样两个回文子串。
+
+示例 2： 输入：s = "a" 输出：0
+
+示例 3： 输入：s = "ab" 输出：1
+
+提示：
+
+- 1 <= s.length <= 2000
+- s 仅由小写英文字母组成
+
+**思路解析**
+
+- 确定dp数组以及下标的含义
+  - dp[i]：范围是[0, i]的回文子串，最少分割次数是dp[i]。
+
+- 确定递推公式
+  - 如果要对长度为[0, i]的子串进行分割，分割点为j。那么如果分割后，区间[j + 1, i]是回文子串，那么dp[i] 就等于 dp[j] + 1。
+  - 递推公式为：dp[i] = min(dp[i], dp[j] + 1);
+  - 判定回文子串采用上面的推导过程
+- dp数组如何初始化
+  - dp[0]一定是0，长度为1的字符串最小分割次数就是0。这个是比较直观的。
+  - 非零下标的dp[i]，如果非零下标的dp[i]初始化为0，在那么在递推公式中，所有数值将都是零。非零下标的dp[i]初始化为一个最大数i。
+- 遍历过程
+  - j为分割点，从0遍历到i-1
+
+**参考代码**
+
+```java
+class Solution {
+    public int minCut(String s) {
+        if(s==null||s.isEmpty()){
+            return 0;
+        }
+        int n=s.length();
+        int[]dp=new int[n];
+        boolean[][]check=new boolean[n][n];
+        for(int i=n-1;i>=0;i--){
+            for(int j=i;j<n;j++){
+                if(s.charAt(i)==s.charAt(j)){
+                    if(j-i<=1){
+                        check[i][j]=true;
+                    }else if(check[i+1][j-1]){
+                        check[i][j]=true;
+                    }
+                }
+            }
+        }
+        for(int i=0;i<n;i++){
+            dp[i]=i;
+        }
+        for(int i = 1; i < n; i++){
+            if(check[0][i]){
+                dp[i] = 0;
+                continue;
+            }
+            for(int j = 0; j < i; j++){
+                if(check[j + 1][i]){
+                    dp[i] = Math.min(dp[i], dp[j] + 1);
+                }
+            }
+        }
+        return dp[n-1];
     }
 }
 ```

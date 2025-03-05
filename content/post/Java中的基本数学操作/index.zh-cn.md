@@ -13,7 +13,7 @@ math : true
 
 Java在Math类中封装了相关的数学函数，位于Java.lang包中
 
-构造方法是`private`的，且所有方法都是静态方法，可以不依赖实例进行调用
+构造方法是 **`private`** 的，且所有方法都是静态方法，可以不依赖实例进行调用
 
 ## 静态常量
 
@@ -161,4 +161,4 @@ System.out.println("abs(): " + Math.abs(-5));
 
 - `Math.random()`：随机产生一个数 random()，随机数范围为 0.0 =< Math.random < 1.0
 
-`a+Math.random()+b`生成[a,a+b)
+`a+Math.random()+b`生成[a,a+b)的随机数

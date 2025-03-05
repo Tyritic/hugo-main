@@ -17,16 +17,16 @@ math : true
 
 ### 基本数据类型与包装类对照表：
 
-| 基本数据类型 | 包装类      |
-| ------------ | ----------- |
-| `byte`       | `Byte`      |
-| `short`      | `Short`     |
-| `int`        | `Integer`   |
-| `long`       | `Long`      |
-| `float`      | `Float`     |
-| `double`     | `Double`    |
-| `char`       | `Character` |
-| `boolean`    | `Boolean`   |
+| 基本数据类型 |   包装类    |
+| :----------: | :---------: |
+|    `byte`    |   `Byte`    |
+|   `short`    |   `Short`   |
+|    `int`     |  `Integer`  |
+|    `long`    |   `Long`    |
+|   `float`    |   `Float`   |
+|   `double`   |  `Double`   |
+|    `char`    | `Character` |
+|  `boolean`   |  `Boolean`  |
 
 
 

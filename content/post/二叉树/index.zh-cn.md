@@ -33,6 +33,8 @@ math : true
   
   - 如果要搜索其中一条符合条件的路径，那么递归一定需要返回值boolean，因为遇到符合条件的路径了就要及时返回。
   
+  - 对于需要回溯的问题，基本数据类型不需要回溯，而引用数据类型需要回溯
+  
 - **确定终止条件：** 写完了递归算法, 运行的时候，经常会遇到栈溢出的错误，就是没写终止条件或者终止条件写的不对，操作系统也是用一个栈的结构来保存每一层递归的信息，如果递归没有终止，操作系统的内存栈必然就会溢出。
 - **确定单层递归的逻辑：** 确定每一层递归需要处理的信息。在这里也就会重复调用自己来实现递归的过程。
 
@@ -1318,6 +1320,70 @@ class Solution {
 
 通常二叉树的路径计算使用前序遍历，因为通常路径的第一个节点为中间节点，遍历顺序为根左右，同时在左右节点的处理中注意回溯
 
+### 统一解题模板
+
+#### 自顶向下
+
+```java
+// 一般路径,要求到叶子节点return
+void traversal(TreeNode root,List<String>res,List<Integer>path)
+    {
+        // 终止条件为到叶子节点
+        if(root.left==null&&root.right==null)
+        {
+            path.add(root.val);
+            res.add(new ArrayList<>(path));
+        }
+        // 单层遍历
+        // 添加非叶子节点
+        if(root.left!=null||root.right!=null)
+            path.add(root.val);
+        if(root.left!=null)
+        {
+            traversal(root.left,res,path);
+            path.remove(path.size()-1); 
+        }
+        if(root.right!=null)
+        {
+            traversal(root.right,res,path);
+            path.remove(path.size()-1);
+        }
+    }
+// 给定和的路径
+public void check(TreeNode root,int targetSum,List<Integer>path,List<List<Integer>>res)
+    {
+        // 终止条件
+        if(root.left==null&&root.right==null)
+        {
+            path.add(root.val);
+            targetSum-=root.val;
+            if(targetSum==0)
+            {
+                res.add(new ArrayList<>(path));
+            }
+            return;
+        }
+        // 单层遍历
+        if(root.left!=null||root.right!=null)
+        {
+            targetSum-=root.val;
+            path.add(root.val);
+        }
+        if(root.left!=null)
+        {
+            check(root.left,targetSum,path,res); // 基本数据类型不需要回溯
+            path.remove(path.size()-1);
+        }
+        if(root.right!=null)
+        {
+            check(root.right,targetSum,path,res);
+            path.remove(path.size()-1);
+        }
+    }
+```
+
+
+
 ### leetcode 257 二叉树的所有路径
 
 #### 题目描述
@@ -1545,7 +1611,6 @@ class Solution {
 
 ```java
 class Solution {
-    int sum=0;
     public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
         List<List<Integer>>res=new ArrayList<>();
         if (root == null) return res; // 非空判断
@@ -1560,8 +1625,8 @@ class Solution {
         if(root.left==null&&root.right==null)
         {
             path.add(root.val);
-            sum+=root.val;
-            if(sum==targetSum)
+            targetSum-=root.val;
+            if(targetSum==0)
             {
                 res.add(new ArrayList<>(path));
             }
@@ -1570,19 +1635,17 @@ class Solution {
         // 单层遍历
         if(root.left!=null||root.right!=null)
         {
-            sum+=root.val;
+            targetSum-=root.val;
             path.add(root.val);
         }
         if(root.left!=null)
         {
             check(root.left,targetSum,path,res);
-            sum-=path.get(path.size()-1);
             path.remove(path.size()-1);
         }
         if(root.right!=null)
         {
             check(root.right,targetSum,path,res);
-            sum-=path.get(path.size()-1);
             path.remove(path.size()-1);
         }
     }
