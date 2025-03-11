@@ -946,7 +946,6 @@ class Solution {
             sp.put(s_string,p_ch);
             index=j+1;
         }
-        System.out.println(index);
         return index>=s.length();
     }
 }

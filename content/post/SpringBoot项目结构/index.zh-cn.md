@@ -123,7 +123,12 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 
 **功能实现**：通过 **`@Mapper`** 注解接口来建立java方法和sql语句的映射关系
 
-**作用对象** ：通常插入和更新操作针对entity对象
+**作用对象** ：
+
+- 插入操作直接操作entity对象
+- 更新操作可以直接操作entity对象
+- 查询操作通常使用分页操作
+- 删除操作通常接受主键作为查询条件
 
 ```java
 @Mapper
@@ -161,7 +166,7 @@ public interface DistrictMapper {
 
 {{<notice tip>}}
 
-VO在实际开发中通常作为controller类方法的形参从而起到封装客户端请求数据的作用
+VO在实际开发中通常作为controller类方法的返回值从而起到封装客户端请求数据的作用
 
 {{</notice>}}
 

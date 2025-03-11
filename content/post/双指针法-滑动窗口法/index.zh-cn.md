@@ -91,6 +91,28 @@ class solution{
 
 题目中出现显式的窗口长度或字符串长度可以考虑使用
 
+#### 代码模板
+
+```java
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        int left=0;
+        for(int right=0;right<s.length();right++){
+           	// 将右侧元素加入窗口
+            if(right<pLen-1){ //窗口大小不足
+                continue;
+            }
+            // 更新答案
+            // 窗口左侧元素离开队列
+            left++;
+        }
+        return ans;
+    }
+}
+```
+
+
+
 ## 经典例题
 
 ### leetcode 209. 长度最小的子数组
@@ -419,20 +441,19 @@ class Solution {
         // 比较起始位置是否是字母异位词
         for(int i=0;i<pLen;i++)
         {
-            sCount[s.charAt(i)-'a']++;
             pCount[p.charAt(i)-'a']++;
         }
-        if(Arrays.equals(sCount,pCount))
-        {
-            ans.add(0);
-        }
-        // 移动固定滑动窗口，再进行比较
-        for(int i=0;i<sLen-pLen;i++)
-        {
-            sCount[s.charAt(i)-'a']--;
-            sCount[s.charAt(i+pLen)-'a']++;
-            if(Arrays.equals(sCount,pCount))
-                ans.add(i+1);
+        int left=0;
+        for(int right=0;right<s.length();right++){
+            sCount[s.charAt(right)-'a']++;
+            if(right<pLen-1){
+                continue;
+            }
+            if(Arrays.equals(sCount,pCount)){
+                ans.add(left);
+            }
+            sCount[s.charAt(left)-'a']--;
+            left++;
         }
         return ans;
     }
