@@ -3,9 +3,9 @@ date : '2025-03-01T17:51:38+08:00'
 draft : false
 title : 'Redis的缓存淘汰策略和过期删除策略'
 image : ""
-categories : [""]
-tags : [""]
-description : ""
+categories : ["Redis"]
+tags : ["数据库"]
+description : "Redis的缓存淘汰策略和过期删除策略"
 math : true
 ---
 
