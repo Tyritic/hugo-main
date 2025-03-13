@@ -1,7 +1,7 @@
 ---
 date : '2025-01-03T11:26:20+08:00'
 draft : false
-title : 'Java的继承机制'
+title : 'Java为什么不允许多继承但是允许多实现'
 image : ""
 categories : ["互联网面试题"]
 tags : ["JavaSE"]

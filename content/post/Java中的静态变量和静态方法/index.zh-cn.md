@@ -15,7 +15,7 @@ math : true
 
 ## 静态变量
 
-被`static`修饰的成员变量
+被 **`static`** 修饰的成员变量
 
 ### 特点
 
@@ -70,3 +70,7 @@ public class Student {
 
 - 类名.静态方法（推荐）
 - 对象名.静态方法
+
+## 静态方法和实例方法的区别
+
+参考 [往期博客](https://tyritic.github.io/p/java%E4%B8%AD%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95%E5%92%8C%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/)
