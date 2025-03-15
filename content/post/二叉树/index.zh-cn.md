@@ -641,8 +641,6 @@ class Solution {
         dfs(root.left,depth);
         // 处理右节点
         dfs(root.right,depth);
-        // 回溯
-        depth--;
     }
 
 }
@@ -751,7 +749,6 @@ class Solution {
         dfs(root.left,depth);
         // 右节点处理
         dfs(root.right,depth);
-        depth--;
     }
 
 }
