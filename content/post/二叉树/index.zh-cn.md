@@ -1325,16 +1325,14 @@ class Solution {
 // 一般路径,要求到叶子节点return
 void traversal(TreeNode root,List<String>res,List<Integer>path)
     {
+    	// 中
+    	path.add(root.val);
         // 终止条件为到叶子节点
         if(root.left==null&&root.right==null)
         {
-            path.add(root.val);
             res.add(new ArrayList<>(path));
         }
         // 单层遍历
-        // 添加非叶子节点
-        if(root.left!=null||root.right!=null)
-            path.add(root.val);
         if(root.left!=null)
         {
             traversal(root.left,res,path);
@@ -1346,25 +1344,20 @@ void traversal(TreeNode root,List<String>res,List<Integer>path)
             path.remove(path.size()-1);
         }
     }
+
 // 给定和的路径
 public void check(TreeNode root,int targetSum,List<Integer>path,List<List<Integer>>res)
     {
+    	path.add(root.val);
+        targetSum-=root.val;
         // 终止条件
         if(root.left==null&&root.right==null)
         {
-            path.add(root.val);
-            targetSum-=root.val;
             if(targetSum==0)
             {
                 res.add(new ArrayList<>(path));
             }
             return;
-        }
-        // 单层遍历
-        if(root.left!=null||root.right!=null)
-        {
-            targetSum-=root.val;
-            path.add(root.val);
         }
         if(root.left!=null)
         {

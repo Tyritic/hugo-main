@@ -1,7 +1,7 @@
 ---
 date : '2025-03-07T10:05:10+08:00'
 draft : false
-title : '基于langchain4j实现RAG'
+title : 'langchain4j实现RAG系统'
 image : ""
 categories : ["langchain4j"]
 tags : ["后端开发"]

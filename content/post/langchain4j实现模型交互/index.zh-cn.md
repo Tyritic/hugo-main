@@ -1,7 +1,7 @@
 ---
 date : '2025-03-06T15:40:51+08:00'
 draft : false
-title : '基于langchain4j的模型交互'
+title : 'langchain4j的模型交互'
 image : ""
 categories : ["langchain4j"]
 tags : ["后端开发"]
