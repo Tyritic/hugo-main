@@ -126,7 +126,7 @@ math : true
 
 #### `addFirst()`方法
 
-**`addFirst(E e)`**的作用是在*Deque*的首端插入元素，也就是在`head`的前面插入元素，在空间足够且下标没有越界的情况下，只需要将**`elements[--head] = e`**即可。
+**`addFirst(E e)`** 的作用是在*Deque*的首端插入元素，也就是在`head`的前面插入元素，在空间足够且下标没有越界的情况下，只需要将 **`elements[--head] = e`** 即可。
 
 ```java
 //addFirst(E e)
@@ -141,7 +141,7 @@ public void addFirst(E e) {
 
 #### `addLast()`方法
 
-**`addLast(E e)`**的作用是在*Deque*的尾端插入元素，也就是在**`tail`**的位置插入元素，由于**`tail`**总是指向下一个可以插入的空位，因此只需要**`elements[tail] = e`**即可
+**`addLast(E e)`** 的作用是在*Deque*的尾端插入元素，也就是在 **`tail`** 的位置插入元素，由于 **`tail`** 总是指向下一个可以插入的空位，因此只需要 **`elements[tail] = e`** 即可
 
 ```java
 public void addLast(E e) {
@@ -155,7 +155,7 @@ public void addLast(E e) {
 
 #### `pollFirst()`方法
 
-**`pollFirst()`**的作用是删除并返回队列首端元素，也即是**`head`**位置处的元素。如果容器不空，只需要直接返回**`elements[head]`**即可，当然还需要处理下标的问题。由于**`ArrayDeque`**中不允许放入**`null`**，当**`elements[head] == null`**时，意味着容器为空。
+**`pollFirst()`**的作用是删除并返回队列首端元素，也即是**`head`**位置处的元素。如果容器不空，只需要直接返回**`elements[head]`**即可，当然还需要处理下标的问题。由于**`ArrayDeque`**中不允许放入**`null`**，当 **`elements[head] == null`** 时，意味着容器为空。
 
 ```java
 public E pollFirst() {
@@ -170,7 +170,7 @@ public E pollFirst() {
 
 #### `pollLast`方法
 
-**`pollLast()`**的作用是删除并返回队列尾端元素，也即是**`tail`**位置前面的那个元素
+**`pollLast()`** 的作用是删除并返回队列尾端元素，也即是 **`tail`** 位置前面的那个元素
 
 ```java
 public E pollLast() {
@@ -208,7 +208,7 @@ public E pollLast() {
 
 堆是一种完全二叉树，堆的特点是根节点的值最小（小顶堆）或最大（大顶堆），并且任意非根节点i的值都不大于（或不小于）其父节点的值。
 
-在堆中，每个节点的下标和其在数组中的下标是一一对应的，假设节点下标为**`i`**，则其父节点下标为**`(i-1)/2`**，其左子节点下标为**`2i+1`**，其右子节点下标为**`2i+2`**。
+在堆中，每个节点的下标和其在数组中的下标是一一对应的，假设节点下标为 **`i`** ，则其父节点下标为 **`(i-1)/2`** ，其左子节点下标为 **`2i+1`** ，其右子节点下标为 **`2i+2`** 。
 
 小顶堆
 
