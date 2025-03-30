@@ -3,7 +3,7 @@ date : '2025-01-03T11:13:40+08:00'
 draft : false
 title : 'Java中接口和抽象类的辨析'
 image : ""
-categories : ["互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "Java中接口和抽象类的区别和使用场景"
 math : true

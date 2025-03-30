@@ -3,7 +3,7 @@ date : '2025-02-08T10:24:08+08:00'
 draft : false
 title : 'Java中的异步调用'
 image : ""
-categories : ["Java并发编程","互联网面试题"]
+categories : ["Java并发编程"]
 tags : ["JavaSE"]
 description : ""
 math : true

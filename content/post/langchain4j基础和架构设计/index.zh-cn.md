@@ -3,15 +3,15 @@ date : '2025-03-06T14:33:36+08:00'
 draft : false
 title : 'Langchain4j基础和架构设计'
 image : ""
-categories : ["langchain4j"]
+categories : ["LangChain4j"]
 tags : ["后端开发"]
 description : "记录识物探趣项目中对LLM的支持"
 math : true
 ---
 
-## langchain4j
+## LangChain4j
 
-langchain4j是langchain的java版本，目的是简化将 LLM 集成到 Java 应用程序中的过程
+LangChain4j是LangChain的java版本，目的是简化将 LLM 集成到 Java 应用程序中的过程
 
 ### 核心功能
 
@@ -47,9 +47,22 @@ langchain4j的软件架构采用模块结构和层次结构
 
     ```xml
     <dependency>
-          <groupId>dev.langchain4j</groupId>
-          <artifactId>langchain4j-ollama-spring-boot-starter</artifactId>
-          <version>1.0.0-beta1</version>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-ollama</artifactId>
+            <version>1.0.0-beta1</version>
+    </dependency>
+    
+    <dependency>
+                <groupId>dev.langchain4j</groupId>
+                <artifactId>langchain4j</artifactId>
+                <version>1.0.0-beta1</version>
+            </dependency>
+    
+    <!-- 如果要通过application.yml中自动配置Bean才引入 -->
+    <dependency>
+             <groupId>dev.langchain4j</groupId>
+             <artifactId>langchain4j-ollama-spring-boot-starter</artifactId>
+             <version>1.0.0-beta1</version>
     </dependency>
     ```
 
@@ -64,6 +77,18 @@ langchain4j的软件架构采用模块结构和层次结构
            <version>1.0.0-beta1</version>
     </dependency>
     ```
+
+  - 引入RAG的相关支持
+
+    ```xml
+    <dependency>
+                <groupId>dev.langchain4j</groupId>
+                <artifactId>langchain4j-easy-rag</artifactId>
+                <version>1.0.0-beta1</version>
+            </dependency>
+    ```
+
+    
 
 - 在application.yml中设置ollama模型的元信息，包括模型名称，ollama服务的url等等
 

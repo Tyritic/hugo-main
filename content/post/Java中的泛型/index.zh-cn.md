@@ -3,7 +3,7 @@ date : '2024-11-16T09:46:03+08:00'
 draft : false
 title : 'Java中的泛型'
 image : ""
-categories : ["Java基础","互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

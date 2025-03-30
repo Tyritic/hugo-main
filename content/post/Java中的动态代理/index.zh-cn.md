@@ -3,7 +3,7 @@ date : '2025-01-19T20:10:12+08:00'
 draft : false
 title : 'Java的动态代理'
 image : ""
-categories : ["Java基础","互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : ""
 math : true

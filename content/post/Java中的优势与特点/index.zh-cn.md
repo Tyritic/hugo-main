@@ -3,18 +3,11 @@ date : '2025-01-02T10:53:37+08:00'
 draft : false
 title : 'Java的优势与特点'
 image : ""
-categories : ["互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "对Java这一编程语言的优劣势的认识"
 math : true
 ---
-
-## 回答重点
-
-- 跨平台
-- 垃圾回收
-- 生态
-- 面向对象
 
 ## 跨平台
 

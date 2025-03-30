@@ -3,7 +3,7 @@ date : '2025-02-07T13:17:52+08:00'
 draft : false
 title : 'Java的线程池技术'
 image : ""
-categories : ["Java并发编程","互联网面试题"]
+categories : ["Java并发编程"]
 tags : ["JavaSE"]
 description : "Java的线程池技术"
 math : true
@@ -19,7 +19,7 @@ math : true
 - **提高响应速度**。当任务到达时，任务可以不需要等到线程创建就能立即执行。
 - **提高线程的可管理性**。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。
 
-## **`Executor`** 框架
+## **Executor** 框架
 
 **`Executor`** 框架不仅包括了线程池的管理，还提供了线程工厂、队列以及拒绝策略等，`Executor` 框架让并发编程变得更加简单。
 
@@ -103,7 +103,7 @@ public class CallableExample {
 
 ## 创建线程池的方法
 
-### 使用 **`ThreadPoolExecutor`** 直接创建线程池
+### 使用 **ThreadPoolExecutor** 直接创建线程池
 
 常见构造函数
 
@@ -144,7 +144,7 @@ public ThreadPoolExecutor(int corePoolSize,
 
 
 
-### 使用 **`Executors`** 工厂类
+### 使用 **Executors** 工厂类
 
 **通过 `Executor` 框架的工具类 `Executors` 来创建内置线程池。**
 
@@ -369,7 +369,7 @@ public class SubmitCallableExample {
 - **`shutdown()`** ：关闭线程池，线程池的状态变为 `SHUTDOWN`。线程池不再接受新任务了，但是队列里的任务得执行完毕。
 - **`shutdownNow()`** ：关闭线程池，线程池的状态变为 `STOP`。线程池会终止当前正在运行的任务，并停止处理排队的任务并返回正在等待执行的 List。
 
-### **`shutdown()`** 方法
+### **shutdown()** 方法
 
 ```java
 /**
@@ -397,7 +397,7 @@ public void shutdown() {
 
 线程池会进入 `SHUTDOWN` 状态，所有已执行和正在执行的任务都会继续完成，只有所有任务完成后，线程池才会完全终止。
 
-### **`shutdownNow()`**
+### **shutdownNow()**
 
 ```java
 /**

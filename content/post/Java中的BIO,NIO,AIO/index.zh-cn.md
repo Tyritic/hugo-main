@@ -3,7 +3,7 @@ date : '2025-01-20T15:22:04+08:00'
 draft : false
 title : 'Java的BIO,NIO,AIO'
 image : ""
-categories : ["Java基础","互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "Java中不同的IO模式"
 math : true

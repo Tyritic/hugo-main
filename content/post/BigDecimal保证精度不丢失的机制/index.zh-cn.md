@@ -3,7 +3,7 @@ date : '2025-01-14T10:19:12+08:00'
 draft : false
 title : 'BigDecimal保证精度不丢失的机制'
 image : ""
-categories : ["互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "BigDecimal如何保证精度不丢失"
 math : true

@@ -14,7 +14,7 @@ description : "项目中对于异常的处理办法"
 
 ![](微信截图_20241107164515.png)
 
-**@RestControllerAdvice**：用于修饰类表示全局异常处理器
+**`@RestControllerAdvice`**：用于修饰类表示全局异常处理器
 
 - 创建一个类并使用 `@ControllerAdvice` 注解标记。
 - 在该类中定义带有 `@ExceptionHandler` 注解的方法，用于捕获异常。

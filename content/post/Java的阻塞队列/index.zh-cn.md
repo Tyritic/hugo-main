@@ -3,7 +3,7 @@ date : '2025-02-07T21:27:50+08:00'
 draft : false
 title : 'Java的阻塞队列'
 image : ""
-categories : ["Java并发编程","互联网面试题"]
+categories : ["Java并发编程"]
 tags : ["JavaSE"]
 description : "线程池中常用的阻塞队列"
 math : true

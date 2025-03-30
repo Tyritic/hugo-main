@@ -3,7 +3,7 @@ date : '2025-01-13T23:15:14+08:00'
 draft : false
 title : 'Java中包装类和基本数据类型的对比'
 image : ""
-categories : ["互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "包装类和基本数据类型的区别和对比"
 math : true

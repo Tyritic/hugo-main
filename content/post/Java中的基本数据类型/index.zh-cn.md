@@ -3,7 +3,7 @@ date : '2025-01-02T14:17:22+08:00'
 draft : false
 title : 'Java的基本数据类型'
 image : ""
-categories : ["互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "Java的基本数据类型"
 math : true

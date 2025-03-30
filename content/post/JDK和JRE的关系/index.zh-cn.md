@@ -3,7 +3,7 @@ date : '2025-01-02T12:10:06+08:00'
 draft : false
 title : 'JDK和JRE的关系'
 image : ""
-categories : ["互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "Java运行的底层环境和工具包"
 math : true

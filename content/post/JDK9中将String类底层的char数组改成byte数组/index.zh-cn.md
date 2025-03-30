@@ -3,7 +3,7 @@ date : '2025-01-14T22:32:10+08:00'
 draft : false
 title : 'JDK9中将String类底层的char数组改成byte数组'
 image : ""
-categories : ["互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "为什么JDK9中将String类底层的char数组改成byte数组"
 math : true

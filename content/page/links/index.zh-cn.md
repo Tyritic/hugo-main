@@ -25,6 +25,14 @@ links:
     description: MyBatis-Plus 中文官方文档
     website: https://baomidou.com/introduce/
     image: mybatis-plus-logo.png
+  - title: SpringAI
+    description: SpringAI 官方文档
+    website: https://docs.spring.io/spring-ai/reference/
+    image: OIP1.jpg
+  - title: LangChain4j
+    description: LangChain4j 官方文档
+    website: https://docs.langchain4j.dev/category/tutorials
+    image: OIP.jpg
 menu:
     main: 
         weight: -50

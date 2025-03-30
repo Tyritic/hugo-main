@@ -3,7 +3,7 @@ date : '2025-02-04T20:59:16+08:00'
 draft : false
 title : 'Java中的ReentrantLock类'
 image : ""
-categories : ["Java并发编程","互联网面试题"]
+categories : ["Java并发编程"]
 tags : ["JavaSE"]
 description : "重入锁-ReentrantLock类"
 math : true
@@ -37,15 +37,14 @@ math : true
 
 - **`public void unlock()`** ：释放锁
 
-### **`ReentrantLock`** 的实现原理
+## **ReentrantLock** 的实现原理
 
-内部实现依靠一个 **`state`** 变量和两个队列：**同步队列** 和 **等待队列**。
+**`ReentrantLock`** 是基于 **`AQS`** 实现的可重入锁，内部实现依靠一个 **`state`** 变量和两个队列：**同步队列** 和 **等待队列**。
 
-线程利用 **`CAS`** 修改 **`state`** 来争抢锁。
+- 等待队列：条件 **`condition`** 不满足时候则入等待队列等待，是个单向链表。
+- 同步队列：等待争抢锁的线程
 
-争抢不到则入同步队列等待，同步队列是一个双向链表。
-
-条件 **`condition`** 不满足时候则入等待队列等待，是个单向链表。
+线程利用 **`CAS`** 修改 **`state`** 来争抢锁。争抢不到则入同步队列等待，同步队列是一个双向链表。
 
 是否是公平锁的区别在于：线程获取锁时是加入到同步队列尾部还是直接利用 CAS 争抢锁。
 
@@ -151,9 +150,16 @@ protected final boolean tryAcquire(int acquires) {
 - 如果该锁已经被线程占有了，会继续检查占有线程是否为当前线程
   - 如果是的话，同步状态加 1 返回 true，表示可以再次获取成功。每次重新获取都会对同步状态进行加一的操作
 
+### 底层实现
 
+- 内部通过一个计数器 **`state`** 来跟踪锁的状态和持有次数。
+- 当线程调用 `lock()` 方法获取锁时，**`ReentrantLock`** 会检查 **`state`** 的值如果为 0
+  - 通过 CAS 修改为 1，表示成功加锁。
+  - 否则根据当前线程的公平性策略，加入到等待队列中。
+- 线程首次获取锁时，**`state`** 值设为 1；如果同一个线程再次获取锁时，**`state`** 加 1；每释放一次锁，**`state`** 减 1。
+- 如果 `state = 0`，则释放锁，并唤醒等待队列中的线程来竞争锁。
 
-## **`ReentrantLock`** 和 **`synchronized`** 的区别
+## **ReentrantLock** 和 **synchronized** 的区别
 
 - **用法不同**：**`synchronized`** 可用来修饰普通方法、静态方法和代码块，而 **`ReentrantLock`** 只能用在代码块上。
 - **获取锁和释放锁方式不同**：**`synchronized`**  会自动加锁和释放锁，当进入 **`synchronized`**  修饰的代码块之后会自动加锁，当离开 **`synchronized`** 的代码段之后会自动释放锁。而 **`ReentrantLock`** 需要手动加锁和释放锁

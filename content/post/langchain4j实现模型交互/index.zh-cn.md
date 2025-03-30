@@ -1,11 +1,11 @@
 ---
 date : '2025-03-06T15:40:51+08:00'
 draft : false
-title : 'langchain4j的模型交互'
+title : 'LangChain4j的模型交互'
 image : ""
-categories : ["langchain4j"]
+categories : ["LangChain4j"]
 tags : ["后端开发"]
-description : "langchain4j中对语言和聊天能力的支持"
+description : "LangChain4j中对语言和聊天能力的支持"
 math : true
 ---
 

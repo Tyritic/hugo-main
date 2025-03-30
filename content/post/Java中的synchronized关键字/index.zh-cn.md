@@ -3,23 +3,23 @@ date : '2024-12-04T13:16:44+08:00'
 draft : false
 title : 'Java中的synchronized关键字'
 image : ""
-categories : ["Java并发编程","互联网面试题"]
+categories : ["Java并发编程"]
 tags : ["JavaSE"]
 description : "synchronized关键字的底层原理"
 math : true
 ---
 
-## **`synchronized`** 关键字
+## **synchronized** 关键字
 
 `synchronized` 是 Java 提供的一种**内置同步机制**，用于**解决多线程环境下的并发安全问题**。它能够确保同一时刻只有一个线程执行同步代码块，从而防止线程间的**数据不一致**和**竞态条件**。
 
-## **`synchronized`** 的作用
+## **synchronized** 的作用
 
 - **保证原子性**：同步代码块在执行时不会被其他线程打断，保证操作的完整性。
 - **保证可见性**：线程进入 **`synchronized`** 代码块前，必须先从主内存中读取变量最新的值，退出时必须将变量的修改刷新到主内存。
 - **保证有序性**：由于 **`synchronized`** 具有**内存屏障**（Memory Barrier），可以保证**重排序不会影响同步代码块的正确性**。
 
-## **`synchronized`** 使用方式
+## **synchronized** 使用方式
 
 - **同步实例方法** ：为 **当前对象** 加锁，进入同步代码前要获得当前对象的锁；
 - **同步静态方法** ：为 **当前类（Class对象）** 加锁，进入同步代码前要获得当前类的锁；
@@ -33,7 +33,7 @@ math : true
 
 {{</notice>}}
 
-### **`synchronized`** 修饰实例方法
+### **synchronized** 修饰实例方法
 
 在实例方法声明中加入 **`synchronized`** 关键字，可以保证在任意时刻，只有一个线程能执行该方法。也就是说，线程在执行这个方法的时候，其他线程不能同时执行，需要等待锁释放。
 
@@ -48,7 +48,7 @@ synchronized void method() {
 - 修饰实例方法是给当前对象上锁
 - 不同实例的 **`synchronized`** 方法不会相互影响（每个对象都有一个对象锁，不同的对象，他们的锁不会互相影响）
 
-### **`synchronized`** 修饰静态方法
+### **synchronized** 修饰静态方法
 
 给 **当前类** 加锁，会作用于类的所有对象实例 ，进入同步代码前要获得 **当前 class 的锁**。
 
@@ -64,9 +64,9 @@ synchronized static void method() {
 
 - 锁的是 **当前类的 Class 对象**，不属于某个对象。
 - 当前类的 Class 对象锁被获取，不影响实例对象锁的获取，两者互不影响
-- 静态 **`synchronized`** 方法和非静态 **`synchronized`** 方法之间的调用不互斥（因为访问静态 **`synchronized`** 方法占用的锁是当前类的锁，而访问非静态 **`synchronized`** 方法占用的锁是当前实例对象锁。）
+- 静态 **`synchronized`** 方法和非静态 **`synchronized`** 方法之间的调用不互斥（因为访问静态 **`synchronized`** 方法占用的锁是当前类的锁，而访问非静态 **`synchronized`** 方法占用的锁是当前实例对象锁。），比如说如果线程 A 调用了一个对象的非静态 synchronized 方法，线程 B 需要调用这个对象所属类的静态 synchronized 方法，是不会发生互斥的
 
-### **`synchronized`** 修饰代码块
+### **synchronized** 修饰代码块
 
 对括号里指定的对象/类加锁：
 
@@ -79,7 +79,7 @@ synchronized(this) {
 }
 ```
 
-## **`synchronized`** 属于可重入锁
+## **synchronized** 属于可重入锁
 
 **可重入锁** 是指同一个线程在获取了锁之后，可以再次重复获取该锁而不会造成死锁或其他问题。当一个线程持有锁时，如果再次尝试获取该锁，就会成功获取而不会被阻塞。
 
@@ -133,7 +133,7 @@ public class AccountingSync implements Runnable{
   - 如果 ID 匹配，表示的是同一个线程，锁计数器递增。
 - 当线程退出同步块时，锁计数器递减。如果计数器值为零，JVM 将锁标记为未持有状态，并清除线程 ID 信息。
 
-## **`synchronized`** 底层实现原理
+## **synchronized** 底层实现原理
 
 **`synchronized`** 实现原理依赖于 JVM 的 Monitor（监视器锁） 和 对象头（Object Header）。
 
@@ -141,10 +141,16 @@ public class AccountingSync implements Runnable{
 
 - **synchronized 修饰方法**：会在方法的访问标志中增加一个 **`ACC_SYNCHRONIZED`** 标志。每当一个线程访问该方法时，JVM 会检查方法的访问标志。如果包含 **`ACC_SYNCHRONIZED`** 标志，线程必须先获得该方法对应的对象的监视器锁（即对象锁），然后才能执行该方法，从而保证方法的同步性。
 - **synchronized 修饰代码块**：会在代码块的前后插入 **`monitorenter`** 和 **`monitorexit`** 字节码指令。
+  - 执行 **`monitorenter`** 指令时会尝试获取对象锁，如果对象没有被锁定或者已经获得了锁，锁的计数器+1。此时其他竞争锁的线程则会进入等待队列中。
+  - 执行 **`monitorexit`** 指令时则会把计数器-1，当计数器值为0时，则锁释放，处于等待队列中的线程再继续竞争锁。
 
-执行 **`monitorenter`** 指令时会尝试获取对象锁，如果对象没有被锁定或者已经获得了锁，锁的计数器+1。此时其他竞争锁的线程则会进入等待队列中。
 
-执行 **`monitorexit`** 指令时则会把计数器-1，当计数器值为0时，则锁释放，处于等待队列中的线程再继续竞争锁。
+从源码的角度上
+
+- 当多个线程进入同步代码块时，首先进入entryList
+- 有一个线程获取到monitor锁后，就赋值给当前线程，并且计数器+1
+- 如果线程调用wait方法，将释放锁，当前线程置为null，计数器-1，同时进入waitSet等待被唤醒，调用notify或者notifyAll之后又会进入entryList竞争锁
+- 如果线程执行完毕，同样释放锁，计数器-1，当前线程置为null
 
 ### 原子性的保证
 
@@ -156,7 +162,27 @@ public class AccountingSync implements Runnable{
 
 **`synchronized`** 同步的代码块，具有排他性，一次只能被一个线程拥有，所以 **`synchronized`** 保证同一时刻，代码是单线程执行的。
 
-因为 as-if-serial 语义的存在，单线程的程序能保证最终结果是有序的，但是不保证不会指令重排。
+**`synchronized`** 通过 JVM 指令 **`monitorenter`** 和 **`monitorexit`** 来确保加锁代码块内的指令不会被重排。
 
-所以 **`synchronized`** 保证的有序是执行结果的有序性，而不是防止指令重排的有序性。
+- **`monitorenter`** ：获取锁，进入同步代码块 
+- **`monitorexit`** ：释放锁，退出同步代码块
 
+### 可重入锁的实现
+
+可重入意味着同一个线程可以多次获得同一个锁，而不会被阻塞。
+
+**`synchronized`** 支持可重入的原理
+
+- Java 的对象头包含了一个 Mark Word，用于存储对象的状态，包括锁信息。
+
+- 当一个线程获取对象锁时，JVM 会将该线程的 ID 写入 Mark Word，并将锁计数器设为 1。
+
+- 如果一个线程尝试再次获取已经持有的锁，JVM 会检查 Mark Word 中的线程 ID。如果 ID 匹配，表示的是同一个线程，锁计数器递增。
+
+- 当线程退出同步块时，锁计数器递减。如果计数器值为零，JVM 将锁标记为未持有状态，并清除线程 ID 信息。
+
+源码中是通过 Monitor 对象的 owner 和 count 字段实现的，owner 记录持有锁的线程，count 记录线程获取锁的次数。
+
+## **synchronized** 的锁升级过程
+
+参见[下期博客](https://tyritic.github.io/p/java%E4%B8%AD%E7%9A%84%E9%94%81/)

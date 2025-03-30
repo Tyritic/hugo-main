@@ -3,7 +3,7 @@ date : '2025-02-02T20:48:21+08:00'
 draft : false
 title : 'Java内存模型（JMM）'
 image : ""
-categories : ["Java并发编程","互联网面试题"]
+categories : ["Java并发编程"]
 tags : ["JavaSE"]
 description : "Java内存模型的理解"
 math : true
@@ -159,13 +159,13 @@ public class Singleton {
 
 ## 内存可见性的保证
 
-### **`volatile`** 关键字
+### **volatile** 关键字
 
-- **写入 `volatile` 变量时，JMM 会**强制把值**刷新到主存**。
-- **读取 `volatile` 变量时，JMM 会**强制从主存**获取最新值**，而不是从缓存读取。
+- **写入 `volatile` 变量时，JMM**   强制把值 **刷新到主存**。
+- **读取 `volatile` 变量时，JMM**   强制从主存 **获取最新值**，而不是从缓存读取。
 - **禁止指令重排序**（确保 **`volatile`** 变量的读写顺序不会被 JVM 或 CPU 乱序执行）。
 
-### **`synchronized`** 关键字
+### **synchronized** 关键字
 
 - 进入 **`synchronized`** 方法或代码块时，线程**必须从主存读取最新变量**。
 - 退出 **`synchronized`** 方法或代码块时，线程**必须把修改的变量刷新回主存**。

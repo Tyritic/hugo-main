@@ -71,13 +71,13 @@ Read View 有四个重要的字段：
 - max_trx_id ：这个并不是 m_ids 的最大值，而是 **创建 Read View 时当前数据库中应该给下一个事务的 id 值** ，也就是全局事务中最大的事务 id 值 + 1；
 - creator_trx_id ：指的是 **创建该 Read View 的事务的事务 id** 。
 
-并发事务![img](ReadView.drawio.png)
+![并发事务](ReadView.drawio.png)
 
 ### 可见性实现
 
-- 如果记录的 trx_id 值小于 Read View 中的 `min_trx_id` 值，表示这个版本的记录是在创建 Read View **前** 已经提交的事务生成的，所以该版本的记录对当前事务 **可见** 。
-- 如果记录的 trx_id 值大于等于 Read View 中的 `max_trx_id` 值，表示这个版本的记录是在创建 Read View **后**才启动的事务生成的，所以该版本的记录对当前事务 **不可见** 。
-- 如果记录的 trx_id 值在 Read View 的 `min_trx_id` 和 `max_trx_id`之间，需要判断 trx_id 是否在 m_ids 列表中：
+- 如果记录的 `trx_id` 值小于 Read View 中的 `min_trx_id` 值，表示这个版本的记录是在创建 Read View **前** 已经提交的事务生成的，所以该版本的记录对当前事务 **可见** 。
+- 如果记录的 `trx_id` 值大于等于 Read View 中的 `max_trx_id` 值，表示这个版本的记录是在创建 Read View **后**才启动的事务生成的，所以该版本的记录对当前事务 **不可见** 。
+- 如果记录的 `trx_id` 值在 Read View 的 `min_trx_id` 和 `max_trx_id`之间，需要判断 `trx_id` 是否在 m_ids 列表中：
   - 如果记录的 trx_id  **在**  `m_ids` 列表中，表示生成该版本记录的活跃事务依然活跃着（还没提交事务），所以该版本的记录对当前事务**不可见**。
   - 如果记录的 trx_id  **不在**  `m_ids`列表中，表示生成该版本记录的活跃事务已经被提交，所以该版本的记录对当前事务 **可见** 。
 

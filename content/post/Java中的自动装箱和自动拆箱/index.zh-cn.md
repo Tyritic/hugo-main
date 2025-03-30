@@ -3,7 +3,7 @@ date : '2025-01-02T14:29:54+08:00'
 draft : false
 title : 'Java中的自动装箱和自动拆箱'
 image : ""
-categories : ["互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "Java中的自动装箱和自动拆箱机制"
 math : true

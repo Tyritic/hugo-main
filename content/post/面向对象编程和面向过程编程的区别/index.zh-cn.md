@@ -3,7 +3,7 @@ date : '2025-01-14T10:59:01+08:00'
 draft : false
 title : '面向对象编程和面向过程编程的区别'
 image : ""
-categories : ["互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "面向对象编程和面向过程编程的区别"
 math : true

@@ -3,7 +3,7 @@ date : '2024-11-26T10:44:24+08:00'
 draft : false
 title : 'Java中的Map接口'
 image : ""
-categories : ["Java集合","互联网面试题"]
+categories : ["Java集合"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

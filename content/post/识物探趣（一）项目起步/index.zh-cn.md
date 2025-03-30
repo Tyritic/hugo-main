@@ -5,7 +5,7 @@ title : '识物探趣（一）项目起步'
 image : ""
 categories : ["个人项目"]
 tags : ["后端开发"]
-description : "软著文档的留档"
+description : "开发过程的留档"
 math : true
 ---
 

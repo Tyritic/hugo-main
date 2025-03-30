@@ -3,7 +3,7 @@ date : '2024-11-21T16:00:25+08:00'
 draft : false
 title : 'Java中的List实现类'
 image : ""
-categories : ["Java集合","互联网面试题"]
+categories : ["Java集合"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true
@@ -711,7 +711,7 @@ public E get(int index) {
 
 所有读操作都可以无锁地直接读取 **`CopyOnWriteArrayList`** 当前持有的数组，**因为这个数组在读操作期间不会被修改**。
 
-### `CopyOnWriteArrayList` 和 `Collections.synchronizedList` 的区别（面试题）
+### CopyOnWriteArrayList 和 Collections.synchronizedList 的区别（面试题）
 
 #### 回答要点
 

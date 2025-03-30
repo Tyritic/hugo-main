@@ -3,7 +3,7 @@ date : '2024-06-06T21:09:15+08:00'
 draft : false
 title : '网络分层模型'
 image : ""
-categories : ["计算机网络","互联网面试题"]
+categories : ["计算机网络"]
 tags : ["计算机基础"]
 description : "课堂笔记转换"
 math : true

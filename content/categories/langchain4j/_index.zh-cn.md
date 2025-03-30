@@ -1,5 +1,5 @@
 ---
-title: "Langchain4j"
+title: "LangChain4j"
 image: "th.jpg"
 style:
     background: "#2a9d8f"

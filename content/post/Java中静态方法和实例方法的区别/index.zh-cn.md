@@ -3,7 +3,7 @@ date : '2025-01-03T10:56:32+08:00'
 draft : false
 title : 'Java中静态方法和实例方法的区别'
 image : ""
-categories : ["互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "Java中静态方法和实例方法的辨析"
 math : true

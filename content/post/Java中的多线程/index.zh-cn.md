@@ -3,7 +3,7 @@ date : '2024-12-01T10:47:55+08:00'
 draft : false
 title : 'Java中的多线程'
 image : ""
-categories : ["Java并发编程","互联网面试题"]
+categories : ["Java并发编程"]
 tags : ["JavaSE"]
 description : "Java中的多线程概念"
 math : true
@@ -239,9 +239,9 @@ public class CallableExample {
 
 {{</notice>}}
 
-## **`Runnable`** 接口 和 **`Callable`** 接口
+## **Runnable** 接口 和 **Callable** 接口
 
-### 无返回值的 **`Runnable`**
+### 无返回值的 **Runnable**
 
 ```java
 public interface Runnable {
@@ -251,7 +251,7 @@ public interface Runnable {
 
 执行完任务之后无法返回任何结果
 
-### 有返回值的 **`Callable`**
+### 有返回值的 **Callable**
 
 ```java
 public interface Callable<V> {
@@ -261,7 +261,7 @@ public interface Callable<V> {
 
 `call()` 方法返回的类型是一个 V 类型的泛型
 
-## **`Future`** 接口和 **`FutureTask`** 实现类
+## **Future** 接口和 **FutureTask** 实现类
 
 ```java
 public interface Future<V> {

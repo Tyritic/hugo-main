@@ -3,7 +3,7 @@ date : '2024-11-11T09:36:04+08:00'
 draft : false
 title : 'Java中的集合体系和集合遍历方式'
 image : ""
-categories : ["Java集合","互联网面试题"]
+categories : ["Java集合"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

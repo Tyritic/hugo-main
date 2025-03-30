@@ -3,7 +3,7 @@ date : '2024-11-14T19:07:43+08:00'
 draft : false
 title : 'Java中的不可变对象'
 image : ""
-categories : ["Java基础","互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

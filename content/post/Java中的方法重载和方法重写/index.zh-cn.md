@@ -3,7 +3,7 @@ date : '2025-01-03T16:05:05+08:00'
 draft : false
 title : 'Java中的方法重载和方法重写'
 image : ""
-categories : ["互联网面试题"]
+categories : ["Java基础"]
 tags : ["JavaSE"]
 description : "Java的方法重载和方法重写"
 math : true
