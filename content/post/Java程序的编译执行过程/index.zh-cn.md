@@ -87,6 +87,8 @@ Java虚拟机用于解释Java源代码，加载Java程序。针对不同的操�
 - javap：类文件反汇编器，用于反汇编和查看 Java 类文件。
 - jdeps：Java 类依赖分析工具，用于分析类文件或 JAR 文件的依赖关系
 
+其他工具的介绍参见[博客](https://tyritic.github.io/p/jdk%E5%B7%A5%E5%85%B7%E5%8C%85/)
+
 ### 相互关系
 
 - JDK

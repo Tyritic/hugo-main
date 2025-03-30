@@ -45,7 +45,7 @@ math : true
 
 {{<notice tip>}}
 
-**`ThreadLocalMap`* *的引用情况
+**`ThreadLocalMap`**  的引用情况
 
 - **`key`** ：**`ThreadLocal`** 对 **`key`** 是弱引用
 - **`value`**  ：**`ThreadLocalMap.Entry`**  对 **`value`** 强引用
