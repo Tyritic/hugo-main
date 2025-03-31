@@ -36,4 +36,4 @@ Kafka 采用不断追加写文件的方式来实现顺序写，从而提高磁�
 
 Kafka Broker 将消息发送给消费端时，即使命中了 PageCache，也需要将 PageCache 中的数据先复制到应用程序的内存空间，然后从应用程序的内存空间复制到 Socket 缓存区，将数据发送出去。Kafka 采用了零拷贝技术把数据直接从 PageCache 复制到 Socket 缓冲区中，这样数据不用复制到用户态的内存空间，同时 DMA 控制器直接完成数据复制，不需要 CPU 参与。
 
-零拷贝的技术原理参见往期博客
+零拷贝的技术原理参见[往期博客](https://tyritic.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84io%E6%A8%A1%E5%9E%8B/#%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF-1)

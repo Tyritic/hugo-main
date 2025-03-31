@@ -35,4 +35,4 @@ math : true
 
 ## 索引优化
 
-参考往期博客
+参考[往期博客](https://tyritic.github.io/p/mysql%E7%B4%A2%E5%BC%95/#%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95)
