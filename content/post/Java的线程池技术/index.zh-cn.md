@@ -32,20 +32,19 @@ math : true
 ### 使用流程
 
 - 主线程首先要创建实现 **`Runnable`** 或者 **`Callable`** 接口的任务对象。
-
 - 提交任务
 
-  - 把创建完成的实现 **`Runnable`/`Callable`** 接口的 对象直接交给 **`ExecutorService`** 执行:
+  - 把创建完成的实现 **`Runnable`/`Callable`** 接口的对象直接交给 **`ExecutorService`** 执行:
+  - 对于 **`Runnable`** 这种无返回值的任务，把 **`Runnable`** 对象提交给 **`ExecutorService`** 执行
+    - **`ExecutorService.submit(Runnable task)`**
     - **`ExecutorService.execute（Runnable command）`**
-  - 把 **`Runnable`** 对象或 **`Callable`** 对象提交给 **`ExecutorService`** 执行
-    - **`ExecutorService.submit（Runnable task）`**
-    - **`ExecutorService.submit（Callable <T> task）`**
+  - 对于 **`Callable`** 这种有返回值的任务，把  **`Callable`** 对象提交给 **`ExecutorService`** 执行
+    - **`ExecutorService`** 将返回一个实现 **`Future`** 接口的对象
 
-- 执行 **`ExecutorService.submit（…）`**，**`ExecutorService`** 将返回一个实现 **`Future`** 接口的对象
+    - **`ExecutorService.submit(Callable <T> task)`**
 
-- 最后，主线程可以执行 **`FutureTask.get()`** 方法来等待任务执行完成。
+    - 主线程可以执行 **`FutureTask.get()`** 方法来获得任务执行完成的结果。
 
-  
 
 **示例代码**
 
@@ -190,7 +189,7 @@ ExecutorService pool = Executors.newWorkStealingPool(); //任务窃取线程池
 Java中提供了四种拒绝策略用于任务被拒绝时执行该策略同时支持自定义拒绝策略
 
 - **`ThreadPoolExecutor.AbortPolicy`** ：抛出 **`RejectedExecutionException`** 来拒绝新任务的处理。
-- **`ThreadPoolExecutor.CallerRunsPolicy`** ：调用执行者自己的线程运行任务，也就是直接在调用`execute`方法的线程中运行(`run`)被拒绝的任务，如果执行程序已关闭，则会丢弃该任务。因此这种策略会降低对于新任务提交速度，影响程序的整体性能。如果你的应用程序可以承受此延迟并且你要求任何一个任务请求都要被执行的话，你可以选择这个策略。
+- **`ThreadPoolExecutor.CallerRunsPolicy`** ：调用执行者自己的线程运行任务，也就是直接在调用`execute`方法的线程中运行(`run`)被拒绝的任务，如果执行程序已关闭，则会丢弃该任务。因此这种策略会降低对于新任务提交速度，影响程序的整体性能。
 - **`ThreadPoolExecutor.DiscardPolicy`** ：不处理新任务，直接丢弃掉。
 - **`ThreadPoolExecutor.DiscardOldestPolicy`** ：此策略将丢弃最早的未处理的任务请求。
 
@@ -244,8 +243,6 @@ public class CustomRejectedExecutionHandler implements RejectedExecutionHandler 
 但是，如果线程池是被用于周期性使用的场景，且频率不高（周期之间有明显的空闲时间）可以考虑回收核心线程。在负载高峰时临时增加核心线程数，低负载时通过回收空闲线程释放资源
 
 **`allowCoreThreadTimeOut(true)`** 可以允许核心线程在空闲时被回收，从而释放系统资源。
-
-
 
 ### 核心线程数在运行过程可以动态修改
 

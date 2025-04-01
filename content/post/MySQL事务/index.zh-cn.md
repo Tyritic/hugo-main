@@ -66,12 +66,12 @@ ReadView（读视图）是 InnoDB 为了实现一致性读而创建的数据结�
 
 Read View 有四个重要的字段：
 
-- m_ids ：指的是在创建 Read View 时，当前数据库中「活跃事务」的 **事务 id 列表**，注意是一个列表，**“活跃事务”指的就是，启动了但还没提交的事务**。
-- min_trx_id ：指的是在创建 Read View 时，当前数据库中「活跃事务」中事务 **id 最小的事务** ，也就是 m_ids 的最小值。
-- max_trx_id ：这个并不是 m_ids 的最大值，而是 **创建 Read View 时当前数据库中应该给下一个事务的 id 值** ，也就是全局事务中最大的事务 id 值 + 1；
-- creator_trx_id ：指的是 **创建该 Read View 的事务的事务 id** 。
+- **`m_ids`** ：指的是在创建 Read View 时，当前数据库中「活跃事务」的 **事务 id 列表**，注意是一个列表，**“活跃事务”指的就是，启动了但还没提交的事务**。
+- **`min_trx_id`** ：指的是在创建 Read View 时，当前数据库中「活跃事务」中事务 **id 最小的事务** ，也就是 m_ids 的最小值。
+- **`max_trx_id`** ：这个并不是 m_ids 的最大值，而是 **创建 Read View 时当前数据库中应该给下一个事务的 id 值** ，也就是全局事务中最大的事务 id 值 + 1；
+- **`creator_trx_id`** ：指的是 **创建该 Read View 的事务的事务 id** 。
 
-![并发事务](ReadView.drawio.png)
+![ReadView结构](ReadView.drawio.png)
 
 ### 可见性实现
 
@@ -178,6 +178,10 @@ set [ session | global] transaction isolation level { read uncommitted | read co
 ## MySQL的日志级别
 
 - binlog ：是 MySQL 中的二进制日志文件，用于记录 MySQL 服务器上的所有更新和修改操作。它可以记录所有的 DDL和 DML操作，包括对表结构的更改、数据的插入、修改、删除等等。binlog是在事务提交后生成的，因此可以用于恢复数据库。是位于 **Server** 层的日志
+  - STATEMENT：每一条修改数据的 SQL 都会被记录到 binlog 中（相当于记录了逻辑操作，所以针对这种格式， binlog 可以称为逻辑日志），主从复制中 slave 端再根据 SQL 语句重现。但 STATEMENT 有动态函数的问题，比如你用了 uuid 或者 now 这些函数，你在主库上执行的结果并不是你在从库执行的结果，这种随时在变的函数会导致复制的数据不一致；
+  - ROW：记录行数据最终被修改成什么样了（这种格式的日志，就不能称为逻辑日志了），不会出现 STATEMENT 下动态函数的问题。但 ROW 的缺点是每行数据的变化结果都会被记录，比如执行批量 update 语句，更新多少行数据就会产生多少条记录，使 binlog 文件过大，而在 STATEMENT 格式下只会记录一个 update 语句而已；
+  - MIXED：包含了 STATEMENT 和 ROW 模式，它会根据不同的情况自动使用 ROW 模式和 STATEMENT 模式；
+
 - redolog ：用于恢复数据，保证数据的一致性和持久性。当 MySQL 发生修改时，redolog 会将这些操作记录下来，并写入磁盘。这样，当 MySQL 发生宕机或崩溃时，通过重放 redolog 就可以恢复数据。实现了事务中的 **持久性** ，主要**用于故障恢复**；
 - undolog：用于回滚操作。当 MySQL 发生事务回滚时，undolog 会记录这些操作并将其写入磁盘。这样，当 MySQL 需要回滚时，通过重放 undolog 就可以回滚事务。实现了事务中的 **原子性** ，主要 **用于事务回滚和 MVCC** 。
 

@@ -37,14 +37,14 @@ Spring 框架是分模块存在，除了最核心的 **`Spring Core Container`**
 
 ![Spring模块划分](spring-bb7c13ea-3174-4b32-84b8-821849ddc377.png)
 
-### 核心模块 **`Core Container`**
+### 核心模块 Core Container
 
 - **Spring Core**：提供了依赖注入（Dependency Injection, DI）和控制反转（Inversion of Control, IoC）的实现，所有其他Spring模块的基础，别的模块都会依赖此模块。
 - **Spring Beans**：负责管理Bean的定义和生命周期。通过IoC容器完成Bean的创建、依赖注入、初始化、销毁等操作。
 - **Spring Context**：基于Core和Beans的高级容器，提供了类似JNDI的上下文功能，还包含了国际化、事件传播、资源访问等功能。
 - **Spring Expression Language（SpEL）**：一个强大的表达式语言，用于在运行时查询和操作对象的值。
 
-### 面向切面编程模块 **`AOP`**
+### 面向切面编程模块 AOP
 
 - **Spring AOP**：提供面向切面编程的功能，可以在方法执行前后或抛出异常时动态插入额外的逻辑，比如日志记录、权限验证、事务管理等。
 - **spring-aspects**：该模块为与 AspectJ 的集成提供支持。

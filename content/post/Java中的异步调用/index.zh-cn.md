@@ -274,13 +274,13 @@ public interface Future<V> {
                 }
             });
     
-            CompletableFuture<Integer> future3=CompletableFuture.supplyAsync(new Supplier<Integer>() {
+    CompletableFuture<Integer> future3=CompletableFuture.supplyAsync(new Supplier<Integer>() {
                 @Override
                 public Integer get() {
                     return 200;
                 }
             });
-            CompletableFuture<Integer> future4=future2.thenCombine(future3, new BiFunction<Integer, Integer, Integer>() {
+    CompletableFuture<Integer> future4=future2.thenCombine(future3, new BiFunction<Integer, Integer, Integer>() {
                 @Override
                 public Integer apply(Integer integer, Integer integer2) {
                     return integer+integer2;

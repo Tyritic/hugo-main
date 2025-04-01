@@ -11,7 +11,7 @@ math : true
 
 ## **synchronized** 关键字
 
-`synchronized` 是 Java 提供的一种**内置同步机制**，用于**解决多线程环境下的并发安全问题**。它能够确保同一时刻只有一个线程执行同步代码块，从而防止线程间的**数据不一致**和**竞态条件**。
+**`synchronized`**  是 Java 提供的一种**内置同步机制**，用于**解决多线程环境下的并发安全问题**。它能够确保同一时刻只有一个线程执行同步代码块，从而防止线程间的**数据不一致**和**竞态条件**。
 
 ## **synchronized** 的作用
 
@@ -124,15 +124,6 @@ public class AccountingSync implements Runnable{
 - 在 **`main`** 方法中，创建了两个线程 **`t1`** 和 **`t2`**，它们共享同一个 **`Runnable`** 对象
 -  **`synchronized(this)`** 和 **`synchronized`** 方法都使用了同一个锁对象（当前的 AccountingSync 实例），并且对静态变量 **`i`** 和 **`j`** 进行了增加操作，因此，在多线程环境下，也能保证 **`i`** 和 **`j`** 的操作是线程安全的。
 
-### 实现原理
-
-**`synchronized`** 底层是利用计算机系统mutex Lock实现的。每一个可重入锁都会关联一个线程ID和一个锁状态 **`status`**。
-
-- 当一个线程获取对象锁时，JVM 会将该线程的 ID 写入 **`Mark Word`**，并将锁计数器设为 1。
-- 如果一个线程尝试再次获取已经持有的锁，JVM 会检查 **`Mark Word`** 中的线程 ID。
-  - 如果 ID 匹配，表示的是同一个线程，锁计数器递增。
-- 当线程退出同步块时，锁计数器递减。如果计数器值为零，JVM 将锁标记为未持有状态，并清除线程 ID 信息。
-
 ## **synchronized** 底层实现原理
 
 **`synchronized`** 实现原理依赖于 JVM 的 Monitor（监视器锁） 和 对象头（Object Header）。
@@ -173,11 +164,11 @@ public class AccountingSync implements Runnable{
 
 **`synchronized`** 支持可重入的原理
 
-- Java 的对象头包含了一个 Mark Word，用于存储对象的状态，包括锁信息。
+- Java 的对象头包含了一个 **`Mark Word`** ，用于存储对象的状态，包括锁信息。
 
-- 当一个线程获取对象锁时，JVM 会将该线程的 ID 写入 Mark Word，并将锁计数器设为 1。
+- 当一个线程获取对象锁时，JVM 会将该线程的 ID 写入 **`Mark Word`**，并将锁计数器设为 1。
 
-- 如果一个线程尝试再次获取已经持有的锁，JVM 会检查 Mark Word 中的线程 ID。如果 ID 匹配，表示的是同一个线程，锁计数器递增。
+- 如果一个线程尝试再次获取已经持有的锁，JVM 会检查 **`Mark Word`** 中的线程 ID。如果 ID 匹配，表示的是同一个线程，锁计数器递增。
 
 - 当线程退出同步块时，锁计数器递减。如果计数器值为零，JVM 将锁标记为未持有状态，并清除线程 ID 信息。
 

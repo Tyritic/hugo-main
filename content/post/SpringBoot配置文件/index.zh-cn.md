@@ -8,7 +8,11 @@ tags : ["后端开发"]
 description : "SpringBoot的配置文件以及参数配置化"
 ---
 
-## 配置文件的种类
+## 配置方法
+
+### 通过配置文件配置
+
+#### 配置文件的种类
 
 SpringBoot提供了多种属性配置方式
 
@@ -41,25 +45,23 @@ SpringBoot提供了多种属性配置方式
 
   
 
-## 配置文件优先级
+#### 配置文件优先级
 
 优先级从高到低：properties>yml>yaml
 
 外部配置文件的优先级（从低到高）
 
-1. classpath（resource文件夹）
-2. classpath根config
-3. 项目根目录（对于存在继承/聚合关系的maven项目项目根目录是父工程的根目录）
-4. 项目根目录/config
-5. 直接子目录/config
+- classpath（resource文件夹）
+- classpath根config
+- 项目根目录（对于存在继承/聚合关系的maven项目项目根目录是父工程的根目录）
+- 项目根目录/config
+- 直接子目录/config
 
-## 多配置文件的加载
+#### 多配置文件的加载
 
 Profile意思是配置，不同环境可能需要不同的配置需要
 
 SpringBoot框架提供了多profile的管理功能，我们可以使用profile文件来区分不同环境的配置
-
-### 基本语法
 
 如果需要创建自定义的yml文件时，可以用application-{profile}.yml的命名方式
 
@@ -71,7 +73,43 @@ spring:
     active: profile
 ```
 
+### 其他配置方式
 
+#### Java系统属性
+
+- 执行maven打包指令package
+
+- 执行java指令，运行jar包，在执行java命令时添加参数
+
+- 参数格式
+
+  ```
+  -Dxxx=xxx
+  ```
+
+
+#### 命令行参数
+
+- 执行maven打包指令package
+
+- 执行java指令，运行jar包，在执行java命令时添加参数
+
+- 参数格式
+
+  ```
+  --xxx=xxx
+  ```
+
+
+### 配置方法的优先级
+
+优先级从低到高
+
+- application.yaml(忽略)
+- application.yml
+- application.properties
+- java系统属性(-Dxxx=xxx)
+- 命令行参数(--xxx=xxx)
 
 ## yml文件语法
 
@@ -107,9 +145,9 @@ spring:
 
 ### 利用注解进行参数配置化
 
-**@Value 注解**通常用于外部配置的属性注入，具体用法为: @Value("${配置文件中的key}")
+**`@Value`** 通常用于外部配置的属性注入，具体用法为: **`@Value("${配置文件中的key}")`**
 
-在 Spring 框架中，**`@Value`** 注解用于注入外部化的配置值到 Spring 管理的 Bean 中。通过 @Value 注解，可以将属性文件、环境变量、系统属性等外部资源中的值注入到 Spring Bean 的字段、方法参数或构造函数参数中。
+在 Spring 框架中，**`@Value`** 注解用于注入外部化的配置值到 Spring 管理的 Bean 中。通过 **`@Value`** 注解，可以将属性文件、环境变量、系统属性等外部资源中的值注入到 Spring Bean 的字段、方法参数或构造函数参数中。
 
 示例代码
 
@@ -139,7 +177,7 @@ pubiic class AliossUti1s{
 
 ### 使用自定义配置类进行参数配置化
 
-自定义properties文件使用 **`@Component`** 注册为Bean对象，使用 **`@ConfigurationProperties`** 注解批量的将yml配置文件的属性和Bean对象属性绑定，**@ConfigurationProperties** 的prefix属性指定application.yml的子节点，该节点中的子节点将自动和属性进行绑定
+自定义properties文件使用 **`@Component`** 注册为Bean对象，使用 **`@ConfigurationProperties`** 注解批量的将yml配置文件的属性和Bean对象属性绑定，**`@ConfigurationProperties`** 的prefix属性指定application.yml的子节点，该节点中的子节点将自动和属性进行绑定
 
 示例代码
 
@@ -156,7 +194,7 @@ public class AliyunOSSProperties {
 }
 ```
 
-**@ConfigurationProperties** 支持jsr-300数据校验使用 **@Validate**
+**`@ConfigurationProperties`** 支持jsr-300数据校验使用 **@Validate**
 
 {{<notice tip>}}
 

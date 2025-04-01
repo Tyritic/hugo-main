@@ -39,7 +39,7 @@ math : true
 - **`take()`** ：检索并删除此队列的头部，如有必要，则等待直到队列可用；
 - **`poll(long timeout, TimeUnit unit)`** ：检索并删除此队列的头部，如果需要元素变得可用，则等待指定的等待时间。
 
-## **`ArrayBlockingQueue`**
+## ArrayBlockingQueue
 
 **`ArrayBlockingQueue`** 它是一个基于数组的有界阻塞队列
 
@@ -55,7 +55,7 @@ math : true
 
 **`ArrayBlockingQueue`** 默认情况下不能保证线程访问队列的公平性但是可以在构造方法中将第二个 **`Boolean`** 类型参数设置为 **`true`**
 
-## **`LinkedBlockingQueue`**
+## LinkedBlockingQueue
 
 **`LinkedBlockingQueue`** 是一个底层基于**单向链表**实现的阻塞队列，可以当做无界队列也可以当做有界队列来使用，同样满足 FIFO 的特性。
 
@@ -69,8 +69,13 @@ math : true
 
 **`LinkedBlockingQueue`** 使用两个锁（putLock 和 takeLock），一个用于放入操作，另一个用于取出操作。锁分离
 
-## **`PriorityBlockingQueue`**
+## PriorityBlockingQueue
 
 **`PriorityBlockingQueue`** 是一个支持优先级的无界阻塞队列。默认情况下元素采用自然顺序进行排序，也可以通过自定义类实现 **`compareTo()`** 方法来指定元素排序规则，或者初始化时通过构造器参数 **`Comparator`** 来指定排序规则。
 
 **`PriorityBlockingQueue`** 并发控制采用的是可重入锁 **`ReentrantLock`**，队列为无界队列（ **`ArrayBlockingQueue`** 是有界队列，**`LinkedBlockingQueue`** 也可以通过在构造函数中传入 **`capacity`** 指定队列最大的容量，但是 **`PriorityBlockingQueue`** 只能指定初始的队列大小，后面插入元素的时候，**如果空间不够的话会自动扩容**）。
+
+## 其他阻塞队列
+
+- **`SynchronousQ ueue`**：每个插入操作必须等待另一个线程的移除操作，同样，任何一个移除操作都必须等待另一个线程的插入操作。
+- **`DelayQueue`** ：类似于 PriorityBlockingQueue，由二叉堆实现的无界优先级阻塞队列。
