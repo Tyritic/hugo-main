@@ -11,7 +11,7 @@ math : true
 
 ## Hash的定义
 
-Hash 是一个键值对（key - value）集合，其中 value 的形式如： `value=[{field1，value1}，...{fieldN，valueN}]`。Hash 适合用于存储对象。![img](hash.png)
+Hash 是一个键值对（key - value）集合，其中 value 的形式如： **`value=[{field1，value1}，...{fieldN，valueN}]`** 。Hash 适合用于存储对象。![img](hash.png)
 
 ## 常用命令
 
@@ -39,7 +39,7 @@ Hash 是一个键值对（key - value）集合，其中 value 的形式如： `v
 
 Hash 类型的底层数据结构是由 **压缩列表或哈希表** 实现的：
 
-- 如果哈希类型元素个数小于 `512` 个（默认值，可由 `hash-max-ziplist-entries` 配置），所有值小于 `64` 字节（默认值，可由 `hash-max-ziplist-value` 配置）的话，Redis 会使用 **压缩列表** 作为 Hash 类型的底层数据结构；
+- 如果哈希类型元素个数小于 **512** 个（默认值，可由 **`hash-max-ziplist-entries`** 配置），所有值小于 **64** 字节（默认值，可由 **`hash-max-ziplist-value`** 配置）的话，Redis 会使用 **压缩列表** 作为 Hash 类型的底层数据结构；
 - 如果哈希类型元素不满足上面条件，Redis 会使用 **哈希表** 作为 Hash 类型的 底层数据结构。
 
 后面版本使用 **ListPack** 实现
@@ -47,6 +47,8 @@ Hash 类型的底层数据结构是由 **压缩列表或哈希表** 实现的：
 {{<notice tip>}}
 
 ListPack 是 Redis 内部的一种数据结构，用于高效存储短小的字符串或整数集合。它是一种 **紧凑型的序列化数据结构** ，旨在减少内存占用和提升性能。直接以字节序列的形式存储数据。
+
+相较于Ziplist，Listpack 没有压缩列表中记录前一个节点长度的字段了，Listpack 只记录当前节点的长度，当我们向 Listpack 加入一个新元素的时候，不会影响其他节点的长度字段的变化，从而避免了压缩列表的连锁更新问题。
 
 {{</notice>}}
 

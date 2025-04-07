@@ -25,7 +25,7 @@ MVC 模式的优点是可以将代码分离成三个独立的组件，使得应�
 - **Spring MVC 框架底层是基于 Servlct 技术。遵循 Servlet 规范**，Web 组件 Servlet 、Filter、Listener在 Spring MVC 中都能使用。同时 Spring MVC 也是基于 MVC 架构模式的，职责分离，每个组件只负责自己的功能，组件解耦。
 - Spring Boot 的**自动配置**、**按约定编程**极大简化，提高了 Web 应用的开发效率。
 
-### 响应流程：
+### 响应流程
 
 ![](88a9f433929f4bce5f8cfc4a0b9d48b5.png)
 
@@ -34,8 +34,8 @@ MVC 模式的优点是可以将代码分离成三个独立的组件，使得应�
 具体流程：
 
 - **客户端请求**：用户通过浏览器发送 HTTP 请求，所有请求都被 DispatcherServlet 接收。
-- **执行拦截器的 `preHandle()`**：如果配置了拦截器，Spring MVC 会首先执行 `preHandle()` 方法。如果返回 `false`，请求处理终止；否则，继续处理。 
-- **请求映射**：**`DispatcherServlet`** 根据配置的处理器映射器（**`HandlerMapping`**）查找与请求 URL 对应的控制器**`Controller`**。
+- **执行拦截器的 `preHandle()`**：如果配置了拦截器，Spring MVC 会首先执行 **`preHandle()`** 方法。如果返回 `false`，请求处理终止；否则，继续处理。 
+- **请求映射**：**`DispatcherServlet`** 根据配置的处理器映射器（**`HandlerMapping`**）查找与请求 URL 对应的控制器 **`Controller`** 。
 - **调用控制器方法** ：找到控制器后，**`DispatcherServlet`** 将使用 **`HandlerAdapter`** 来调用 **`Controller`** 的处理方法。转发给对应的控制器方法进行处理。控制器方法处理业务逻辑后，通常返回一个 **`ModelAndView`** 对象，包含数据模型和视图名称。 
 - **执行拦截器的 `postHandle()`**：如果返回视图，拦截器的 `postHandle()` 方法会在视图渲染之前执行。对于 JSON 响应，该方法仍然会执行。
 - **视图解析**：**`DispatcherServlet`** 根据控制器返回的视图名称，使用视图解析器（ **`ViewResolver`** ）将逻辑视图名称解析为实际的视图

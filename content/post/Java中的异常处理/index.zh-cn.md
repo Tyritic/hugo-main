@@ -45,12 +45,12 @@ java.lang.Object
 
 ![层次结构图](1720683900898-1d0ce69d-4b5d-41a6-a5df-022e42f8f4c5.webp)
 
-### `Throwable` 类
+### Throwable 类
 
 - 所有错误和异常的超类。
 - 定义了 `printStackTrace()`、`getMessage()` 和 `toString()` 等常用方法。
 
-### `Error` 类
+### Error 类
 
 - **定义**：表示程序运行时的严重问题，通常是 JVM 无法处理的情况。
 - 特点
@@ -62,7 +62,7 @@ java.lang.Object
   - **`StackOverflowError`**：递归调用过深导致栈溢出。
   - **`InternalError`**：JVM 内部错误。
 
-### `Exception` 类
+### Exception 类
 
 **定义**：表示程序中可预料的问题，可以通过代码进行捕获和处理。
 
@@ -73,7 +73,7 @@ java.lang.Object
   - **受检异常（Checked Exception）**：在源代码里必须显式地捕获或者抛出，否则编译器会提示你进行相应的操作。
   - **非受检异常（Unchecked Exception，`RuntimeException`）**：通常是由程序逻辑错误导致的，可以通过编码进行规避的，并不需要显式地捕获或者抛出。
 
-### `Exception`和`Error`的区别
+### Exception和Error的区别
 
 `Exception` 和 `Error` 都是  **`Throwable`**  类的子类（在 Java 代码中只有继承了  **`Throwable`**  类的实例才可以被 throw 或者被 catch）它们表示在程序运行时发生的异常或错误情况。
 
@@ -109,13 +109,7 @@ java.lang.Object
 
 - **异常信息打印：**
 
-  - JVM 会调用异常对象的 
-
-    ```
-    printStackTrace()
-    ```
-
-     方法，打印异常的堆栈跟踪信息，包括：
+  - JVM 会调用异常对象的 **`printStackTrace()`**方法，打印异常的堆栈跟踪信息
 
     - 异常类型（如 `NullPointerException`、`ArithmeticException` 等）。
     - 异常的详细信息（如异常消息）。
@@ -127,7 +121,7 @@ java.lang.Object
 
 ### 捕获并处理异常
 
-#### `try-catch-finally`块
+#### try-catch-finally块
 
 使用 `try-catch-finally` 块捕获异常并对其进行处理。
 
@@ -289,7 +283,7 @@ public class Main {
   - 如果  **`catch`**  块抛出一个异常，而  **`finally`**  块中也抛出异常，那么最终抛出的将是  **`finally`**  块中的异常。 **`catch`**  块中的异常会被丢弃，而  **`finally`**  块中的异常会覆盖并向上传递。
   -  **`finally`** 块中的逻辑一定被执行，无论是否出现异常，如果在  **`try`**  或  **`catch`**  块中调用了 `System.exit()` 方法，或者程序被强制终止， **`finally`**  块不会执行
 
-#### `try-with-resources` 块
+#### try-with-resources 块
 
 `try-with-resources` 是 Java 中的一种简洁方式，用于自动管理资源。资源在使用完成后会被自动关闭，而无需显式调用 `close()` 方法，从而减少资源泄漏的风险。
 
@@ -342,7 +336,7 @@ public class MultiResourceExample {
 
 在方法体中使用 **`throw`** 手动抛出异常
 
-#### `throws`关键字
+#### throws关键字
 
 - **作用**：声明一个方法可能抛出的异常，将异常传递给调用者来处理，用于通知调用该方法的代码，必须处理这些异常。
 - **语法**：放在方法签名中，位于参数列表和方法体之间。
@@ -374,7 +368,7 @@ public static void myMethod1() throws ArithmeticException, NullPointerException{
 }
 ```
 
-#### `throw` 关键字
+#### throw 关键字
 
 - **作用**：在方法体或代码块中，实际抛出一个异常对象，用于在代码中触发异常处理逻辑
 - **语法**：后面必须紧跟一个异常对象的实例（`new ExceptionType(...)`）。

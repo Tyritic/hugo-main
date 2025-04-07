@@ -29,11 +29,11 @@ Object类是Java所有类的父类，所有的Java类默认继承Object类，Obj
 - **作用**：返回对象的哈希码，是对象的整数表示。哈希码用于支持基于哈希的集合（如 `HashMap` 和 `HashSet`）。
 - **使用**：如果重写了 `equals` 方法，则通常也需要重写 `hashCode` 方法，以保证相等的对象具有相同的哈希码。
 
-#### `hashCode`和`equals`的关系
+#### hashCode()和equals()的关系
 
-`equals`决定了对象的**逻辑相等性**
+- `equals`决定了对象的**逻辑相等性**
 
-`hashCode`决定了对象的**哈希存储方式**。
+- `hashCode`决定了对象的**哈希存储方式**。
 
 **`equals()` 方法**：
 
@@ -43,7 +43,7 @@ Object类是Java所有类的父类，所有的Java类默认继承Object类，Obj
 
 - 返回对象的哈希值，主要用于基于哈希的集合（如 `HashMap`、`HashSet`）。同一个对象每次调用 `hashCode()` 必须返回相同的值，且相等的对象必须有相同的哈希码。
 
-#### `equals` 和 `hashCode` 的约定
+#### equals() 和 hashCode() 的约定
 
 - **相等对象的哈希值必须相等** ： 如果两个对象通过 `equals` 方法比较相等（`a.equals(b) == true`），那么它们的哈希值必须相同（`a.hashCode() == b.hashCode()`）
 
@@ -56,7 +56,7 @@ Object类是Java所有类的父类，所有的Java类默认继承Object类，Obj
 
 **解释**
 
-如果仅重写 `equals` 方法而不重写 `hashCode`，会违反 `hashCode` 与 `equals` 的约定，从而导致集合类行为异常。例如：`HashSet` 基于哈希值来判断对象是否相同，哈希值不同导致它们被视为不同的对象。
+如果仅重写 `equals` 方法而不重写 `hashCode`，会违反 `hashCode` 与 `equals` 的约定，从而导致集合类行为异常。例如：**`HashSet`** 基于哈希值来判断对象是否相同，哈希值不同导致它们被视为不同的对象。导致 **`HashSet`** 中存储两个相同的对象
 
 ### 对象转字符串
 

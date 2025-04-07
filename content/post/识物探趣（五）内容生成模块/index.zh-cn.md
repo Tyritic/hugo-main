@@ -41,7 +41,7 @@ math : true
 - 展馆方提供的展品资料文档，存储在文件系统中。本地知识库中大部分为docx文件
 - 网络上的相关资料
 
-对于本地文件系统的文档，使用**`FileSystemDocumentLoader`** 作为文件加载器，使用 **`ApachePoiDocumentParser`** 作为文件解析器
+对于本地文件系统的文档，使用 **`FileSystemDocumentLoader`** 作为文件加载器，使用 **`ApachePoiDocumentParser`** 作为文件解析器
 
 #### 拆分文档
 

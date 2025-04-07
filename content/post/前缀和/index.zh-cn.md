@@ -22,7 +22,7 @@ math : true
 例如，统计 vec[i] 这个数组上的区间和。
 
 - 先做累加，即 p[i] 表示 下标 0 到 i 的 vec[i] 累加 之和。
-- 统计vec数组上 下标 i 到下标 j 之间的累加和时使用**p[j]-p[i-1]**即可
+- 统计vec数组上 下标 i 到下标 j 之间的累加和时使用 **p[j]-p[i-1]** 即可
 
 ```
 p[i] = vec[0] + vec[1] + ... vec[i];
@@ -183,7 +183,7 @@ class Solution {
             preSum[i]=pre;
         }
         map.put(0,1);
-        // 区间[i,j]的区间和为preSum[j]-preSum[i]=k
+        // 区间[i,j]的区间和为preSum[j]-preSum[i-1]=k
         for(int j=0;j<nums.length;j++){
             int temp=preSum[j]-k;
             if(map.containsKey(temp)){
