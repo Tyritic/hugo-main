@@ -79,8 +79,8 @@ Redisson 是一个高级的 Redis 客户端，提供分布式和并行编程的�
   <!--连接池依赖-->
   <dependency>    
       <groupId>org.apache.commons</groupId>    
-      <artifactId>commons-pool2</artifactId></dependency>
-  
+      <artifactId>commons-pool2</artifactId>
+  </dependency>
   ```
 
 - 修改 **`application.yml`** 的spring.data.redis的字段配置连接信息
