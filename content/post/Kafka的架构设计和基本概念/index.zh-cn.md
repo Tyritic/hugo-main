@@ -74,3 +74,22 @@ Consumer Group 是一组消费者（Consumer），它们共同协作来消费一
 - 即使有多个消费者在同一个组内消费同一个Topic，Kafka也会确保每条消息只会被组内的其中一个消费者处理。这样极大地提高了消费的并发能力和处理速度，保证了消息的高效处理。 
 - Consumer Group可以实现负载均衡。当有新的消费者加入或离开组时，Kafka会自动均衡分区的消费，将需要消费的分区重新分配给现存的消费者。
 
+## 分区的分配规则
+
+### 生产者分配规则
+
+- 开发者手动指定partition
+- 指定 key（Kafka 自动 hash 取模）
+  - 相同 key 会落到同一个 partition（实现“局部有序”）
+  - key 不同的消息可能落到不同 partition，接近均匀分布
+- 既不指定 key，也没 partition（默认轮询 Round-Robin）
+
+### 消费者分配规则
+
+发生在 **Consumer Group 内部** 的事情。每个 Topic 下有多个 Partition，Kafka 会把这些分区 **均匀地分配给组内的消费者**。
+
+Kafka 默认的消费者分区分配策略是
+
+- **Range** ：按 partition 序号分组（容易不均）
+- **RoundRobin** ：分区轮着分
+- **Sticky**（默认）：尽可能稳定地分区（减少重平衡影响），和 RoundRobin 类似，但**尽量保持和上一次分配一致**

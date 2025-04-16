@@ -282,32 +282,125 @@ B树中的删除操作与插入操作类似，但是只需讨论删除终端结�
 - **大顶堆** ：根节点上的数据 **大于或者等于** 左右两个孩子
 - **小顶堆** ：根节点上的数据 **小于或者等于** 左右两个孩子
 
+### 相关操作
+
+```java
+		List<Integer>heap;
+        MyHeap(){
+            this.heap=new ArrayList<>();
+        }
+        MyHeap(ArrayList<Integer>heap){
+            this.heap=heap;
+        }
+        public int getLeft(int index){
+            return 2*index+1;
+        }
+        public int getRight(int index){
+            return 2*index+2;
+        }
+        public int getParent(int index){
+            return (index-1)/2;
+        }
+        public void swap(int left,int right){
+            int temp=heap.get(right);
+            heap.set(right,heap.get(left));
+            heap.set(left,temp);
+        }
+```
+
+
+
 ### 插入操作
 
 以大顶堆为例，需要对堆的叶子节点进行向上调整，使得堆符合定义。
 
-- 将元素插入到叶子节点中
-- 比较插入节点和它的父亲节点，如果插入节点比其父亲节点大则交换位置
-- 继续迭代往上判断，直到 **父节点比它大或者到达树的顶部**
+- 将元素插入到数组尾部中
+- 对数组尾部的元素进行向上调整
+  - 比较插入节点和它的父亲节点，如果插入节点比其父亲节点大则交换位置
+  - 继续迭代往上判断，直到 **父节点比它大或者到达树的顶部**
+
 
 ![向上调整](693ae41a5750cc86ca060d7c44ca5e69.png)
+
+```java
+	public void shiftUp(int index){
+            while(index>0&&heap.get(index)>heap.get(getParent(index))){
+                swap(index,getParent(index));
+                index=getParent(index);
+            }
+        }
+        public void push(int val){
+            heap.add(val);
+            shiftUp(heap.size()-1);
+        }
+```
+
+
 
 ### 删除操作
 
 堆的删除只会删除堆顶的元素，因此需要对堆的根节点进行向下调整使得堆满足定义。对大顶堆来说
 
-- 假装删除堆顶的元素，将其视为空穴
-- 选取空穴的左右子节点中比较小的节点，与空穴进行交换
-- 继续迭代向下判断，直到空穴位于叶子节点
+- 将数组尾部的元素放入数组顶部并删除数组顶部
+- 对数组头部进行向下调整
+  - 选取空穴的左右子节点中比较小的节点，与空穴进行交换
+  - 继续迭代向下判断，直到空穴位于叶子节点
+
+
+```java
+	public void shiftDown(int index,int heapSize){
+            while(getLeft(index)<heapSize){
+                int max=index;
+                int left=getLeft(index);
+                int right=getRight(index);
+                if(left<heapSize&&heap.get(left)>heap.get(max)){
+                    max=left;
+                }
+                if(right<heapSize&&heap.get(right)>heap.get(max)){
+                    max=right;
+                }
+                if(max==index){
+                    break;
+                }
+                swap(index,max);
+                index=max;
+            }
+        }
+        public int pop(){
+            if(heap.isEmpty()){
+                return Integer.MIN_VALUE;
+            }
+            int res=heap.get(0);
+            int last=heap.remove(heap.size()-1);
+            if(!heap.isEmpty()){
+                heap.set(0,last);
+                shiftDown(0,heap.size());
+            }
+            return res;
+        }
+```
+
+
 
 ### 建立堆
 
 #### 向下调整建立堆
 
-时间复杂度为$O(logn)$
+时间复杂度为$O(nlogn)$
 
 - 找到最后一个父节点，将该父节点进行向下调整
 - 依次对所有的父节点进行向下调整
+
+```java
+public void buildHeap(){
+            int n=heap.size();
+            for(int i=(n-2)/2;i>=0;i--){
+                shiftDown(i,heap.size());
+            }
+        }
+```
+
+
 
 ### 堆排序和Top K问题
 
@@ -319,6 +412,18 @@ B树中的删除操作与插入操作类似，但是只需讨论删除终端结�
 - 将当前最大的元素与末尾元素进行交换
 - 重新调整剩余元素形成新的堆
 - 循环往复直到堆中没有元素
+
+```java
+	public void heapSort(){
+            buildHeap();
+            int size=heap.size();
+            for(int i=heap.size()-1;i>=0;i--){
+                swap(0,i);
+                size--;
+                shiftDown(0,size);
+            }
+        }
+```
 
 TOP K问题：比如说现在有10亿个数据，要选出其中最大的K个数，应该怎么选？
 
