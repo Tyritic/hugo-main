@@ -141,7 +141,7 @@ public class Penguin {
 }
 ```
 
-**`volatile`** 关键字用于防止 **`m_penguin = new Penguin()`** 这一步被指令重排序。因为实际上，`new Penguin()` 这一行代码分为三个子步骤：
+**`volatile`** 关键字用于防止 **`m_penguin = new Penguin()`** 这一步被指令重排序。因为实际上，**`new Penguin()`** 这一行代码分为三个子步骤：
 
 - 步骤 1：为 Penguin 对象分配足够的内存空间
 - 步骤 2：调用 Penguin 的构造方法，初始化对象的成员变量
@@ -153,4 +153,4 @@ public class Penguin {
 - 将对象赋值给引用 m_penguin
 - 调用构造方法初始化成员变量
 
-这种重排序会导致 m_penguin 引用在对象完全初始化之前就被其他线程访问到。
+这种重排序会导致 **`m_penguin`** 引用在对象完全初始化之前就被其他线程访问到。

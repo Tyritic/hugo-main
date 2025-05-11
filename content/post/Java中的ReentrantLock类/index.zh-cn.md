@@ -37,7 +37,7 @@ math : true
 
 - **`public void unlock()`** ：释放锁
 
-## **ReentrantLock** 的实现原理
+## ReentrantLock 的实现原理
 
 **`ReentrantLock`** 是基于 **`AQS`** 实现的可重入锁，内部实现依靠一个 **`state`** 变量和两个队列：**同步队列** 和 **等待队列**。
 
@@ -59,15 +59,15 @@ final boolean nonfairTryAcquire(int acquires) {
     final Thread current = Thread.currentThread();
     int c = getState();
     //1. 如果该锁未被任何线程占有，该锁能被当前线程获取
-	if (c == 0) {
+    if (c == 0) {
         if (compareAndSetState(0, acquires)) {
             setExclusiveOwnerThread(current);
             return true;
         }
     }
-	//2.若被占有，检查占有线程是否是当前线程
+    //2. 若被占有，检查占有线程是否是当前线程
     else if (current == getExclusiveOwnerThread()) {
-		// 3. 再次获取，计数加一
+	//3. 再次获取，计数加一
         int nextc = c + acquires;
         if (nextc < 0) // overflow
             throw new Error("Maximum lock count exceeded");
@@ -88,7 +88,7 @@ final boolean nonfairTryAcquire(int acquires) {
 protected final boolean tryRelease(int releases) {
 	//1. 同步状态减1
     int c = getState() - releases;
-    if (Thread.currentThread() != getExclusiveOwnerThread())
+   if (Thread.currentThread() != getExclusiveOwnerThread())
         throw new IllegalMonitorStateException();
     boolean free = false;
     if (c == 0) {
@@ -144,20 +144,22 @@ protected final boolean tryAcquire(int acquires) {
 #### 总体逻辑
 
 - 如果该锁未被任何线程占有，该锁能被当前线程获取
-- 再检查 `hasQueuedPredecessors()`，**判断当前线程前面是否有排队的线程**
+- 再检查 **`hasQueuedPredecessors()`** ，**判断当前线程前面是否有排队的线程**
   - 如果队列为空，才允许当前线程尝试获取锁（**严格遵循先来先得**）。
-  - 如果队列中已有等待的线程，即使 `state == 0` 也不能直接获取锁。
+  - 如果队列中已有等待的线程，即使 **`state == 0`** 也不能直接获取锁。
 - 如果该锁已经被线程占有了，会继续检查占有线程是否为当前线程
   - 如果是的话，同步状态加 1 返回 true，表示可以再次获取成功。每次重新获取都会对同步状态进行加一的操作
 
 ### 底层实现
 
+**`ReentrantLock`** 是基于 **`AQS`** 实现的可重入锁，内部实现依靠一个 **`state`** 变量和两个队列：**同步队列** 和 **等待队列**。
+
 - 内部通过一个计数器 **`state`** 来跟踪锁的状态和持有次数。
-- 当线程调用 `lock()` 方法获取锁时，**`ReentrantLock`** 会检查 **`state`** 的值如果为 0
+- 当线程调用 **`lock()`** 方法获取锁时，**`ReentrantLock`** 会检查 **`state`** 的值如果为 0
   - 通过 CAS 修改为 1，表示成功加锁。
   - 否则根据当前线程的公平性策略，加入到等待队列中。
 - 线程首次获取锁时，**`state`** 值设为 1；如果同一个线程再次获取锁时，**`state`** 加 1；每释放一次锁，**`state`** 减 1。
-- 如果 `state = 0`，则释放锁，并唤醒等待队列中的线程来竞争锁。
+- 如果 **`state = 0`** ，则释放锁，并唤醒等待队列中的线程来竞争锁。
 
 ## **ReentrantLock** 和 **synchronized** 的区别
 

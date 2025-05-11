@@ -128,7 +128,7 @@ public class Test {
 
 **注意事项**
 
-- 在重写时，子类方法不能使用比父类更严格的访问级别。例如，父类的方法是 `protected`，子类不能将其修改为 `private`，但可以改为 `public`。
+- 在重写时，子类方法不能使用比父类更严格的访问级别。例如，父类的方法是 **`protected`** ，子类不能将其修改为 **`private`** ，但可以改为 **`public`** 。
 
 
 - 子类方法抛出的异常必须与父类一致，或者是其父类异常的子类。
@@ -173,7 +173,7 @@ father_className father=new son_className ()
 
 ### 向下转型（父亲变儿子）
 
-向下转型是将父类引用转回其子类类型，通过父类对象(大范围)实例化子类对象(小范围)，但在执行前需要确认父类引用变量实际引用必须是子类对象才能成功转型以避免 `ClassCastException`
+向下转型是将父类引用转回其子类类型，通过父类对象(大范围)实例化子类对象(小范围)，但在执行前需要确认父类引用变量实际引用必须是子类对象才能成功转型以避免 **`ClassCastException`**
 
 向下转型允许我们通过父类引用访问子类特有的方法和属性![示意图](extends-bigsai-ef0d4716-8b4f-4adf-845e-dd293871b7a7.png)
 
@@ -245,8 +245,8 @@ if (obj instanceof String s) {
 
 判定为`true`的条件
 
--  `object` 是 `ClassName` 类型或其子类（或实现类）的对象
--  `ClassName` 是 `object` 实现的接口。
+-  **`object`** 是 **`ClassName`** 类型或其子类（或实现类）的对象
+-  **`ClassName`** 是 **`object`** 实现的接口。
 
-无论右边的类型是什么，**`null`** 对象总是返回 `false`。即：`null instanceof SomeClass // 结果为 false`
+无论右边的类型是什么，**`null`** 对象总是返回 **`false`**。即：**`null instanceof SomeClass // 结果为 false`**
 

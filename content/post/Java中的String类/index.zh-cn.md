@@ -13,19 +13,19 @@ math : true
 
 ### 不可变的实现方式
 
-- String类本身被`final`修饰表示该类不允许被继承
-- 从JDK1.9开始String类底层已经不再使用`char[]`存储而是使用`byte[]`加上并一个字段 **`coder`** 来指示编码方式，同时这个`byte[]`数组被`private final`修饰，保证初始化后不再被更改
+- String类本身被 **`final`** 修饰表示该类不允许被继承
+- 从JDK1.9开始String类底层已经不再使用 **`char[]`** 存储而是使用 **`byte[]`** 加上并一个字段 **`coder`** 来指示编码方式，同时这个 **`byte[]`** 数组被 **`private final`** 修饰，保证初始化后不再被更改
 
 ### 不可变性的体现
 
 - 当对字符串重新赋值的时候，需要重新指定内存区域赋值，不能使用原来的内存区域
-- `String`类是线程安全的
+- **`String`** 类是线程安全的
 - 当对现有字符串进行修改的时候，需要重新指定内存区域赋值，不能使用原来的内存区域
 
 ## String的底层实现
 
-- 在 JDK 9 之前，String 类是基于 **`char[]`** 实现的，内部采用 UTF-16 编码，每个字符占用两个字节。但是，如果当前的字符仅需一个字节的空间，这就造成了浪费。例如一些 `Latin-1` 字符用一个字节即可表示。
-- JDK 9 做了优化采用 **`byte[]`** 数组来实现，ASCII 字符串（单字节字符）通过 **`byte[]`** 存储，仅需 1 字节，减小了内存占用。并引入了 coder 变量来标识编码方式（Latin-1 或 UTF-16）。如果字符串中只包含 Latin-1 范围内的字符（如 ASCII），则使用单字节编码，否则使用 UTF-16。这种机制在保持兼容性的同时，又减少了内存占用。
+- 在 JDK 9 之前，String 类是基于 **`char[]`** 实现的，内部采用 UTF-16 编码，每个字符占用两个字节。但是，如果当前的字符仅需一个字节的空间，这就造成了浪费。例如一些 **`Latin-1`** 字符用一个字节即可表示。
+- JDK 9 做了优化采用 **`byte[]`** 数组来实现，ASCII 字符串（单字节字符）通过 **`byte[]`** 存储，仅需 1 字节，减小了内存占用。并引入了 **`coder`** 变量来标识编码方式（Latin-1 或 UTF-16）。如果字符串中只包含 Latin-1 范围内的字符（如 ASCII），则使用单字节编码，否则使用 UTF-16。这种机制在保持兼容性的同时，又减少了内存占用。
 
 ## String对象的创建方式
 
@@ -33,18 +33,18 @@ math : true
 
 #### 构造函数
 
-- `public String()`：创建空白字符串
-- `public String(String input)`：根据输入字符串`input`创建字符串
-- `public String(char[] input)`：根据输入`char`数组`input`创建字符串
-- `public String(byte[] input)`：根据输入`byte`数组`input`创建字符串
+- **`public String()`** ：创建空白字符串
+- **`public String(String input)`** ：根据输入字符串`input`创建字符串
+- **`public String(char[] input)`** ：根据输入**`char`** 数组 **`input`** 创建字符串
+- **`public String(byte[] input)`** ：根据输入 **`byte`** 数组 **`input`** 创建字符串
 
 #### 底层实现
 
-使用构造函数创建`String`对象的时候，先在**堆区**中创建一个新的`String`对象（引用常量池中的字面量），同时在字符串常量池中保存其字面量，在栈中保存字符串对象的引用。若常量池中存在相同的字面值则只会在堆区中创建新的`String`对象![内存示意图](LT51yuh0_image_mianshiya.png)
+使用构造函数创建 **`String`** 对象的时候，先在**堆区**中创建一个新的 **`String`** 对象（引用常量池中的字面量），同时在字符串常量池中保存其字面量，在栈中保存字符串对象的引用。若常量池中存在相同的字面值则只会在堆区中创建新的 **`String`** 对象![内存示意图](LT51yuh0_image_mianshiya.png)
 
 [参考补充材料](https://www.mianshiya.com/bank/1787463103423897602/question/1780933294678896641#heading-1)
 
-- 在**堆区**中创建一个新的`String`对象
+- 在**堆区**中创建一个新的 **`String`** 对象
   - 若常量池中不存在所需的字面量则在常量池中创建新的字面量并将堆区中的对象指向常量池中的字面量
   - 若存在则将堆区中的对象指向常量池中的字面量
 
@@ -58,7 +58,7 @@ String s="abc"
 
 #### 底层实现
 
-使用字面量创建`String`对象的时候，会将在常量池中创建字面量。而不会在堆区创建`String`对象。若使用了相同的字面值则直接复用常量池中的字面量
+使用字面量创建 **`String`** 对象的时候，会将在常量池中创建字面量。而不会在堆区创建`String`对象。若使用了相同的字面值则直接复用常量池中的字面量
 
 - JVM检查该字符串的字面是否存在于常量池中
   - 若不存在则在常量池中创建新的字面量
@@ -68,8 +68,8 @@ String s="abc"
 
 ### 两者创建方式的比较
 
-- 使用字面量创建`String`对象不会在堆区创建对象
-- 使用构造函数创建`String`对象会在堆区创建对象
+- 使用字面量创建 **`String`** 对象不会在堆区创建对象
+- 使用构造函数创建 **`String`** 对象会在堆区创建对象
 
 #### 示例比较
 
@@ -104,7 +104,7 @@ public class StringExercise01 {
 
 - 常量与常量的拼接结果在常量池，且常量池中不会存在相同内容的常量
 - 只要其中有一个结果是变量，结果就在堆中
-- 如果拼接的结果调用`intern()`方法，返回值就在常量池中
+- 如果拼接的结果调用 **`intern()`** 方法，返回值就在常量池中
 
 ```java
 	String s1 = "Java";
@@ -132,7 +132,7 @@ public class StringExercise01 {
 
 #### 查找字符串中的字符
 
-`charAt(int index)` 方法：用于返回字符串指定位置的字符，返回值为 **char** 类型，参数为 **int** 类型
+**`charAt(int index)`** 方法：用于返回字符串指定位置的字符，返回值为 **char** 类型，参数为 **int** 类型
 
 ```java
 String str = new String("Hello World");
@@ -143,14 +143,14 @@ for (int i = 0; i < str.length(); i++) {
 
 #### 查找字符串中下标
 
-- `int indexOf(int ch)`	用于返回当前字符串中参数 ch 指定的字符第一次出现的下标
-- `int indexOf(int ch, int fromIndex)`	用于从 fromIndex(包含) 位置开始查找ch指定的字符
-- `int indexOf(String str)`	在字符串中检索 str 返回其第一次出现的位置，若找不到返回-1
-- `int indexOf(String str, int fromIndex)`	表示从字符串的 fromIndex(包含) 位置开始检索str第一次出现的位置
-- `int lastIndexOf(int ch)`	用于返回参数 ch 指定的字符最后一次出现的下标
-- `int lastIndexOf(int ch, int fromIndex)`	用于从 fromIndex(包含) 位置开始反向查找 ch 指定字符出现的下标，若找不到返回-1
-- `int lastIndexOf(String str)`	返回 str 指定字符串最后一次出现的下标
-- `int lastIndexOf(String str, int fromIndex)`	用于从 fromIndex(包含) 位置开始反向搜索的第一次出现的下标
+- **`int indexOf(int ch)`**	用于返回当前字符串中参数 ch 指定的字符第一次出现的下标
+- **`int indexOf(int ch, int fromIndex)`**	用于从 fromIndex(包含) 位置开始查找ch指定的字符
+- **`int indexOf(String str)`**	在字符串中检索 str 返回其第一次出现的位置，若找不到返回-1
+- **`int indexOf(String str, int fromIndex)`**	表示从字符串的 fromIndex(包含) 位置开始检索str第一次出现的位置
+- **`int lastIndexOf(int ch)`**	用于返回参数 ch 指定的字符最后一次出现的下标
+- **`int lastIndexOf(int ch, int fromIndex)`**	用于从 fromIndex(包含) 位置开始反向查找 ch 指定字符出现的下标，若找不到返回-1
+- **`int lastIndexOf(String str)`**	返回 str 指定字符串最后一次出现的下标
+- **`int lastIndexOf(String str, int fromIndex)`**	用于从 fromIndex(包含) 位置开始反向搜索的第一次出现的下标
 
 **示例代码**
 
@@ -177,20 +177,20 @@ System.out.println(str.lastIndexOf("Day", 15)); // -1
 
 ### 字符串截取
 
-- `substring(int beginIndex, int endIndex)` 方法：返回字符串中从下标 beginIndex(包括) 开始到 endIndex(不包括) 结束的子字符串，返回值为 String 类型，参数为 int 类型
-- `substring(int beginIndex)` 方法：返回字符串中从下标 beginIndex(包括) 开始到字符串结尾的子字符串，返回值为 String 类型，参数为 int 类型
+- **`substring(int beginIndex, int endIndex)`** 方法：返回字符串中从下标 beginIndex(包括) 开始到 endIndex(不包括) 结束的子字符串，返回值为 String 类型，参数为 int 类型
+- **`substring(int beginIndex)`** 方法：返回字符串中从下标 beginIndex(包括) 开始到字符串结尾的子字符串，返回值为 String 类型，参数为 int 类型
 
 ### 字符串比较
 
 #### 判定是否相等
 
-- `equals(Object anObject)` 方法：比较字符串内容是否相等并返回，返回值为 boolean 类型
-- `equalsIgnoreCase(String anotherString)`方法：比较字符串内容是否相等并返回，返回值为 boolean 类型，不考虑大小写， 如：'A’和’a’是相等
+- **`equals(Object anObject)`** 方法：比较字符串内容是否相等并返回，返回值为 boolean 类型
+- **`equalsIgnoreCase(String anotherString)`** 方法：比较字符串内容是否相等并返回，返回值为 boolean 类型，不考虑大小写， 如：'A’和’a’是相等
 
 #### 比较大小
 
-- `compareTo(String anotherString)` 方法：比较调用对象和参数对象的大小关系，返回值为 int 类型
-- `compareToIgnoreCase(String str)` 方法：比较调用对象和参数对象的大小关系，返回值为 int 类型，不考虑大小写，也就是’a’和’A’是相等的关系
+- **`compareTo(String anotherString)`** 方法：比较调用对象和参数对象的大小关系，返回值为 int 类型
+- **`compareToIgnoreCase(String str)`** 方法：比较调用对象和参数对象的大小关系，返回值为 int 类型，不考虑大小写，也就是’a’和’A’是相等的关系
 
 **比较方法**
 
@@ -198,9 +198,9 @@ System.out.println(str.lastIndexOf("Day", 15)); // -1
 
 #### 判定前缀/后缀
 
-- `startsWith(String prefix)` 方法：判断字符串是否以参数字符串开头，返回值为 boolean 类型，参数为 String 类型
-- `startsWith(String prefix, int toffset)` 方法：从指定位置开始是否以参数字符串开头，返回值为 boolean 类型，参数 prefix 为 String 类型，toffset 为 int 类型
-- `endsWith(String suffix)` 方法：判断字符串是否以参数字符串结尾，返回值为 boolean 类型，参 数为 String 类型
+- **`startsWith(String prefix)`** 方法：判断字符串是否以参数字符串开头，返回值为 boolean 类型，参数为 String 类型
+- **`startsWith(String prefix, int toffset)`** 方法：从指定位置开始是否以参数字符串开头，返回值为 boolean 类型，参数 prefix 为 String 类型，toffset 为 int 类型
+- **`endsWith(String suffix)`** 方法：判断字符串是否以参数字符串结尾，返回值为 boolean 类型，参 数为 String 类型
 
 **示例代码**
 
@@ -215,7 +215,7 @@ System.out.println(str.endsWith("see"));//true
 
 #### 判定子串
 
-`contains(CharSequence s)` 方法：判断当前字符串是否包含参数指定的内容，返回值为 **boolean** 类型
+**`contains(CharSequence s)`** 方法：判断当前字符串是否包含参数指定的内容，返回值为 **boolean** 类型
 
 ```java
 String str = "Give you some color to see see";
@@ -225,27 +225,27 @@ System.out.println(str.contains("Some"));//false
 
 ### 字符串替换
 
-- `replace(char oldChar, char newChar)` 方法：使用参数newChar替换此字符串中出现的所有参数oldChar，返回值为 String 类型，参数为 char 类型
-- `replace(CharSequence target, CharSequence replacement)` 方法：用新字符串replacement替换所有的旧字符串target，返回值为 String 类型，参数为 CharSequence 接口
+- **`replace(char oldChar, char newChar)`** 方法：使用参数newChar替换此字符串中出现的所有参数oldChar，返回值为 String 类型，参数为 char 类型
+- **`replace(CharSequence target, CharSequence replacement)`** 方法：用新字符串replacement替换所有的旧字符串target，返回值为 String 类型，参数为 CharSequence 接口
 
 ### 字符串拆分
 
-- `split(String regex)`：根据给定的正则表达式分割此字符串，并返回一个String数组。
-- `split(String regex,int limit)`：根据给定的正则表达式分割此字符串分割成limit组，并返回一个String数组。
+- **`split(String regex)`** ：根据给定的正则表达式分割此字符串，并返回一个String数组。
+- **`split(String regex,int limit)`** ：根据给定的正则表达式分割此字符串分割成limit组，并返回一个String数组。
 
 ### 字符串与其他类型的相互转换
 
 #### 数字和字符串之间相互转换
 
-- 数字转字符串：`String.valueOf(var var_name)`
+- 数字转字符串：**`String.valueOf(var var_name)`**
 - 字符串转数字
-  - `Integer.valueOf(String var)`
-  - `Integer.parseInt(String var)`
+  - **`Integer.valueOf(String var)`**
+  - **`Integer.parseInt(String var)`**
 
 #### 字符串和char数组的相互转换
 
-- 字符串转字符数组：`char[] toCharArray()` 方法：
+- 字符串转字符数组：**`char[] toCharArray()`** 方法：
 
 #### 字符串转byte数组
 
-`byte[] getBytes() `
+**`byte[] getBytes()`**

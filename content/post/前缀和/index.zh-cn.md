@@ -166,7 +166,6 @@ public class Main {
 
 - 先构造出nums的前缀和数组
 - 根据公式，从区间[i,j]的区间和为p[j]-p[i-1]=k
-- 注意要先在map中放入（0，1），因为当j=0时只有1种可能
 - 因此可以遍历前缀和数组，相当于求解p[j]-k在map中出现多少次
 
 **参考代码**
@@ -174,17 +173,17 @@ public class Main {
 ```java
 class Solution {
     public int subarraySum(int[] nums, int k) {
-        HashMap<Integer,Integer>map=new HashMap<>();
-        int[]preSum=new int[nums.length];
+        int n=nums.length;
+        int[]preSum=new int[n+1];
         int pre=0;
-        int count=0;
-        for(int i=0;i<nums.length;i++){
-            pre+=nums[i];
+        for(int i=1;i<=n;i++){
+            pre+=nums[i-1];
             preSum[i]=pre;
         }
-        map.put(0,1);
-        // 区间[i,j]的区间和为preSum[j]-preSum[i-1]=k
-        for(int j=0;j<nums.length;j++){
+        HashMap<Integer,Integer>map=new HashMap<>();
+        int count=0;
+        // k=preSum[j]-preSum[i-1]
+        for(int j=0;j<nums.length+1;j++){
             int temp=preSum[j]-k;
             if(map.containsKey(temp)){
                 count+=map.get(temp);

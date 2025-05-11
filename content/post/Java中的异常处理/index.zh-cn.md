@@ -48,13 +48,13 @@ java.lang.Object
 ### Throwable 类
 
 - 所有错误和异常的超类。
-- 定义了 `printStackTrace()`、`getMessage()` 和 `toString()` 等常用方法。
+- 定义了 **`printStackTrace()`** 、**`getMessage()`** 和 **`toString()`** 等常用方法。
 
 ### Error 类
 
 - **定义**：表示程序运行时的严重问题，通常是 JVM 无法处理的情况。
 - 特点
-  - 是 `Throwable` 的子类。
+  - 是 **`Throwable`** 的子类。
   - 不受检查的异常，编译器不强制要求处理。
   - 程序无法通过代码处理这些错误，通常由 JVM 抛出。
 - 常见类型
@@ -75,7 +75,7 @@ java.lang.Object
 
 ### Exception和Error的区别
 
-`Exception` 和 `Error` 都是  **`Throwable`**  类的子类（在 Java 代码中只有继承了  **`Throwable`**  类的实例才可以被 throw 或者被 catch）它们表示在程序运行时发生的异常或错误情况。
+**`Exception`** 和 **`Error`** 都是  **`Throwable`**  类的子类（在 Java 代码中只有继承了  **`Throwable`**  类的实例才可以被 throw 或者被 catch）它们表示在程序运行时发生的异常或错误情况。
 
 总结来看：**`Exception`** 表示可以被处理的程序异常，**`Error`** 表示系统级的不可恢复错误。
 
@@ -85,7 +85,7 @@ java.lang.Object
 
   - **Unchecked Exception**：运行时异常，不需要显式捕获。常见的如 `NullPointerException`、`IllegalArgumentException` 等，继承自 `RuntimeException`。
 
-- **Error**：表示严重的错误，通常是 JVM 层次内系统级的、无法预料的错误，程序无法通过代码进行处理或恢复。例如内存耗尽（`OutOfMemoryError`）、栈溢出（`StackOverflowError`）。`Error` 不应该被程序捕获或处理，因为一般出现这种错误时程序无法继续运行。
+- **Error**：表示严重的错误，通常是 JVM 层次内系统级的、无法预料的错误，程序无法通过代码进行处理或恢复。例如内存耗尽（ **`OutOfMemoryError`** ）、栈溢出（ **`StackOverflowError`** ）。**`Error`** 不应该被程序捕获或处理，因为一般出现这种错误时程序无法继续运行。
 
 ## 异常的处理方式
 
@@ -101,29 +101,28 @@ java.lang.Object
 
   - 如果当前方法没有匹配的异常处理器，JVM 会将该异常抛给调用它的方法。
 
-  - 这个过程会沿着方法调用栈向上查找，直到主方法 `main()`。
+  - 这个过程会沿着方法调用栈向上查找，直到主方法 **`main()`** 。
 
 - **异常到达 `main()` 方法：**
 
   - 如果异常传播到 `main()` 方法仍然未被捕获，JVM 默认的异常处理机制会接管。
 
 - **异常信息打印：**
-
   - JVM 会调用异常对象的 **`printStackTrace()`**方法，打印异常的堆栈跟踪信息
-
-    - 异常类型（如 `NullPointerException`、`ArithmeticException` 等）。
+  
+    - 异常类型（如 **`NullPointerException`** 、**`ArithmeticException`** 等）。
     - 异常的详细信息（如异常消息）。
     - 异常发生的代码位置（方法名和行号）。
-
+  
   - 堆栈信息从异常发生的位置开始，逐步列出调用栈的各个方法。
-
+  
 -  **终止程序：** 打印完堆栈跟踪信息后，JVM 会终止程序的执行。
 
 ### 捕获并处理异常
 
 #### try-catch-finally块
 
-使用 `try-catch-finally` 块捕获异常并对其进行处理。
+使用 **`try-catch-finally`** 块捕获异常并对其进行处理。
 
 **语法格式**
 
@@ -285,9 +284,9 @@ public class Main {
 
 #### try-with-resources 块
 
-`try-with-resources` 是 Java 中的一种简洁方式，用于自动管理资源。资源在使用完成后会被自动关闭，而无需显式调用 `close()` 方法，从而减少资源泄漏的风险。
+**`try-with-resources`** 是 Java 中的一种简洁方式，用于自动管理资源。资源在使用完成后会被自动关闭，而无需显式调用 `close()` 方法，从而减少资源泄漏的风险。
 
-它是在 **Java 7** 中引入的，资源必须实现 **`java.lang.AutoCloseable`** 接口（或其子接口 `java.io.Closeable`）。
+它是在 **Java 7** 中引入的，资源必须实现 **`java.lang.AutoCloseable`** 接口（或其子接口 **`java.io.Closeable`** ）。
 
 **语法格式**
 
