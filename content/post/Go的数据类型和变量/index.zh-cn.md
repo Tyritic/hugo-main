@@ -5,7 +5,7 @@ title : 'Go的数据类型和变量'
 image : ""
 categories : ["Golang"]
 tags : [""]
-description : ""
+description : "Go中变量的声明和踩坑点"
 math : true
 ---
 ## 变量的声明方式
@@ -29,6 +29,7 @@ math : true
   - **`:=`** 左侧的变量不应该是已经声明过的，否则会导致编译错误。
   - 在定义变量 a 之前使用它，则会得到编译错误 undefined: a。
   - 声明了一个局部变量却没有在相同的代码块中使用它，同样会得到编译错误
+  - 只可以在函数内使用，不能用于声明全局变量
 
 
 ```go
@@ -201,6 +202,20 @@ type StringHeader struct {
 - 字符串之间使用 **`+`** 进行拼接
 - 对于长字符串使用分行拼接处理，将 **`+`** 保留在上一行
 
+## 作用域
+
+Go 语言中变量可以在三个地方声明
+
+- 函数内定义的变量
+- 函数外定义的变量
+- 函数定义中的变量
+
+作用域分为以下几种
+
+- 局部变量：在函数体内声明的变量的作用域只在函数体内，参数和返回值变量也是局部变量
+- 全局变量：在函数体外声明的变量可以在整个包甚至外部包（被导出后）使用可以在任何函数中使用
+- 形式参数：形式参数会作为函数的局部变量来使用
+
 ## 基本数据类型的默认值
 
 在 go 中，数据类型都有一个默认值，当没有赋值时，就会保留默认值，在go 中，默认值又叫零值。
@@ -263,12 +278,69 @@ type struct_variable_type struct {
    member definition
 }
 // 初始化
-variable_name := structure_variable_type {value1, value2...valuen}
+variable_name := structure_variable_type {
+    member1: value1
+    member2: value2
+    membern: valuen
+}
 ```
 
 Go的结构体支持匿名字段，用于在一个结构体中插入另一个结构体，可以用于模拟实现继承行为
 
 结构体常通过指针传递，避免复制整个结构体，提高性能。
+
+虽然 Go 本身语法中没有类似 Java 中的 `@Annotation` 的注解机制，但结构体字段可以使用反引号（`）添加 tag，以传递元信息（meta info）给反射或其他工具使用。
+
+- 标签必须用 **反引号（`）** 包裹。
+- 每个 tag 是 `key:"value"` 形式，多个 tag 之间以空格分隔。
+- 每个 key 应唯一。
+
+```go
+type User struct {
+    ID    int    `json:"id" db:"user_id" validate:"required"`
+    Name  string `json:"name" db:"username" comment:"用户姓名"`
+    Email string `json:"email,omitempty" validate:"email"`
+}
+```
+
+## type关键字
+
+在 Go 语言中，type是一个重要而且常用的关键字。它可以用于定义结构体、类型别名、方法等。
+
+可以用于定义类型别名
+
+```Go
+//定义类型别名 - 别名实际上是为了更好的理解代码
+type MyInt = int
+var i MyInt = 12
+var int = 8
+fmt.Println(i + j)
+fmt.Printf("%T", i)    //int
+
+//类型定义
+type MyInt int
+var i MyInt = 12
+var j int = 8    //j不能和i直接相加，因为类型不同
+fmt.Println(int(i) + j)    //需要强制类型转换
+fmt.Printf("%T", i)        //main.MyInt
+```
+
+在编译的时候，类型别名会被直接替换成对应类型。
+
+可以用于类型判断
+
+```go
+switch v := i.(type) {
+    case int:
+        fmt.Println("int 类型，值是", v)
+    case string:
+        fmt.Println("string 类型，值是", v)
+    case bool:
+        fmt.Println("bool 类型，值是", v)
+    default:
+        fmt.Println("未知类型")
+    }
+```
 
 
 
@@ -372,3 +444,101 @@ const (
 ```
 
 底层原理：当你在一个 **`const`** 组中仅仅有一个标示符在一行的时候，它将使用增长的 **`iota`** 取得前面的表达式并且再运用它
+
+## 类型系统
+
+### 组成部分
+
+- **基本类型：** 包括整数类型（如 **`int`** 、**`int8`** 、**`int16`** 等）、浮点数类型（如 **`float32`** 、**`float64`** ）、布尔类型（ **`bool`** ）、字符串类型（ **`string`** ）等。
+- **复合类型：**
+  - 数组：具有固定长度的相同类型元素的序列。
+  - 切片：可以动态增长或收缩的元素序列。
+  - 结构体：将不同类型的数据组合在一起形成一个新的类型。
+  - 指针：用于指向其他变量的地址。
+  - 映射（字典）：存储键值对的数据结构。
+- **接口类型：** 定义了一组方法签名，具体的类型可以实现这些接口。
+- **类型别名：** 可以为已有的类型定义一个新的名称。
+
+### 接口
+
+在 Go 语言中，**接口（interface）** 是一种抽象类型，定义了一组方法的集合，**只要某个类型实现了这些方法，就自动满足这个接口** —— 无需显式地声明“我实现了某个接口”。
+
+#### 定义接口
+
+```go
+type 接口名 interface {
+    方法1(参数) 返回值
+    方法2(参数) 返回值
+}
+```
+
+#### 实现接口
+
+只要某个类型实现了接口中定义的所有方法，它就**自动**实现了该接口。
+
+```go
+type Dog struct{}
+
+func (d Dog) Speak() string {
+    return "Woof!"
+}
+```
+
+#### 使用接口
+
+```go
+func MakeSpeak(s Speaker) {
+    fmt.Println(s.Speak())
+}
+
+func main() {
+    var d Dog
+    MakeSpeak(d) // 输出: Woof!
+}
+```
+
+#### 应用场景
+
+- **`interface{}`** 是 **空接口** ，可以接受**任何类型的值** ，常用于处理未知类型（如：`fmt.Println`、JSON 解析、泛型前的容器类型）。
+- 接口断言是 **从接口值中** 提取具体类型，可用于判断类型
+
+```go
+var i interface{} = "hello"
+
+s := i.(string)
+fmt.Println(s) // 输出: hello
+```
+
+### 类型元数据
+
+不管是内置类型还是自定义类型都有对应的类型描述信息，称为它的 “类型元数据”。而且每种类型的元数据都是全局唯一的，这些类型元数据构成了 Go 语言的 “类型系统”
+
+每个类型元数据的 Header被放到了 **`runtime._type`** 结构体
+
+```Go
+type _type struct {
+    size        uintptr
+    ptrdata     uintptr
+    hash        uint32
+    tflag       tflag
+    align       uint8
+    fieldalign  uint8
+    kind        uint8
+    // ......
+}
+```
+
+在 **`_type`** 之后存储的是各种类型额外需要描述的信息 例如 slice 的类型元数据在 **`_type`** 结构体后面记录着一个 **`*type`**，指向其存储的元素的类型元数据。如果是 string 类型的 slice，下面这个 **`*_type`** 类型的指针就指向 string 类型的元数据。
+
+如果是自定义类型，在其它描述信息的后面还会有一个 uncommontype 结构体。
+
+```go
+type uncommontype struct {
+    pkgpath   nameOff    // 记录类型所在的包路径
+    mcount    uint16     // 记录了该类型关联到多少个方法
+    _         uint16
+    moff      uint32     // 记录的是这些方法元数据组成的数组相对于这个uncommontype结构体偏移了多少字节
+    _         uint32
+}
+```
+
