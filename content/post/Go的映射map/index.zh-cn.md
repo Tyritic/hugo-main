@@ -109,7 +109,7 @@ type bmap struct {
 - 数组的每个元素都是一个桶（bucket）
 - 每个桶可以存储 8 个 kv，当桶满时，会创建溢出桶
 
-{{<hugo notice>}}
+{{<notice tip>}}
 
 为什么设置为8个k-v键值对
 
