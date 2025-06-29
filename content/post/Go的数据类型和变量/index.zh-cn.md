@@ -87,6 +87,12 @@ func main() {
     g, h := 123 //只能在函数体内使用
     ```
 
+### 命名规则
+
+- 一个名字必须以一个字母（Unicode 字母）或下划线开头，后面可以跟任意数量的字母、数字或下划线
+- 大写字母和小写字母是不同的：heapSort 和 Heapsort 是两个不同的名字
+- Go 语言程序员推荐使用**驼峰式**命名，当名字由几个单词组成时优先使用大小写分隔，而不是优先用下划线分隔
+
 ## 基本数据类型
 
 Go的数据类型分类与Java类似分为基本数据类型和派生数据类型
@@ -267,7 +273,9 @@ var j =newType(i)
 
 ## 结构体
 
-一个结构体（`struct`）就是一组 字段（field）。
+一个结构体（ **`struct`** ）就是一组 字段（field）。
+
+### 创建和初始化
 
 ```go
 // 声明
@@ -289,10 +297,12 @@ Go的结构体支持匿名字段，用于在一个结构体中插入另一个结
 
 结构体常通过指针传递，避免复制整个结构体，提高性能。
 
-虽然 Go 本身语法中没有类似 Java 中的 `@Annotation` 的注解机制，但结构体字段可以使用反引号（`）添加 tag，以传递元信息（meta info）给反射或其他工具使用。
+### 注解
+
+虽然 Go 本身语法中没有类似 Java 中的 **`@Annotation`** 的注解机制，但结构体字段可以使用反引号（`）添加 tag，以传递元信息（meta info）给反射或其他工具使用。
 
 - 标签必须用 **反引号（`）** 包裹。
-- 每个 tag 是 `key:"value"` 形式，多个 tag 之间以空格分隔。
+- 每个 tag 是 **`key:"value"`** 形式，多个 tag 之间以空格分隔。
 - 每个 key 应唯一。
 
 ```go
@@ -302,6 +312,80 @@ type User struct {
     Email string `json:"email,omitempty" validate:"email"`
 }
 ```
+
+### 方法绑定
+
+利用方法绑定可以实现类似Java的成员方法的效果。**方法绑定** 指的是某个方法被**绑定（关联）到某个类型的值（value）或指针（pointer）上，从而可以通过该值或指针来调用这个方法**。
+
+```go
+func (var_name varType) func_name(parameter_type parmeterlist) return_type {
+    
+}
+```
+
+- 接收者是值：传的是**副本**，原值不受影响。可以通过 **`Person`** 值或 **`*Person`** 调用
+- 接收者是指针：可以修改原对象内容
+
+### JSON解析
+
+Go通常使用使用标准库中的 **`import "encoding/json"`** 做序列化和反序列化
+
+- 序列化：Go对象 → JSON字符串
+- 反序列化：JSON字符串 → Go对象
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type User struct {
+	Name string `json:"name"` // 指定 JSON 字段名
+	Age  int    `json:"age"`
+}
+
+func main() {
+    // 序列化
+	u := User{Name: "Alice", Age: 30}
+	data, err := json.Marshal(u)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(data)) // 输出：{"name":"Alice","age":30}
+    
+    // 反序列化
+    jsonStr := `{"name":"Bob","age":25}`
+
+	var u User
+	err := json.Unmarshal([]byte(jsonStr), &u)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(u.Name, u.Age) // 输出：Bob 25
+}
+```
+
+Json Tag属性
+
+- **`json:"name,varType"`** ：将字段编码为 **`name`** ，数据类型为varType
+- **`json:"name,omitempty"`** ：若字段为零值则忽略
+- **`json:"-"`** ：忽略该字段，不参与序列化
+
+相比 Go 的官方 **`encoding/json`**，**`jsoniter`** 性能更高，**通常快 2～5 倍**，且完全兼容原有代码接口（几乎无需改动即可替换）。
+
+```go
+import jsoniter "github.com/json-iterator/go"
+
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
+
+// 替代 encoding/json 的 Marshal 和 Unmarshal
+data, _ := json.Marshal(obj)
+json.Unmarshal(data, &obj)
+```
+
+
 
 ## type关键字
 
@@ -458,56 +542,6 @@ const (
   - 映射（字典）：存储键值对的数据结构。
 - **接口类型：** 定义了一组方法签名，具体的类型可以实现这些接口。
 - **类型别名：** 可以为已有的类型定义一个新的名称。
-
-### 接口
-
-在 Go 语言中，**接口（interface）** 是一种抽象类型，定义了一组方法的集合，**只要某个类型实现了这些方法，就自动满足这个接口** —— 无需显式地声明“我实现了某个接口”。
-
-#### 定义接口
-
-```go
-type 接口名 interface {
-    方法1(参数) 返回值
-    方法2(参数) 返回值
-}
-```
-
-#### 实现接口
-
-只要某个类型实现了接口中定义的所有方法，它就**自动**实现了该接口。
-
-```go
-type Dog struct{}
-
-func (d Dog) Speak() string {
-    return "Woof!"
-}
-```
-
-#### 使用接口
-
-```go
-func MakeSpeak(s Speaker) {
-    fmt.Println(s.Speak())
-}
-
-func main() {
-    var d Dog
-    MakeSpeak(d) // 输出: Woof!
-}
-```
-
-#### 应用场景
-
-- **`interface{}`** 是 **空接口** ，可以接受**任何类型的值** ，常用于处理未知类型（如：`fmt.Println`、JSON 解析、泛型前的容器类型）。
-- 接口断言是 **从接口值中** 提取具体类型，可用于判断类型
-
-```go
-var i interface{} = "hello"
-
-s := i.(string)
-fmt.Println(s) // 输出: hello
-```
 
 ### 类型元数据
 

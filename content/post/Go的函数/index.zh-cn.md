@@ -38,7 +38,7 @@ func add(x, y int) int {
 }
 ```
 
-- 函数可以返回任意数量的返回值。
+- 函数可以返回任意数量的返回值，对于不需要的返回值使用 **`_`** 代替
 - Go 的返回值可被命名，它们会被视作定义在函数顶部的变量。没有参数的 `return` 语句会直接返回已命名的返回值，也就是「裸」返回值。
 
 ```Go
@@ -150,6 +150,50 @@ func main() {
 // Defer 2
 // Defer 1
 ```
+
+### 底层原理
+
+```Go
+type _defer struct {
+    siz     int32     // 参数和返回值共占多少字节，这段空间会直接分配在_defer结构体后面，用于在注册时保存参数，并在执行时拷贝到调用者参数与返回值空间
+    started bool      // 标记defer是否已经执行
+    sp      uintptr   // 记录注册这个defer的函数栈指针（调用者栈指针），函数可以通过它判断自己注册的defer是否已经执行完了
+    pc      uintptr   // deferproc的返回地址
+    fn      *funcval  // 注册的function value函数
+    _panic  *_panic
+    link    *_defer   // 链接到前一个注册的defer结构体
+}
+```
+
+### defer的注册
+
+```go
+func A() {
+    defer B()
+    //code to do something
+}
+```
+
+编译后的伪指令是下面这样的。defer 指令对应到两部分内容，其中 **`deferproc`** 负责把要执行的函数信息保存起来，称之为 **defer 注册**
+
+```go
+func A() {
+    r = deferproc(8, B)    // 1.注册
+    
+    //code to do something
+    
+    runtime.deferreturn()  // 2.调用
+    return
+}
+```
+
+在 defer 注册完成后，程序就会执行后面的逻辑，直到返回之前通过 **`defer return`** 执行注册的 defer 函数，即 **defer 调用**。正是因为先注册后调用，才实现了 defer 延迟执行的效果。
+
+defer 注册部分，defer 注册的信息会注册到一个链表，而当前执行的 goroutine 会持有这个链表的头指针。每个 goroutine 在运行时都有一个对应的结构体 g，其中有一个字段就指向 defer 链表头。
+
+defer 链表链起来的是一个一个 **`_defer`** 结构体，新注册的 defer 会添加到链表头，执行时也是从头开始，这也就是 defer 会表现为倒序执行的原因。
+
+![defer链表](image-20250628091008611.png)
 
 ## 可变参数
 
