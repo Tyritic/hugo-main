@@ -1,6 +1,6 @@
 ---
 title: "Kitex框架"
-image: "5ff958bfe20e49a5a2c2bf2f7352b9f5~tplv-k3u1fbpfcp-zoom-crop-mark_4536_4536_4536_2553.jpg"
+image: "55079dc7bc0d47528cc530447f708e45.png"
 style:
     background: "#2a9d8f"
     color: "#fff"
