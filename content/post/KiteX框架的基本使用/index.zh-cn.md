@@ -11,7 +11,7 @@ math : true
 
 ## Kitex框架介绍
 
-KiteX [kaɪt’eks] 是字节跳动内部的 Golang 微服务 RPC 框架，已经在 GitHub 上开源，具有高性能、强可扩展的特点，在字节内部已广泛使用。支持 Thrift、[gRPC、Kitex Protobuf](https://bytedance.larkoffice.com/wiki/wikcnCMy5WGHHgP54lxjpwl135b?create_from=create_doc_to_wiki) 协议
+Kitex [kaɪt’eks] 是字节跳动内部的 Golang 微服务 RPC 框架，已经在 GitHub 上开源，具有高性能、强可扩展的特点，在字节内部已广泛使用。支持 Thrift、[gRPC、Kitex Protobuf](https://bytedance.larkoffice.com/wiki/wikcnCMy5WGHHgP54lxjpwl135b?create_from=create_doc_to_wiki) 协议
 
 ## Kitex框架特点
 

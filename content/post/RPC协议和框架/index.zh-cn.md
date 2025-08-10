@@ -3,7 +3,7 @@ date : '2025-07-05T17:13:20+08:00'
 draft : false
 title : 'RPC协议和框架'
 image : ""
-categories : [""]
+categories : ["Kitex框架"]
 tags : [""]
 description : ""
 math : true

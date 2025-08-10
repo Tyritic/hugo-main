@@ -190,7 +190,56 @@ func copy(dst, src []T) int
 
 - 返回值：成功复制的元素数量（即 **`min(len(dst), len(src))`**）。
 
-### slice 和 slice 指针的区别
+### 切片展开
+
+在 Go 里，**`...`** 主要有 **两个核心用途**，意义完全取决于它出现的位置
+
+#### 可变参数
+
+表示**可变参数**（variadic parameter），也就是这个参数可以接收**任意数量**的值。
+
+```go
+func sum(nums ...int) int {
+    total := 0
+    for _, n := range nums {
+        total += n
+    }
+    return total
+}
+
+func main() {
+    fmt.Println(sum(1, 2))        // 3
+    fmt.Println(sum(1, 2, 3, 4)) // 10
+}
+```
+
+#### 切片展开
+
+表示**展开切片**（slice expansion），把切片里的元素依次当作独立的参数传入。
+
+```go
+func printAll(a ...string) {
+    for _, s := range a {
+        fmt.Println(s)
+    }
+}
+
+func main() {
+    words := []string{"Go", "is", "cool"}
+    printAll(words...) // 展开切片传入
+}
+```
+
+**`append`** 中表示把一个切片的元素依次追加/传入
+
+```go
+a := []int{1, 2}
+b := []int{3, 4}
+a = append(a, b...) // 把 b 展开后追加到 a
+fmt.Println(a) // [1 2 3 4]
+```
+
+## slice 和 slice 指针的区别
 
 - 当 slice 作为函数参数时，就是一个普通的结构体。在调用者看来，实参 slice 并不会被函数中的操作改变
 - 当 slice 指针作为函数参数，在调用者看来，是会被改变原 slice 的。
@@ -200,9 +249,69 @@ func copy(dst, src []T) int
 - 传 slice 和 slice 指针，如果对 slice 数组里面的数据做修改，都会改变 slice 底层数据
 - 传 slice 是拷贝，在函数内部修改，不会修改 slice 的结构， **`len`** 和 **`cap`** 不变 ，传slice 指针是修改，会修改其 slice 结构。
 
-因此
+因此要想真的改变外层 slice，只有将返回的新的 slice 赋值到原始 slice，或者向函数传递一个指向 slice 的指针。
 
-要想真的改变外层 slice，只有将返回的新的 slice 赋值到原始 slice，或者向函数传递一个指向 slice 的指针。
+## nil 切片，切片为 nil和空切片
+
+- nil切片：底层指向数组为nil，不可以直接进行访问，常见于声明阶段 **`var s []int`**
+- 空切片：底层指向数组为空数组（非nil），常见于初始化阶段 **`s := []int{}`**
+
+## 踩坑实录总结
+
+### 误用slice预分配空间
+
+下面代码预期创建**容量**为2的[]int，实际创建了**长度**为2的[]int。
+
+```Go
+package main
+
+import "fmt"
+
+func main() {
+    a := make([]int, 2)
+    a = append(a, 1)
+    a = append(a, 1)
+    fmt.Println(a)
+}
+// 运行结果
+[0 0 1 1]
+
+Process finished with the exit code 0
+```
+
+**解析：**
+
+make()函数可以创建slice：
+
+- **`make([]T, length, capacity)`** ：创建初始容量为capacity，初始长度为length（用零值填充），类型为[]T的slice
+- **`make([]T, length)`** ：创建初始长度为length（用零值填充），类型为[]T的slice
+
+**`length`** 表示初始长度，即slice已经包含数据的个数，默认会用零值填充；
+
+**`capacity`** 表示初始容量，即slice的当前可容量的数据个数，当满足一定条件会自动扩容。
+
+**解决方法：**尽量不用 **`make`** 创建slice
+
+```Go
+func main() {
+    var a []int // 或者a:=[]int{}
+    a = append(a, 1)
+    a = append(a, 1)
+    fmt.Println(a)
+}
+```
+
+### 注意slice和底层数组的关系
+
+slice底层数据结构：
+
+- **`array`** ：用于存储数据，指向一块连续的内存空间；
+- **`len`** ：大小，表示已存储数据的数量；
+- **`cap`** ：容量，表示连续内存空间的大小
+
+对数组进行截取操作后赋值给切片（并没有拷贝），与原数组共用内存空间，所以修改切片也会修改原数组对应的数据。
+
+使用 **`append`** 添加数据后，触发扩容产生新的array，与原数组不是同一个内存空间，所以修改原数组不会对切片产生影响。
 
 ## 底层原理
 

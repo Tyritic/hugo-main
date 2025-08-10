@@ -72,6 +72,43 @@ for k, v := range m {
   - nil map 上使用 **`delete`** ：不会 **`panic`** 只是无效操作
   - 删除 key 操作只是将对应的 key-value 对标记为空，但不会释放桶（不会释放内存），也不会触发缩容
 
+## 踩坑实录
+
+### 直接操作nil map，发生panic
+
+问题：直接操作未初始化的map，会触发panic
+
+```Go
+package main
+
+func main() {
+    var m map[string]string
+    m["key"] = "value"
+}
+// 运行结果
+panic: assignment to entry in nil map
+
+goroutine 1 [running]:
+main.main()
+        .../main.go:5 +0x38
+
+Process finished with the exit code 2
+```
+
+解决方法：使用map前，需对map进行初始化。
+
+```Go
+package main
+
+func main() {
+    m := map[string]string{}
+    m["key"] = "value"
+
+    n := make(map[string]string)
+    n["key"] = "value"
+}
+```
+
 ## 底层原理
 
 ### 底层数据结构
@@ -299,14 +336,30 @@ type entry struct {
 - 读取：**`func Load(key interface{}) (value interface{}, ok bool)`**
   - **`value`**：键对应的值（类型需自行转换）。
   - **`ok`** ：键是否存在的标志。
+
 - 存储/更新：**`func Store(key, value interface{})`**
   - 若键已存在，新值会覆盖旧值；不支持存储 **`nil`**（会触发 panic）
+
 - 删除键：**`func Delete(key interface{})`**
   - 实际为逻辑删除（标记 **`entry`** 为 **`nil`** ），在 `dirty` 提升时才物理删除。
   - 若键不存在，不会报错。
+
 - 若存在则加载否则存储：**`func LoadOrStore(key, value interface{}) (actual interface{}, loaded bool)`**
   - **`actual`** ：键的当前值（无论是否新存入）。
-  - **`loaded`** ：键是否已存在的标志（`true` 表示已存在，直接加载；`false` 表示新存入）。
+  - **`loaded`** ：键是否已存在的标志（ **`true`** 表示已存在，直接加载；**`false`** 表示新存入）。
+
+- 遍历：**`Sync.Map`** 有自带的**`Range`** ，**`Range(func(key, value any) bool`** ，**`any`**（即 **`interface{}`**），要用类型断言才能使用具体类型
+
+  ```go
+  m.Range(func(key, value any) bool {
+      k := key.(string)
+      v := value.(int)
+      fmt.Printf("%s => %d\n", k, v)
+      return true
+  })
+  ```
+
+  
 
 ### 底层原理
 

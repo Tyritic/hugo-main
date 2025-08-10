@@ -46,4 +46,13 @@ type StringHeader struct {
   - **`strings.Trim("#hello #go#", "#"))`**  ：去除两头的特殊字符
   - 字符串拼接
     - 性能要求不高，平时一般采用 **`fmt.Sprinf`** ：
-    - 性能要求高的场景使用 **`string.Builder`** 的 **`WriteString`** 方法进行拼接，然后使用 **`builder.String()`** 得到拼接后的字符串
+    - 性能要求高的场景使用 **`string.Builder`** 进行拼接，然后使用 **`builder.String()`** 得到拼接后的字符串
+      -  **`WriteString`** 方法：添加字符串（ **`string`** ）
+      - **`WriteRune`** 方法：添加单个字符（ **`rune`** ）
+      - **`WriteByte`** 方法：添加单个字节（ **`byte`** ）
+- 字符数组的转换
+  - string可以被转换为 **`[]byte`** 和 **`[]rune`**
+  - **`[]byte`** ：适合ASCII字符
+  - **`[]rune`** ：适合包含中文、emoji 等多字节字符
+- 访问第i个字符
+  - **`s[i]`** ：直接访问底层字符数组**`byte`**
