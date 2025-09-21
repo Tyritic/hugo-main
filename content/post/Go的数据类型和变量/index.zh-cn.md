@@ -392,6 +392,27 @@ data, _ := json.Marshal(obj)
 json.Unmarshal(data, &obj)
 ```
 
+### 继承和聚合
+
+go语言中，不能说面向对象，因为go语言中没有类的函数，但是它可以根据结构体和方法来实现面对对象编程的某些特性。在go语言中，通过聚合的方式来实现继承特性的，多态准确来说在go语言中不存在，顶多算接口吧。
+
+```go
+type Animal struct {
+	Name string
+}
+func(a *Animal)speak(){
+	fmt.Printf("%s speaks\n", a.Name)
+}
+type Dog struct {
+	*Animal
+	Breed string
+func(d *Dog)Bark(){
+	fmt.Printf("%s the %s dog barks\n",d.Name, d.Breed)
+}
+```
+
+### 面向切面编程
+
 
 
 ## type关键字
@@ -550,7 +571,7 @@ type Speaker interface {
 ```
 
 - 这个接口要求实现一个 **`Speak() string`** 方法。
-- 任何类型只要实现了这个方法，就**自动**实现了 **`Speaker`** 接口。
+- 任何类型只要实现了接口中所有方法，就**自动**实现了 **`Speaker`** 接口。
 
 ### 空接口
 
