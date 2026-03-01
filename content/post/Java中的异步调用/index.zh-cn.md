@@ -9,13 +9,30 @@ description : ""
 math : true
 ---
 
-## 为什么要异步调用？
+## 📑 目录
+
+- [为什么要异步调用？](#为什么要异步调用？)
+- [Future接口](#future接口)
+- [CompletableFuture`** 类](#completablefuture`**-类)
+  - [创建操作](#创建操作)
+    - [使用构造方法](#使用构造方法)
+    - [使用静态工厂方法](#使用静态工厂方法)
+  - [获取异步调用的结果](#获取异步调用的结果)
+  - [处理异步调用的结果](#处理异步调用的结果)
+  - [异常处理](#异常处理)
+  - [组合处理](#组合处理)
+  - [并行处理](#并行处理)
+
+
+## ⚡ 为什么要异步调用？
 
 实际项目中，一个接口可能需要同时获取多种不同的数据，然后再汇总返回
 
 如果是串行（按顺序依次执行每个任务）执行的话，接口的响应速度会非常慢。考虑到这些任务之间有大部分都是 **无前后顺序关联** 的，可以 **并行执行** 。通过并行执行多个任务的方式，接口的响应速度会得到大幅优化。
 
-## Future接口
+---
+
+## 🔌 Future接口
 
 **核心思想** ：当我们执行某一耗时的任务时，可以将这个耗时任务交给一个子线程去异步执行，同时我们可以干点其他事情，不用等待耗时任务执行完成。等我们的事情干完后，我们再通过 **`Future`** 类获取到耗时任务的执行结果。这样一来，程序的执行效率就明显提高了。
 
@@ -45,7 +62,9 @@ public interface Future<V> {
 
 **`FutureTask`** 相当于对 **`Callable`** 进行了封装，管理着任务执行的情况，存储了 **`Callable`** 的 **`call`** 方法的任务执行结果。
 
-## **`CompletableFuture`** 类
+---
+
+## 📦 **`CompletableFuture`** 类
 
 **`CompletableFuture`** 是 Java 8 引入的一个强大的异步编程工具。允许非阻塞地处理异步任务，并且可以通过**链式调用组合**多个异步操作。
 
@@ -57,13 +76,13 @@ public interface Future<V> {
 - **并行任务**：支持多个异步任务的组合，如 `thenCombine()`、`allOf()` 等方法，可以在多个任务完成后进行操作。
 - **非阻塞获取结果**：相比 `Future`，`CompletableFuture` 支持通过回调函数获取结果，而不需要显式的阻塞等待。
 
-### 创建操作
+### 📌 创建操作
 
-#### 使用构造方法
+#### 🔨 使用构造方法
 
 - **`CompletableFuture<T> future = new CompletableFuture<>();`**
 
-#### 使用静态工厂方法
+#### 🔨 使用静态工厂方法
 
 - 创建异步任务并返回结果
   - **`static <U> CompletableFuture<U> supplyAsync(Supplier<U> supplier)`** ：// 使用自定义线程池(推荐)
@@ -72,7 +91,7 @@ public interface Future<V> {
   - **`static CompletableFuture<Void> runAsync(Runnable runnable)`** ：// 使用自定义线程池(推荐)
   - **`static CompletableFuture<Void> runAsync(Runnable runnable, Executor executor)`**
 
-### 获取异步调用的结果
+### ⚡ 获取异步调用的结果
 
 - **`V get() throws InterruptedException, ExecutionException`** ：**阻塞** 调用，等待异步任务完成并返回结果。
   - **`get()`** 会抛出 **`InterruptedException`** 或 **`ExecutionException`**
@@ -82,7 +101,7 @@ public interface Future<V> {
   - 如果 **`CompletableFuture`** **执行失败**，**`join()`** **不会抛出 `CheckedException`**，而是抛出 **`CompletionException`**（**运行时异常**）。
 
 
-### 处理异步调用的结果
+### ⚡ 处理异步调用的结果
 
 - **`<U> CompletableFuture<U> thenApply(Function<? super T,? extends U> fn)`** ：接受一个 **`Function`** 实例，用它来修改任务返回值，并返回新的 **`CompletableFuture<U>`** ，支持 **链式调用**
 
@@ -193,7 +212,7 @@ public interface Future<V> {
 
   
 
-### 异常处理
+### ⚠️ 异常处理
 
 - **`CompletableFuture<U> handle(BiFunction<? super T, Throwable, ? extends U> fn)`** ：
 
@@ -230,7 +249,7 @@ public interface Future<V> {
 
 
 
-### 组合处理
+### 📌 组合处理
 
 - **`public <U> CompletableFuture<U> thenCompose(Function<? super T, ? extends CompletionStage<U>> fn)`**
 
@@ -290,7 +309,7 @@ public interface Future<V> {
 
 
 
-### 并行处理
+### 📌 并行处理
 
 - **`static CompletableFuture<Void> allOf(CompletableFuture<?>... cfs)`**
 

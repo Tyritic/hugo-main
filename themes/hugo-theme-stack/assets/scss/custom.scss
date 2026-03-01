@@ -152,3 +152,100 @@
     width: auto;
   }
 }
+
+// 内联代码样式美化（只影响内联代码，不影响代码框）
+.article-content code:not(pre code) {
+  // 基础样式
+  padding: 3px 6px;
+  border-radius: 6px;
+  font-size: 0.95em;
+  font-weight: 500;
+  font-family: var(--code-font-family);
+  word-wrap: break-word;
+  word-break: break-word;
+  
+  // 浅色模式
+  background-color: rgba(27, 31, 35, 0.05);
+  color: #24292e;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  
+  // 过渡效果
+  transition: all 0.2s ease-in-out;
+  
+  // 悬停效果
+  &:hover {
+    background-color: rgba(27, 31, 35, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+  }
+}
+
+// 深色模式下的内联代码样式
+[data-scheme="dark"] .article-content code:not(pre code) {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #e6edf3;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// 设置 JetBrains Mono 为代码和数字字体，中文使用非等宽字体
+:root {
+  --base-font-family: var(--sys-font-family), var(--zh-font-family), 'JetBrains Mono', sans-serif;
+  --article-font-family: var(--base-font-family);
+  --code-font-family: 'JetBrains Mono', Menlo, Monaco, Consolas, 'Courier New', var(--zh-font-family), monospace;
+}
+
+// 美化数字显示字体
+// 使用 JetBrains Mono 字体显示数字
+@font-face {
+  font-family: 'Digital';
+  src: local('JetBrains Mono'), local('JetBrainsMono-Regular');
+  font-weight: 400;
+  font-style: normal;
+  unicode-range: U+0030-0039; /* 数字 0-9 */
+}
+
+@font-face {
+  font-family: 'Digital';
+  src: local('JetBrains Mono'), local('JetBrainsMono-Medium');
+  font-weight: 500;
+  font-style: normal;
+  unicode-range: U+0030-0039; /* 数字 0-9 */
+}
+
+@font-face {
+  font-family: 'Digital';
+  src: local('JetBrains Mono'), local('JetBrainsMono-SemiBold');
+  font-weight: 600;
+  font-style: normal;
+  unicode-range: U+0030-0039; /* 数字 0-9 */
+}
+
+@font-face {
+  font-family: 'Digital';
+  src: local('JetBrains Mono'), local('JetBrainsMono-Bold');
+  font-weight: 700;
+  font-style: normal;
+  unicode-range: U+0030-0039; /* 数字 0-9 */
+}
+
+// 应用数字字体
+body {
+  font-family: 'Digital', var(--base-font-family);
+}
+
+.article-content {
+  font-family: 'Digital', var(--article-font-family);
+  
+  /* 数字样式增强 */
+  :is(h1, h2, h3, h4, h5, h6, p, li, span) {
+    &:not(code) {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" on;
+    }
+  }
+}

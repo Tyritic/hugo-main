@@ -9,24 +9,69 @@ description : "Java中的多线程概念"
 math : true
 ---
 
-## 并发和并行
+## 📑 目录
+
+- [并发和并行](#并发和并行)
+- [同步和异步](#同步和异步)
+- [进程和线程](#进程和线程)
+  - [进程和线程之间的关系](#进程和线程之间的关系)
+  - [Java中的线程和操作系统的线程的关系](#java中的线程和操作系统的线程的关系)
+- [线程的上下文切换](#线程的上下文切换)
+- [线程安全](#线程安全)
+  - [线程安全的定义](#线程安全的定义)
+  - [常见线程安全措施](#常见线程安全措施)
+- [线程的创建方式](#线程的创建方式)
+  - [继承  **`Thread`** 类](#继承--**`thread`**-类)
+  - [实现 **`Runnable`** 接口](#实现-**`runnable`**-接口)
+  - [实现 **`Callable`** 接口与 **`FutureTask`**](#实现-**`callable`**-接口与-**`futuretask`**)
+  - [使用线程池（ **`ExecutorService`** ）](#使用线程池-**`executorservice`**-)
+- [Runnable** 接口 和 **Callable** 接口](#runnable**-接口-和-**callable**-接口)
+  - [无返回值的 **Runnable**](#无返回值的-**runnable**)
+  - [有返回值的 **Callable**](#有返回值的-**callable**)
+- [Future** 接口和 **FutureTask** 实现类](#future**-接口和-**futuretask**-实现类)
+- [控制线程的常用方法](#控制线程的常用方法)
+  - [启动线程](#启动线程)
+  - [线程命名](#线程命名)
+  - [线程休眠](#线程休眠)
+  - [线程优先执行](#线程优先执行)
+  - [线程间通信](#线程间通信)
+  - [中断线程](#中断线程)
+  - [让出时间片](#让出时间片)
+  - [设置线程优先级](#设置线程优先级)
+  - [守护线程](#守护线程)
+- [线程的状态](#线程的状态)
+  - [NEW（初始状态）](#new初始状态)
+  - [RUNNABLE（正在运行）](#runnable正在运行)
+  - [BLOCKED（阻塞状态）](#blocked阻塞状态)
+  - [WAITING（等待状态）](#waiting等待状态)
+  - [TIMED_WAITING（超时等待）](#timed_waiting超时等待)
+  - [TERMINATE（终止状态）](#terminate终止状态)
+
+
+## 🔀 并发和并行
 
 - 并行：多核 CPU 上的多任务处理，多个任务在同一时间真正地同时执行。
 - 并发：单核 CPU 上的多任务处理，多个任务在同一时间段内交替执行，通过时间片轮转实现交替执行。
 
-![并行和并发的区别](javathread-1.png)
+<div align="center">
+  <img src="javathread-1.png" alt="并行和并发的区别" width="60%">
+</div>
 
-## 同步和异步
+---
+
+## 🔄 同步和异步
 
 - **同步**：发出一个调用之后，在没有得到结果之前， 该调用就不可以返回，一直等待。
 - **异步**：调用在发出之后，不用等待返回结果，该调用直接返回。
 
-## 进程和线程
+---
+
+## 🧵 进程和线程
 
 - **进程**：是对运行时程序的封装，是系统进行资源调度和分配的基本单位，实现了操作系统的并发。
 - **线程**：是进程的子任务，是 CPU 调度和分派的基本单位，实现了进程内部的并发。
 
-### 进程和线程之间的关系
+### 🧵 进程和线程之间的关系
 
 - **线程在进程下进行**
 - **进程之间不会相互影响，主线程结束将会导致整个进程结束**
@@ -34,13 +79,15 @@ math : true
 - **同进程下的不同线程之间数据很容易共享**
 - **进程使用内存地址可以限定使用量**
 
-### Java中的线程和操作系统的线程的关系
+### 🧵 Java中的线程和操作系统的线程的关系
 
 在 JDK 1.2 及以后，Java 线程改为基于原生线程（Native Threads）实现，也就是说 JVM 直接使用操作系统原生的内核级线程（内核线程）来实现 Java 线程，由操作系统内核进行线程的调度和管理。
 
 所以本质上 java 程序创建的线程，就是和操作系统线程是一样的，是 1 对 1 的线程模型。
 
-## 线程的上下文切换
+---
+
+## 🧵 线程的上下文切换
 
 并发其实是一个 CPU 来应付多个线程。CPU 资源的分配采用了时间片轮转也就是给每个线程分配一个时间片，线程在时间片内占用 CPU 执行任务。当线程使用完时间片后，就会处于就绪状态并让出 CPU 让其他线程占用。
 
@@ -48,9 +95,11 @@ math : true
 
 同时线程可以被**多核调度**。操作系统的调度器负责将线程分配给可用的 CPU 核心，从而实现并行处理。多核处理器提供了并行执行多个线程的能力。
 
-## 线程安全
+---
 
-### 线程安全的定义
+## 🧵 线程安全
+
+### 🧵 线程安全的定义
 
 **线程安全**是指多个线程访问某一共享资源时，能够保证一致性和正确性，即无论线程如何交替执行，程序都能够产生预期的结果，且不会出现数据竞争或内存冲突
 
@@ -69,8 +118,12 @@ math : true
   - **内存屏障**：`volatile` 变量的读写操作会在指令流中插入内存屏障，阻止特定的指令重排序。对于 **`volatile`** 变量的写操作，会在写操作前插入一个 StoreStore 屏障，防止写操作与之前的写操作重排序；在读操作之后插入一个 LoadLoad 屏障，防止读操作与之后的读操作重排序。
 
 - **活跃性**：
-  - **死锁**是指多个线程因为环形等待锁的关系而永远地阻塞下去。![死锁示意图](thread-bring-some-problem-d4e65d5f-3de1-4a1c-8ae1-02cb3bfb528c.png)
-  - **活锁**：线程没有阻塞。当多个线程都在运行并且都在修改各自的状态，而其他线程又依赖这个状态，就导致任何一个线程都无法继续执行，只能重复着自身的动作，于是就发生了活锁。![活锁示意图](thread-bring-some-problem-d1f9e916-0985-46fe-bf87-63fccfd27bae.png)
+  - **死锁**是指多个线程因为环形等待锁的关系而永远地阻塞下去。<div align="center">
+  <img src="thread-bring-some-problem-d4e65d5f-3de1-4a1c-8ae1-02cb3bfb528c.png" alt="死锁示意图" width="60%">
+</div>
+  - **活锁**：线程没有阻塞。当多个线程都在运行并且都在修改各自的状态，而其他线程又依赖这个状态，就导致任何一个线程都无法继续执行，只能重复着自身的动作，于是就发生了活锁。<div align="center">
+  <img src="thread-bring-some-problem-d1f9e916-0985-46fe-bf87-63fccfd27bae.png" alt="活锁示意图" width="60%">
+</div>
   - **饥饿**：如果一个线程无其他异常却迟迟不能继续运行。
     - 高优先级的线程一直在运行消耗 CPU，所有的低优先级线程一直处于等待；
     - 一些线程被永久堵塞在一个等待进入同步块的状态，而其他线程总是能在它之前持续地对该同步块进行访问；
@@ -78,7 +131,7 @@ math : true
 
 
 
-### 常见线程安全措施
+### 🧵 常见线程安全措施
 
 - **同步锁**：通过 **`synchronized`** 关键字或 **`ReentrantLock`** 实现对共享资源的同步控制。
 - **原子操作类**：Java 提供的 **`AtomicInteger`**、**`AtomicReference`** 等类确保多线程环境下的原子性操作。
@@ -86,9 +139,11 @@ math : true
 - **局部变量**：线程内独立的局部变量天然是线程安全的，因为每个线程都有自己的栈空间（线程隔离）。
 - **ThreadLocal**：类似于局部变量，属于线程本地资源，通过线程隔离保证了线程安全。
 
-## 线程的创建方式
+---
 
-### 继承  **`Thread`** 类
+## 🧵 线程的创建方式
+
+### 📦 继承  **`Thread`** 类
 
 创建一个类继承 **`Thread`** 类，并重写 **`run()`** 方法
 
@@ -113,7 +168,7 @@ public static void main(String[] args) {
 - 优点: 编写简单，如果需要访问当前线程，无需使用 **`Thread.currentThread ()`** 方法，直接使用 **`this`** ，即可获得当前线程
 - 缺点：因为线程类已经继承了Thread类，所以不能再继承其他的父类
 
-### 实现 **`Runnable`** 接口
+### 🔌 实现 **`Runnable`** 接口
 
 创建一个类实现 **`Runnable`** 接口，并重写 **`run()`** 方法,使用 **`Thread`** 类的构造函数传入 **`Runnable`** 对象，调用 **`start()`** 方法启动线程
 
@@ -137,7 +192,7 @@ public static void main(String[] args) {
 
 - 缺点：编程稍微复杂，如果需要访问当前线程，必须使用 **`Thread.currentThread()`** 方法。
 
-### 实现 **`Callable`** 接口与 **`FutureTask`**
+### 🔌 实现 **`Callable`** 接口与 **`FutureTask`**
 
 - 实现 **`Callable`** 接口的 **`call()`** 方法
 
@@ -171,7 +226,7 @@ public static void main(String[] args) {
 - 缺点：编程稍微复杂，如果需要访问当前线程，必须调用 **`Thread.currentThread()`** 方法。
 - 优点：线程只是实现Runnable或实现Callable接口，还可以继承其他类。这种方式下，多个线程可以共享一个target对象，非常适合多线程处理同一份资源的情形。
 
-### 使用线程池（ **`ExecutorService`** ）
+### 💡 使用线程池（ **`ExecutorService`** ）
 
 通过 `ExecutorService` 提交 `Runnable` 或 `Callable` 任务，不直接创建和管理线程，适合管理大量并发任务。
 
@@ -239,9 +294,11 @@ public class CallableExample {
 
 {{</notice>}}
 
-## **Runnable** 接口 和 **Callable** 接口
+---
 
-### 无返回值的 **Runnable**
+## 🔌 **Runnable** 接口 和 **Callable** 接口
+
+### 📌 无返回值的 **Runnable**
 
 ```java
 public interface Runnable {
@@ -251,7 +308,7 @@ public interface Runnable {
 
 执行完任务之后无法返回任何结果
 
-### 有返回值的 **Callable**
+### 📌 有返回值的 **Callable**
 
 ```java
 public interface Callable<V> {
@@ -261,7 +318,9 @@ public interface Callable<V> {
 
 `call()` 方法返回的类型是一个 V 类型的泛型
 
-## **Future** 接口和 **FutureTask** 实现类
+---
+
+## 📦 **Future** 接口和 **FutureTask** 实现类
 
 ```java
 public interface Future<V> {
@@ -335,9 +394,11 @@ executorService.shutdown();
 
 
 
-## 控制线程的常用方法
+---
 
-### 启动线程
+## 🔨 控制线程的常用方法
+
+### 🧵 启动线程
 
 - **`public void start()`**
 
@@ -347,7 +408,7 @@ executorService.shutdown();
 
 如果直接调用 **`run()`** 方法，那么 **`run()`** 方法就在当前线程中以同步的方式运行，没有新的线程被创建，也就没有实现多线程的效果。
 
-### 线程命名
+### 🧵 线程命名
 
 - **`public void setName(String)`** ：给当前线程取名字name)
 - **`public void getName()`**：获取当前线程的名字。线程存在默认名称
@@ -355,11 +416,11 @@ executorService.shutdown();
   - 主线程是**main**
 - **`public static ThreadcurrentThread()`**：获取当前线程对象，代码在哪个线程中执行
 
-### 线程休眠
+### 🧵 线程休眠
 
 - **`public static void sleep(long millis) throws InterruptedException`**：使当前正在执行的线程暂停指定的毫秒数，也就是进入休眠的状态，休眠期间线程不会占用 CPU 时间片。休眠结束后，线程会尝试重新获取 CPU 时间片，进入可运行状态，但是不会让出锁。
 
-### 线程优先执行
+### 🚀 线程优先执行
 
 - **`public void join() throws InterruptedException`**
 - **`public synchronized void join(long millis) throws InterruptedException`**
@@ -367,7 +428,7 @@ executorService.shutdown();
 
 等待这个线程执行完才会轮到后续线程得到 cpu 的执行权
 
-### 线程间通信
+### 🧵 线程间通信
 
 **`wait()`** 让当前线程释放锁并进入等待状态
 
@@ -380,7 +441,7 @@ executorService.shutdown();
 - **`public final void notify()`**
 - **`public final void notifyAll()`**
 
-### 中断线程
+### 🧵 中断线程
 
 - **`public void interrupt()`**：设置线程的中断标志为 **`true`** 并立即返回。仅仅是设置标志而不会实际中断
 - **`boolean isInterrupted()`**：检测当前线程是否被中断
@@ -403,18 +464,18 @@ public void run() {
 }
 ```
 
-### 让出时间片
+### 📌 让出时间片
 
 **`yield()`** 方法用于暗示当前线程愿意放弃其当前的时间片，允许其他线程执行。它并不会使线程进入阻塞状态，线程依然处于 **RUNNABLE** 状态。但是它只是向线程调度器提出建议，调度器可能会忽略这个建议。具体行为取决于操作系统和JVM)的线程调度策略。（和 **`Thread.sleep(0)`** 功能相同）
 
 - **`public static void yield()`**
 
-### 设置线程优先级
+### 🧵 设置线程优先级
 
 - **`public final int getPriority()`** ：返回此线程的优先级
 - **`public final void setPriority(int priority)`**：更改此线程的优先级，规定线程优先级是1~1010的整数，较大的优先级能提高该线程被 CPU 调度的机率
 
-### 守护线程
+### 🧵 守护线程
 
 - **`public void setDaemon()`**
 
@@ -444,9 +505,13 @@ public void run() {
 
 {{</notice>}}
 
-## 线程的状态
+---
 
-![状态转移图](1712648206670-824228d1-be28-449d-8509-fd4df4ff63d3.webp)
+## 📊 线程的状态
+
+<div align="center">
+  <img src="1712648206670-824228d1-be28-449d-8509-fd4df4ff63d3.webp" alt="状态转移图" width="60%">
+</div>
 
 可以使用Thread中的 **`getState()`** 方法获取状态
 
@@ -459,7 +524,7 @@ Java中的线程状态
 - **Timed Waiting（含等待时间的等待状态）** ：线程进入等待状态，但指定了等待时间，超时后会被唤醒。
 - **Terminated（终止状态）** ：线程执行完成或因异常退出。
 
-### NEW（初始状态）
+### 📊 NEW（初始状态）
 
 处于 **NEW** 状态的线程此时尚未启动。这里的尚未启动指的是还没调用 Thread 实例的 **`start()`** 方法。
 
@@ -502,7 +567,7 @@ public synchronized void start() {
 
 在调用 **`start()`** 之后，**`threadStatus`** 的值会改变（ **`threadStatus !=0`** ），再次调用 **`start()`** 方法会抛出 **`IllegalThreadStateException`** 异常。
 
-### RUNNABLE（正在运行）
+### ⚡ RUNNABLE（正在运行）
 
 表示当前线程正在运行中。当调用线程的 **`start()`** 方法后，线程进入可运行状态。处于 **RUNNABLE** 状态的线程在 Java 虚拟机中运行，也有可能在等待 CPU 分配资源。
 
@@ -519,11 +584,11 @@ Java 线程的**RUNNABLE**状态其实包括了操作系统线程的**ready**和
 
 现代操作系统架构通常都是用所谓的时间分片方式进行抢占式轮转调度。这个时间分片通常是很小的，一个线程一次最多只能在 CPU 上运行比如 10-20ms 的时间（此时处于 running 状态），也即大概只有 0.01 秒这一量级，时间片用后就要被切换下来放入调度队列的末尾等待再次调度。（也即回到 ready 状态）。线程切换的如此之快，区分这两种状态就没什么意义了。
 
-### BLOCKED（阻塞状态）
+### 📊 BLOCKED（阻塞状态）
 
 线程在试图获取一个锁以进入同步块/方法时，如果锁被其他线程持有，线程将进入阻塞状态，直到它获取到锁。处于 **BLOCKED** 状态的线程正等待**锁**的释放以进入同步区
 
-### WAITING（等待状态）
+### 📊 WAITING（等待状态）
 
 等待状态。处于等待状态的线程变成 **RUNNABLE** 状态需要其他线程唤醒
 
@@ -533,7 +598,7 @@ Java 线程的**RUNNABLE**状态其实包括了操作系统线程的**ready**和
 - **`Thread.join()`**：等待线程执行完毕，底层调用的是 Object 的 wait 方法；
 - **`LockSupport.park()`**：除非获得调用许可，否则禁用当前线程进行线程调度
 
-### TIMED_WAITING（超时等待）
+### 📌 TIMED_WAITING（超时等待）
 
 超时等待状态。线程等待一个具体的时间，时间到后会被自动唤醒。
 
@@ -542,7 +607,7 @@ Java 线程的**RUNNABLE**状态其实包括了操作系统线程的**ready**和
 - **`Thread.join(long millis)`**：等待当前线程最多执行 millis 毫秒，如果 millis 为 0，则会一直执行；
 - **`LockSupport.parkNanos(long nanos)`**： 除非获得调用许可，否则禁用当前线程进行线程调度指定时间
 
-### TERMINATE（终止状态）
+### 📊 TERMINATE（终止状态）
 
 当线程的 **`run()`** 方法执行完毕后，或者因为一个未捕获的异常终止了执行，线程进入终止状态。一旦线程终止，它的生命周期结束，不能再被重新启动，此时线程已执行完毕
 

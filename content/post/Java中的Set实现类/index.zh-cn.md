@@ -9,11 +9,36 @@ description : "手写笔记转换"
 math : true
 ---
 
-## HashSet类
+## 📑 目录
+
+- [HashSet类](#hashset类)
+  - [特点](#特点)
+  - [注意事项](#注意事项)
+  - [底层原理](#底层原理)
+    - [去重原理](#去重原理)
+    - [扩容机制](#扩容机制)
+  - [常见方法](#常见方法)
+    - [构造方法](#构造方法)
+    - [添加元素](#添加元素)
+    - [删除元素](#删除元素)
+    - [查询元素](#查询元素)
+    - [集合大小](#集合大小)
+    - [集合运算](#集合运算)
+  - [与HashMap的关系](#与hashmap的关系)
+- [LinkedHashSet类](#linkedhashset类)
+  - [特点](#特点)
+  - [底层原理](#底层原理)
+    - [插入顺序的维护](#插入顺序的维护)
+- [TreeSet类](#treeset类)
+  - [特点](#特点)
+  - [排序规则](#排序规则)
+
+
+## 📦 HashSet类
 
 **`HashSet`** 是 Java 集合框架中的一个实现类，属于 `Set` 接口的一种实现，基于**哈希表**来存储数据。它不允许存储重复元素，并且不保证元素的顺序。
 
-### 特点
+### ✨ 特点
 
 - **无重复元素**：
   - **`HashSet`** 使用哈希算法来存储元素，保证集合中没有重复的元素。
@@ -31,18 +56,18 @@ math : true
 - **性能高效**：
   - 添加、删除和查找操作的时间复杂度为 $O(1)$，但需要良好的哈希算法来避免哈希冲突。
 
-### 注意事项
+### 📌 注意事项
 
 - 必须同时重写 **`hashCode()`** 方法和 **`equal()`** 方法
   - 通过 **`hashCode()`** 方法快速找到存储位置（哈希桶）。
   - 再通过 **`equals()`** 方法检查对象是否相等，避免重复存储。
 - **`hashCode()`** 方法默认根据地址值计算，**`equal()`** 方法默认根据地址值判断对象是否相同
 
-### 底层原理
+### 🔧 底层原理
 
 **`HashSet`** 的底层是由一个 **`HashMap`** 实现的，它将需要存储的元素作为 **`HashMap`** 的键（`key`），而值（**`value`**）则是一个固定的常量 **`PRESENT`**。
 
-#### 去重原理
+#### 🔧 去重原理
 
 **`HashSet`** 是基于 **哈希表** 实现的集合类，它的去重功能依赖于两个方法：
 
@@ -114,7 +139,7 @@ public class HashSetExample {
 }
 ```
 
-#### 扩容机制
+#### ⚙️ 扩容机制
 
 **初始容量**
 
@@ -139,37 +164,37 @@ public class HashSetExample {
   - 遍历旧哈希表中的每个桶。
   - 对每个桶中的元素重新计算哈希值，将其分配到新哈希表中
 
-### 常见方法
+### 🔨 常见方法
 
-#### 构造方法
+#### 🔨 构造方法
 
 - **`public HashSet()`**：创建一个空的 **`HashSet`**，默认容量为 **16**，负载因子为 **0.75**。
 - **`public HashSet(int initialCapacity)`**：创建一个具有指定初始容量的空 **`HashSet`**。
 - **`public HashSet(int initialCapacity, float loadFactor)`**：创建一个具有指定初始容量和负载因子的空 **`HashSet`**。
 - **`public HashSet(Collection<? extends E> c)`**：创建一个包含指定集合中所有元素的 **`HashSet`**
 
-#### 添加元素
+#### 💡 添加元素
 
 - **`public boolean add(E e)`**：如果元素不存在，则添加成功并返回 **`true`**；否则返回 **`false`**。
 - **`public boolean addAll(Collection<? extends E> c)`**：将指定集合中的所有元素添加到当前 **`HashSet`**。
 
-#### 删除元素
+#### 💡 删除元素
 
 - **`public boolean remove(Object o)`**：如果集合中存在该元素，则移除并返回 **`true`**；否则返回 **`false`**。
 - **`public boolean removeAll(Collection<?> c)`**：从当前集合中移除指定集合中的所有元素
 - **`public void clear()`**：移除集合中的所有元素
 
-#### 查询元素
+#### 💡 查询元素
 
 - **`public boolean contains(Object o)`**：如果集合中存在指定的元素，则返回 **`true`**
 - **`public boolean containsAll(Collection<?> c)`**：如果当前集合包含指定集合中的所有元素，则返回 **`true`**
 
-#### 集合大小
+#### 📦 集合大小
 
 - **`public boolean isEmpty()`**：如果集合为空，则返回 **`true`**
 - **`public int size()`**：返回集合中的元素数量
 
-#### 集合运算
+#### 📦 集合运算
 
 - **并集（Union）** 将两个集合的所有元素合并在一起，去重后返回新集合
   - **`public boolean addAll(Collection<? extends E> c)`**
@@ -181,15 +206,17 @@ public class HashSetExample {
   - **`public boolean removeAll(Collection<?> c)`**
   - 从当前集合中移除与指定集合相交的元素
 
-### 与HashMap的关系
+### 🗺️ 与HashMap的关系
 
 实际上 **`HashSet`** 内部使用 **`HashMap`** 来实现，**`HashSet`** 中的元素实际上存储在 **`HashMap`** 的键中，而所有的值都是一个常量对象 **`PRESENT`**。因此，**`HashSet`** 仅操作 **`HashMap`** 的键部分。
 
-## LinkedHashSet类
+---
+
+## 📦 LinkedHashSet类
 
 **`LinkedHashSet`** 是 Java 集合框架中的一个类，它实现了 **`Set`** 接口，并且结合了 **`HashSet`** 和链表的特性。它是 **`HashSet`** 的一个变种，具有元素唯一性和顺序性的特点。**`LinkedHashSet`** 维护了元素插入的顺序（即按插入顺序遍历元素），这使得它在保持 **`Set`** 接口的特性（元素唯一性）的同时，还能提供元素的顺序遍历。
 
-### 特点
+### ✨ 特点
 
 - **元素唯一性**：
   - **`LinkedHashSet`** 和 **`HashSet`** 一样，保证集合中的元素不重复，即不允许重复元素。
@@ -204,9 +231,9 @@ public class HashSetExample {
   
 - 使用哈希表来实现高效的查找、插入和删除操作。
 
-### 底层原理
+### 🔧 底层原理
 
-#### 插入顺序的维护
+#### 💡 插入顺序的维护
 
 **`LinkedHashSet`** 通过内部维护一个 **双向链表** 来保持元素的插入顺序。每个元素在哈希表中不仅存储它的哈希值，还会保存指向前一个元素和后一个元素的引用。这使得集合可以按照插入顺序遍历元素。
 
@@ -216,9 +243,11 @@ public class HashSetExample {
 
 - 每次添加元素时，它会被插入到链表的末尾，并通过双向链表保持元素之间的顺序。这样，在遍历 **`LinkedHashSet`** 时，元素会按照它们被插入的顺序输出。
 
-## TreeSet类
+---
 
-### 特点
+## 📦 TreeSet类
+
+### ✨ 特点
 
 - **排序功能**：
   - **`TreeSet`** 中的元素是自动按升序排序的。它使用 **自然顺序**（元素必须实现 **`Comparable`** 接口）或者提供的 **`Comparator`** 对元素进行排序。
@@ -241,7 +270,7 @@ public class HashSetExample {
 - **访问和操作性能**：
   - **`TreeSet`** 的常见操作（如 **`add()`**、**`remove()`**、**`contains()`**）的时间复杂度是 $O(log n)$，这是因为它使用了红黑树来存储元素。
 
-### 排序规则
+### 📌 排序规则
 
 - 对于数值类型默认采用升序排列
 - 对于字符类型默认采用ASCII码排序

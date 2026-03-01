@@ -9,11 +9,22 @@ description : "Java中注解的实现原理"
 math : true
 ---
 
-## 什么是注解
+## 📑 目录
+
+- [什么是注解](#什么是注解)
+- [注解的定义方式](#注解的定义方式)
+- [注解的目标对象](#注解的目标对象)
+- [注解的生命周期](#注解的生命周期)
+- [示例](#示例)
+
+
+## 🧐 什么是注解
 
 **注解（Annotation）** 是一种元数据，它为代码提供了附加的信息，注解本身不直接影响代码的逻辑执行，但可以通过工具、编译器或运行时反射等机制对代码进行处理。
 
-## 注解的定义方式
+---
+
+## 🏷️ 注解的定义方式
 
 ```java
 public @interface MyAnnotation {
@@ -22,7 +33,9 @@ public @interface MyAnnotation {
 }
 ```
 
-## 注解的目标对象
+---
+
+## 🎯 注解的目标对象
 
 - **`ElementType.TYPE`**：类、接口（包括注解类型）或枚举。
 - **`ElementType.FIELD`**：字段（包括枚举常量）。
@@ -35,7 +48,9 @@ public @interface MyAnnotation {
 
 定义在 `ElementType` 枚举中，使用元注解`@Target`指定目标对象
 
-## 注解的生命周期
+---
+
+## 🏷️ 注解的生命周期
 
 - **`RetentionPolicy.SOURCE`**：注解仅在源码中存在，编译时被丢弃。
 - **`RetentionPolicy.CLASS`**：注解存在于编译后的 `.class` 文件中，但运行时不可用。
@@ -43,7 +58,9 @@ public @interface MyAnnotation {
 
 定义在 `RetentionPolicy` 枚举中，使用元注解`@Retention`指定生命周期
 
-## 示例
+---
+
+## 📌 示例
 
 ```java
 @Retention(RetentionPolicy.RUNTIME)

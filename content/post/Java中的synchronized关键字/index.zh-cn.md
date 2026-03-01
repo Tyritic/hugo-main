@@ -9,17 +9,38 @@ description : "synchronized关键字的底层原理"
 math : true
 ---
 
-## **synchronized** 关键字
+## 📑 目录
+
+- [synchronized** 关键字](#synchronized**-关键字)
+- [synchronized** 的作用](#synchronized**-的作用)
+- [synchronized** 使用方式](#synchronized**-使用方式)
+  - [synchronized** 修饰实例方法](#synchronized**-修饰实例方法)
+  - [synchronized** 修饰静态方法](#synchronized**-修饰静态方法)
+  - [synchronized** 修饰代码块](#synchronized**-修饰代码块)
+- [synchronized** 属于可重入锁](#synchronized**-属于可重入锁)
+  - [示例**](#示例**)
+- [synchronized** 底层实现原理](#synchronized**-底层实现原理)
+  - [原子性的保证](#原子性的保证)
+  - [有序性的保证](#有序性的保证)
+  - [可重入锁的实现](#可重入锁的实现)
+- [synchronized** 的锁升级过程](#synchronized**-的锁升级过程)
+
+
+## 🔒 **synchronized** 关键字
 
 **`synchronized`**  是 Java 提供的一种**内置同步机制**，用于**解决多线程环境下的并发安全问题**。它能够确保同一时刻只有一个线程执行同步代码块，从而防止线程间的**数据不一致**和**竞态条件**。
 
-## **synchronized** 的作用
+---
+
+## 🔒 **synchronized** 的作用
 
 - **保证原子性**：同步代码块在执行时不会被其他线程打断，保证操作的完整性。
 - **保证可见性**：线程进入 **`synchronized`** 代码块前，必须先从主内存中读取变量最新的值，退出时必须将变量的修改刷新到主内存。
 - **保证有序性**：由于 **`synchronized`** 具有**内存屏障**（Memory Barrier），可以保证**重排序不会影响同步代码块的正确性**。
 
-## **synchronized** 使用方式
+---
+
+## 💡 **synchronized** 使用方式
 
 - **同步实例方法** ：为 **当前对象** 加锁，进入同步代码前要获得当前对象的锁；
 - **同步静态方法** ：为 **当前类（Class对象）** 加锁，进入同步代码前要获得当前类的锁；
@@ -33,7 +54,7 @@ math : true
 
 {{</notice>}}
 
-### **synchronized** 修饰实例方法
+### 🔨 **synchronized** 修饰实例方法
 
 在实例方法声明中加入 **`synchronized`** 关键字，可以保证在任意时刻，只有一个线程能执行该方法。也就是说，线程在执行这个方法的时候，其他线程不能同时执行，需要等待锁释放。
 
@@ -48,7 +69,7 @@ synchronized void method() {
 - 修饰实例方法是给当前对象上锁
 - 不同实例的 **`synchronized`** 方法不会相互影响（每个对象都有一个对象锁，不同的对象，他们的锁不会互相影响）
 
-### **synchronized** 修饰静态方法
+### 🔨 **synchronized** 修饰静态方法
 
 给 **当前类** 加锁，会作用于类的所有对象实例 ，进入同步代码前要获得 **当前 class 的锁**。
 
@@ -66,7 +87,7 @@ synchronized static void method() {
 - 当前类的 Class 对象锁被获取，不影响实例对象锁的获取，两者互不影响
 - 静态 **`synchronized`** 方法和非静态 **`synchronized`** 方法之间的调用不互斥（因为访问静态 **`synchronized`** 方法占用的锁是当前类的锁，而访问非静态 **`synchronized`** 方法占用的锁是当前实例对象锁。），比如说如果线程 A 调用了一个对象的非静态 synchronized 方法，线程 B 需要调用这个对象所属类的静态 synchronized 方法，是不会发生互斥的
 
-### **synchronized** 修饰代码块
+### 💻 **synchronized** 修饰代码块
 
 对括号里指定的对象/类加锁：
 
@@ -79,13 +100,15 @@ synchronized(this) {
 }
 ```
 
-## **synchronized** 属于可重入锁
+---
+
+## 🔒 **synchronized** 属于可重入锁
 
 **可重入锁** 是指同一个线程在获取了锁之后，可以再次重复获取该锁而不会造成死锁或其他问题。当一个线程持有锁时，如果再次尝试获取该锁，就会成功获取而不会被阻塞。
 
 因此一个线程调用 **`synchronized`** 方法的同时，在其方法体内部调用该对象另一个 **`synchronized`** 方法是允许的
 
-### **示例**
+### 📌 **示例**
 
 ```java
 public class AccountingSync implements Runnable{
@@ -124,7 +147,9 @@ public class AccountingSync implements Runnable{
 - 在 **`main`** 方法中，创建了两个线程 **`t1`** 和 **`t2`**，它们共享同一个 **`Runnable`** 对象
 -  **`synchronized(this)`** 和 **`synchronized`** 方法都使用了同一个锁对象（当前的 AccountingSync 实例），并且对静态变量 **`i`** 和 **`j`** 进行了增加操作，因此，在多线程环境下，也能保证 **`i`** 和 **`j`** 的操作是线程安全的。
 
-## **synchronized** 底层实现原理
+---
+
+## 🔧 **synchronized** 底层实现原理
 
 **`synchronized`** 实现原理依赖于 JVM 的 Monitor（监视器锁） 和 对象头（Object Header）。
 
@@ -143,13 +168,13 @@ public class AccountingSync implements Runnable{
 - 如果线程调用wait方法，将释放锁，当前线程置为null，计数器-1，同时进入waitSet等待被唤醒，调用notify或者notifyAll之后又会进入entryList竞争锁
 - 如果线程执行完毕，同样释放锁，计数器-1，当前线程置为null
 
-### 原子性的保证
+### 📌 原子性的保证
 
 - 线程加锁前，将清空工作内存中共享变量的值，从而使用共享变量时需要从主内存中重新读取最新的值。
 - 线程加锁后，其它线程无法获取主内存中的共享变量。
 - 线程解锁前，必须把共享变量的最新值刷新到主内存中。
 
-### 有序性的保证
+### 📌 有序性的保证
 
 **`synchronized`** 同步的代码块，具有排他性，一次只能被一个线程拥有，所以 **`synchronized`** 保证同一时刻，代码是单线程执行的。
 
@@ -158,7 +183,7 @@ public class AccountingSync implements Runnable{
 - **`monitorenter`** ：获取锁，进入同步代码块 
 - **`monitorexit`** ：释放锁，退出同步代码块
 
-### 可重入锁的实现
+### ✅ 可重入锁的实现
 
 可重入意味着同一个线程可以多次获得同一个锁，而不会被阻塞。
 
@@ -174,6 +199,8 @@ public class AccountingSync implements Runnable{
 
 源码中是通过 Monitor 对象的 owner 和 count 字段实现的，owner 记录持有锁的线程，count 记录线程获取锁的次数。
 
-## **synchronized** 的锁升级过程
+---
+
+## 🔒 **synchronized** 的锁升级过程
 
 参见[下期博客](https://tyritic.github.io/p/java%E4%B8%AD%E7%9A%84%E9%94%81/)

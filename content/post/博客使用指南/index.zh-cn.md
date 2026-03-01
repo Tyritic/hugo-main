@@ -14,14 +14,14 @@ description : "博客的使用指南"
 
 ## 如何添加文章
 
-在 `content/tags/文章名` 下新建文件 `index.md`
+在 `content/tags/文章名` 下新建文件 `index.zh-cn.md`
 
 ### 命令行操作
 
 在MyBlog主文件夹的cmd中运行以下命令
 
-```
-hugo new content post/<FileName>/index.md
+```shell
+hugo new content post/<FileName>/index.zh-cn.md
 ```
 
 #### 参数解释
@@ -67,7 +67,7 @@ hugo new content post/<FileName>/index.md
 
 在markdown文件中插入以下短代码，使用时将{}改为{{}}
 
-```
+```markdown
 {< quote author="作者" url="作品的来源（可不填）" source="作品名" >}
 引用内容
 {< /quote >}
@@ -77,7 +77,7 @@ hugo new content post/<FileName>/index.md
 
 在markdown文件中插入以下短代码，使用时将{}改为{{}}
 
-```
+```markdown
 {< bilibili VIDEO_ID PART_NUMBER >}
 ```
 
@@ -98,7 +98,7 @@ hugo notice有以下几个类别
 
 ##### 创建Tip
 
-```
+```markdown
 {< notice tip >}
 This is a very good tip.
 {< /notice >}
@@ -110,7 +110,7 @@ This is a very good tip.
 
 ##### 创建Info
 
-```
+```markdown
 {< notice info >}
 This is a very good info.
 {< /notice >}
@@ -122,7 +122,7 @@ This is a very good info.
 
 ##### 创建Warning
 
-```
+```markdown
 {< notice warning >}
 This is a very bad warning.
 {< /notice >}
@@ -158,7 +158,7 @@ This is a very bad note.
 
 可以使用命令行工具
 
-```
+```shell
 hugo new content categories/<分组名>/_index.md
 ```
 
@@ -178,7 +178,7 @@ hugo new content categories/<分组名>/_index.md
 
 可以使用命令行工具
 
-```
+```shell
 hugo new content tags/<标签名>/_index.md
 ```
 
@@ -202,3 +202,7 @@ hugo new content tags/<标签名>/_index.md
 - **description**：博客对该网站的描述
 - **website**：网站链接
 - **image**：网站的icon
+
+  
+
+  

@@ -9,19 +9,34 @@ description : "手写笔记转换"
 math : true
 ---
 
-## Math类的简介
+## 📑 目录
+
+- [Math类的简介](#math类的简介)
+- [静态常量](#静态常量)
+- [三角函数](#三角函数)
+- [指数函数](#指数函数)
+- [取整函数](#取整函数)
+- [比较函数](#比较函数)
+- [随机数生成](#随机数生成)
+
+
+## 📝 Math类的简介
 
 Java在Math类中封装了相关的数学函数，位于Java.lang包中
 
 构造方法是 **`private`** 的，且所有方法都是静态方法，可以不依赖实例进行调用
 
-## 静态常量
+---
+
+## 📚 静态常量
 
 自然对数$e$：`Math.E`（double数据类型）
 
 圆周率$π$：`Math.PI`（double数据类型）
 
-## 三角函数
+---
+
+## 📚 三角函数
 
 - `Math.toRadians()`：角度 --> 弧度
 - `Math.toDegrees()`：弧度 --> 弧度
@@ -73,7 +88,9 @@ System.out.println("45° 的反正切值1: " + Math.atan(radians)); // atan()
 System.out.println("反正弦值2: " + Math.atan2(m, n)); // atan2() 坐标系表示角的反正切值
 ```
 
-## 指数函数
+---
+
+## 📚 指数函数
 
 - `Math.exp()`：自然对数e的幂函数
 - `Math.pow()`：幂函数
@@ -108,7 +125,9 @@ System.out.println("ln(8): " + Math.log(p)); // ln(8)
 System.out.println("log10(8): " + Math.log10(p)); // log10(8)
 ```
 
-## 取整函数
+---
+
+## 📚 取整函数
 
 - `Math.ceil()`：上取整
 - `Math.floor()`：下取整
@@ -137,7 +156,9 @@ System.out.println("round(100.675): " + Math.round(d));
 System.out.println("round(100.500): " + Math.round(e));
 ```
 
-## 比较函数
+---
+
+## 📚 比较函数
 
 - `Math.min()`：最小值
 - `Math.max()`：最大值
@@ -157,7 +178,9 @@ System.out.println("max(): " + Math.max(2, 10));
 System.out.println("abs(): " + Math.abs(-5));
 ```
 
-## 随机数生成
+---
+
+## 📚 随机数生成
 
 - `Math.random()`：随机产生一个数 random()，随机数范围为 0.0 =< Math.random < 1.0
 

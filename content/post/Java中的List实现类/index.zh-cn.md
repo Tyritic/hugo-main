@@ -9,11 +9,74 @@ description : "手写笔记转换"
 math : true
 ---
 
-## ArrayList类
+## 📑 目录
+
+- [ArrayList类](#arraylist类)
+  - [特点](#特点)
+  - [常见方法](#常见方法)
+    - [构造方法](#构造方法)
+    - [添加元素](#添加元素)
+    - [删除元素](#删除元素)
+    - [判断元素](#判断元素)
+    - [修改元素](#修改元素)
+    - [访问元素](#访问元素)
+    - [获取大小](#获取大小)
+  - [扩容机制](#扩容机制)
+    - [源码分析](#源码分析)
+    - [总结](#总结)
+  - [线程安全问题](#线程安全问题)
+    - [为什么是线程不安全的](#为什么是线程不安全的)
+    - [解决方法](#解决方法)
+  - [增删查改的机制](#增删查改的机制)
+    - [查询](#查询)
+    - [插入](#插入)
+    - [修改](#修改)
+    - [删除](#删除)
+- [LinkedList类](#linkedlist类)
+  - [特点](#特点)
+  - [常见方法](#常见方法)
+    - [构造方法](#构造方法)
+    - [添加元素](#添加元素)
+    - [访问元素](#访问元素)
+    - [删除元素](#删除元素)
+    - [判断元素](#判断元素)
+    - [获取大小](#获取大小)
+    - [修改元素](#修改元素)
+  - [源码解析](#源码解析)
+    - [链表节点类](#链表节点类)
+    - [插入节点](#插入节点)
+    - [删除节点](#删除节点)
+    - [修改节点](#修改节点)
+- [Stack类](#stack类)
+  - [特点](#特点)
+  - [常用方法](#常用方法)
+    - [入栈操作](#入栈操作)
+    - [出栈操作](#出栈操作)
+    - [查看栈顶元素](#查看栈顶元素)
+    - [检查栈空](#检查栈空)
+    - [搜索元素](#搜索元素)
+- [CopyOnWriteArrayList类](#copyonwritearraylist类)
+  - [特点](#特点)
+  - [常见方法](#常见方法)
+    - [构造方法](#构造方法)
+    - [添加元素](#添加元素)
+    - [访问元素](#访问元素)
+    - [删除元素](#删除元素)
+    - [判断元素](#判断元素)
+    - [获取大小](#获取大小)
+    - [修改元素](#修改元素)
+  - [源码分析](#源码分析)
+    - [写操作](#写操作)
+    - [读操作](#读操作)
+  - [CopyOnWriteArrayList 和 Collections.synchronizedList 的区别（面试题）](#copyonwritearraylist-和-collections.synchronizedlist-的区别面试题)
+    - [回答要点](#回答要点)
+
+
+## 📦 ArrayList类
 
 **`ArrayList`** 是 Java 集合框架中的一个类，属于 **`java.util`** 包，是一种 **基于动态数组实现的可变长度集合**。它实现了 **`List`** 接口，提供了一个可调整大小的数组，能够存储任意类型的对象（包括自定义类和基本类型的包装类）。
 
-### 特点
+### ✨ 特点
 
 - **动态数组：**
   - **`ArrayList`** 的大小是可变的，默认容量为 10。当元素数量超过当前容量时，**`ArrayList`** 会自动扩容，通常以 1.5 倍的速度增长。
@@ -26,22 +89,22 @@ math : true
 - **线程不安全：**
   - **`ArrayList`** 是非同步的，因此在多线程环境下需要手动同步（可以使用 **`Collections.synchronizedList()`** 或 **`CopyOnWriteArrayList`** 替代）。
 
-### 常见方法
+### 🔨 常见方法
 
-#### 构造方法
+#### 🔨 构造方法
 
 - **`public ArrayList()`**：创建一个默认初始容量为 10 的空 **`ArrayList`**
 - **`public ArrayList(int initialCapacity)`**：创建一个具有指定初始容量的空 `ArrayList`
 - **`public ArrayList(Collection<? extends E> c)`**：创建一个包含指定集合中所有元素的 **`ArrayList`**，按照集合的迭代器顺序。
 
-#### 添加元素
+#### 💡 添加元素
 
 - **`boolean add(E e)`**：将指定的元素添加到列表的末尾
 - **`void add(int index, E element)`**：将指定的元素插入到列表的指定位置
 - **`boolean addAll(Collection<? extends E> c)`**：将指定集合中的所有元素添加到当前列表的末尾
 - **`boolean addAll(int index, Collection<? extends E> c)`**：将指定集合中的所有元素插入到当前列表的指定位置。
 
-#### 删除元素
+#### 💡 删除元素
 
 - **`void clear()`**：删除全部元素
 - **`E remove(int index)`**：删除列表中指定位置的元素
@@ -49,30 +112,30 @@ math : true
 - **`boolean removeAll(Collection<?> c)`**：删除当前列表中所有与指定集合中的元素相同的元素
 - **`void removeRange(int from,int to)`**：删除索引[from，to）之间的元素
 
-#### 判断元素
+#### 💡 判断元素
 
 - **`boolean contains(Object o)`**：判断列表中是否包含指定的元素
 - **`boolean containsAll(Collection<?> c)`**：判断列表是否包含指定集合中的所有元素
 
-#### 修改元素
+#### 💡 修改元素
 
 - **`E set(int index, E element)`**：用指定的元素替换列表中指定位置的元素
 
-#### 访问元素
+#### 💡 访问元素
 
 - **`E get(int index)`**：返回指定位置的元素
 - **`int indexOf(Object o)`**：返回指定元素在列表中的第一次出现位置的索引。如果列表中没有该元素，则返回 `-1`
 - **`int lastIndexOf(Object o)`**：返回指定元素在列表中的最后一次出现位置的索引。如果列表中没有该元素，则返回 **`-1`**
 
-#### 获取大小
+#### 💡 获取大小
 
 - **`int size()`**：返回列表中元素的数量
 - **`boolean isEmpty()`**：判断列表是否为空
 - **`void ensureCapacity(int minCapacity)`**：确保列表能够容纳至少指定数量的元素，不会导致扩容。
 
-### 扩容机制
+### ⚙️ 扩容机制
 
-#### 源码分析
+#### 💡 源码分析
 
 - 往 **`ArrayList`** 中添加元素时会有 **`ensureCapacityInternal`** 的判断
 
@@ -120,7 +183,7 @@ math : true
   }
   ```
 
-#### 总结
+#### 💡 总结
 
 当 **`ArrayList`** 中的元素数量超过其当前容量时，会触发扩容机制。
 
@@ -132,9 +195,9 @@ math : true
 - 更新引用：将 **`ArrayList`** 内部指向原数组的引用指向新数组。
 - 完成扩容：扩容完成后，可以继续添加新元素。
 
-### 线程安全问题
+### ❓ 线程安全问题
 
-#### 为什么是线程不安全的
+#### 🧐 为什么是线程不安全的
 
 **`ArrayList`** 不是线程安全的。**`ArrayList`** 会暴露三个问题;
 
@@ -150,7 +213,7 @@ math : true
     - 将新的 **size** 值覆盖掉原来的
   - 线程1和线程2拿到一样的 **size** 值加完了同时覆盖，就会导致一次没有加上，所以肯定不会与`add`的数量保持一致的
 
-#### 解决方法
+#### 🔨 解决方法
 
 - 使用Collections类的 **`synchronizedList`** 方法将 **`ArrayList`** 包装成线程安全的 **`List`**
 
@@ -177,9 +240,9 @@ math : true
 
 - 使用线程安全的替代类 **`CopyOnWriteArrayList`**
 
-### 增删查改的机制
+### ⚙️ 增删查改的机制
 
-#### 查询
+#### 💡 查询
 
 ```java
 /**
@@ -208,7 +271,7 @@ E elementData(int index) {
 
 时间复杂度为$ O(1)$，因为 **`ArrayList`** 内部使用数组来存储元素，所以可以直接根据索引来访问元素。
 
-#### 插入
+#### 💡 插入
 
 添加一个元素（调用 **`add()`** 方法时）的时间复杂度最好情况为 $O(1)$，最坏情况为 $O(n)$。
 
@@ -234,9 +297,11 @@ public void add(int index, E element) {
 }
 ```
 
-![示意图](arraylist-01.png)
+<div align="center">
+  <img src="arraylist-01.png" alt="示意图" width="60%">
+</div>
 
-#### 修改
+#### 💡 修改
 
 修改一个元素（调用 **`set()`** 方法时）可以直接根据索引来访问元素，时间复杂度为 $O(1)$。
 
@@ -258,7 +323,7 @@ public E set(int index, E element) {
 }
 ```
 
-#### 删除
+#### 💡 删除
 
 删除一个元素（调用 **`remove(Object)`** 方法时）的时间复杂度最好情况 $O(1)$，最坏情况 $O(n)$。
 
@@ -311,11 +376,13 @@ public boolean remove(Object o) {
 }
 ```
 
-## LinkedList类
+---
+
+## 📦 LinkedList类
 
 **`LinkedList`** 是 Java 集合框架中的一个类，位于 **`java.util`** 包下，它同时实现了 **`List`** 和 **`Deque`** 接口，是一种基于**双向链表**的数据结构。
 
-### 特点
+### ✨ 特点
 
 - **双向链表**：
   - 每个节点包含：
@@ -333,21 +400,21 @@ public boolean remove(Object o) {
 - **允许重复元素：**
   - **`LinkedList`** 允许存储重复的元素。
 
-### 常见方法
+### 🔨 常见方法
 
-#### 构造方法
+#### 🔨 构造方法
 
 - **`public LinkedList()`**：创建一个空的 `LinkedList` 实例
 - **`public LinkedList(Collection<? extends E> c)`**：使用指定集合中的所有元素初始化 **`LinkedList`**
 
-#### 添加元素
+#### 💡 添加元素
 
 - **`boolean add(E e)`**：将指定的元素添加到链表的末尾
 - **`void add(int index, E element)`**：将指定的元素插入到链表的指定位置
 - **`void addFirst(E e)`**：在链表头部添加元素
 - **`void addLast(E e)`**：在链表尾部添加元素
 
-#### 访问元素
+#### 💡 访问元素
 
 - **`E get(int index)`**：返回指定位置的元素
 - **`E getFirst()`**：返回链表头部的第一个元素
@@ -355,7 +422,7 @@ public boolean remove(Object o) {
 - **`int indexOf(Object o)`**：返回指定元素在列表中的首次出现位置，如果列表中不包含该元素，返回  **-1**  。
 - **`int lastIndexOf(Object o)`**：返回指定元素在列表中最后一次出现的位置，如果列表中不包含该元素，返回 **-1**  。
 
-#### 删除元素
+#### 💡 删除元素
 
 - **`E remove(int index)`**：删除指定位置的元素，并返回被删除的元素
 - **`boolean remove(Object o)`**：删除链表中第一个匹配的元素
@@ -363,23 +430,23 @@ public boolean remove(Object o) {
 - **`E removeLast()`**：删除并返回链表尾部的最后一个元素
 - **`void clear()`**：删除全部元素
 
-#### 判断元素
+#### 💡 判断元素
 
 - **`boolean contains(Object o)`**：判断列表中是否包含指定的元素
 - **`boolean containsAll(Collection<?> c)`**：判断列表是否包含指定集合中的所有元素
 
-#### 获取大小
+#### 💡 获取大小
 
 - **`int size()`**：返回列表中元素的数量
 - **`boolean isEmpty()`**：判断列表是否为空
 
-#### 修改元素
+#### 💡 修改元素
 
 - **`E set(int index, E element)`**：用指定的元素替换列表中指定位置的元素
 
-### 源码解析
+### 📌 源码解析
 
-#### 链表节点类
+#### 📦 链表节点类
 
 ```java
 /**
@@ -411,7 +478,7 @@ private static class Node<E> {
 - 下一个节点
 - 上一个节点
 
-#### 插入节点
+#### 💡 插入节点
 
 **`add`** 方法内部其实调用的是 **`linkLast`** 方法
 
@@ -468,7 +535,7 @@ private void linkFirst(E e) {
 }
 ```
 
-#### 删除节点
+#### 💡 删除节点
 
 **`remove(int)`** 内部调用的是 **`unlink`** 方法
 
@@ -520,7 +587,7 @@ E unlink(Node<E> x) {
 }
 ```
 
-#### 修改节点
+#### 💡 修改节点
 
 ```java
 /**
@@ -567,43 +634,47 @@ Node<E> node(int index) {
 
 **`node`** 方法会对下标进行一个初步判断，如果靠近前半截，就从下标 0 开始遍历；如果靠近后半截，就从末尾开始遍历。
 
-## Stack类
+---
+
+## 📦 Stack类
 
 **`Stack`** 是 Java 集合框架中的一个类，位于 **`java.util`** 包中，作为 **`Vector`** 的子类间接实现了List接口，用于实现 **栈（Stack）** 数据结构
 
-### 特点
+### ✨ 特点
 
 - **`Stack`** 类继承自 **`Vector`** 类，因此它是一种 **同步的（线程安全的）** 集合。
 
-### 常用方法
+### 🔨 常用方法
 
-#### 入栈操作
+#### 💡 入栈操作
 
 - **`public E push(E item)`**：将元素压入栈顶
 
-#### 出栈操作
+#### 💡 出栈操作
 
 - **`public synchronized E pop()`**
   - 移除并返回栈顶的元素。
   - 如果栈为空，则抛出 **`EmptyStackException`** 。
 
-#### 查看栈顶元素
+#### 💡 查看栈顶元素
 
 - **`public synchronized E peek()`**
   - 返回栈顶的元素，但不移除。
   - 如果栈为空，则抛出 **`EmptyStackException`** 。
 
-#### 检查栈空
+#### 💡 检查栈空
 
 - **`public boolean empty()`**：判断栈是否为空
 
-#### 搜索元素
+#### 💡 搜索元素
 
 - **`public synchronized int search(Object o)`**
   - 返回元素在栈中的位置（以 **1** 为基准）。
   - 如果元素不存在，则返回 **`-1`**。
 
-## CopyOnWriteArrayList类
+---
+
+## 📦 CopyOnWriteArrayList类
 
 **`CopyOnWriteArrayList`** 是 Java 的一个**线程安全**的动态数组实现，属于 **`java.util.concurrent`** 包。
 
@@ -611,27 +682,27 @@ Node<E> node(int index) {
 
 由于写操作涉及复制整个数组，所以它的写操作开销较大，但读取操作则完全无锁。这使得 **`CopyOnWriteArrayList`** 适合于**读多写少**的场景。
 
-### 特点
+### ✨ 特点
 
 - **写时复制**是一种保证数据一致性和线程安全的技术。核心思想是在进行写操作时，不直接修改原来的数据结构，而是先复制一份副本，在副本上进行修改，然后将修改后的副本替换原来的数据结构。
 - **保证数据一致性和线程安全**
 
-### 常见方法
+### 🔨 常见方法
 
-#### 构造方法
+#### 🔨 构造方法
 
 - **`public CopyOnWriteArrayList()`**：创建一个空的 **`CopyOnWriteArrayList`**
 - **`public CopyOnWriteArrayList(Collection<? extends E> c)`**：使用指定的集合初始化 **`CopyOnWriteArrayList`**
 - **`public CopyOnWriteArrayList(E[] toCopyIn)`**：使用指定的数组初始化 **`CopyOnWriteArrayList`** 。
 
-#### 添加元素
+#### 💡 添加元素
 
 - **`boolean add(E e)`** ：将指定的元素添加到链表的末尾
 - **`void add(int index, E element)`** ：将指定的元素插入到链表的指定位置
 - **`void addFirst(E e)`** ：在链表头部添加元素
 - **`void addLast(E e)`** ：在链表尾部添加元素
 
-#### 访问元素
+#### 💡 访问元素
 
 - **`E get(int index)`** ：返回指定位置的元素
 - **`E getFirst()`** ：返回链表头部的第一个元素
@@ -639,7 +710,7 @@ Node<E> node(int index) {
 - **`int indexOf(Object o)`** ：返回指定元素在列表中的首次出现位置，如果列表中不包含该元素，返回 **-1**。
 - **`int lastIndexOf(Object o)`**：返回指定元素在列表中最后一次出现的位置，如果列表中不包含该元素，返回 **-1**。
 
-#### 删除元素
+#### 💡 删除元素
 
 - **`E remove(int index)`**：删除指定位置的元素，并返回被删除的元素
 - **`boolean remove(Object o)`**：删除链表中第一个匹配的元素
@@ -647,21 +718,21 @@ Node<E> node(int index) {
 - **`E removeLast()`**：删除并返回链表尾部的最后一个元素
 - **`void clear()`**：删除全部元素
 
-#### 判断元素
+#### 💡 判断元素
 
 - **`boolean contains(Object o)`**：判断列表中是否包含指定的元素
 - **`boolean containsAll(Collection<?> c)`**：判断列表是否包含指定集合中的所有元素
 
-#### 获取大小
+#### 💡 获取大小
 
 - **`int size()`**：返回列表中元素的数量
 - **`boolean isEmpty()`**：判断列表是否为空
 
-#### 修改元素
+#### 💡 修改元素
 
 - **`E set(int index, E element)`**：用指定的元素替换列表中指定位置的元素
 
-### 源码分析
+### 📌 源码分析
 
 **`CopyOnWriteArrayList`** 底层也是通过一个数组保存数据，使用 **`volatile`** 关键字修饰数组，保证当前线程对数组对象重新赋值后，其他线程可以及时感知到。
 
@@ -669,7 +740,7 @@ Node<E> node(int index) {
 private transient volatile Object[] array;
 ```
 
-#### 写操作
+#### 💡 写操作
 
 ```java
 public boolean add(E e) {
@@ -701,7 +772,7 @@ public boolean add(E e) {
 - 在副本上进行修改：在副本数组上进行写操作（如添加、删除元素）。
 - 用新数组替换旧数组：将修改后的副本数组设置为 **`CopyOnWriteArrayList`** 持有的数组，旧数组将不再使用。
 
-#### 读操作
+#### 💡 读操作
 
 ```java
 public E get(int index) {
@@ -711,9 +782,9 @@ public E get(int index) {
 
 所有读操作都可以无锁地直接读取 **`CopyOnWriteArrayList`** 当前持有的数组，**因为这个数组在读操作期间不会被修改**。
 
-### CopyOnWriteArrayList 和 Collections.synchronizedList 的区别（面试题）
+### 📋 CopyOnWriteArrayList 和 Collections.synchronizedList 的区别（面试题）
 
-#### 回答要点
+#### 💡 回答要点
 
 **CopyOnWriteArrayList**
 

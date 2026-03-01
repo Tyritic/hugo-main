@@ -9,25 +9,50 @@ description : "手写笔记转换"
 math : true
 ---
 
-## StringBuffer的定义
+## 📑 目录
+
+- [StringBuffer的定义](#stringbuffer的定义)
+- [StringBuffer 的特点](#stringbuffer-的特点)
+- [StringBuffer的构造函数](#stringbuffer的构造函数)
+- [StringBuffer的常见操作](#stringbuffer的常见操作)
+  - [追加数据](#追加数据)
+  - [插入内容](#插入内容)
+  - [删除内容](#删除内容)
+  - [替换子串](#替换子串)
+  - [反转字符串](#反转字符串)
+  - [获取属性](#获取属性)
+  - [操作指定位置的字符](#操作指定位置的字符)
+  - [截取子串](#截取子串)
+  - [查找子串](#查找子串)
+  - [总体使用](#总体使用)
+- [String，StringBuffer，StringBuilder的区别（面试题）](#string，stringbuffer，stringbuilder的区别面试题)
+
+
+## 📝 StringBuffer的定义
 
 `StringBuffer` 是 Java 中用于创建可变字符串的类，提供了一个与 `StringBuilder` 类似的功能。它们都用于处理可变的字符串数据，不同之处在于 `StringBuffer` 是线程安全的，而 `StringBuilder` 不是。
 
-## StringBuffer 的特点
+---
+
+## ✨ StringBuffer 的特点
 
 - **可变字符串：** `StringBuffer` 提供了修改字符串内容的方法，避免了每次修改字符串时创建新的 `String` 对象，从而提高了性能。
 - **线程安全：** `StringBuffer` 是线程安全的，意味着它可以在多个线程间安全地共享和操作。`StringBuffer` 中的方法通常都被同步（使用 `synchronized`），确保多线程环境下的线程安全。
 - **效率较低：** 由于线程安全的特性，`StringBuffer` 的性能通常比 `StringBuilder` 略差，因为 `StringBuffer` 的方法被加锁，而 `StringBuffer` 的方法没有锁定。
 
-## StringBuffer的构造函数
+---
+
+## 📝 StringBuffer的构造函数
 
 - `public StringBuffer()` ：默认构造，初始化容量为 16
 - `public StringBuffer(String str)` ：以指定字符串初始化
 - `public StringBuffer(int capacity)`：以指定初始容量初始化
 
-## StringBuffer的常见操作
+---
 
-### 追加数据
+## 📝 StringBuffer的常见操作
+
+### 📊 追加数据
 
 - `public StringBuffer append(String str)`：将字符串`str`追加到 `StringBuffer` 对象的末尾。
 - `public StringBuffer append(int i)`：将 `i` 转换为字符串并追加到 `StringBuffer` 对象的末尾。
@@ -46,7 +71,7 @@ sb.append(" World").append(123).append('!');
 System.out.println(sb); // 输出：Hello World123!
 ```
 
-### 插入内容
+### 📌 插入内容
 
 - `public StringBuffer insert(int offset, String str)`
 - `public StringBuffer insert(int offset, int i)`
@@ -65,7 +90,7 @@ sb.insert(5, " Java");
 System.out.println(sb); // 输出：Hello Java!
 ```
 
-### 删除内容
+### 📌 删除内容
 
 - `public StringBuffer delete(int start, int end)`
 
@@ -82,7 +107,7 @@ sb.delete(5, 10);
 System.out.println(sb); // 输出：Hello!
 ```
 
-### 替换子串
+### 📌 替换子串
 
 - `public StringBuffer replace(int start, int end, String str)`
 
@@ -99,7 +124,7 @@ sb.replace(6, 11, "Java");
 System.out.println(sb); // 输出：Hello Java!
 ```
 
-### 反转字符串
+### 📌 反转字符串
 
 - `public StringBuffer reverse()`
 
@@ -116,17 +141,17 @@ sb.reverse();
 System.out.println(sb); // 输出：olleH
 ```
 
-### 获取属性
+### 📋 获取属性
 
 - `public int length()`：获取字符串长度
 - `public int capacity()`：获取容量
 
-### 操作指定位置的字符
+### 📌 操作指定位置的字符
 
 - `public char charAt(int index)`：获取指定位置的字符
 - `public void setCharAt(int index, char ch)`：设置指定位置的字符
 
-### 截取子串
+### 📌 截取子串
 
 - `public String substring(int start)`
 - `public String substring(int start, int end)`
@@ -145,7 +170,7 @@ System.out.println(sb.substring(6));      // 输出：World
 System.out.println(sb.substring(0, 5));   // 输出：Hello
 ```
 
-### 查找子串
+### 📌 查找子串
 
 - `public int indexOf(String str)`
 - `public int indexOf(String str, int fromIndex)`
@@ -163,7 +188,7 @@ System.out.println(sb.indexOf("World"));      // 输出：6
 System.out.println(sb.indexOf("o", 5));       // 输出：7
 ```
 
-### 总体使用
+### 💡 总体使用
 
 ```java
 public class StringBufferExample {
@@ -200,7 +225,9 @@ public class StringBufferExample {
 }
 ```
 
-## String，StringBuffer，StringBuilder的区别（面试题）
+---
+
+## 📝 String，StringBuffer，StringBuilder的区别（面试题）
 
 **String**
 

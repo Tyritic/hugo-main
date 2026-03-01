@@ -9,7 +9,23 @@ description : "ThreadLocal——线程的本地变量"
 math : true
 ---
 
-## 为什么需要  **ThreadLocal**
+## 📑 目录
+
+- [为什么需要  **ThreadLocal**](#为什么需要--**threadlocal**)
+- [ThreadLocal** 的主要特性](#threadlocal**-的主要特性)
+- [ThreadLocal** 的主要方法](#threadlocal**-的主要方法)
+- [ThreadLocal 的实现原理](#threadlocal-的实现原理)
+- [ThreadLocal** 的使用场景](#threadlocal**-的使用场景)
+- [ThreadLocal** 的缺点](#threadlocal**-的缺点)
+  - [内存泄漏问题](#内存泄漏问题)
+    - [底层原因](#底层原因)
+    - [内存泄漏的条件](#内存泄漏的条件)
+    - [解决方法](#解决方法)
+  - [解决哈希冲突的策略可以优化](#解决哈希冲突的策略可以优化)
+- [使用建议](#使用建议)
+
+
+## 🧵 为什么需要  **ThreadLocal**
 
 **`ThreadLocal`** 是 Java 中提供的一种用于实现线程局部变量的工具类。它允许每个线程都拥有自己的独立副本，从而实现线程隔离，用于解决多线程中共享对象的线程安全问题。
 
@@ -19,13 +35,17 @@ math : true
 
 **`ThreadLocal`** 就是线程的“本地变量”，即每个线程都拥有该变量的一个副本，达到人手一份的目的，这样就可以避免共享资源的竞争。
 
-## **ThreadLocal** 的主要特性
+---
+
+## 🧵 **ThreadLocal** 的主要特性
 
 - **每个线程都维护一份独立的变量副本**：不同线程之间的值互不影响。
 - **变量的生命周期与线程一致**：线程结束后，**`ThreadLocal`** 变量会自动回收，避免内存泄漏。
 - **适用于线程安全的场景**，尤其是在无锁并发编程中使用，如 **数据库连接、用户 Session、事务管理** 等。
 
-## **ThreadLocal** 的主要方法
+---
+
+## 🔨 **ThreadLocal** 的主要方法
 
 - `set(T value)`  **设置当前线程的变量值** 
 
@@ -33,15 +53,21 @@ math : true
 - `remove()`  **删除当前线程的变量值，避免内存泄漏** 
 - `withInitial(Supplier<T> supplier)`  **设置初始值**
 
-## ThreadLocal 的实现原理
+---
 
-**`ThreadLocal`** 提供了一种线程内独享的变量机制，使每个线程都能有自己独立的变量副本。每个线程内部维护一个 **`ThreadLocalMap`**，这个 **`ThreadLocalMap`** 用于存储线程独立的变量副本。**`ThreadLocalMap`** 以 **`ThreadLocal`** 实例作为键，以线程独立的变量副本作为值。不同线程通过 **`ThreadLocal`** 获取各自的变量副本，而不会影响其他线程的数据。![示意图](68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f79657373696d6964612f63646e5f696d6167652f696d672f32303232303132333136353032302e706e67_mianshiya.png)
+## 🔧 ThreadLocal 的实现原理
+
+**`ThreadLocal`** 提供了一种线程内独享的变量机制，使每个线程都能有自己独立的变量副本。每个线程内部维护一个 **`ThreadLocalMap`**，这个 **`ThreadLocalMap`** 用于存储线程独立的变量副本。**`ThreadLocalMap`** 以 **`ThreadLocal`** 实例作为键，以线程独立的变量副本作为值。不同线程通过 **`ThreadLocal`** 获取各自的变量副本，而不会影响其他线程的数据。<div align="center">
+  <img src="68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f79657373696d6964612f63646e5f696d6167652f696d672f32303232303132333136353032302e706e67_mianshiya.png" alt="示意图" width="60%">
+</div>
 
 **`ThreadLocal` 可以理解为 `ThreadLocalMap`的封装，传递了变量值。** 
 
 **每个`Thread`中都具备一个`ThreadLocalMap`，而 `ThreadLocalMap` 可以存储以`ThreadLocal`为 key ，Object 对象为 value 的键值对。**
 
-![ThreadLocal 数据结构](threadlocal-data-structure.png)
+<div align="center">
+  <img src="threadlocal-data-structure.png" alt="ThreadLocal 数据结构" width="60%">
+</div>
 
 {{<notice tip>}}
 
@@ -56,7 +82,9 @@ math : true
 
 {{</notice>}}
 
-## **ThreadLocal** 的使用场景
+---
+
+## 💡 **ThreadLocal** 的使用场景
 
 - 用于保存用户登录信息，这样在同一个线程中的任何地方都可以获取到登录信息。
 - 用于保存数据库连接、Session 对象等，这样在同一个线程中的任何地方都可以获取到数据库连接、Session 对象等。
@@ -116,31 +144,35 @@ public class UserAuthenticationService {
 
 
 
-## **ThreadLocal** 的缺点
+---
 
-### 内存泄漏问题
+## ⚠️ **ThreadLocal** 的缺点
+
+### ❓ 内存泄漏问题
 
 当 **`ThreadLocal`** 实例失去强引用后，由于 **`ThreadLocalMap`** 中的 **`key`** 是弱引用会被GC，而因为 **`Entry`** 对象强引用了其对应的 **`value`** 导致 **`value`** 仍然存在于 **`ThreadLocalMap`** 中。如果线程持续存活（例如线程池中的线程），**`ThreadLocalMap`** 也会一直存在，导致 **`key`** 为 `null` 的 entry 无法被垃圾回收，即会造成内存泄漏。
 
-#### 底层原因
+#### 💡 底层原因
 
 - **`key`** 是弱引用：**`ThreadLocalMap`** 中的 **`key`** 是 **`ThreadLocal`** 的弱引用 。 这意味着，如果 **`ThreadLocal`** 实例不再被任何强引用指向，垃圾回收器会在下次 GC 时回收该实例，导致 **`ThreadLocalMap`** 中对应的 **key** 变为 **`null`**
 - **`value`** 是强引用： **`ThreadLocalMap`** 中的 **`value`** 是强引用。 即使 **`key`** 被回收（变为 **`null`**），**`value`** 仍然存在于 **`ThreadLocalMap`** 中，被强引用，不会被回收。
 
-#### 内存泄漏的条件
+#### 🧠 内存泄漏的条件
 
 - **`ThreadLocal`** 实例不再被强引用，导致 **`ThreadLocalMap`** 中对应的 **key** 变为 **`null`**
 - 线程持续存活，导致 **`ThreadLocalMap`** 长期存在。
 
-#### 解决方法
+#### 🔨 解决方法
 
 - 显式调用 **`remove()`** 方法
 
-### 解决哈希冲突的策略可以优化
+### ✅ 解决哈希冲突的策略可以优化
 
 **`HashMap`** 是通过链表(红黑树)法来解决冲突，而 **`ThreadLocalMap`** 是通过开放寻址法来解决冲突。在哈希冲突多了，需要遍历的次数就多了
 
-## 使用建议
+---
+
+## 💡 使用建议
 
 - **避免内存泄漏**：
   - **`ThreadLocal`** 中的 **`key`** 是弱引用，但 **`value`** 是强引用，因此需要在适当的时机调用 **`remove()`** 方法来清除 **`ThreadLocal`** 的值，避免内存泄漏。尤其是在使用线程池时，线程对象会被重用，若不手动清理，容易导致内存泄漏。

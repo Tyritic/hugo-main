@@ -9,7 +9,49 @@ description : "Java中的IO流"
 math : true
 ---
 
-## IO流的定义
+## 📑 目录
+
+- [IO流的定义](#io流的定义)
+- [字符流和字节流的区别](#字符流和字节流的区别)
+- [编码和解码](#编码和解码)
+- [文件流](#文件流)
+  - [文件字节流](#文件字节流)
+    - [FileOutputStream`文件输出流](#fileoutputstream`文件输出流)
+    - [FileInputStream`文件输入流](#fileinputstream`文件输入流)
+    - [常见操作](#常见操作)
+  - [文件字符流](#文件字符流)
+    - [FileReader`文件输入流](#filereader`文件输入流)
+    - [FileWriter`文件输出流](#filewriter`文件输出流)
+- [缓冲流**：](#缓冲流**：)
+  - [字节缓冲流](#字节缓冲流)
+    - [BufferedInputStream` 字节缓冲输入流](#bufferedinputstream`-字节缓冲输入流)
+    - [BufferedOutputStream`字节缓冲输出流](#bufferedoutputstream`字节缓冲输出流)
+  - [字符缓冲流](#字符缓冲流)
+    - [BufferedReader`字符缓冲输入流](#bufferedreader`字符缓冲输入流)
+    - [BufferedWriter`字符缓冲输出流](#bufferedwriter`字符缓冲输出流)
+- [转换流](#转换流)
+  - [InputStreamReader`](#inputstreamreader`)
+    - [作用](#作用)
+    - [构造方法](#构造方法)
+    - [常用方法](#常用方法)
+  - [OutputStreamWriter`](#outputstreamwriter`)
+    - [作用](#作用)
+    - [构造方法](#构造方法)
+    - [常用方法](#常用方法)
+  - [示例](#示例)
+- [序列化流](#序列化流)
+  - [ObjectOutputStream`序列化流](#objectoutputstream`序列化流)
+    - [构造方法](#构造方法)
+    - [写入方法](#写入方法)
+    - [示例](#示例)
+  - [ObjectInputStream`反序列化流](#objectinputstream`反序列化流)
+    - [构造方法](#构造方法)
+    - [读入方法](#读入方法)
+  - [Serializable`序列化接口](#serializable`序列化接口)
+  - [transient`瞬态关键字](#transient`瞬态关键字)
+
+
+## 📥📤 IO流的定义
 
 Java 的 I/O（输入/输出）流是用于处理输入和输出数据的类库。通过流，程序可以从各种输入源（如文件、网络）读取数据，或将数据写入目标位置（如文件、控制台）。
 
@@ -18,12 +60,16 @@ I/O 流分为两大类：**字节流** 和 **字符流**，分别用于处理字
 - **字节流**：处理 8 位字节数据，适合于处理二进制文件，如图片、视频等。主要类是 `InputStream` 和 `OutputStream` 及其子类。
 - **字符流**：处理 16 位字符数据，适合于处理文本文件。主要类是 `Reader` 和 `Writer` 及其子类。
 
-## 字符流和字节流的区别
+---
+
+## 📚 字符流和字节流的区别
 
 - 字节流一般用来处理图像、视频、音频、PPT、Word等类型的文件。字符流一般用于处理纯文本类型的文件，如TXT文件等，但不能处理图像视频等非文本文件。用一句话说就是：字节流可以处理一切文件，而字符流只能处理纯文本文件。
 - 字节流本身没有缓冲区，缓冲字节流相对于字节流，效率提升非常高。而字符流本身就带有缓冲区，缓冲字符流相对于字符流效率提升就不是那么大了。
 
-## 编码和解码
+---
+
+## 📚 编码和解码
 
 输出流将缓冲区存储的字符通过查ASCII表转换为对应数字再进行编码
 
@@ -48,13 +94,15 @@ Unicode字符集（万国码）是国家标准字符集同时兼任ASCII码
 
 - **字符编码与解码不一致**。乱码问题常常由字符编码（比如 UTF-8、GBK）和解码过程的不一致引起。如果在编码时使用了一种字符集，而在解码时使用了另一种，字符将无法正确显示，从而出现乱码。
 
-## 文件流
+---
+
+## 📄 文件流
 
 一切文件（文本、视频、图片）的数据都是以二进制的形式存储的，传输时也是。所以，字节流可以传输任意类型的文件数据。
 
-### 文件字节流
+### 📄 文件字节流
 
-#### `FileOutputStream`文件输出流
+#### 📄 `FileOutputStream`文件输出流
 
 **构造方法**
 
@@ -72,7 +120,7 @@ Unicode字符集（万国码）是国家标准字符集同时兼任ASCII码
 
 在构造方法中加入第二个`Boolean`类型参数指示是否继续读写
 
-#### `FileInputStream`文件输入流
+#### 📄 `FileInputStream`文件输入流
 
 **构造方法**
 
@@ -85,7 +133,7 @@ Unicode字符集（万国码）是国家标准字符集同时兼任ASCII码
 - `public int read(byte[] b) throws IOException`：读取数据并将其存储在字节数组 `b` 中。返回实际读取的字节数。
 - `public int read(byte[] b, int off, int len) throws IOException`：从文件中读取最多 `len` 个字节的数据，存储到字节数组 `b` 中，从偏移量 `off` 开始。返回实际读取的字节数。
 
-#### 常见操作
+#### 💡 常见操作
 
 **文件拷贝**
 
@@ -186,11 +234,11 @@ public class DirectoryCopy {
 }
 ```
 
-### 文件字符流
+### 📄 文件字符流
 
 **字符流 = 字节流 + 编码表**
 
-#### `FileReader`文件输入流
+#### 📄 `FileReader`文件输入流
 
 一次读取一个字节，遇到中文时一次读入多个字节
 
@@ -209,7 +257,7 @@ public class DirectoryCopy {
 
 `public int close()`：释放字符流
 
-#### `FileWriter`文件输出流
+#### 📄 `FileWriter`文件输出流
 
 **构造方法**
 
@@ -229,17 +277,19 @@ public class DirectoryCopy {
 - `flush()` ：刷新缓冲区，将缓冲区中的数据强制写入目标设备或流中,流对象可以继续使用。
 - `close()` ：先刷新缓冲区，然后通知系统释放资源。流对象不可以再被使用了。
 
-## **缓冲流**：
+---
+
+## 📚 **缓冲流**：
 
 缓冲流是对基础流的包装，可以显著提高 I/O 性能。常见的缓冲流有 `BufferedInputStream`、`BufferedOutputStream`、`BufferedReader` 和 `BufferedWriter`，它们通过**内部缓冲区减少实际 I/O 操作的次数**。
 
 在处理大文件或频繁 I/O 操作时，使用缓冲流可以有效提高性能。
 
-### 字节缓冲流
+### 📌 字节缓冲流
 
 底层自带8KB的缓冲区
 
-#### `BufferedInputStream` 字节缓冲输入流
+#### 💡 `BufferedInputStream` 字节缓冲输入流
 
 **构造方法**
 
@@ -251,7 +301,7 @@ public class DirectoryCopy {
 - `public int read(byte[] b) throws IOException`：读取数据并将其存储在字节数组 `b` 中。返回实际读取的字节数。
 - `public int read(byte[] b, int off, int len) throws IOException`：从文件中读取最多 `len` 个字节的数据，存储到字节数组 `b` 中，从偏移量 `off` 开始。返回实际读取的字节数。
 
-#### `BufferedOutputStream`字节缓冲输出流
+#### 💡 `BufferedOutputStream`字节缓冲输出流
 
 **构造方法**
 
@@ -270,9 +320,9 @@ public class DirectoryCopy {
 - `flush()` ：刷新缓冲区，将缓冲区中的数据强制写入目标设备或流中,流对象可以继续使用。
 - `close()` ：先刷新缓冲区，然后通知系统释放资源。流对象不可以再被使用了。只用关闭高级流的流对象底层会自动关闭基本流
 
-### 字符缓冲流
+### 📌 字符缓冲流
 
-#### `BufferedReader`字符缓冲输入流
+#### 💡 `BufferedReader`字符缓冲输入流
 
 **构造方法**
 
@@ -288,7 +338,7 @@ public class DirectoryCopy {
 
 `public int close()`：释放字符流
 
-#### `BufferedWriter`字符缓冲输出流
+#### 💡 `BufferedWriter`字符缓冲输出流
 
 **构造方法**
 
@@ -308,7 +358,9 @@ public class DirectoryCopy {
 - `flush()` ：刷新缓冲区，将缓冲区中的数据强制写入目标设备或流中,流对象可以继续使用。
 - `close()` ：先刷新缓冲区，然后通知系统释放资源。流对象不可以再被使用了。
 
-## 转换流
+---
+
+## 📚 转换流
 
 将字符流和字节流进行连接，实现互相转换
 
@@ -318,45 +370,45 @@ public class DirectoryCopy {
 
 它们使用指定的字符集将字节流和字符流之间进行转换。常用的字符集包括 UTF-8、GBK、ISO-8859-1 等。
 
-### `InputStreamReader`
+### 📌 `InputStreamReader`
 
-#### 作用
+#### 💡 作用
 
 - 将字节流（InputStream）转换为字符流（Reader）
 - 同时支持指定的字符集编码方式，从而实现字节流到字符流之间的转换。
 
-#### 构造方法
+#### 🔨 构造方法
 
 - `InputStreamReader(InputStream in)`: 创建一个使用默认字符集的字符流。
 - `InputStreamReader(InputStream in, String charsetName)`: 创建一个指定字符集的字符流。
 
-#### 常用方法
+#### 🔨 常用方法
 
 - `read()`：从输入流中读取一个字符的数据。
 - `read(char[] cbuf, int off, int len)`：从输入流中读取 len 个字符的数据到指定的字符数组 cbuf 中，从 off 位置开始存放。
 - `ready()`：返回此流是否已准备好读取。
 - `close()`：关闭输入流。
 
-### `OutputStreamWriter`
+### 📌 `OutputStreamWriter`
 
-#### 作用
+#### 💡 作用
 
 - 将字符流（Writer）转换为字节流（OutputStream）
 - 同时支持指定的字符集编码方式，从而实现字符流到字节流之间的转换。
 
-#### 构造方法
+#### 🔨 构造方法
 
 - `OutputStreamWriter(OutputStream in)`: 创建一个使用默认字符集的字节流。
 - `OutputStreamWriter(OutputStream in, String charsetName)`：创建一个指定字符集的字节流。
 
-#### 常用方法
+#### 🔨 常用方法
 
 - `write(int c)`：向输出流中写入一个字符的数据。
 - `write(char[] cbuf, int off, int len)`：向输出流中写入指定字符数组 cbuf 中的 len 个字符，从 off 位置开始。
 - `flush()`：将缓冲区的数据写入输出流中。
 - `close()`：关闭输出流
 
-### 示例
+### 📌 示例
 
 ```java
 try {
@@ -388,7 +440,9 @@ try {
 }
 ```
 
-## 序列化流
+---
+
+## 📚 序列化流
 
 **序列化**
 
@@ -398,9 +452,9 @@ try {
 
 是将字节流重新转换为对象的过程，即从存储中读取数据并重新创建对象。
 
-### `ObjectOutputStream`序列化流
+### 📌 `ObjectOutputStream`序列化流
 
-#### 构造方法
+#### 🔨 构造方法
 
 `ObjectOutputStream(OutputStream out)`
 
@@ -409,13 +463,13 @@ FileOutputStream fos = new FileOutputStream("file.txt");
 ObjectOutputStream oos = new ObjectOutputStream(fos);
 ```
 
-#### 写入方法
+#### 🔨 写入方法
 
 - `public final writeObject (Object obj)`：写入一个对象
 - `public void write(int b) throws IOException`
 - `public void write(byte[] b, int off, int len) throws IOException`
 
-#### 示例
+#### 📌 示例
 
 ```java
 public class ObjectOutputStreamDemo {
@@ -450,20 +504,20 @@ class Person implements Serializable {
 }
 ```
 
-### `ObjectInputStream`反序列化流
+### 📌 `ObjectInputStream`反序列化流
 
 `ObjectInputStream` 可以读取 `ObjectOutputStream` 写入的字节流，并将其反序列化为相应的对象（包含`对象的数据`、`对象的类型`和`对象中存储的属性`等信息）。
 
-#### 构造方法
+#### 🔨 构造方法
 
 - `ObjectInputStream(InputStream in)`
 
-#### 读入方法
+#### 🔨 读入方法
 
 - `public Object readObject()`：读入对象
 - `public void read()`：读一个字节
 
-### `Serializable`序列化接口
+### 🔌 `Serializable`序列化接口
 
 **定义**
 
@@ -480,7 +534,7 @@ public interface Serializable {
 - Java 虚拟机会把字节流中的 `serialVersionUID` 与被序列化类中的 `serialVersionUID` 进行比较，如果相同则可以进行反序列化，否则就会抛出序列化版本不一致的异常
 - 通常使用`private` ，`static` ，`final` 来修饰`serialVersionUID`
 
-### `transient`瞬态关键字
+### 📌 `transient`瞬态关键字
 
 在实际开发过程中，不需要被序列化的字段，比如说用户的一些敏感信息（如密码、银行卡号等），为了安全起见，不希望在网络操作中传输或者持久化到磁盘文件中，那这些字段就可以加上 `transient` 关键字。
 

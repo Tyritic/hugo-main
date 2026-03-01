@@ -9,11 +9,23 @@ description : "JDK 8的新特性"
 math : true
 ---
 
-## `Optional`类的定义
+## 📑 目录
+
+- [Optional`类的定义](#optional`类的定义)
+- [核心思想](#核心思想)
+- [创建对象方法](#创建对象方法)
+- [判断值是否存在](#判断值是否存在)
+- [获取值](#获取值)
+- [操作值](#操作值)
+
+
+## 📦 `Optional`类的定义
 
 `Optional` 类是 Java 8 引入的一个容器类，用来解决可能出现的 **NullPointerException** 问题。它表示一个值可能存在也可能不存在，提供了一种优雅的方式来避免显式的 `null` 检查。
 
-## 核心思想
+---
+
+## 💎 核心思想
 
 - **避免显式使用 `null`**：
   使用 `Optional` 代替直接返回 `null`，从而避免潜在的空指针异常。
@@ -22,7 +34,9 @@ math : true
 - **函数式编程支持**：
   支持链式调用和流式操作，更适合在函数式编程中使用
 
-## 创建对象方法
+---
+
+## 🎯 创建对象方法
 
 - **`Optional.empty()`**：创建一个空的 `Optional` 对象。
 
@@ -44,12 +58,16 @@ Optional<String> nameOpt = Optional.of("John");
 Optional<String> nullableOpt = Optional.ofNullable(null);
 ```
 
-## 判断值是否存在
+---
+
+## 📚 判断值是否存在
 
 - **`isPresent()`**：值存在返回 `true`，否则返回 `false`。
 - **`isEmpty()`**：值不存在返回 `true`（Java 11 引入）。
 
-## 获取值
+---
+
+## 📚 获取值
 
 **`get()`**：返回值，如果值不存在会抛出 `NoSuchElementException`。
 
@@ -63,7 +81,9 @@ String name = nameOpt.get();
 String name = nullableOpt.orElse("Default Name");
 ```
 
-## 操作值
+---
+
+## 📚 操作值
 
 - **`ifPresent(Consumer<? super T>)`**：值存在时执行给定的动作。
 

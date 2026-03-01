@@ -9,11 +9,27 @@ description : "手写笔记转换"
 math : true
 ---
 
-## Map接口的定义
+## 📑 目录
+
+- [Map接口的定义](#map接口的定义)
+- [Map集合的特点](#map集合的特点)
+- [Map接口的实现类](#map接口的实现类)
+- [Map 接口常用方法](#map-接口常用方法)
+  - [添加键值对](#添加键值对)
+  - [获取值](#获取值)
+  - [删除键值对](#删除键值对)
+  - [检查键值对](#检查键值对)
+  - [替换键值对](#替换键值对)
+  - [集合视图](#集合视图)
+
+
+## 🔌 Map接口的定义
 
 **`Map`** 接口是 Java 集合框架中的一部分，用于存储键值对（**`key-value`**）的映射关系。**`Map`** 中的键是唯一的，而值可以重复。
 
-## Map集合的特点
+---
+
+## ✨ Map集合的特点
 
 - **键值对存储**：
   - 每个元素由一个键（**`key`**）和一个值（**`value`**）组成。
@@ -33,7 +49,9 @@ math : true
   - **`HashMap`** 和 **`TreeMap`** 是非线程安全的。
   - **`Hashtable`** 和 **`ConcurrentHashMap`** 是线程安全的。
 
-## Map接口的实现类
+---
+
+## 📦 Map接口的实现类
 
 - **`HashMap`**：
   - 基于哈希表实现，允许一个 `null` 键和多个 `null` 值。
@@ -47,9 +65,11 @@ math : true
 - **`ConcurrentHashMap`**：
   - 线程安全，支持高并发。
 
-## Map 接口常用方法
+---
 
-### 添加键值对
+## 🔨 Map 接口常用方法
+
+### 📌 添加键值对
 
 ```java
 V put(K key, V value)
@@ -63,7 +83,7 @@ default V putIfAbsent(K key, V value)
 
 - 如果键不存在，添加键值对。
 
-### 获取值
+### 📌 获取值
 
 ```java
 V get(Object key)
@@ -77,7 +97,7 @@ default V getOrDefault(Object key, V defaultValue)
 
 - 如果键存在，返回对应的值；否则返回 `defaultValue`。
 
-### 删除键值对
+### 📌 删除键值对
 
 ```java
 V remove(Object key)
@@ -97,7 +117,7 @@ default boolean remove(Object key, Object value)
 
 - 如果键存在且值匹配，则移除该键值对。
 
-### 检查键值对
+### 📌 检查键值对
 
 ```java
 boolean containsKey(Object key)
@@ -111,7 +131,7 @@ boolean containsValue(Object value)
 
 - 检查是否包含指定的值。
 
-### 替换键值对
+### 📌 替换键值对
 
 ```java
 default boolean replace(K key, V oldValue, V newValue)
@@ -125,7 +145,7 @@ default V replace(K key, V value)
 
 - 替换键对应的值（如果键存在）。
 
-### 集合视图
+### 📦 集合视图
 
 ```java
 Set<Map.Entry<K, V>> entrySet()
