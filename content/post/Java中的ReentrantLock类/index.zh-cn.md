@@ -9,26 +9,6 @@ description : "重入锁-ReentrantLock类"
 math : true
 ---
 
-## 📑 目录
-
-- [ReentrantLock类](#reentrantlock类)
-- [ReentrantLock类的常用方法](#reentrantlock类的常用方法)
-  - [构造方法](#构造方法)
-  - [获取锁](#获取锁)
-  - [判断锁的归属](#判断锁的归属)
-  - [释放锁](#释放锁)
-- [ReentrantLock 的实现原理](#reentrantlock-的实现原理)
-  - [非公平锁的实现](#非公平锁的实现)
-    - [获取非公平锁](#获取非公平锁)
-    - [释放非公平锁](#释放非公平锁)
-    - [总体逻辑](#总体逻辑)
-  - [公平锁的实现](#公平锁的实现)
-    - [获取公平锁](#获取公平锁)
-    - [总体逻辑](#总体逻辑)
-  - [底层实现](#底层实现)
-- [ReentrantLock** 和 **synchronized** 的区别](#reentrantlock**-和-**synchronized**-的区别)
-
-
 ## 📦 ReentrantLock类
 
 **`ReentrantLock`** 是 Java 并发包（java.util.concurrent.locks） 提供的一个可重入锁，比 **`synchronized`** 更灵活，支持公平锁、非公平锁、可中断锁、超时获取锁等特性。

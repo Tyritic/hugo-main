@@ -9,25 +9,6 @@ description : "手写笔记转换"
 math : true
 ---
 
-## 📑 目录
-
-- [StringBuffer的定义](#stringbuffer的定义)
-- [StringBuffer 的特点](#stringbuffer-的特点)
-- [StringBuffer的构造函数](#stringbuffer的构造函数)
-- [StringBuffer的常见操作](#stringbuffer的常见操作)
-  - [追加数据](#追加数据)
-  - [插入内容](#插入内容)
-  - [删除内容](#删除内容)
-  - [替换子串](#替换子串)
-  - [反转字符串](#反转字符串)
-  - [获取属性](#获取属性)
-  - [操作指定位置的字符](#操作指定位置的字符)
-  - [截取子串](#截取子串)
-  - [查找子串](#查找子串)
-  - [总体使用](#总体使用)
-- [String，StringBuffer，StringBuilder的区别（面试题）](#string，stringbuffer，stringbuilder的区别面试题)
-
-
 ## 📝 StringBuffer的定义
 
 `StringBuffer` 是 Java 中用于创建可变字符串的类，提供了一个与 `StringBuilder` 类似的功能。它们都用于处理可变的字符串数据，不同之处在于 `StringBuffer` 是线程安全的，而 `StringBuilder` 不是。

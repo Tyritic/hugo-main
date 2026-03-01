@@ -9,28 +9,6 @@ description : "手写笔记转换"
 math : true
 ---
 
-## 📑 目录
-
-- [异常的定义](#异常的定义)
-- [异常的继承结构](#异常的继承结构)
-  - [Throwable 类](#throwable-类)
-  - [Error 类](#error-类)
-  - [Exception 类](#exception-类)
-  - [Exception和Error的区别](#exception和error的区别)
-- [异常的处理方式](#异常的处理方式)
-  - [JVM默认处理方式](#jvm默认处理方式)
-  - [捕获并处理异常](#捕获并处理异常)
-    - [try-catch-finally块](#try-catch-finally块)
-    - [try-with-resources 块](#try-with-resources-块)
-  - [抛出异常](#抛出异常)
-    - [throws关键字](#throws关键字)
-    - [throw 关键字](#throw-关键字)
-- [自定义异常](#自定义异常)
-  - [实现方法](#实现方法)
-  - [定义受检异常](#定义受检异常)
-  - [定义非受检异常](#定义非受检异常)
-
-
 ## ⚠️ 异常的定义
 
 在 Java 中，**异常（Exception）** 是程序运行过程中发生的一种错误或意外情况，可能会中断程序的正常执行流程。异常机制通过捕获和处理错误，避免程序崩溃，提供了一种高效的错误管理方式。

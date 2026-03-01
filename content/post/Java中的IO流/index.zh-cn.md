@@ -9,48 +9,6 @@ description : "Java中的IO流"
 math : true
 ---
 
-## 📑 目录
-
-- [IO流的定义](#io流的定义)
-- [字符流和字节流的区别](#字符流和字节流的区别)
-- [编码和解码](#编码和解码)
-- [文件流](#文件流)
-  - [文件字节流](#文件字节流)
-    - [FileOutputStream`文件输出流](#fileoutputstream`文件输出流)
-    - [FileInputStream`文件输入流](#fileinputstream`文件输入流)
-    - [常见操作](#常见操作)
-  - [文件字符流](#文件字符流)
-    - [FileReader`文件输入流](#filereader`文件输入流)
-    - [FileWriter`文件输出流](#filewriter`文件输出流)
-- [缓冲流**：](#缓冲流**：)
-  - [字节缓冲流](#字节缓冲流)
-    - [BufferedInputStream` 字节缓冲输入流](#bufferedinputstream`-字节缓冲输入流)
-    - [BufferedOutputStream`字节缓冲输出流](#bufferedoutputstream`字节缓冲输出流)
-  - [字符缓冲流](#字符缓冲流)
-    - [BufferedReader`字符缓冲输入流](#bufferedreader`字符缓冲输入流)
-    - [BufferedWriter`字符缓冲输出流](#bufferedwriter`字符缓冲输出流)
-- [转换流](#转换流)
-  - [InputStreamReader`](#inputstreamreader`)
-    - [作用](#作用)
-    - [构造方法](#构造方法)
-    - [常用方法](#常用方法)
-  - [OutputStreamWriter`](#outputstreamwriter`)
-    - [作用](#作用)
-    - [构造方法](#构造方法)
-    - [常用方法](#常用方法)
-  - [示例](#示例)
-- [序列化流](#序列化流)
-  - [ObjectOutputStream`序列化流](#objectoutputstream`序列化流)
-    - [构造方法](#构造方法)
-    - [写入方法](#写入方法)
-    - [示例](#示例)
-  - [ObjectInputStream`反序列化流](#objectinputstream`反序列化流)
-    - [构造方法](#构造方法)
-    - [读入方法](#读入方法)
-  - [Serializable`序列化接口](#serializable`序列化接口)
-  - [transient`瞬态关键字](#transient`瞬态关键字)
-
-
 ## 📥📤 IO流的定义
 
 Java 的 I/O（输入/输出）流是用于处理输入和输出数据的类库。通过流，程序可以从各种输入源（如文件、网络）读取数据，或将数据写入目标位置（如文件、控制台）。

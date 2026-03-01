@@ -206,7 +206,23 @@
 
             ol {
                 display: flex;
+                flex-direction: column;
                 padding-left: 0;
+                gap: 30px;
+
+                @include respond(xl) {
+                    gap: 25px;
+                }
+
+                li {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+
+                    @include respond(md) {
+                        width: 100%;
+                    }
+                }
             }
         }
     }

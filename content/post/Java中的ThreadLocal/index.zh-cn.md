@@ -9,22 +9,6 @@ description : "ThreadLocal——线程的本地变量"
 math : true
 ---
 
-## 📑 目录
-
-- [为什么需要  **ThreadLocal**](#为什么需要--**threadlocal**)
-- [ThreadLocal** 的主要特性](#threadlocal**-的主要特性)
-- [ThreadLocal** 的主要方法](#threadlocal**-的主要方法)
-- [ThreadLocal 的实现原理](#threadlocal-的实现原理)
-- [ThreadLocal** 的使用场景](#threadlocal**-的使用场景)
-- [ThreadLocal** 的缺点](#threadlocal**-的缺点)
-  - [内存泄漏问题](#内存泄漏问题)
-    - [底层原因](#底层原因)
-    - [内存泄漏的条件](#内存泄漏的条件)
-    - [解决方法](#解决方法)
-  - [解决哈希冲突的策略可以优化](#解决哈希冲突的策略可以优化)
-- [使用建议](#使用建议)
-
-
 ## 🧵 为什么需要  **ThreadLocal**
 
 **`ThreadLocal`** 是 Java 中提供的一种用于实现线程局部变量的工具类。它允许每个线程都拥有自己的独立副本，从而实现线程隔离，用于解决多线程中共享对象的线程安全问题。

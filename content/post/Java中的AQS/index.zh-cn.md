@@ -9,15 +9,6 @@ description : "AQS-抽象队列同步器"
 math : true
 ---
 
-## 📑 目录
-
-- [什么是AQS](#什么是aqs)
-- [AQS的底层数据结构](#aqs的底层数据结构)
-  - [状态](#状态)
-  - [CLH双端队列](#clh双端队列)
-  - [资源共享模式](#资源共享模式)
-
-
 ## 🧐 什么是AQS
 
 **`AQS`** 全称 **`Abstract Queued Synchronizer`** 即 **抽象队列同步器**

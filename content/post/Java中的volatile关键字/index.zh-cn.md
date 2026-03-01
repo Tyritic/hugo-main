@@ -9,21 +9,6 @@ description : "Java中volatile关键字"
 math : true
 ---
 
-## 📑 目录
-
-- [volatile** 关键字](#volatile**-关键字)
-- [volatile**  关键字的作用](#volatile**--关键字的作用)
-- [volatile** 保证数据可见性](#volatile**-保证数据可见性)
-- [volatile** 保证指令有序性](#volatile**-保证指令有序性)
-  - [写操作](#写操作)
-  - [读屏障](#读屏障)
-  - [四种内存屏障的作用](#四种内存屏障的作用)
-- [volatile** 不保证原子性](#volatile**-不保证原子性)
-- [volatile** 修饰基本数据类型和引用数据类型的区别](#volatile**-修饰基本数据类型和引用数据类型的区别)
-- [volatile** 与 **synchronized** 的对比](#volatile**-与-**synchronized**-的对比)
-- [volatile** 关键字在单例模式中的应用](#volatile**-关键字在单例模式中的应用)
-
-
 ## ⚡ **volatile** 关键字
 
 **`volatile`** 是一个**修饰符**，用来修饰**共享变量**。它的作用是确保对该变量的读写操作直接在主存中进行，而不使用线程的本地缓存。这意味着所有线程访问 **`volatile`** 变量时都会看到该变量的最新值，避免了多线程环境下的内存可见性问题。

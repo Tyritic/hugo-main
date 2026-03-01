@@ -9,48 +9,6 @@ description : "动态规划的思想应用"
 math : true
 ---
 
-## 📑 目录
-
-- [动态规划的思考步骤](#动态规划的思考步骤)
-  - [思考过程](#思考过程)
-  - [基本代码模板](#基本代码模板)
-- [一维动态规划](#一维动态规划)
-  - [leetcode 509 斐波那契数](#leetcode-509-斐波那契数)
-  - [leetcode 70 爬楼梯](#leetcode-70-爬楼梯)
-  - [leetcode 746 使用最小花费爬楼梯](#leetcode-746-使用最小花费爬楼梯)
-  - [leetcode 343 整数拆分](#leetcode-343-整数拆分)
-  - [leetcode 96 不同的二叉搜索树](#leetcode-96-不同的二叉搜索树)
-- [二维动态规划](#二维动态规划)
-  - [leetcode 62 不同路径](#leetcode-62-不同路径)
-  - [leetcode 63 不同路径II](#leetcode-63-不同路径ii)
-- [0-1背包问题](#0-1背包问题)
-  - [题目描述](#题目描述)
-  - [思路解析](#思路解析)
-    - [二维dp解法](#二维dp解法)
-    - [一维dp解法](#一维dp解法)
-  - [经典例题](#经典例题)
-    - [leetcode 416 分割等和子集](#leetcode-416-分割等和子集)
-    - [leetcode 494 目标和](#leetcode-494-目标和)
-    - [leetcode 474 一和零](#leetcode-474-一和零)
-- [完全背包问题](#完全背包问题)
-  - [题目描述](#题目描述-1)
-  - [思路解析](#思路解析-1)
-    - [二维dp解法](#二维dp解法-1)
-    - [一维dp解法](#一维dp解法-1)
-  - [经典例题](#经典例题-1)
-    - [leetcode 518 零钱兑换II](#leetcode-518-零钱兑换ii)
-    - [leetcode 377 组合总和IV](#leetcode-377-组合总和iv)
-    - [leetcode 322 零钱兑换](#leetcode-322-零钱兑换)
-    - [leetcode 279 完全平方数](#leetcode-279-完全平方数)
-    - [leetcode 139 单词拆分](#leetcode-139-单词拆分)
-- [打劫问题](#打劫问题)
-  - [leetcode 198 打家劫舍](#leetcode-198-打家劫舍)
-  - [leetcode 213 打家劫舍II](#leetcode-213-打家劫舍ii)
-- [股票问题](#股票问题)
-  - [leetcode 121 买卖股票的最佳时机](#leetcode-121-买卖股票的最佳时机)
-  - [leetcode 122 买卖股票的最佳时机II](#leetcode-122-买卖股票的最佳时机ii)
-  - [leetcode 123 买卖股票的最佳时机III](#leetcode-123-买卖股票的最佳时机iii)
-
 ## 🧠 动态规划的思考步骤
 
 ### 🔍 思考过程

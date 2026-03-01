@@ -9,19 +9,6 @@ description : "手写笔记转换"
 math : true
 ---
 
-## 📑 目录
-
-- [BigInteger类和BigDecimal类](#biginteger类和bigdecimal类)
-- [BigInteger创建方法](#biginteger创建方法)
-  - [通过有参构造器](#通过有参构造器)
-  - [通过valueOf()静态方法](#通过valueof()静态方法)
-- [BigDecimal创建方法](#bigdecimal创建方法)
-  - [通过有参构造器](#通过有参构造器)
-  - [通过静态方法valueOf()](#通过静态方法valueof())
-- [计算方法](#计算方法)
-- [BigDecimal保证精度不丢失的机制](#bigdecimal保证精度不丢失的机制)
-
-
 ## 📦 BigInteger类和BigDecimal类
 
 BigInteger类支持任意精度的整数，表示任何大小的整数

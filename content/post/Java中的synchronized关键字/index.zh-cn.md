@@ -9,23 +9,6 @@ description : "synchronized关键字的底层原理"
 math : true
 ---
 
-## 📑 目录
-
-- [synchronized** 关键字](#synchronized**-关键字)
-- [synchronized** 的作用](#synchronized**-的作用)
-- [synchronized** 使用方式](#synchronized**-使用方式)
-  - [synchronized** 修饰实例方法](#synchronized**-修饰实例方法)
-  - [synchronized** 修饰静态方法](#synchronized**-修饰静态方法)
-  - [synchronized** 修饰代码块](#synchronized**-修饰代码块)
-- [synchronized** 属于可重入锁](#synchronized**-属于可重入锁)
-  - [示例**](#示例**)
-- [synchronized** 底层实现原理](#synchronized**-底层实现原理)
-  - [原子性的保证](#原子性的保证)
-  - [有序性的保证](#有序性的保证)
-  - [可重入锁的实现](#可重入锁的实现)
-- [synchronized** 的锁升级过程](#synchronized**-的锁升级过程)
-
-
 ## 🔒 **synchronized** 关键字
 
 **`synchronized`**  是 Java 提供的一种**内置同步机制**，用于**解决多线程环境下的并发安全问题**。它能够确保同一时刻只有一个线程执行同步代码块，从而防止线程间的**数据不一致**和**竞态条件**。

@@ -9,30 +9,6 @@ description : "手写笔记转换"
 math : true
 ---
 
-## 📑 目录
-
-- [StringBuilder的定义](#stringbuilder的定义)
-- [StringBuilder的特点](#stringbuilder的特点)
-- [StringBuilder的构造方法](#stringbuilder的构造方法)
-- [StringBuilder的常见操作](#stringbuilder的常见操作)
-  - [追加数据](#追加数据)
-  - [插入内容](#插入内容)
-  - [删除内容](#删除内容)
-  - [替换子串](#替换子串)
-  - [反转字符串](#反转字符串)
-  - [获取属性](#获取属性)
-  - [操作指定位置的字符](#操作指定位置的字符)
-  - [截取子串](#截取子串)
-  - [查找子串](#查找子串)
-- [equals方法](#equals方法)
-- [StringBuilder的实现原理](#stringbuilder的实现原理)
-  - [大致核心实现](#大致核心实现)
-  - [底层具体实现](#底层具体实现)
-  - [append()的具体实现](#append()的具体实现)
-  - [insert()的具体实现](#insert()的具体实现)
-  - [优化方法（JDK 11的优化）](#优化方法jdk-11的优化)
-
-
 ## 📝 StringBuilder的定义
 
 `StringBuilder` 是 Java 中的一个 **可变字符序列类**，位于 `java.lang` 包中。它用于创建和操作可变的字符串（字符序列），与 `String` 不同，`StringBuilder` 的内容是 **可变的**，不会像 `String` 那样在每次修改时创建新的对象，从而提高了性能，尤其在需要频繁修改字符串时非常有用。
