@@ -5,20 +5,44 @@
     {{- end -}}
 {{ end }}
 {{ define "main" }}
-<form action="{{ .RelPermalink }}" class="search-form"{{ with .OutputFormats.Get "json" -}} data-json="{{ .RelPermalink }}"{{- end }}>
-    <p>
-        <label>{{ T "search.title" }}</label>
-        <input name="keyword" placeholder="{{ T `search.placeholder` }}" />
-    </p>
+<div class="search-container">
+    <div class="search-header">
+        <h1 class="search-title">{{ T "search.title" }}</h1>
+        <p class="search-description">{{ T "search.description" }}</p>
+    </div>
 
-    <button title="{{ T `search.title` }}">
-        {{ partial "helper/icon" "search" }}
-    </button>
-</form>
+    <form action="{{ .RelPermalink }}" class="search-form"{{ with .OutputFormats.Get "json" -}} data-json="{{ .RelPermalink }}"{{- end }}>
+        <p>
+            <label>{{ T "search.title" }}</label>
+            <input name="keyword" placeholder="{{ T `search.placeholder` }}" />
+        </p>
 
-<div class="search-result">
-    <h3 class="search-result--title section-title"></h3>
-    <div class="search-result--list article-list--compact"></div>
+        <button title="{{ T `search.title` }}">
+            {{ partial "helper/icon" "search" }}
+        </button>
+    </form>
+
+    <div class="search-hot">
+        <h3 class="search-hot--title">{{ T "search.hotTitle" }}</h3>
+        <div class="search-hot--list">
+            <a href="{{ .RelPermalink }}?keyword=Java" class="search-hot--item">Java</a>
+            <a href="{{ .RelPermalink }}?keyword=Spring" class="search-hot--item">Spring</a>
+            <a href="{{ .RelPermalink }}?keyword=Golang" class="search-hot--item">Golang</a>
+            <a href="{{ .RelPermalink }}?keyword=MySQL" class="search-hot--item">MySQL</a>
+            <a href="{{ .RelPermalink }}?keyword=Redis" class="search-hot--item">Redis</a>
+            <a href="{{ .RelPermalink }}?keyword=算法" class="search-hot--item">算法</a>
+            <a href="{{ .RelPermalink }}?keyword=设计模式" class="search-hot--item">设计模式</a>
+            <a href="{{ .RelPermalink }}?keyword=并发" class="search-hot--item">并发</a>
+        </div>
+    </div>
+
+    <div class="search-result">
+        <h3 class="search-result--title section-title"></h3>
+        <div class="search-result--list article-list--compact"></div>
+        <div class="search-result--empty" style="display: none;">
+            <p>{{ T "search.empty" }}</p>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -28,6 +52,37 @@
 {{- $opts := dict "minify" hugo.IsProduction "JSXFactory" "createElement" -}}
 {{- $searchScript := resources.Get "ts/search.tsx" | js.Build $opts -}}
 <script type="text/javascript" src="{{ $searchScript.RelPermalink }}" defer></script>
+
+<script>
+    // 监听搜索结果，显示/隐藏空状态
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchForm = document.querySelector('.search-form');
+        const searchInput = searchForm.querySelector('input');
+        const searchResultList = document.querySelector('.search-result--list');
+        const searchResultEmpty = document.querySelector('.search-result--empty');
+        const searchResultTitle = document.querySelector('.search-result--title');
+
+        // 监听输入事件
+        searchInput.addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                searchResultEmpty.style.display = 'none';
+            }
+        });
+
+        // 定期检查搜索结果
+        setInterval(function() {
+            const hasResults = searchResultList.children.length > 0;
+            const hasSearchTerm = searchInput.value.trim() !== '';
+            const hasTitle = searchResultTitle.textContent.trim() !== '';
+
+            if (hasSearchTerm && hasTitle && !hasResults) {
+                searchResultEmpty.style.display = 'block';
+            } else {
+                searchResultEmpty.style.display = 'none';
+            }
+        }, 100);
+    });
+</script>
 
 {{ partialCached "footer/footer" . }}
 {{ end }}

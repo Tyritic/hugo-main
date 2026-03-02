@@ -56,8 +56,17 @@ search:
   title:
     other: 搜索
 
+  description:
+    other: 搜索您感兴趣的内容，获取相关文章
+
   placeholder:
     other: 输入关键词...
+
+  hotTitle:
+    other: 热门搜索
+
+  empty:
+    other: 没有找到相关结果，请尝试其他关键词
 
   resultTitle:
     other: "#PAGES_COUNT 个结果 （用时 #TIME_SECONDS 秒）"
