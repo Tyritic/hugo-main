@@ -170,6 +170,7 @@
         position: relative;
         vertical-align: middle;
         padding: 0;
+        width: 100%;
 
         @include respond(md) {
             width: 100%;
@@ -184,10 +185,17 @@
 
         a {
             height: 100%;
+            width: 100%;
             display: inline-flex;
             align-items: center;
             color: var(--body-text-color);
             gap: var(--menu-icon-separation);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent-color);
         }
 
         span {

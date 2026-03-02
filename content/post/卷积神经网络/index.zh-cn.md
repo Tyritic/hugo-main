@@ -145,9 +145,14 @@ CNN 采用的激活函数一般为 **ReLU**（The Rectified Linear Unit / 修正
 
 #### 📈 梯度爆炸/梯度消失
 
-<div align="center">
-  <img src="3630241-20250608221623142-1959099605.png" alt="梯度爆炸/梯度消失" width="60%">
-</div>
+$$
+\begin{aligned}
+\because \delta^l_j &= \frac{\partial C}{\partial z^l_j} = \sum_k \frac{\partial C}{\partial z^{l+1}_k} \cdot \frac{\partial z^{l+1}_k}{\partial a^l_j} \cdot \frac{\partial a^l_j}{\partial z^l_j} \\
+&= \sum_k \delta^{l+1}_k \cdot \frac{\partial (w^{l+1}_{kj} a^l_j + b^{l+1}_k)}{\partial a^l_j} \cdot \sigma'(z^l_j) \\
+&= \sum_k \delta^{l+1}_k \cdot w^{l+1}_{kj} \cdot \sigma'(z^l_j) \\
+\therefore \delta^l &= ((w^{l+1})^T \delta^{l+1}) \odot \sigma'(z^l)
+\end{aligned}
+$$
 
 首先一个很重要的原因就是当网络层数不断增加的时候，会很容易出现梯度爆炸与梯度消失的问题。因为我们更新网络的方式是通过反向传播的方式，其是通过链式求导的方式进行的，而当网络层数越深，连乘的项不断增多，所以这就是会导致很容易梯度爆炸或者梯度消失。就会导致靠近输入层的网络层，计算得到的偏导数极其大，更新后 $W$ 变成一个很大的数（爆炸）或者靠近输入层的网络层，计算得到的偏导数近乎零，$W$ 几乎无法得到更新。
 
