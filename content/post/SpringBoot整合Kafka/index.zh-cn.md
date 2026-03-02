@@ -1,3 +1,4 @@
+
 ---
 date : '2025-03-18T19:22:46+08:00'
 draft : false
@@ -9,29 +10,33 @@ description : "SpringBoot中整合Kafka"
 math : true
 ---
 
-## SpringBoot中整合Kafka的流程
+## 🚀 SpringBoot中整合Kafka的流程
 
-### 引入依赖
+### 📦 引入依赖
 
 引入 **Spring for Apache Kafka** 依赖
 
 ```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-web</artifactId>
-</dependency>
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
 
-<dependency>
-    <groupId>org.springframework.kafka</groupId>
-    <artifactId>spring-kafka</artifactId>
-</dependency>
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.kafka&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-kafka&lt;/artifactId&gt;
+&lt;/dependency&gt;
 ```
 
-### 配置Kafka相关参数
+---
+
+### ⚙️ 配置Kafka相关参数
 
 在application.xml中配置Kafka的相关参数
 
-### 创建生产者
+---
+
+### 📤 创建生产者
 
 通常生产者作为Service类，使用 **`KafkaTemplate`** 的相关API来调用相关方法
 
@@ -41,9 +46,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class KafkaProducer {
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate&lt;String, String&gt; kafkaTemplate;
 
-    public KafkaProducer(KafkaTemplate<String, String> kafkaTemplate) {
+    public KafkaProducer(KafkaTemplate&lt;String, String&gt; kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
@@ -54,7 +59,9 @@ public class KafkaProducer {
 }
 ```
 
-### 创建消费者
+---
+
+### 📥 创建消费者
 
 对监听的方法使用 **`@KafkaListener`** 注解，指定消息主题和消费者组
 
@@ -67,7 +74,7 @@ import org.springframework.stereotype.Service;
 public class KafkaConsumer {
 
     @KafkaListener(topics = "test-topic", groupId = "my-group")
-    public void listen(ConsumerRecord<String, String> record) {
+    public void listen(ConsumerRecord&lt;String, String&gt; record) {
         System.out.println("Received message: " + record.value());
     }
 }

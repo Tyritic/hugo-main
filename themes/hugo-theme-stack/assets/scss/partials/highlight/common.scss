@@ -82,7 +82,7 @@
 
 /* KeywordNamespace */
 .chroma .kn {
-    color: #f92672;
+    color: $keyword-color;
 }
 
 /* KeywordPseudo */
@@ -97,7 +97,7 @@
 
 /* KeywordType */
 .chroma .kt {
-    color: $keyword-color;
+    color: $name-color;
 }
 
 /* Name */
@@ -147,6 +147,11 @@
 
 /* NameFunction */
 .chroma .nf {
+    color: $name-color;
+}
+
+/* NameFunction */
+.chroma .nb {
     color: $name-color;
 }
 

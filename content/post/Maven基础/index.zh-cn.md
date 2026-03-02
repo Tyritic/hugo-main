@@ -1,3 +1,4 @@
+
 ---
 date : '2024-11-01T15:28:45+08:00'
 draft : false
@@ -8,15 +9,15 @@ tags : ["后端开发"]
 description : "一些Maven项目的基础知识"
 ---
 
-## Maven的作用
+## 🎯 Maven的作用
 
 - 依赖管理：方便快捷地管理依赖
-
 - 统一项目结构：提供标准的项目结构
+- 项目构建：提供了标准的跨平台项目构建方式
 
-- 项目构建：提供了标准的跨平台项目构建方式 
+---
 
-## Maven项目的结构
+## 📂 Maven项目的结构
 
 ```
 Maven-name/
@@ -31,11 +32,17 @@ Maven-name/
 |--target（打包后的jar包存放地）
 ```
 
-<img src="Maven项目结构图.png" alt="Maven项目结构图" style="zoom:67%;" />
+&lt;div align="center"&gt;
+  &lt;img src="Maven项目结构图.png" alt="Maven项目结构图" width="60%"&gt;
+&lt;/div&gt;
 
-## Maven项目模型
+---
 
-![Maven项目模型](Maven项目模型.png)
+## 🏗️ Maven项目模型
+
+&lt;div align="center"&gt;
+  &lt;img src="Maven项目模型.png" alt="Maven项目模型" width="60%"&gt;
+&lt;/div&gt;
 
 **仓库**：用于存储资源以及各种JAR包
 
@@ -43,82 +50,98 @@ Maven-name/
 - 中央仓库：由Maven团队维护的仓库
 - 私服：公司团队搭建的私有仓库
 
-## 依赖管理
+---
 
-### 什么是依赖
+## 📦 依赖管理
+
+### 🧠 什么是依赖
 
 依赖就是项目所需要的jar包
 
-### Maven坐标
+---
 
-​	Maven坐标是依赖资源的唯一标识，可以唯一定位资源的位置，使用Maven坐标可以引入项目依赖
+### 📌 Maven坐标
 
-#### 	组成结构
+Maven坐标是依赖资源的唯一标识，可以唯一定位资源的位置，使用Maven坐标可以引入项目依赖
+
+#### 组成结构
 
 - **groupId**：项目所属的组织名
 - **artifactId**：项目名称/模块名称
 - **version**：版本号
 
-![](Maven坐标.png)
+&lt;div align="center"&gt;
+  &lt;img src="Maven坐标.png" alt="Maven坐标" width="60%"&gt;
+&lt;/div&gt;
 
-### 依赖配置
+---
 
-#### 	配置方法
+### ⚙️ 依赖配置
+
+#### 配置方法
 
 1. 在pom.xml文件中使用标签&lt; dependencies &gt;
-2. 单个依赖在&lt; dependencies &gt;中被&lt; dependency &gt; 包围
+2. 单个依赖在&lt; dependencies &gt;中被&lt; dependency &gt; 包围
 3. 定义依赖的坐标
 4. 刷新Maven文件
 
-{{<notice tip>}}
+{{&lt;notice tip&gt;}}
 
 若本地仓库不存在依赖则会连接私服或者中央仓库进行下载
 
-{{< /notice >}}
+{{&lt; /notice &gt;}}
 
-### 依赖传递
+---
 
-​	依赖具有传递性
+### 🔄 依赖传递
 
-​	**直接依赖**：在当前项目中通过依赖配置建立的依赖关系
+依赖具有传递性
 
-​	**间接依赖**:被依赖的资源如果依赖其他资源，当前项目间接依赖其他资源
+**直接依赖**：在当前项目中通过依赖配置建立的依赖关系
 
-​	依赖的传递关系可能出现冲突
+**间接依赖**:被依赖的资源如果依赖其他资源，当前项目间接依赖其他资源
+
+依赖的传递关系可能出现冲突
 
 - **路径优先**：当依赖中出现相同的资源时：层级越深优先级越低
 - **声明优先**：当资源在相同的层级被依赖，配置靠前的覆盖配置靠后的
 - **特殊优先**：当同级配置了相同资源的不同版本，后配置的覆盖先配置的
 
-### 依赖排除
+---
 
-​	依赖可以被开发者手动排除
+### 🚫 依赖排除
 
-​	实现形式
+依赖可以被开发者手动排除
 
-1. 在pom.xml文件中使用标签&lt; exclusions &gt;包围
+实现形式
 
-2. 对于要排除的单个依赖使用标签&lt; exclusion &gt;包围
+1. 在pom.xml文件中使用标签&lt; exclusions &gt;包围
 
-   {{< notice tip>}}
+2. 对于要排除的单个依赖使用标签&lt; exclusion &gt;包围
+
+   {{&lt; notice tip&gt;}}
 
    排除依赖的时候无须指定版本号
 
-   {{< /notice >}}
+   {{&lt; /notice &gt;}}
 
-   ![](依赖排除.png)
+   &lt;div align="center"&gt;
+     &lt;img src="依赖排除.png" alt="依赖排除" width="60%"&gt;
+   &lt;/div&gt;
 
- ### 依赖范围
+---
 
-​		依赖的jar包，默认情况下，可以在任何地方使用。但是可以通过&lt; scope &gt; 手动指定其使用范围
+### 🎯 依赖范围
 
-#### 		作用范围
+依赖的jar包，默认情况下，可以在任何地方使用。但是可以通过&lt; scope &gt; 手动指定其使用范围
+
+#### 作用范围
 
 - 主程序范围有效。(main文件夹范围内)
 - 测试程序范围有效。(test文件夹范围内)
 - 是否参与打包运行。(package指令范围内)
 
-#### 			&lt;scope&gt;标签的取值
+#### &lt;scope&gt;标签的取值
 
 | scope的取值   | 主程序 | 测试程序 | 打包运行 | 举例                   |
 | ------------- | ------ | -------- | -------- | ---------------------- |
@@ -127,25 +150,31 @@ Maven-name/
 | provided      | Y      | Y        | X        | servlet（三大组件）    |
 | runtime       | X      | Y        | Y        | jdbc（数据库连接依赖） |
 
-### 生命周期
+---
 
-​	Maven中有三套独立的生命周期
+## ⏱️ 生命周期
+
+Maven中有三套独立的生命周期
 
 - **clean**：清理工作
 - **default**：核心工作包括（编译，测试，打包，变更，部署）
 - **site**：生成报告，发布站点
 
-#### 	生命周期的阶段
+---
 
-![](Maven生命周期.png)
+#### 生命周期的阶段
 
-​	
+&lt;div align="center"&gt;
+  &lt;img src="Maven生命周期.png" alt="Maven生命周期" width="60%"&gt;
+&lt;/div&gt;
 
-​	{{< notice tip >}}
+{{&lt; notice tip &gt;}}
 
-​	同一套生命周期，后面的阶段要依托前面的阶段来执行
+同一套生命周期，后面的阶段要依托前面的阶段来执行
 
-​	{{< /notice >}}
+{{&lt; /notice &gt;}}
+
+---
 
 ##### 重要阶段
 
@@ -154,3 +183,4 @@ Maven-name/
 - **test**:使用合适的单元测试框架运行测试(junit)
 - **package**:将编译后的文件打包，如:jar、war等
 - **install**:安装项目到本地仓库
+

@@ -1,3 +1,4 @@
+
 ---
 date : '2024-11-09T19:20:26+08:00'
 draft : false
@@ -8,34 +9,40 @@ tags : ["后端开发"]
 description : "SpringBoot框架的热部署和日志结构"
 ---
 
-## devtool热部署
+## 🔥 devtool热部署
 
 为了进一步提高开发效率,springboot为我们提供了全局项目热部署,日后在开发过程中修改了部分代码以及相关配置文件后,不需要每次重启使修改生效,在项目中开启springboot全局热部署之后只需要在修改之后等待几秒即可使修改生效。
 
-### 开启热部署
+---
+
+### 🚀 开启热部署
 
 1. 引入相关依赖
 
    ```xml
-   <dependency>
-   	<groupId>org.springframework.boot</groupId>
-   	<artifactId>spring-boot-devtools</artifactId>
-   	<optional>true</optional>
-   </dependency>
+   &lt;dependency&gt;
+   	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+   	&lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+   	&lt;optional&gt;true&lt;/optional&gt;
+   &lt;/dependency&gt;
    ```
 
-## Java的日志体系
+---
 
-### 日志门面
+## 📝 Java的日志体系
+
+### 🏷️ 日志门面
 
 每一种日志框架都有自己单独的API，要使用对应的框架就要使用其对应的API，这就大大的增加应用程序代码对于日志框架的耦合性。
 
 为了解决这个问题，就是在日志框架和应用程序之间架设一个沟通的桥梁，对于应用程序来说，无论底层的日志框架如何变，都不需要有任何感知。只要门面服务做的足够好，随意换另外一个日志框架，应用程序不需要修改任意一行代码，就可以直接上线。总而言之，日志门面用于整合不同日志框架的日志（类似接口），不实现具体日志
 
-常见的日志门面
+**常见的日志门面**
 
 - JCL（Java Common Logging）：Java自带的日志门面
 - SLF4J：目前最常用的日志门面
+
+---
 
 #### JCL
 
@@ -43,8 +50,7 @@ description : "SpringBoot框架的热部署和日志结构"
 
 JCL默认的情况下，会使用JUL日志框架做日志的记录操作。
 
-JCL使用原则：如果有log4j，优先使用log4j，如果没有任何第三方日志框架的时候，使用的就是JUL。再没有则使用JCL内部提供的
-SimpleLog 实现
+JCL使用原则：如果有log4j，优先使用log4j，如果没有任何第三方日志框架的时候，使用的就是JUL。再没有则使用JCL内部提供的SimpleLog 实现
 
 **具体实现**
 
@@ -62,7 +68,7 @@ SimpleLog 实现
    }
    ```
 
-   
+---
 
 #### SLF4J
 
@@ -77,22 +83,20 @@ SimpleLog 实现
 1. 引入相关依赖
 
    ```xml
-   <!--slf4j 核心依赖-->
-   <dependency>
-       <groupId>org.slf4j</groupId>
-       <artifactId>slf4j-api</artifactId>
-       <version>1.7.25</version>
-   </dependency>
-   <!--slf4j 自带的简单日志实现 -->
-   <dependency>
-       <groupId>org.slf4j</groupId>
-       <artifactId>slf4j-simple</artifactId>
-       <version>1.7.25</version>
-   </dependency>
-   <!--具体日志框架的slf4j桥接器（可选）-->
+   &lt;!--slf4j 核心依赖--&gt;
+   &lt;dependency&gt;
+       &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+       &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+       &lt;version&gt;1.7.25&lt;/version&gt;
+   &lt;/dependency&gt;
+   &lt;!--slf4j 自带的简单日志实现 --&gt;
+   &lt;dependency&gt;
+       &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+       &lt;artifactId&gt;slf4j-simple&lt;/artifactId&gt;
+       &lt;version&gt;1.7.25&lt;/version&gt;
+   &lt;/dependency&gt;
+   &lt;!--具体日志框架的slf4j桥接器（可选）--&gt;
    ```
-
-   
 
 2. 编写业务代码(如果在没有任何其他日志实现框架集成的基础之上，slf4j使用的就是自带的框架slf4j-simple，slf4j-simple也必须以单独依赖的形式导入进来。)
 
@@ -109,9 +113,9 @@ SimpleLog 实现
    }
    ```
 
-   
+---
 
-#### 日志实现和对应的日志门面
+#### 📊 日志实现和对应的日志门面
 
 |         日志实现         | 日志门面  |
 | :----------------------: | :-------: |
@@ -120,13 +124,15 @@ SimpleLog 实现
 |          log4j2          |   SLF4J   |
 |         logback          |   SLF4J   |
 
-{{<notice tip>}}
+{{&lt;notice tip&gt;}}
 
 记录日志不能直接使用日志实现框架，必须通过日志门面来实现
 
-{{</notice>}}
+{{&lt;/notice&gt;}}
 
-### 日志实现
+---
+
+### 🔧 日志实现
 
 #### JUL
 
@@ -134,7 +140,9 @@ JUL全称 **Java Util Logging**，核心类在java.util.logging包下，它是ja
 
 **组件构成**
 
-![](51d4c386423747b7edacbc04f1288f84.png)
+&lt;div align="center"&gt;
+  &lt;img src="51d4c386423747b7edacbc04f1288f84.png" alt="JUL组件构成" width="60%"&gt;
+&lt;/div&gt;
 
 - Logger：被称为记录器，应用程序通过获取Logger对象，调用其API来发布日志信息。Logger通常被认为是访问日志系统的入口程序。
 - Handler：处理器，每个Logger都会关联一个或者是一组Handler，Logger会将日志交给关联的Handler去做处理，由Handler负责将日志做记录。Handler具体实现了日志的输出位置，比如可以输出到控制台或者是文件中等等。
@@ -183,15 +191,21 @@ public static void test02() {
 }
 ```
 
-## SpringBoot日志框架
+---
 
-![](微信截图_20241110182327.png)
+## 🚀 SpringBoot日志框架
+
+&lt;div align="center"&gt;
+  &lt;img src="微信截图_20241110182327.png" alt="SpringBoot日志框架" width="60%"&gt;
+&lt;/div&gt;
 
 SpringBoot框架底层使用slf4j+logback的方式进行日志记录同时对于其他日志实现都提供了slf4j日志门面的集成
 
-## SpringBoot日志使用
+---
 
-### 日志级别
+## 💻 SpringBoot日志使用
+
+### 📊 日志级别
 
 - trace：日志追踪信息
 - debug：日志详细信息
@@ -216,18 +230,18 @@ logging:
 			example:
 ```
 
+---
 
+### 📋 日志记录器声明
 
-### 日志记录器声明
-
-方法一：Java语句声明
+**方法一：Java语句声明**
 
 ```java
 //1.声明日志记录器
 Logger logger=LoggerFactory.getLogger(全类名)
 ```
 
-方法二：使用注解@Slf4j(这个注解基于lombok依赖)
+**方法二：使用注解@Slf4j(这个注解基于lombok依赖)**
 
 ```java
 @Slf4j
@@ -236,13 +250,15 @@ public class userController{
 }
 ```
 
-​	
+---
 
-### 日志格式
+### 🎨 日志格式
 
 #### 默认格式
 
-![](微信截图_20241110184311.png)
+&lt;div align="center"&gt;
+  &lt;img src="微信截图_20241110184311.png" alt="日志默认格式" width="60%"&gt;
+&lt;/div&gt;
 
 - 日期和时间：毫秒精度，易于排序
 - 日志级别：ERROR，WARN，INFO，DEBUG，或TRACE
@@ -264,7 +280,9 @@ logging:
 
 [SpringBoot官方文档](https://springdoc.cn/spring-boot/application-properties.html#appendix.application-properties.testing)
 
-### 日志输出
+---
+
+### 📤 日志输出
 
 日志默认在控制台输出，可以通过修改applicaiton.yml中的logging.file.name和logging.file.path来输出日志文件
 
@@ -279,7 +297,9 @@ logging:
 		path:日志文件的输出路径
 ```
 
-### 日志的归档和迭代
+---
+
+### 📂 日志的归档和迭代
 
 在application.yml中可以设置相关参数实现日志的归档和迭代
 
@@ -291,7 +311,7 @@ logging:
 |     logging.logback.rollingpolicy.total-size-cap     |   删除日志档案之前可以使用的最大大小   |
 |      logging.logback.rollingpolicy.max-history       |      保留日志存档的天数(默认为7)       |
 
-示例代码
+**示例代码**
 
 ```yml
 logging:
@@ -302,35 +322,38 @@ logging:
 		max-history: 日志文件保留的时间
 ```
 
-### 切换日志框架
+---
+
+### 🔄 切换日志框架
 
 将SpringBoot底层默认日志框架logback修改为log4j2
 
 1. 排除logback的场景启动器
 
    ```xml
-   <dependencies>
-   	<dependency>
-   	<!‐‐starter‐web里面自动添加starter‐logging 也就是logback的依赖‐‐>
-   		 <groupId>org.springframework.boot</groupId>
-   		 <artifactId>spring‐boot‐starter‐web</artifactId>
-   		 <exclusions>
-   	<!‐‐排除starter‐logging 也就是logback的依赖‐‐>
-   		 	<exclusion>
-   			 	<artifactId>spring‐boot‐starter‐logging</artifactId>
-   			 	<groupId>org.springframework.boot</groupId>
-   		 	</exclusion>
-   		 </exclusions>
-    	</dependency>
-   </dependencies>
+   &lt;dependencies&gt;
+   	&lt;dependency&gt;
+   	&lt;!‐‐starter‐web里面自动添加starter‐logging 也就是logback的依赖‐‐&gt;
+   		 &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+   		 &lt;artifactId&gt;spring‐boot‐starter‐web&lt;/artifactId&gt;
+   		 &lt;exclusions&gt;
+   	&lt;!‐‐排除starter‐logging 也就是logback的依赖‐‐&gt;
+   		 	&lt;exclusion&gt;
+   			 	&lt;artifactId&gt;spring‐boot‐starter‐logging&lt;/artifactId&gt;
+   			 	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+   		 	&lt;/exclusion&gt;
+   		 &lt;/exclusions&gt;
+    	&lt;/dependency&gt;
+   &lt;/dependencies&gt;
    ```
 
 2. 添加log4j2的场景启动器
 
    ```xml
-   <!‐‐Log4j2的场景启动器‐‐>
-   <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring‐boot‐starter‐log4j2</artifactId>
-   </dependency>
+   &lt;!‐‐Log4j2的场景启动器‐‐&gt;
+   &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring‐boot‐starter‐log4j2&lt;/artifactId&gt;
+   &lt;/dependency&gt;
    ```
+

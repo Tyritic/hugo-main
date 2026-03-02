@@ -1,5 +1,5 @@
-$defaultTagBackgrounds: #8ea885, #df7988, #0177b8, #ffb900, #6b69d6;
-$defaultTagColors: #fff, #fff, #fff, #fff, #fff;
+$defaultTagBackgrounds: #00d4ff, #ff00a0, #0177b8, #7b42f6, #00f0b5;
+$defaultTagColors: #000, #fff, #fff, #fff, #000;
 
 /*
 *   Global style
@@ -11,28 +11,27 @@ $defaultTagColors: #fff, #fff, #fff, #fff, #fff;
         --main-top-padding: 50px;
     }
 
-    --body-background: #f5f5fa;
+    --body-background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    --accent-color: #00d4ff;
+    --accent-color-darker: #0099cc;
+    --accent-color-text: #000;
+    --body-text-color: rgba(255, 255, 255, 0.8);
 
-    --accent-color: #34495e;
-    --accent-color-darker: #2c3e50;
-    --accent-color-text: #fff;
-    --body-text-color: #707070;
-
-    --tag-border-radius: 4px;
+    --tag-border-radius: 8px;
 
     --section-separation: 40px;
 
-    --scrollbar-thumb: hsl(0, 0%, 85%);
-    --scrollbar-track: var(--body-background);
+    --scrollbar-thumb: rgba(0, 212, 255, 0.5);
+    --scrollbar-track: rgba(15, 12, 41, 0.5);
 
     &[data-scheme="dark"] {
-        --body-background: #303030;
-        --accent-color: #ecf0f1;
-        --accent-color-darker: #bdc3c7;
+        --body-background: linear-gradient(135deg, #0a071a 0%, #1a153a 50%, #0f0c29 100%);
+        --accent-color: #00f0b5;
+        --accent-color-darker: #00c095;
         --accent-color-text: #000;
-        --body-text-color: rgba(255, 255, 255, 0.7);
-        --scrollbar-thumb: hsl(0, 0%, 40%);
-        --scrollbar-track: var(--body-background);
+        --body-text-color: rgba(255, 255, 255, 0.8);
+        --scrollbar-thumb: rgba(0, 240, 181, 0.5);
+        --scrollbar-track: rgba(10, 7, 26, 0.5);
     }
 }
 
@@ -51,15 +50,17 @@ $defaultTagColors: #fff, #fff, #fff, #fff, #fff;
 *   Card style
 */
 :root {
-    --card-background: #fff;
-    --card-background-selected: #eaeaea;
+    --card-background: rgba(255, 255, 255, 0.1);
+    --card-background-selected: rgba(255, 255, 255, 0.2);
+    --card-border: 1px solid rgba(0, 212, 255, 0.3);
+    --card-glow: 0 0 15px rgba(0, 212, 255, 0.3);
 
-    --card-text-color-main: #000;
-    --card-text-color-secondary: #747474;
-    --card-text-color-tertiary: #767676;
-    --card-separator-color: rgba(218, 218, 218, 0.5);
+    --card-text-color-main: rgba(255, 255, 255, 0.95);
+    --card-text-color-secondary: rgba(255, 255, 255, 0.8);
+    --card-text-color-tertiary: rgba(255, 255, 255, 0.6);
+    --card-separator-color: rgba(0, 212, 255, 0.2);
 
-    --card-border-radius: 10px;
+    --card-border-radius: 12px;
 
     --card-padding: 20px;
 
@@ -78,12 +79,14 @@ $defaultTagColors: #fff, #fff, #fff, #fff, #fff;
     }
 
     &[data-scheme="dark"] {
-        --card-background: #424242;
-        --card-background-selected: rgba(255, 255, 255, 0.16);
-        --card-text-color-main: rgba(255, 255, 255, 0.9);
-        --card-text-color-secondary: rgba(255, 255, 255, 0.7);
-        --card-text-color-tertiary: rgba(255, 255, 255, 0.5);
-        --card-separator-color: rgba(255, 255, 255, 0.12);
+        --card-background: rgba(255, 255, 255, 0.05);
+        --card-background-selected: rgba(255, 255, 255, 0.1);
+        --card-border: 1px solid rgba(0, 240, 181, 0.3);
+        --card-glow: 0 0 15px rgba(0, 240, 181, 0.3);
+        --card-text-color-main: rgba(255, 255, 255, 0.95);
+        --card-text-color-secondary: rgba(255, 255, 255, 0.8);
+        --card-text-color-tertiary: rgba(255, 255, 255, 0.6);
+        --card-separator-color: rgba(0, 240, 181, 0.2);
     }
 }
 
@@ -106,33 +109,39 @@ $defaultTagColors: #fff, #fff, #fff, #fff, #fff;
 */
 :root {
     --blockquote-border-size: 4px;
-    --blockquote-background-color: rgb(248 248 248);
+    --blockquote-background-color: rgba(0, 212, 255, 0.1);
+    --blockquote-border-color: #00d4ff;
 
     --heading-border-size: 4px;
+    --heading-border-color: #00d4ff;
 
-    --link-background-color: 189, 195, 199;
-    --link-background-opacity: 0.5;
-    --link-background-opacity-hover: 0.7;
+    --link-background-color: 0, 212, 255;
+    --link-background-opacity: 0.3;
+    --link-background-opacity-hover: 0.5;
 
-    --pre-background-color: #272822;
-    --pre-text-color: #f8f8f2;
+    --pre-background-color: rgba(0, 0, 0, 0.8);
+    --pre-text-color: #ffffff;
+    --pre-border: 1px solid rgba(0, 240, 181, 0.3);
 
-    --code-background-color: rgba(0, 0, 0, 0.12);
-    --code-text-color: #808080;
+    --code-background-color: rgba(0, 212, 255, 0.1);
+    --code-text-color: #00f0b5;
 
-    --table-border-color: #dadada;
-    --tr-even-background-color: #efefee;
+    --table-border-color: rgba(0, 212, 255, 0.3);
+    --tr-even-background-color: rgba(0, 212, 255, 0.05);
 
-    --kbd-border-color: #dadada;
+    --kbd-border-color: rgba(0, 212, 255, 0.3);
 
     &[data-scheme="dark"] {
-        --code-background-color: #272822;
-        --code-text-color: rgba(255, 255, 255, 0.9);
+        --code-background-color: rgba(0, 240, 181, 0.1);
+        --code-text-color: #00f0b5;
 
-        --table-border-color: #717171;
-        --tr-even-background-color: #545454;
+        --table-border-color: rgba(0, 240, 181, 0.3);
+        --tr-even-background-color: rgba(0, 240, 181, 0.05);
 
-        --blockquote-background-color: rgb(75 75 75);
+        --blockquote-background-color: rgba(0, 240, 181, 0.1);
+        --blockquote-border-color: #00f0b5;
+        --heading-border-color: #00f0b5;
+        --pre-border: 1px solid rgba(0, 240, 181, 0.3);
     }
 }
 
@@ -141,22 +150,22 @@ $defaultTagColors: #fff, #fff, #fff, #fff, #fff;
 *   Thanks to https://www.figma.com/community/plugin/744987207861965946/Shadow-picker
 */
 :root {
-    --shadow-l1: 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 0px 1px rgba(0, 0, 0, 0.04);
-    --shadow-l2: 0px 10px 20px rgba(0, 0, 0, 0.04), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
-    --shadow-l3: 0px 10px 20px rgba(0, 0, 0, 0.04), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
-    --shadow-l4: 0px 24px 32px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04),
-        0px 0px 1px rgba(0, 0, 0, 0.04);
+    --shadow-l1: 0px 4px 8px rgba(0, 0, 0, 0.1), 0px 0px 2px rgba(0, 212, 255, 0.2), 0px 0px 1px rgba(0, 212, 255, 0.3);
+    --shadow-l2: 0px 10px 20px rgba(0, 0, 0, 0.15), 0px 2px 6px rgba(0, 212, 255, 0.3), 0px 0px 1px rgba(0, 212, 255, 0.4);
+    --shadow-l3: 0px 10px 20px rgba(0, 0, 0, 0.2), 0px 2px 6px rgba(0, 212, 255, 0.4), 0px 0px 1px rgba(0, 212, 255, 0.5);
+    --shadow-l4: 0px 24px 32px rgba(0, 0, 0, 0.25), 0px 16px 24px rgba(0, 212, 255, 0.3), 0px 4px 8px rgba(0, 212, 255, 0.4),
+        0px 0px 1px rgba(0, 212, 255, 0.5);
 }
 
 [data-scheme="light"] {
-    --pre-text-color: #272822;
-    --pre-background-color: #fafafa;
+    --pre-text-color: #ffffff;
+    --pre-background-color: rgba(0, 0, 0, 0.8);
     @import "partials/highlight/light.scss";
 }
 
 [data-scheme="dark"] {
-    --pre-text-color: #f8f8f2;
-    --pre-background-color: #272822;
+    --pre-text-color: #ffffff;
+    --pre-background-color: rgba(0, 0, 0, 0.8);
     @import "partials/highlight/dark.scss";
 }
 

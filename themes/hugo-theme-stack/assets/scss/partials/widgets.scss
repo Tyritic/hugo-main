@@ -22,20 +22,46 @@
     a {
       background: var(--card-background);
       box-shadow: var(--shadow-l1);
+      border: var(--card-border);
       border-radius: var(--tag-border-radius);
       padding: 8px 20px;
       color: var(--card-text-color-main);
       font-size: 1.4rem;
-      transition: box-shadow 0.3s ease;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+        transition: left 0.6s ease;
+        z-index: 1;
+      }
 
       &:hover {
-        box-shadow: var(--shadow-l2);
+        box-shadow: var(--card-glow), var(--shadow-l2);
+        border-color: rgba(0, 212, 255, 0.5);
+        transform: translateY(-2px);
+        color: #00d4ff;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        
+        &::before {
+          left: 100%;
+        }
       }
     }
   }
   .tagCloud-count {
     margin-left: 7px;
     color: var(--body-text-color);
+    position: relative;
+    z-index: 2;
   }
 }
 
@@ -45,6 +71,14 @@
     border-radius: var(--card-border-radius);
     box-shadow: var(--shadow-l1);
     background-color: var(--card-background);
+    border: var(--card-border);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      box-shadow: var(--card-glow), var(--shadow-l2);
+      border-color: rgba(0, 212, 255, 0.5);
+    }
   }
 
   .archives-year {
@@ -56,15 +90,53 @@
       font-size: 1.4rem;
       padding: 18px 25px;
       display: flex;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+        transition: left 0.6s ease;
+        z-index: 1;
+      }
 
       span.year {
         flex: 1;
         color: var(--card-text-color-main);
         font-weight: bold;
+        position: relative;
+        z-index: 2;
+        transition: color 0.3s ease;
       }
 
       span.count {
         color: var(--card-text-color-tertiary);
+        position: relative;
+        z-index: 2;
+        transition: color 0.3s ease;
+      }
+
+      &:hover {
+        background-color: rgba(0, 212, 255, 0.1);
+        
+        span.year {
+          color: #00d4ff;
+          text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+        
+        span.count {
+          color: #00f0b5;
+        }
+        
+        &::before {
+          left: 100%;
+        }
       }
     }
   }
@@ -80,19 +152,45 @@
     a {
       background: var(--card-background);
       box-shadow: var(--shadow-l1);
-      border-radius: var(--category-border-radius);
+      border: var(--card-border);
+      border-radius: var(--tag-border-radius);
       padding: 8px 20px;
       color: var(--card-text-color-main);
       font-size: 1.4rem;
-      transition: box-shadow 0.3s ease;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+        transition: left 0.6s ease;
+        z-index: 1;
+      }
 
       &:hover {
-        box-shadow: var(--shadow-l2);
+        box-shadow: var(--card-glow), var(--shadow-l2);
+        border-color: rgba(0, 212, 255, 0.5);
+        transform: translateY(-2px);
+        color: #00d4ff;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        
+        &::before {
+          left: 100%;
+        }
       }
     }
   }
   .category-count {
     margin-left: 7px;
     color: var(--body-text-color);
+    position: relative;
+    z-index: 2;
   }
 }

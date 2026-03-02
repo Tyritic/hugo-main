@@ -1,3 +1,4 @@
+
 ---
 date : '2024-11-06T17:26:14+08:00'
 draft : false
@@ -8,9 +9,9 @@ tags : ["数据库","后端开发"]
 description : "MyBatis框架的基本使用"
 ---
 
-## 在Mapper接口中基于注解书写sql语句
+## 📝 在Mapper接口中基于注解书写sql语句
 
-### 设置动态参数
+### 🎯 设置动态参数
 
 ```java
 #{参数名}
@@ -18,7 +19,9 @@ description : "MyBatis框架的基本使用"
 
 如果mapper接口中的方法参数名和mapper.xml中sql语句中的字段名一致，spring会自动进行封装
 
-### 设置mappper接口方法参数名和mapper.xml中的sql语句中的字段一致
+---
+
+### 🔗 设置mappper接口方法参数名和mapper.xml中的sql语句中的字段一致
 
 如果mapper接口中的方法参数名和mapper.xml中sql语句中的字段名不一致，需要通过注解@Param来指定对应关系
 
@@ -29,18 +32,18 @@ description : "MyBatis框架的基本使用"
 示例
 
 ```java
-User selectUser(@param(“name”)String personName);
+User selectUser(@param("name")String personName);
 ```
 
 ```xml
-<select id=" selectUser" resultMap="BaseResultMap">  
+&lt;select id=" selectUser" resultMap="BaseResultMap"&gt;  
    select  *  from user  where user_name = #{name} 
-</select>
+&lt;/select&gt;
 ```
 
+---
 
-
-### 删除操作
+### 🗑️ 删除操作
 
 #### sql语句
 
@@ -58,7 +61,9 @@ public interface EmpMapper
 public void delete(Integer id):
 ```
 
-### 添加操作
+---
+
+### ➕ 添加操作
 
 #### sql语句
 
@@ -83,7 +88,9 @@ public void insert(Emp emp);
 
 实现：在@Insert上添加注解 **@Options(keyProperty = "id", useGeneratedKeys = true)** 会自动将生成的主键值赋给id属性
 
-### 更新操作
+---
+
+### 🔄 更新操作
 
 #### sql语句
 
@@ -100,7 +107,7 @@ public interface EmpMapper
 public void update(Emp emp);
 ```
 
-{{<notice tip>}}
+{{&lt;notice tip&gt;}}
 
 数据封装
 
@@ -122,9 +129,11 @@ public void update(Emp emp);
   })
   ```
 
-{{</notice>}}
+{{&lt;/notice&gt;}}
 
-### 查询操作
+---
+
+### 🔍 查询操作
 
 #### sql语句
 
@@ -140,22 +149,22 @@ where name like '%李%'
 @Mapper
 public interface EmpMapper
 @Select("select * from emp where name like '%#{name}%'")
-public List<User> list(String name)
+public List&lt;User&gt; list(String name)
 ```
 
-{{<notice warning>}}
+{{&lt;notice warning&gt;}}
 
 在模糊匹配中%#{name}%不建议使用（不是预编译sql语句）
 
-可以使用concat(‘%','#{name}','%')
+可以使用concat('%','#{name}','%')
 
-{{</notice>}}
+{{&lt;/notice&gt;}}
 
+---
 
+## 📄 在Mapper.xml中基于映射文件属性sql语句
 
-## 在Mapper.xml中基于映射文件属性sql语句
-
-### 使用规范
+### 📌 使用规范
 
 - XML映射文件的名称与Mapper接口名称一致，并且将XML映射文件和Mapper接口放置在相同包下(同包同名)。
 
@@ -166,73 +175,81 @@ public List<User> list(String name)
 - 编写sql语句的格式
 
   ```xml
-  <操作名 id="函数名" resultType="单条记录的实体类全类名">
+  &lt;操作名 id="函数名" resultType="单条记录的实体类全类名"&gt;
       sql语句
-  </操作名>
+  &lt;/操作名&gt;
   ```
 
-  {{<notice tip>}}
+  {{&lt;notice tip&gt;}}
 
   只有select操作需要resultType
 
-  {{</notice>}}
+  {{&lt;/notice&gt;}}
 
-### 动态SQL语句
+---
 
-####  \< if \>标签
+### 🔄 动态SQL语句
 
-​	描述：用于判断条件是否成立。使用test属性进行条件判断，如果条件为true，则拼接SQL
+#### 🔥 &lt; if &gt;标签
 
-​	示例代码
+描述：用于判断条件是否成立。使用test属性进行条件判断，如果条件为true，则拼接SQL
+
+示例代码
 
 ```xml
-<select id="list" resultType="com.itheima.pojo.Emp">
+&lt;select id="list" resultType="com.itheima.pojo.Emp"&gt;
 	select *
 	from omp
 	where
-	<if test="name !=null">
+	&lt;if test="name !=null"&gt;
 		name like concat("%",#{name},"%")
-	</if>
-</select>
+	&lt;/if&gt;
+&lt;/select&gt;
 ```
 
-#### \<where\>标签
+---
 
-​	描述：动态生成where子句，若子标签的条件都不满足则不会生成where子句，同时会删除子句开头的条件运算符
+#### 🔥 &lt;where&gt;标签
 
-​	示例代码
+描述：动态生成where子句，若子标签的条件都不满足则不会生成where子句，同时会删除子句开头的条件运算符
+
+示例代码
 
 ```xml
-<select id="list" resultType="com.itheima.pojo.Emp">
+&lt;select id="list" resultType="com.itheima.pojo.Emp"&gt;
 	select *
 	from emp
-	<where>
-        <if test="name !=null">
+	&lt;where&gt;
+        &lt;if test="name !=null"&gt;
 		name like concat("%",#{name},"%")
-		</if>
-    </where>
-</select>
+		&lt;/if&gt;
+    &lt;/where&gt;
+&lt;/select&gt;
 ```
 
-#### \<set\>标签
+---
+
+#### 🔥 &lt;set&gt;标签
 
 描述：动态生成set子句
 
 示例代码
 
 ```xml
-<update id="update">
+&lt;update id="update"&gt;
     update emp
-    <set>
-        <if test="name !=null">
+    &lt;set&gt;
+        &lt;if test="name !=null"&gt;
 			name=#{name}
-		</if>
-    </set>
+		&lt;/if&gt;
+    &lt;/set&gt;
     where id=#{id}
-</update>
+&lt;/update&gt;
 ```
 
-#### \<foreach\>标签
+---
+
+#### 🔥 &lt;foreach&gt;标签
 
 描述：用于遍历元素
 
@@ -247,57 +264,67 @@ public List<User> list(String name)
 示例代码
 
 ```xml
-<delete id="delete">
+&lt;delete id="delete"&gt;
     delete from emp where id in
-    <foreach collection="遍历的集合",item="集合中的元素",separator="分隔符",open="(",close=")">
+    &lt;foreach collection="遍历的集合",item="集合中的元素",separator="分隔符",open="(",close=")"&gt;
         #{id}
-    </foreach>
-</delete>
+    &lt;/foreach&gt;
+&lt;/delete&gt;
 ```
 
-#### \<sql\>标签和\<include\>标签
+---
 
-- \<sql\>:定义可重用的 SQL片段。
-- \<include\>:通过属性refid，指定包含的sql片段。
+#### 🔥 &lt;sql&gt;标签和&lt;include&gt;标签
+
+- &lt;sql&gt;:定义可重用的 SQL片段。
+- &lt;include&gt;:通过属性refid，指定包含的sql片段。
 
 示例代码
 
 ```xml
-<sql id="commonSelect">
+&lt;sql id="commonSelect"&gt;
 select id, username
 from emp
-</sql>
+&lt;/sql&gt;
 
 
-<select id="getById" resultTypea"com.itheima.pojo.Emp">
-    <include refid="commonselect"/>
+&lt;select id="getById" resultTypea"com.itheima.pojo.Emp"&gt;
+    &lt;include refid="commonselect"/&gt;
     where id = #{id}
-</select>
+&lt;/select&gt;
 ```
 
-#### \< trim \>标签
+---
+
+#### 🔥 &lt; trim &gt;标签
 
 - prefix：将trim标签中内容前面添加指定内容
 - suffix：将trim标签中内容前面添加指定内容
 - prefixOverride：将trim标签中内容前面去除指定内容
 - suffixOverride：将trim标签中内容后面去除指定内容
 
-#### \<choose\>,\<when\>,\<otherwise\>
+---
+
+#### 🔥 &lt;choose&gt;,&lt;when&gt;,&lt;otherwise&gt;
 
 相当于switch，if，else
 
 ```xml
-<choose>
-    <when test="满足的条件">
-    </when>
-    <otherwise>
-    </otherwise>
-</choose>
+&lt;choose&gt;
+    &lt;when test="满足的条件"&gt;
+    &lt;/when&gt;
+    &lt;otherwise&gt;
+    &lt;/otherwise&gt;
+&lt;/choose&gt;
 ```
 
-## 字段名和属性名的映射关系
+---
+
+## 🗺️ 字段名和属性名的映射关系
 
 通常情况下当数据表中的字段名和实体类的属性名对应相等时，MyBatis会将查询出的字段数据自动赋值给实体类
+
+---
 
 ### 当字段名和属性名不一致时
 
@@ -306,15 +333,15 @@ from emp
 - 通过resultMap解决，其他的sql语句设置resultMap属性来确定映射关系
 
   ```xml
-  <resultMap id="resultMap_name",type="实体类">
-      <id property="属性名",column="主键字段名"></id>
-      <result property="属性名",column="其他字段名"></result>
-  </resultMap>
+  &lt;resultMap id="resultMap_name",type="实体类"&gt;
+      &lt;id property="属性名",column="主键字段名"&gt;&lt;/id&gt;
+      &lt;result property="属性名",column="其他字段名"&gt;&lt;/result&gt;
+  &lt;/resultMap&gt;
   ```
 
-  
+---
 
-### 多对一的映射关系
+### 👥 多对一的映射关系
 
 示例：查询员工及其对应部门信息时，将员工的did和dname合并为一个dept对象，作为emp对象的成员变量
 
@@ -323,15 +350,15 @@ from emp
   - resultMap使用级联属性对应成员对象名
 
     ```xml
-    <resultMap id="empAndDeptResultMapone" type="Emp">
-        <id property="eid" column="eid"></id>
-        <result property="empName" column="emp name"></result>
-        <result property="age"column="age"></result>
-        <result property="sex" column="sex"></result>
-        <result property="email" column="email"></result>
-        <result property="dept.did" column="did"></result>
-        <result property="dept.deptName" column="dept_name"></result>
-    </resultMap>
+    &lt;resultMap id="empAndDeptResultMapone" type="Emp"&gt;
+        &lt;id property="eid" column="eid"&gt;&lt;/id&gt;
+        &lt;result property="empName" column="emp name"&gt;&lt;/result&gt;
+        &lt;result property="age"column="age"&gt;&lt;/result&gt;
+        &lt;result property="sex" column="sex"&gt;&lt;/result&gt;
+        &lt;result property="email" column="email"&gt;&lt;/result&gt;
+        &lt;result property="dept.did" column="did"&gt;&lt;/result&gt;
+        &lt;result property="dept.deptName" column="dept_name"&gt;&lt;/result&gt;
+    &lt;/resultMap&gt;
     ```
 
 - 通过resultMap中的association标签解决，其他的sql语句设置resultMap属性来确定映射关系
@@ -339,22 +366,22 @@ from emp
   - association具有两个属性，property对应实体类中的成员对象名，javaType对应该成员对象的java类型
 
     ```xml
-    <resultMap id="empAndDeptResultMapone" type="Emp">
-        <id property="eid" column="eid"></id>
-        <result property="empName" column="emp name"></result>
-        <result property="age"column="age"></result>
-        <result property="sex" column="sex"></result>
-        <result property="email" column="email"></result>
-        <association property="dept" javaType="Dept">
-            <id property="did" column="did"></id>
-            <result property="dept.deptName" column="dept_name"></result>
-        </association>
-    </resultMap>
+    &lt;resultMap id="empAndDeptResultMapone" type="Emp"&gt;
+        &lt;id property="eid" column="eid"&gt;&lt;/id&gt;
+        &lt;result property="empName" column="emp name"&gt;&lt;/result&gt;
+        &lt;result property="age"column="age"&gt;&lt;/result&gt;
+        &lt;result property="sex" column="sex"&gt;&lt;/result&gt;
+        &lt;result property="email" column="email"&gt;&lt;/result&gt;
+        &lt;association property="dept" javaType="Dept"&gt;
+            &lt;id property="did" column="did"&gt;&lt;/id&gt;
+            &lt;result property="dept.deptName" column="dept_name"&gt;&lt;/result&gt;
+        &lt;/association&gt;
+    &lt;/resultMap&gt;
     ```
 
-    
+---
 
-### 一对多的映射方式
+### 👥 一对多的映射方式
 
 示例：查询部门及其下属员工时，一个部门作为实体类具有一个员工对象的集合作为成员变量
 
@@ -363,15 +390,14 @@ from emp
   - collection具有两个属性，property对应实体类中的成员对象名，ofType对应该成员对象的java类型
 
     ```xml
-    <resultMap id="empAndDeptResultMapone" type="Emp">
-        <collection property="成员变量名" ofType="集合内的泛型">
-             <id property="eid" column="eid"></id>
-        	<result property="empName" column="emp name"></result>
-        	<result property="age"column="age"></result>
-        	<result property="sex" column="sex"></result>
-        	<result property="email" column="email"></result>
-        </association>
-    </resultMap>
+    &lt;resultMap id="empAndDeptResultMapone" type="Emp"&gt;
+        &lt;collection property="成员变量名" ofType="集合内的泛型"&gt;
+             &lt;id property="eid" column="eid"&gt;&lt;/id&gt;
+        	&lt;result property="empName" column="emp name"&gt;&lt;/result&gt;
+        	&lt;result property="age"column="age"&gt;&lt;/result&gt;
+        	&lt;result property="sex" column="sex"&gt;&lt;/result&gt;
+        	&lt;result property="email" column="email"&gt;&lt;/result&gt;
+        &lt;/association&gt;
+    &lt;/resultMap&gt;
     ```
 
-    

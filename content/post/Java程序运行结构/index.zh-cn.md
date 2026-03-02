@@ -9,23 +9,6 @@ description : "手写笔记转换"
 math : true
 ---
 
-## 📑 目录
-
-- [顺序结构](#顺序结构)
-- [选择结构](#选择结构)
-  - [if语句](#if语句)
-  - [if-else语句](#if-else语句)
-  - [if-else if语句](#if-else-if语句)
-  - [switch语句](#switch语句)
-  - [JDK12的新特性](#jdk12的新特性)
-- [循环结构](#循环结构)
-  - [for循环](#for循环)
-  - [while循环](#while循环)
-  - [do-while循环](#do-while循环)
-- [循环控制语句](#循环控制语句)
-
----
-
 ## 📐 顺序结构
 
 代码逐行执行，执行逻辑为线性逻辑

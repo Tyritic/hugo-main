@@ -1,3 +1,4 @@
+
 ---
 date : '2025-03-07T10:05:10+08:00'
 draft : false
@@ -9,166 +10,296 @@ description : "RAG基础以及基于langchain4j的实现方式"
 math : true
 ---
 
-## RAG基础
+## 🤖 RAG 概述
 
-### RAG概念
+RAG（Retrieval-Augmented Generation，检索增强生成）是一种将**信息检索**与**文本生成**结合的技术，其核心思想是：在回答用户问题前，先从私有的知识库或文档库中检索出相关的文本片段，再把这些片段连同用户问题一起送给 LLM，让模型可以基于这些“额外上下文”给出更准确、更有依据的回答。
 
-**RAG（检索增强生成，Retrieval-Augmented Generation）** 是一种结合 **信息检索（Retrieval）** 和 **文本生成（Generation）** 的 AI 方法，主要用于 **提高大语言模型（LLM）的知识覆盖范围和回答准确性**。**个人理解为RAG 让 AI 在回答问题时，先从外部知识库中检索相关信息，再结合检索到的内容生成最终回答。** 这样可以减少 AI 依赖自身训练数据的局限性，并提供最新、准确的信息。
+使用 RAG 主要可以解决以下问题：
 
-- **检索** ：检索外部知识库
-- **增强生成** ：将检索到的知识送给大语言模型以此来优化大模型的生成结果 ，使得大模型在生成更精确、更贴合上下文答案的同时，也能有效减少产生误导性信息的可能。
+- **知识时效性**：LLM 的训练数据有截止日期，无法知道训练后的新知识；通过 RAG 可以动态检索最新文档。
+- **私有/领域知识**：企业内部文档、特定领域的资料一般不会出现在公开训练数据中，需要 RAG 把这些信息“带给”模型。
+- **减少幻觉**：有了检索到的上下文作为参考，模型更容易“有据可依”，降低瞎编的概率。
 
-### RAG的业务场景
+---
 
-- 知识的局限性 ：大模型自身的知识完全源于它的训练数据，基本都是构建于网络公开的数据，对于一些实时性的、非公开的或离线的数据是无法获取到的，这部分知识也就无从具备。
-- 幻觉问题： 所有的 AI 大模型的底层原理都是基于数学概率，其模型输出实质上是一系列数值运算，大模型也不例外，所以它有时候会一本正经地胡说八道，尤其是在大模型自身不具备某一方面的知识或不擅长的场景。
+## 🏗️ RAG 的典型流程
 
-在之前的识物探趣的项目中，大模型不具备展馆内的展品相关知识，因此需要将展馆方提供的文档作为外部知识库。
+在 langchain4j 中实现 RAG，通常可以分为以下几个步骤：
 
-### 上下文学习
+1. **文档加载与解析（Loading）**：读取 PDF、TXT、Word、HTML 等格式的文档，并提取出文本内容。
+2. **文本切分（Splitting）**：把长文本切分成若干大小合适的“块（chunk）”或“文本段（text segment）”。
+3. **向量化与存储（Embedding &amp; Storing）**：把每个文本片段通过 Embedding 模型转换成向量，并存入向量数据库（Embedding Store）。
+4. **检索（Retrieval）**：当用户提问时，把问题也转成向量，在向量库中检索出最相似的若干文本片段。
+5. **增强生成（Augmented Generation）**：把用户问题 + 检索到的相关片段组装成提示，发送给 LLM，让模型根据这些信息回答问题。
 
-在上下文学习方法中，模型不仅考虑 当前任务所提供的信息 ，还会考虑 上下文环境中的其他信息 。例如先前的句子或文本段落。在这种情况下，模型可以更好地理解任务的背景和目的，从而输出更
-准确的信息。例如，如果要求模型生成一段关于“猫”的文本，那么在Prompt 中加入一些关于“猫”的 上下文信息，例如“猫是一种宠物，它们很可爱” ”，可以帮助模型更好地理解任务的背景和目的，从而输出更准确的信息。 **RAG其实就是上下文学习的一种，查询与问题相关的知识，并将该知识作为上下文传给大语言模型**
+&lt;div align="center"&gt;
+  &lt;img src="image.png" alt="RAG流程图" width="60%"&gt;
+&lt;/div&gt;
 
-### RAG的过程
+---
 
-#### 索引阶段
+## 📦 文档加载（Document Loading）
 
-嵌入模型是将文本数据（如词汇、短语或句子）转换为数值向量（文本向量化）的工具，这些向量捕捉了文本的语义信息，可用于各种自然语言处理（NLP）任务。文本向量化的本质 **将文本映射到高维空间中的点，使语义相似的文本在这个空间中距离较近。** 例如，“猫”和”狗”的向量可能会比”猫”和”汽车”的向量更接近。
+langchain4j 提供了 `Document` 类以及多种 `DocumentLoader` 实现，用于从不同来源加载文档：
 
-![Embedding过程](1728219277.jpg)
+- `FileSystemDocumentLoader`：从本地文件系统加载；
+- `UrlDocumentLoader`：通过 URL 加载；
+- `PdfDocumentLoader`（部分模块）：用于解析 PDF；
+- 你也可以自己实现 `DocumentParser` 来定制解析逻辑。
 
-在索引阶段，文档经过向量化，以便在检索阶段实现高效搜索。对于向量搜索，这通常涉及用额外的数据和 **元数据** 丰富它们，将它们分成更小的片段，**嵌入** 这些片段，最后将它们存储在向量数据库中。![索引过程](rag-ingestion-9b548e907df1c3c8948643795a981b95.png)
+### 示例：加载一个简单的文本文件
 
-#### 检索阶段
+```java
+Path filePath = Paths.get("path/to/your-document.txt");
+Document document = FileSystemDocumentLoader.loadDocument(filePath);
 
-将用户的查询通过嵌入模型转换成向量 ，以便与向量数据库中存储的知识相关的向量进行比对。通过相似性搜索 ，从向量数据库中找出最匹配的前 K 个数据。
+// 或者一次加载目录下多个文件
+List&lt;Document&gt; documents = FileSystemDocumentLoader.loadDocuments(
+    Paths.get("path/to/your/docs"),
+    new TextDocumentParser() // 或其他解析器，如 PdfDocumentParser
+);
+```
 
-#### 增强生成阶段
+每个 `Document` 包含文本内容（`text()`）和元数据（`metadata()`），比如文件名、URL 等。
 
-将用户的查询内容和检索到的相关知识 一起嵌入到一个预设的提示词模板，将经过检索增强的提示词内容输入到大语言模型中，以此生成所需的输出。
+---
 
-![增强过程](80d5236e087e619edced930b19fb653a.png)
+## ✂️ 文本切分（Document Splitting）
 
-![流程图](image-20250307103356303.png)
+由于大多数 Embedding 模型对输入长度有限制，且太长的文本段也不利于精准检索，我们通常需要把文档切分成更短的片段。
 
-## LangChain4j提供的解决方案
+langchain4j 提供了 `DocumentSplitter`，常见实现有 `DocumentSplitters` 工具类里的分段器：
 
-### EasyRAG
+```java
+DocumentSplitter splitter = DocumentSplitters.recursive(
+    500,    // 每个 segment 最多 500 字符/Token
+    50       // 重叠 50 字符/Token，避免上下文被切断
+);
 
-langchain4j提供的最简单的RAG实现，只需提供文档和指定向量数据库即可实现最基础的RAG，langchain4j的默认嵌入模型bge-small-en-v1.5在量化后仅仅需要24MB内存
+List&lt;TextSegment&gt; segments = splitter.split(document);
+```
 
-- 引入依赖
+- 第一个参数是**最大 segment 大小**，可以按字符数或 Token 数（取决于你使用的 splitter）控制；
+- 第二个参数是**重叠大小**，让相邻片段有一些重叠，减少信息在切分处丢失的风险。
 
-  ```xml
-  <dependency>
-      <groupId>dev.langchain4j</groupId>
-      <artifactId>langchain4j-easy-rag</artifactId>
-      <version>1.0.0-beta1</version>
-  </dependency>
-  ```
+切分后得到的是 `TextSegment` 列表，每个 `TextSegment` 包含一段文本及其对应元数据。
 
-  
+---
 
-- 在AiService中配置向量数据库，内容检索器，easyrag中内置了嵌入模型
+## 🔢 向量化与存储（Embedding &amp; Storing）
 
-  ```java
-  // 嵌入存储 (简易内存存储)
-  @Bean
-  public InMemoryEmbeddingStore<TextSegment> embeddingStore() {
-      return new InMemoryEmbeddingStore<>();
-  }
-  
-  
-  @Bean
-  public ChatAssistant assistant(ChatLanguageModel chatLanguageModel, EmbeddingStore<TextSegment> embeddingStore) {
-      return AiServices.builder(ChatAssistant.class)
-              .chatLanguageModel(chatLanguageModel)
-              .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
-              .contentRetriever(EmbeddingStoreContentRetriever.from(embeddingStore))
-              .build();
-  }
-  ```
+接下来我们需要：
+1. 为每个 `TextSegment` 生成向量（embedding）；
+2. 将“向量 + 原始文本 + 元数据”一起存入 `EmbeddingStore`。
 
-  
+### 1️⃣ 选择 EmbeddingModel
 
-- 文档向量化后保存入向量数据库
+langchain4j 对 Embedding 模型也做了统一抽象，常见实现有：
 
-  ```java
-  Document document = FileSystemDocumentLoader.loadDocument("/Users/lengleng/Downloads/test.docx");
-  EmbeddingStoreIngestor.ingest(document,embeddingStore);
-  ```
+- `OpenAiEmbeddingModel`：使用 OpenAI 的 embedding 接口；
+- `AzureOpenAiEmbeddingModel`：Azure OpenAI 版本；
+- `HuggingFaceEmbeddingModel`（需引入对应模块）：可以使用 HuggingFace 上的模型。
 
-  
+示例：
 
-- 调用AIService即可
+```java
+EmbeddingModel embeddingModel = OpenAiEmbeddingModel.builder()
+    .apiKey(apiKey)
+    .modelName("text-embedding-ada-002") // 或其他 embedding 模型
+    .build();
+```
 
-### 自定义RAG
+---
 
-#### 核心概念
+### 2️⃣ 选择并初始化 EmbeddingStore
 
-- **`Document`**：一个完整的文档,例如单个 PDF 文件或网页
-- **`Metadata`** ：存储文档的额外信息,如名称、来源、最后更新时间等。
-- **`TextSegment`** ：文档的一个片段,专用于文本信息。
-- **`Embedding`**  ：封装了一个数值向量,表示嵌入内容的语义含义。
+`EmbeddingStore` 是向量存储的抽象，你可以选择：
 
-#### 文档处理
+- `InMemoryEmbeddingStore`：纯内存实现，适合原型、测试和数据量不大的场景；
+- 第三方实现：如 `PineconeEmbeddingStore`、`ChromaEmbeddingStore`、`RedisEmbeddingStore` 等（需引入 langchain4j 对应模块）。
 
-- **`Document Loader`** ：文档加载器用于从不同来源加载文档（可以不指定文档解析器，langchain4j会自动选择合适的文档解析器
-- **`Document Parser`** ：文档解析器用于解析不同格式的文档
-- **`DocumentTransformer`**  ：文档转换器，用于对文档执行各种转换,如清理、过滤、增强或总结。
-- **`DocumentSplitter`** ：文档拆分器，用于将文档拆分成更小的片段:
+这里以 `InMemoryEmbeddingStore` 为例：
 
-#### 嵌入处理
+```java
+EmbeddingStore&lt;TextSegment&gt; embeddingStore = new InMemoryEmbeddingStore&lt;&gt;();
+```
 
-- **`EmbeddingModel`**  ：表示一种将文本转换为 `Embedding` 向量的模型。需要接入外部的嵌入模型进行文本向量化
-- **`EmbeddingStore`**  ：表示一个嵌入存储库(向量数据库),用于存储和高效搜索相似的嵌入。
-- **`EmbeddingStoreIngestor`**  ：负责将文档嵌入并存储到 `EmbeddingStore` 中的嵌入存储摄取器
+---
 
-#### 内容检索
+### 3️⃣ 把切好的片段向量化并入库
 
-- **`ContentRetriever`**  ：内容检索器，根据用户的查询从底层数据源中获取内容
+一种方式是手动遍历并存储：
 
-#### 检索增强
+```java
+for (TextSegment segment : segments) {
+    Embedding embedding = embeddingModel.embed(segment).content();
+    embeddingStore.add(embedding, segment);
+}
+```
 
-- **`RetrievalAugmentor`** ：检索增强器是 RAG的核心，它通过从不同的数据源中检索相关内容来增强用户的消息。
-- **`QueryTransformer`** ：查询转换器用于将原始查询转换为一个或多个新的查询，以提高检索的准确性。常见的转换策略
-  - 查询压缩：使用大语言模型（LLM）压缩查询和对话上下文，生成一个简明的查询。
-  - 查询扩展：将简单的查询扩展为多个相关的查询。
-  - 查询重写：对查询进行改写，使其更适合检索。
-- **`QueryRouter`**  ：查询路由器负责将查询分配到合适的内容检索器。
-  - 默认实现为查询会路由到所有的内容检索器中
-  - 目前的实现为使用LLM来决定路由
+也可以使用 langchain4j 提供的工具或 `EmbeddingStoreIngestor` 简化这一步：
 
-- **`ContentAggregator`** ：内容聚合器，负责聚合多个来源的排序列表。它可以从多个查询和多个内容检索器中汇总结果，并将它们整合成一个统一的排序列表。
-  - 默认的内容聚合器使用 **两阶段倒数排名融合**（Reciprocal Rank Fusion）方法来对多个排名列表进行融合。
-  - **Re-Ranking Content Aggregator** ：这个聚合器使用特定的 **评分模型** 进行重新排序。
-- **`ContentInjector`** ：内容注入器负责将从内容聚合器返回的内容（`s`）注入到用户消息中。
-  - 默认实现：将返回的内容简单地附加到用户消息的末尾，并为这些内容加上一个前缀。
+```java
+EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
+    .documentSplitter(splitter)
+    .embeddingModel(embeddingModel)
+    .embeddingStore(embeddingStore)
+    .build();
 
-### RAG构建步骤
+ingestor.ingest(documents); // 一键完成切分、向量化、存储
+```
 
-- 构建对应的大语言模型
-- 构建嵌入模型EmbeddingModel和向量数据库EmbeddingStore
-- 构建内容检索器，配置内容检索器中嵌入模型和向量数据库，同时根据需要构建内容检索器的其他属性
-  - 嵌入模型
-  - 向量数据库
-  - 返回结果条数
-  - 得分的最低值
-- 构建查询转换器：使用压缩查询转换器的情况比较多
-- 如果数据源只有一个可以不配置查询路由器和内容聚合器
-- 构建检索增强器，需要配置以下属性
-  - 查询转换器：配置查询优化策略
-  - 内容检索器：配置数据源
-  - 查询路由器（可选）：配置多个数据源时的路由策略
-  - 内容聚合器（可选）：配置多个数据源时的内容聚合模型
-  - 内容注入器：配置提示词的注入策略
+---
 
-### RAG管道
+## 🔍 检索（Retrieval）
 
-- **加载文档** ：使用适当的文档加载器和文档解析器载入文档
-- **转换文档** ：使用文档转换器清理或增强文档
-- **拆分文档** ：使用合适的文档拆分器将文档拆分为更小的片段
-- **嵌入文档** ：使用嵌入模型将文档片段转换为嵌入向量再用摄取器将向量存储到向量数据库中
-- **检索相关内容** : 使用配置好的检索增强器对文档进行检索
-- **聚合注入内容** : 使用内容聚合器将检索到的相关内容进行结果重排后聚合再使用内容注入器注入到用户查询中，提供给语言模型,生成最终响应
+当用户发来一个问题时，我们需要：
+1. 把问题也用同样的 `EmbeddingModel` 转成向量；
+2. 在 `EmbeddingStore` 中做相似度搜索，取回最相关的若干 `TextSegment`。
+
+```java
+String userQuery = "如何在 langchain4j 中实现 RAG？";
+Embedding queryEmbedding = embeddingModel.embed(userQuery).content();
+
+List&lt;EmbeddingMatch&lt;TextSegment&gt;&gt; relevantMatches = embeddingStore.findRelevant(
+    queryEmbedding,
+    3,       // 返回最相关的 3 个片段
+    0.7      // 相似度阈值（可选，低于该值的结果会被过滤）
+);
+
+// 把匹配到的文本片段拼成一个字符串，用于后续传给 LLM
+List&lt;String&gt; relevantSegments = relevantMatches.stream()
+    .map(EmbeddingMatch::embedded)
+    .map(TextSegment::text)
+    .collect(Collectors.toList());
+
+String context = String.join("\n\n", relevantSegments);
+```
+
+---
+
+## 💬 增强生成（Augmented Generation）
+
+拿到检索出来的相关片段后，我们需要把它们和用户问题一起组织成 Prompt，然后发给 LLM 生成回答。
+
+### 1️⃣ 使用 `PromptTemplate` 组装提示
+
+```java
+PromptTemplate promptTemplate = PromptTemplate.from(
+    "请根据下面的上下文回答用户问题。如果无法从上下文中得到答案，请说明你不知道。\n\n" +
+    "上下文：\n{{context}}\n\n" +
+    "用户问题：{{question}}"
+);
+
+Prompt prompt = promptTemplate.apply(
+    Map.of(
+        "context", context,
+        "question", userQuery
+    )
+);
+
+ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
+    .apiKey(apiKey)
+    .modelName("gpt-3.5-turbo")
+    .build();
+
+String answer = chatLanguageModel.generate(prompt.text());
+System.out.println("最终回答：" + answer);
+```
+
+---
+
+### 2️⃣ 开箱即用的 `RetrievalChain`
+
+langchain4j 提供了 `DefaultRetrievalChain` 或 `RetrievalChain`，帮你把“检索 + 组装提示 + 调用模型”封装在一起：
+
+```java
+ContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
+    .embeddingStore(embeddingStore)
+    .embeddingModel(embeddingModel)
+    .maxResults(3)
+    .minScore(0.7)
+    .build();
+
+RetrievalChain retrievalChain = DefaultRetrievalChain.builder()
+    .chatLanguageModel(chatLanguageModel)
+    .contentRetriever(contentRetriever)
+    // 可选：自定义 prompt template
+    // .promptTemplate(...)
+    .build();
+
+ChainInput input = ChainInput.from(userQuery);
+ChainOutput output = retrievalChain.execute(input);
+String answer = output.content().text();
+```
+
+---
+
+## 🏷️ 使用 `AiServices` 简化 RAG
+
+如果你喜欢更简洁的方式，可以结合 `AiServices` 和 `ContentRetriever`，让 RAG 的使用和普通对话一样简单：
+
+```java
+interface RagAssistant {
+    @SystemMessage("你是一个文档助手，请参考提供的上下文回答用户问题。")
+    String chat(@UserMessage String userMessage);
+}
+
+ContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
+    .embeddingStore(embeddingStore)
+    .embeddingModel(embeddingModel)
+    .maxResults(3)
+    .build();
+
+RagAssistant assistant = AiServices.builder(RagAssistant.class)
+    .chatLanguageModel(chatLanguageModel)
+    .contentRetriever(contentRetriever) // 这里接入你的 RAG 检索器
+    .build();
+
+String answer = assistant.chat("如何在 langchain4j 中使用 EmbeddingStore？");
+System.out.println(answer);
+```
+
+- 加上 `contentRetriever` 后，`AiServices` 会自动在每次调用前进行检索，并把相关片段插入到上下文中。
+
+---
+
+## 🌟 常见优化与进阶方向
+
+RAG 的效果受很多因素影响，以下是一些常见的优化思路：
+
+1. **Embedding 模型与分段策略**：
+   - 尝试更强的 Embedding 模型（如 text-embedding-3-small/large）；
+   - 根据文档类型、语言特点调整切分大小和重叠窗口；
+   - 可以在切分时保留文档结构（如标题层级），提升检索质量。
+
+2. **检索质量**：
+   - 除了相似度分数，也可以结合元数据过滤（Metadata Filtering）；
+   - 对检索到的片段进行重排（Rerank），例如使用专门的 Reranker 模型或交叉编码器；
+   - 尝试混合检索（Hybrid Search），把向量相似度和关键词检索结合。
+
+3. **提示工程**：
+   - 在 Prompt 中明确要求模型引用上下文来源，或注明“根据上下文回答”；
+   - 若有多段检索结果，可以给它们编号或加上出处，让模型更容易组织答案。
+
+4. **对话记忆与 RAG 结合**：
+   如果你需要结合多轮对话历史进行 RAG，可以：
+   - 使用 `ChatMemory` 记住历史消息；
+   - 在检索前，先让模型基于历史和当前问题生成一个“更适合检索的查询”；
+   - 或把最近几轮对话也作为 context 的一部分一起检索/生成。
+
+---
+
+## 📌 总结
+
+- **RAG 能做什么**：通过检索私有/最新文档，让 LLM 回答更有时效性、更领域化，并减少幻觉。
+- **langchain4j 中的核心组件**：
+  - `Document` / `DocumentLoader`：加载文档；
+  - `DocumentSplitter` / `TextSegment`：切分文本；
+  - `EmbeddingModel`：把文本转为向量；
+  - `EmbeddingStore`：存储和检索向量 + 文本；
+  - `ContentRetriever` / `RetrievalChain` / `AiServices`：把前面的步骤串联起来，形成 RAG 流程。
+- **使用建议**：
+  - 初期可以用 `InMemoryEmbeddingStore` + `EmbeddingStoreIngestor` + `RetrievalChain` 或 `AiServices` 快速跑通原型；
+  - 后续根据需要再替换成生产级向量库、优化切分与 Embedding 策略、引入重排等。
+
