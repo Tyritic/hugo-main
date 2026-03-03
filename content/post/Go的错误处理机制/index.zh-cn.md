@@ -346,6 +346,60 @@ defer的操作步骤：
 
 如果没有外层的 recover，程序会崩溃，崩溃信息只显示第二个 panic。
 
+#### 底层原理
+
+当前执行的 **`goroutine`** 中有一个 **`defer`** 链表的头指针，其实它也会有一个 **`panic`** 链表头指针，**`panic`** 链表链起来的是一个个的 **`_panic`** 结构体。
+
+**`panic`** 链表和 **`defer`** 链表类似，也是在链表头上插入新的 **`_panic`** 结构体，所以链表头上的 **`panic`** 就是当前正在执行的那一个。
+
+<div align="center">
+  <img src="image-20250628233221016.png" alt="底层原理" width="60%">
+</div>
+
+```go
+type _panic struct {
+    argp        unsafe.Pointer    // 存储当前要执行的defer的函数参数地址
+    arg         interface{}       // panic的参数
+    link        *_panic           //链接到之前发生的panic
+    recovered   bool              //标记panic是否被恢复
+    aborted     bool              //标记panic会否被终止
+}
+```
+
+以下面的代码为例
+
+```go
+func A() {
+    defer A1()
+    defer A2()
+    // ......
+    panic("panicA")
+    // code to do something
+}
+```
+
+执行流程如下
+
+- 函数 A 注册了两个 **`defer`** 函数 A1 和 A2 后发生了 **`panic`**，执行完两个 **`defer`** 注册后，**`defer`** 链表中已经注册了 A1 和 A2 函数。
+- 发生了 panic，并且 panic 之后的代码不会再执行了，而是进入了 panic 的处理逻辑。首先会在 panic 链表中增加一项，我们将它记作 **`panicA`**，它就是我们当前执行的 **`panic`** 。
+
+<div align="center">
+  <img src="image-20250628234509217.png" alt="panic链表" width="60%">
+</div>
+
+- 接着执行 **`defer`** 链表了，即从头开始执行。**`panic`** 执行 **`defer`** 时，会先将其 **`started`** 置为 true，即标记它已经开始执行了。并且会把 **`_panic`** 字段指向当前执行的 **`panic`** ，标识这个 **`defer`** 是由这个 **`panic`** 触发的。
+
+<div align="center">
+  <img src="image-20250628235140916.png" alt="defer执行" width="60%">
+</div>
+
+- 如果函数 A2 能正常结束，则这一项就会被移除，继续执行下一个 defer。
+- 当 **`def`** 函数中存在 **`recover`** 时，此时就会把当前执行的 panicA 置为已恢复，然后 recover 函数的任务就完成了。程序会继续往下执行 Println 语句，并打印 **`panic`** 的信息，直到 A2 函数执行结束。
+
+<div align="center">
+  <img src="image-20250628235415079.png" alt="recover执行" width="60%">
+</div>
+
 ---
 
 ### 总结
