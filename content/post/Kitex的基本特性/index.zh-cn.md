@@ -9,9 +9,9 @@ description : "Kitex的基本特性"
 math : true
 ---
 
-## Go的项目结构
+## 📁 Go的项目结构
 
-```
+```text
 |--src（源代码）
 |	|--app（项目的主要服务，通常使用Hertz框架生成暴露的HTTP服务）
 |		|---api
@@ -25,9 +25,11 @@ math : true
 
 ```
 
-## RPC服务的项目结构
+---
 
-```
+## 🗂️ RPC服务的项目结构
+
+```text
 |--rpc（rpc服务集合）
 |	|--service_name（单个RPC服务）
 |		|---client(RPC客户端)
@@ -42,9 +44,9 @@ math : true
 |	|--...(其他模块)
 ```
 
-其中kitex_gen的代码结构如下
+其中 `kitex_gen` 的代码结构如下
 
-```shell
+```text
 |-- kitex_gen // Dir for Generated code, which should not be modified. 
 |   |-- base
 |   |   |-- base.go
@@ -63,14 +65,16 @@ math : true
 │                   └── stockservice.go
 ```
 
-## 代码框架生成了什么
+---
+
+## 🔧 代码框架生成了什么
 
 生成代码主要分为两个部分
 
-- 结构体桩代码 + 普通的序列化代码  
-- 创建 Kitex Client/Server 的脚手架
+- **结构体桩代码 + 普通的序列化代码**
+- **创建 Kitex Client/Server 的脚手架**
 
-以stock.thrift为例
+以 `stock.thrift` 为例
 
 ```thrift
 namespace go example.shop.stock
@@ -89,7 +93,7 @@ service StockService {
 }
 ```
 
-### 结构体桩代码
+### 📋 结构体桩代码
 
 ```go
 type Item struct {
@@ -151,9 +155,9 @@ var fieldIDToName_Item = map[int16]string{
 
 常见方法
 
-- **`Get/Set`** ：作为Getter和Setter，获取字段值
-  - 被option修饰的字段会被转换为指针，Get方法获取的是其值
-- **`String`** ：输出对象的字符串
+- **`Get/Set`**：作为 Getter 和 Setter，获取字段值
+  - 被 option 修饰的字段会被转换为指针，Get 方法获取的是其值
+- **`String`**：输出对象的字符串
 
 |                            方法名                            |                  描述&用途                   | CodeGen 内容长度 |
 | :----------------------------------------------------------: | :------------------------------------------: | :--------------: |
@@ -171,13 +175,12 @@ var fieldIDToName_Item = map[int16]string{
 | FastRead/FastReadFieldX/FastWrite/FastWriteNocopy/BLength/fastWriteFieldX/fieldXLength |               FastCodec 编解码               |        长        |
 |                GetOrSetBase/GetOrSetBaseResp                 |      特殊的 Base 相关接口，框架内部使用      |        短        |
 
-### 脚手架
+### 🏗️ 脚手架
 
-```
+```text
 ── stockservice // kitex 封装代码主要在这里(Kitex Client/Server的脚手架)
 │              ├── client.go // 远程调用
 │              ├── invoker.go
 │              ├── server.go
 │              └── stockservice.go
 ```
-

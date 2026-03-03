@@ -33,6 +33,10 @@ links:
     description: LangChain4j 官方文档
     website: https://docs.langchain4j.dev/category/tutorials
     image: OIP.jpg
+  - title: CloudWeGo
+    description: CloudWeGo 是一套由字节跳动基础架构服务框架团队开源的、可快速构建企业级云原生微服务架构 的中间件集合。
+    website: https://www.cloudwego.io/zh/docs/
+    image: OIP-C.png
 menu:
     main: 
         weight: -50

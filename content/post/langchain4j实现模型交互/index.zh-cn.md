@@ -1,4 +1,3 @@
-
 ---
 date : '2025-03-06T15:40:51+08:00'
 draft : false
@@ -14,13 +13,13 @@ math : true
 
 ### 1️⃣ `ChatLanguageModel` / `StreamingChatLanguageModel`
 
-`ChatLanguageModel` 是 langchain4j 中最核心的接口之一，定义了与对话类模型（如 gpt-3.5-turbo、gpt-4 等）交互的统一方法。
+`ChatLanguageModel` 是 langchain4j 中最核心的接口之一，定义了与对话类模型（如 **gpt-3.5-turbo**、**gpt-4** 等）交互的统一方法。
 
-#### 主要方法
+#### 📋 主要方法
 
 - `String generate(String userMessage)`：发送单条用户消息，同步返回模型响应文本。
-- `Response&lt;ChatResponse&gt; generate(ChatMessage... messages)`：发送多条消息（如系统消息、用户消息、助手消息），可获取包含 Token 用量、finish reason 等更丰富信息的响应对象。
-- `Response&lt;ChatResponse&gt; generate(List&lt;ChatMessage&gt; messages, List&lt;ToolSpecification&gt; toolSpecifications)`：在生成时提供工具/函数定义，供模型选择调用。
+- `Response<ChatResponse> generate(ChatMessage... messages)`：发送多条消息（如系统消息、用户消息、助手消息），可获取包含 **Token** 用量、finish reason 等更丰富信息的响应对象。
+- `Response<ChatResponse> generate(List<ChatMessage> messages, List<ToolSpecification> toolSpecifications)`：在生成时提供工具/函数定义，供模型选择调用。
 
 如果你需要**流式**返回（一边生成一边输出），可以使用 `StreamingChatLanguageModel`，用法类似，但通过回调 `StreamingResponseHandler` 来逐步接收 Token：
 
@@ -57,11 +56,11 @@ model.generate("讲一个长一点的科幻故事", new StreamingResponseHandler
 你可以通过 `SystemMessage.from(...)`、`UserMessage.from(...)` 等工厂方法方便地构造它们：
 
 ```java
-List&lt;ChatMessage&gt; messages = new ArrayList&lt;&gt;();
+List<ChatMessage> messages = new ArrayList<>();
 messages.add(SystemMessage.from("你是一个乐于助人的 Java 专家，请用简洁清晰的方式回答问题。"));
 messages.add(UserMessage.from("请解释什么是 Strategy 设计模式？"));
 
-Response&lt;ChatResponse&gt; response = chatLanguageModel.generate(messages);
+Response<ChatResponse> response = chatLanguageModel.generate(messages);
 AiMessage aiMessage = response.content().aiMessage();
 System.out.println(aiMessage.text());
 ```
@@ -80,8 +79,8 @@ System.out.println(aiMessage.text());
 ChatMemory chatMemory = MessageWindowChatMemory.withMaxMessages(10);
 ```
 
-- 会自动保留最近的 10 条消息，超过时会“挤掉”最早的消息。
-- 使用非常简单，适合消息条数不多且 Token 占用可控的场景。
+- 会自动保留最近的 10 条消息，超过时会"挤掉"最早的消息。
+- 使用非常简单，适合消息条数不多且 **Token** 占用可控的场景。
 
 ---
 
@@ -97,8 +96,8 @@ ChatMemory chatMemory = TokenWindowChatMemory.builder()
     .build();
 ```
 
-- 更精细地控制对话历史的 Token 占用，避免超过模型上下文窗口限制。
-- 需要提供一个 `Tokenizer`（如 `OpenAiTokenizer`），用于估算文本 Token 数。
+- 更精细地控制对话历史的 **Token** 占用，避免超过模型上下文窗口限制。
+- 需要提供一个 `Tokenizer`（如 `OpenAiTokenizer`），用于估算文本 **Token** 数。
 
 ---
 
@@ -114,7 +113,7 @@ ChatMemory chatMemory = MessageWindowChatMemory.withMaxMessages(10);
 chatMemory.add(SystemMessage.from("你是一个 Python 导师。"));
 chatMemory.add(UserMessage.from("什么是列表推导式？"));
 
-Response&lt;ChatResponse&gt; response = model.generate(chatMemory.messages());
+Response<ChatResponse> response = model.generate(chatMemory.messages());
 AiMessage aiMessage = response.content().aiMessage();
 chatMemory.add(aiMessage);
 
@@ -122,7 +121,7 @@ System.out.println("AI: " + aiMessage.text());
 
 // 下一轮对话
 chatMemory.add(UserMessage.from("能不能再举个例子？"));
-Response&lt;ChatResponse&gt; response2 = model.generate(chatMemory.messages());
+Response<ChatResponse> response2 = model.generate(chatMemory.messages());
 // ...
 ```
 
@@ -161,21 +160,21 @@ ChatPromptTemplate chatPromptTemplate = ChatPromptTemplate.from(
     UserMessage.from("上下文：\n{{context}}\n\n用户问题：{{question}}")
 );
 
-List&lt;ChatMessage&gt; messages = chatPromptTemplate.applyMessages(
+List<ChatMessage> messages = chatPromptTemplate.applyMessages(
     Map.of(
         "context", "某某框架的主要特性有：A、B、C...",
         "question", "这个框架的主要特性是什么？"
     )
 );
 
-Response&lt;ChatResponse&gt; response = chatLanguageModel.generate(messages);
+Response<ChatResponse> response = chatLanguageModel.generate(messages);
 ```
 
 ---
 
 ## 🔌 使用 Chain 封装常用流程
 
-langchain4j 提供了 `Chain` 接口以及多个开箱即用的实现，帮你把“记忆 + 提示 + 模型 + 输出解析”等步骤封装成一条可以复用的链。
+langchain4j 提供了 `Chain` 接口以及多个开箱即用的实现，帮你把"记忆 + 提示 + 模型 + 输出解析"等步骤封装成一条可以复用的链。
 
 ### 1️⃣ `ConversationalChain`
 
@@ -203,13 +202,13 @@ System.out.println("AI: " + answer2);
 
 ### 2️⃣ `RetrievalChain` / `DefaultRetrievalChain`
 
-用于结合向量检索做 RAG（检索增强生成），我们会在后面专门介绍。
+用于结合向量检索做 **RAG**（检索增强生成），我们会在后面专门介绍。
 
 ---
 
 ## 🏷️ AiServices：更高级的服务封装
 
-如果你希望以“调用 Java 接口方法”的方式和 LLM 交互，而不手动组织消息和记忆，可以使用 `AiServices`。
+如果你希望以"调用 Java 接口方法"的方式和 **LLM** 交互，而不手动组织消息和记忆，可以使用 `AiServices`。
 
 ### 1️⃣ 定义接口
 
@@ -243,13 +242,13 @@ String reply2 = service.chat("算了，帮我转人工吧。");
 
 ## 🔧 工具调用（Tool / Function Calling）
 
-很多模型（如 gpt-3.5-turbo、gpt-4）支持 function calling / tool use。langchain4j 提供了多种方式让你把 Java 方法暴露给模型调用。
+很多模型（如 **gpt-3.5-turbo**、**gpt-4**）支持 function calling / tool use。langchain4j 提供了多种方式让你把 Java 方法暴露给模型调用。
 
 ### 1️⃣ 使用 `@Tool` 注解
 
 ```java
 class WeatherTools {
-    @Tool("查询指定城市的当前天气，入参为城市名，如“北京”、“上海”")
+    @Tool("查询指定城市的当前天气，入参为城市名，如"北京"、"上海"")
     String getCurrentWeather(String city) {
         // 这里仅做模拟，实际可对接天气 API
         if ("北京".equals(city)) {
@@ -272,12 +271,12 @@ class WeatherTools {
 ChatLanguageModel model = OpenAiChatModel.builder().apiKey(apiKey).build();
 
 // 构造工具定义（也可以用 Tools.toolDefinitionsFrom(...) 从带 @Tool 的对象自动生成）
-List&lt;ToolSpecification&gt; toolSpecs = Tools.toolSpecificationsFrom(new WeatherTools());
+List<ToolSpecification> toolSpecs = Tools.toolSpecificationsFrom(new WeatherTools());
 
-List&lt;ChatMessage&gt; messages = new ArrayList&lt;&gt;();
+List<ChatMessage> messages = new ArrayList<>();
 messages.add(UserMessage.from("北京今天天气怎么样？"));
 
-Response&lt;ChatResponse&gt; response = model.generate(messages, toolSpecs);
+Response<ChatResponse> response = model.generate(messages, toolSpecs);
 ChatResponse chatResponse = response.content();
 
 AiMessage aiMessage = chatResponse.aiMessage();
@@ -290,7 +289,7 @@ if (aiMessage.hasToolExecutionRequests()) {
         messages.add(ToolExecutionResultMessage.from(toolExecutionRequest, result));
     }
     // 再次请求模型，让它根据工具执行结果生成最终回答
-    Response&lt;ChatResponse&gt; secondResponse = model.generate(messages, toolSpecs);
+    Response<ChatResponse> secondResponse = model.generate(messages, toolSpecs);
     System.out.println("最终回答：" + secondResponse.content().aiMessage().text());
 }
 ```
@@ -323,8 +322,7 @@ System.out.println(answer);
 
 - **模型交互**：通过 `ChatLanguageModel` / `StreamingChatLanguageModel` 统一同步和流式对话的调用方式；
 - **消息体系**：使用 `SystemMessage`、`UserMessage`、`AiMessage`、`ToolExecutionResultMessage` 等来组织多轮对话和工具调用流程；
-- **对话记忆**：`MessageWindowChatMemory` 基于条数、`TokenWindowChatMemory` 基于 Token 来管理历史消息，避免超限；
+- **对话记忆**：`MessageWindowChatMemory` 基于条数、`TokenWindowChatMemory` 基于 **Token** 来管理历史消息，避免超限；
 - **提示模板**：`PromptTemplate` / `ChatPromptTemplate` 帮助你复用提示结构，减少重复代码；
-- **Chain 与 AiServices**：`ConversationalChain`、`RetrievalChain` 等封装常见流程；`AiServices` 允许你用接口方法的形式与 LLM 交互，同时也能方便地集成 `@Tool`；
+- **Chain 与 AiServices**：`ConversationalChain`、`RetrievalChain` 等封装常见流程；`AiServices` 允许你用接口方法的形式与 **LLM** 交互，同时也能方便地集成 `@Tool`；
 - **工具调用**：可以使用 `@Tool` + `Tools` 工具类，也可以通过 `AiServices` 自动处理，让模型能够调用你的业务方法。
-

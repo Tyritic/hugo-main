@@ -8,25 +8,29 @@ tags : ["后端开发"]
 description : "项目中文件上传的实现"
 ---
 
-## 简介
+## 📝 简介
 
 文件上传，是指将本地图片、视频、音频等文件上传到服务器，供其他用户浏览或下载的过程。
 
-## 实现要点
+---
 
-### 前端页面
+## 🎯 实现要点
 
-- 表单项 type=“file”
-- 表单提交方式 post
-- 表单的enctype属性 multipart/form-data
+### 💻 前端页面
 
-### 后端controller类
+- 表单项 `type="file"`
+- 表单提交方式 `post`
+- 表单的 `enctype` 属性 `multipart/form-data`
 
-- 使用MultipartFile接收文件
+### 🔧 后端controller类
 
-## 实现方式
+- 使用 **MultipartFile** 接收文件
 
-### 上传到本地
+---
+
+## 💡 实现方式
+
+### 💾 上传到本地
 
 常见方法
 
@@ -57,7 +61,7 @@ public class UploadController {
 
 {{<notice tip>}}
 
-在SpringBoot中，文件上传，默认单个文件允许最大大小为1M。如果需要上传大文件，可以进行在application.yml如下配置:
+在 **SpringBoot** 中，文件上传，默认单个文件允许最大大小为 **1M**。如果需要上传大文件，可以进行在 **application.yml** 如下配置:
 
 ```yml
 spring:
@@ -68,20 +72,22 @@ spring:
 
 {{</notice>}}
 
-### 阿里云OSS存储
+---
 
-基本概念
+### ☁️ 阿里云OSS存储
 
-- Bucket：存储空间是用户用于存储对象(0bject，就是文件)的容器，所有的对象都必须隶属于某个存储空间。
-- SDK:Software Development Kit 的缩写，软件开发工具包，包括辅助软件开发的依赖(jar包)、代码示例等，都可以叫做SDK。
+#### 📚 基本概念
 
-具体实现
+- **Bucket**：存储空间是用户用于存储对象（**Object**，就是文件）的容器，所有的对象都必须隶属于某个存储空间。
+- **SDK**：**Software Development Kit** 的缩写，软件开发工具包，包括辅助软件开发的依赖（**jar** 包）、代码示例等，都可以叫做 **SDK**。
 
-1. 创建bucket并获取AccessKey
+#### 🔨 具体实现
 
-2. 在pom.xml中引入相关依赖
+1. 创建 **bucket** 并获取 **AccessKey**
 
-3. 将aliyunOSS服务所需的相关参数写入配置文件application.yml中，并专门建立一个properties配置文件
+2. 在 **pom.xml** 中引入相关依赖
+
+3. 将 **aliyunOSS** 服务所需的相关参数写入配置文件 **application.yml** 中，并专门建立一个 **properties** 配置文件
 
 4. 将相关方法写入工具类中
 
@@ -144,5 +150,3 @@ spring:
            }
        }
    ```
-
-   
