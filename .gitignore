@@ -2,3 +2,9 @@
 public
 resources
 .hugo_build.lock
+
+# 忽略 CS-Base-main 文件夹
+CS-Base-main/
+
+# 忽略 PDF 文件
+*.pdf
