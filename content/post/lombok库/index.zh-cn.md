@@ -3,17 +3,18 @@ date : '2024-11-06T17:19:27+08:00'
 draft : false
 title : 'Lombok类库'
 image : ""
-categories : ["SpringBoot"]
+categories : ["Spring系列"]
 tags : ["后端开发"]
 description : "SpringBoot常用依赖类库lombok"
 ---
 
-## Lombok简介
+## 📖 Lombok简介
 
-Lombok是一个实用的java类库，能通过注解的形式自动生成构造器、getter/setter、equals、hashcode、toString等方法
-并可以自动化生成日志变量，简化iava开发
+**Lombok** 是一个实用的 **Java** 类库，能通过注解的形式自动生成构造器、`getter/setter`、`equals`、`hashcode`、`toString` 等方法，并可以自动化生成日志变量，简化 **Java** 开发。
 
-## 常见注解
+---
+
+## 🏷️ 常见注解
 
 |        注解         |                             作用                             |
 | :-----------------: | :----------------------------------------------------------: |

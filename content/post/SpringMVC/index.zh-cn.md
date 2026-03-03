@@ -4,7 +4,7 @@ date : '2024-11-14T16:21:47+08:00'
 draft : false
 title : 'SpringMVC模块'
 image : ""
-categories : ["SpringBoot","Spring","SpringMVC"]
+categories : ["Spring系列"]
 tags : ["后端开发"]
 description : "Web开发中的SpringMVC的集成"
 ---

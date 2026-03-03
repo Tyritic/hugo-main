@@ -4,7 +4,7 @@ date : '2024-11-15T15:55:52+08:00'
 draft : false
 title : 'SpringBoot中的三大组件'
 image : ""
-categories : ["SpringBoot"]
+categories : ["Spring系列"]
 tags : ["后端组件"]
 description : "SpringBoot框架中对JavaWeb三大组件的集成"
 ---

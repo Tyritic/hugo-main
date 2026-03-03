@@ -4,7 +4,7 @@ date : '2025-03-18T19:22:46+08:00'
 draft : false
 title : 'SpringBoot整合Kafka'
 image : ""
-categories : ["Kafka","SpringBoot"]
+categories : ["Kafka","Spring系列"]
 tags : ["消息队列"]
 description : "SpringBoot中整合Kafka"
 math : true

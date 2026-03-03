@@ -3,7 +3,7 @@ date : '2024-11-03T15:06:44+08:00'
 draft : false
 title : '控制反转（IOC)和依赖注入（DI）'
 image : ""
-categories : ["SpringBoot","Spring"]
+categories : ["Spring系列"]
 tags : ["后端开发"]
 description : "Spring框架中的控制反转(IOC)"
 ---

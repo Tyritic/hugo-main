@@ -3,7 +3,7 @@ date : '2024-11-01T14:58:53+08:00'
 draft : false
 title : 'Spring框架的基础认识'
 image : ""
-categories : ["Spring"]
+categories : ["Spring系列"]
 tags : ["后端开发"]
 description : "对Spring框架的基本认识"
 math : true

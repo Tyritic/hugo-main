@@ -4,7 +4,7 @@ date : '2024-11-12T10:01:20+08:00'
 draft : false
 title : 'SpringBoot整合Springdoc-OpenApi'
 image : ""
-categories : ["SpringBoot"]
+categories : ["Spring系列"]
 tags : ["后端开发"]
 description : "在SpringBoot框架中使用Springdoc-OpenApi框架生成接口文档"
 ---

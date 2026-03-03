@@ -4,7 +4,7 @@ date : '2025-02-23T17:07:39+08:00'
 draft : false
 title : 'SpringCache'
 image : ""
-categories : ["SpringBoot"]
+categories : ["Spring系列"]
 tags : ["后端开发"]
 description : "SpringBoot的缓存框架"
 math : true

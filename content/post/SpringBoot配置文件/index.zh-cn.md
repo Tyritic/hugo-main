@@ -4,7 +4,7 @@ date : '2024-11-07T10:19:39+08:00'
 draft : false
 title : 'SpringBoot配置文件'
 image : ""
-categories : ["SpringBoot"]
+categories : ["Spring系列"]
 tags : ["后端开发"]
 description : "SpringBoot的配置文件以及参数配置化"
 ---

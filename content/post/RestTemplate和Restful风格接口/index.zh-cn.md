@@ -3,7 +3,7 @@ date : '2024-11-11T18:48:31+08:00'
 draft : false
 title : 'RestTemplate和Restful风格接口'
 image : ""
-categories : ["SpringBoot"]
+categories : ["Spring系列"]
 tags : ["后端开发"]
 description : "RestTemplate在web开发中的使用以及REST服务"
 ---

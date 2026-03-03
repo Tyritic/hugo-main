@@ -4,7 +4,7 @@ date : '2024-11-02T19:26:08+08:00'
 draft : false
 title : 'SpringBoot项目结构'
 image : ""
-categories : ["SpringBoot"]
+categories : ["Spring系列"]
 tags : ["后端开发"]
 description : "SpringBoot项目的基本结构"
 ---

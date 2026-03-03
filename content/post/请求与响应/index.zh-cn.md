@@ -3,7 +3,7 @@ date : '2024-11-03T00:05:27+08:00'
 draft : false
 title : '请求与响应'
 image : ""
-categories : ["SpringBoot","SpringMVC","Spring"]
+categories : ["Spring系列"]
 tags : ["后端开发"]
 description : "controller对请求和响应的操作"
 ---

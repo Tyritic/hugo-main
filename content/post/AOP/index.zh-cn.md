@@ -3,7 +3,7 @@ date : '2024-11-07T18:38:05+08:00'
 draft : false
 title : '面向切面编程(AOP)'
 image : ""
-categories : ["SpringBoot","Spring"]
+categories : ["Spring系列"]
 tags : ["后端开发"]
 description : "面向切面编程的相关理解"
 math : true

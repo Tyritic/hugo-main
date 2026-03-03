@@ -4,7 +4,7 @@ date : '2024-11-09T19:20:26+08:00'
 draft : false
 title : 'SpringBoot热部署和日志'
 image : ""
-categories : ["SpringBoot"]
+categories : ["Spring系列"]
 tags : ["后端开发"]
 description : "SpringBoot框架的热部署和日志结构"
 ---

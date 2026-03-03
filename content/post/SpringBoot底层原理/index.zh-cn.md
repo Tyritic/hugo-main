@@ -4,7 +4,7 @@ date : '2024-11-08T18:47:12+08:00'
 draft : false
 title : 'SpringBoot底层原理'
 image : ""
-categories : ["SpringBoot"]
+categories : ["Spring系列"]
 tags : ["后端开发","框架原理"]
 description : "SpringBoot框架的底层原理"
 ---
