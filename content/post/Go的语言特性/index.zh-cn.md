@@ -1,7 +1,7 @@
 ---
 date : '2025-06-10T10:50:08+08:00'
 draft : false
-title : 'Golang的语言特性'
+title : 'Go的语言特性'
 image : ""
 categories : ["Golang"]
 tags : ["后端开发"]
