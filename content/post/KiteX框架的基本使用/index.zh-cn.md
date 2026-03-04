@@ -1,7 +1,7 @@
 ---
 date : '2025-07-05T23:54:35+08:00'
 draft : false
-title : 'KiteX框架的基本使用'
+title : 'Kitex框架的基本使用'
 image : ""
 categories : ["Kitex框架"]
 tags : ["后端开发"]
