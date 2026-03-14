@@ -986,7 +986,7 @@ StreamX 支持三种中间件类型，分别在不同的触发时机执行：
 
 ### 🛠️ 类型定义
 
-#### Stream 中间件
+#### 🏗️ Stream 中间件
 
 ```go
 // Client 侧
@@ -1005,7 +1005,7 @@ type StreamMiddleware func(next StreamEndpoint) StreamEndpoint
 - Client middleware 内 `next` 函数执行后，stream 即完成创建
 - Server middleware 内 `next` 函数执行后，server handler 即完成处理
 
-#### Stream Recv/Send 中间件
+#### 🌊 Stream Recv/Send 中间件
 
 ```go
 // Client 侧
@@ -1029,7 +1029,7 @@ type StreamSendMiddleware func(next StreamSendEndpoint) StreamSendEndpoint
 - `stream`：直接获取当前的流对象
 - `message`：代表真实的请求和响应
 
-#### Unary 中间件
+#### ⚡ Unary 中间件
 
 对所有非流式接口，提供 UnaryMiddleware 用于注入仅对所有 unary 方法生效的中间件：
 
@@ -1154,5 +1154,176 @@ svr, err := testservice.NewServer(
 - **限流控制**：在 Send/Recv 中间件中实现流量控制
 - **认证鉴权**：在 Stream 中间件中进行认证，在消息级别中间件中进行细粒度鉴权
 - **上下文传递**：通过 `stream.Context()` 获取和传递上下文信息
+
+{{</notice>}}
+
+---
+
+## ⚠️ StreamX 流错误处理
+
+与 PingPong RPC 不同，流式 RPC 的错误可以发生在一个流处理的任何时候。例如 Server 可以在发送多条消息后，再返回一个错误。但是一旦一个流发送完错误后，就不能再发送任何消息。
+
+### 📋 错误类型
+
+#### ❗ 框架异常
+
+框架异常是指 Kitex 框架抛出的错误，包含详细的错误描述信息：
+
+| 错误描述 | 含义 |
+|---------|------|
+| `[ttstream error, code=12007]` | TTHeader Streaming 错误，错误码为 12007 |
+| `[server-side stream]` | 表示该错误由 Server 侧的 Stream 抛出 |
+| `[canceled path: ServiceA]` | 表示由 ServiceA 主动发起 cancel |
+| `user code invoking stream RPC with context processed by context.WithCancel or context.WithTimeout, then invoking cancel() actively` | 上游主动使用 cancel() |
+
+#### 📊 TTHeader Streaming 错误码汇总
+
+| 错误码 | 错误描述 | 含义 | 备注 |
+|-------|---------|------|------|
+| **12001** | application exception | 业务异常，下游 handler 返回 err | - |
+| **12002** | unexpected header frame | Header Frame 相关的错误 | - |
+| **12003** | illegal biz err | 解析 Trailer Frame 中包含的业务异常失败 | - |
+| **12004** | illegal frame | 解析 Frame 的基础信息失败 | - |
+| **12005** | illegal operation | 使用 Stream 姿势不当报错 | 例如 Stream 已经 CloseSend 了，依然 Send |
+| **12006** | transport is closing | 连接异常 | 例如连接已被关闭 |
+| **12007** | user code invoking stream RPC with context processed by context.WithCancel or context.WithTimeout, then invoking cancel() actively | 上游主动使用 cancel() | - |
+| **12008** | user code canceled with cancelCause(error) | 上游使用 context.WithCancelCause，并主动使用 cancel(err) | - |
+| **12009** | canceled by downstream | 被下游服务 cancel | - |
+| **12010** | canceled by upstream | 被上游服务 cancel | - |
+| **12011** | Internal canceled | 级联 cancel 场景 | 例如 gRPC handler ctx 被 cancel，级联 cancel TTHeader Streaming |
+| **12012** | canceled by business handler returning | Handler 提前退出 | 但仍有异步 goroutine 使用 Recv/Send |
+| **12013** | canceled by connection closed | 连接被关闭导致 Stream 生命周期结束 | 常见于 Server 侧服务迁移/更新 |
+
+### 💼 业务异常处理
+
+业务异常是指业务逻辑中主动抛出的错误，适用于需要返回业务层面错误的场景。例如 ChatGPT 场景中，需要不停检查用户账户余额是否能继续调用大模型生成返回。
+
+#### 🏢 Server 端实现
+
+```go
+import (
+    "github.com/cloudwego/kitex/pkg/kerrors"
+)
+
+func (si *streamingService) ServerStreamWithErr(
+    ctx context.Context,
+    req *echo.Request,
+    stream echo.TestService_ServerStreamWithErrServer,
+) error {
+    // 检查用户账户余额
+    for isHasBalance(req.UserId) {
+        stream.Send(ctx, res)
+    }
+    
+    // 返回用户余额不足错误
+    bizErr := kerrors.NewBizStatusErrorWithExtra(
+        10001,
+        "insufficient user balance",
+        map[string]string{"testKey": "testVal"},
+    )
+    return bizErr
+}
+```
+
+#### 🖥️ Client 端实现
+
+```go
+import (
+    "github.com/cloudwego/kitex/pkg/kerrors"
+)
+
+stream, err := cli.ServerStreamWithErr(ctx, req)
+if err != nil {
+    log.Printf("创建流失败: %v", err)
+    return
+}
+
+var bizErr error
+for {
+    res, err := stream.Recv(stream.Context())
+    if err != nil {
+        bizErr = err
+        break
+    }
+    // 处理正常响应
+}
+
+// 解析业务异常
+kitexErr, ok := kerrors.FromBizStatusError(bizErr)
+if ok {
+    println("业务错误码:", kitexErr.BizStatusCode())
+    println("业务错误信息:", kitexErr.BizMessage())
+    println("额外信息:", kitexErr.BizExtra())
+}
+```
+
+### 🚨 其他错误处理
+
+如果 Server 返回的 Error 为非业务异常，框架会统一封装为 `(*thrift.ApplicationException)`。此时只能拿到错误的 Message。
+
+#### 🛠️ Server 端实现
+
+```go
+func (si *streamingService) ServerStreamWithErr(
+    ctx context.Context,
+    req *echo.Request,
+    stream echo.TestService_ServerStreamWithErrServer,
+) error {
+    // ... 业务逻辑 ...
+    
+    // 返回普通错误
+    return errors.New("test error")
+}
+```
+
+#### 🖥️ Client 端实现
+
+```go
+import (
+    "git.apache.org/thrift.git/lib/go/thrift"
+)
+
+stream, err := cli.ServerStreamWithErr(ctx, req)
+if err != nil {
+    log.Printf("创建流失败: %v", err)
+    return
+}
+
+var appErr error
+for {
+    res, err := stream.Recv(stream.Context())
+    if err != nil {
+        appErr = err
+        break
+    }
+    // 处理正常响应
+}
+
+// 解析框架异常
+ex, ok := appErr.(*thrift.ApplicationException)
+if ok {
+    println("异常类型:", ex.TypeID())
+    println("异常信息:", ex.Msg())
+}
+```
+
+{{<notice warning>}}
+
+**重要提示：**
+- 流错误一旦发送，就不能再发送任何消息
+- 业务异常应该使用 `kerrors.NewBizStatusErrorWithExtra` 返回，可以携带额外的错误信息
+- 框架异常只能获取 Message 信息，无法获取详细的错误码
+- 在 Client 端需要根据错误类型使用不同的解析方式
+
+{{</notice>}}
+
+{{<notice tip>}}
+
+**流错误处理建议：**
+- **区分错误类型**：首先判断是业务异常还是框架异常
+- **业务异常**：使用 `kerrors.FromBizStatusError` 解析，获取业务错误码和信息
+- **框架异常**：解析 `thrift.ApplicationException`，获取异常信息
+- **优雅处理**：在流处理循环中始终检查错误，包括 `io.EOF`
+- **错误传播**：一旦发生错误，及时通知对方终止流处理
 
 {{</notice>}}
