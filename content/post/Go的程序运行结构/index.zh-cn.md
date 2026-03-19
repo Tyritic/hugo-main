@@ -117,6 +117,36 @@ for name := range scores {
 }
 ```
 
+{{<notice tip>}}
+
+**💡 面试要点：为什么 Go map 的遍历顺序是随机的？**
+
+在 Go 中，使用 for range 遍历字典时，遍历顺序是随机的。每次运行程序时，顺序可能不同。
+
+**原因**：
+- 避免依赖顺序：防止开发者依赖遍历顺序，提高代码可移植性
+- 哈希表的天然特性：哈希表本身就是无序的
+- 安全性考虑：避免攻击者利用顺序性进行攻击
+
+**如果需要有序遍历怎么办？**
+
+先将 key 排序，再按顺序遍历：
+
+```go
+keys := make([]string, 0, len(scores))
+for k := range scores {
+    keys = append(keys, k)
+}
+sort.Strings(keys)
+
+for _, k := range keys {
+    fmt.Printf("%s: %d\n", k, scores[k])
+}
+```
+
+{{</notice>}}
+```
+
 ---
 
 #### 🔤 遍历字符串
@@ -274,6 +304,31 @@ func pow(x, n, lim float64) float64 {
 
 {{</notice>}}
 
+#### 🔀 多条件判断（if-else if-else）
+
+当需要判断多个条件时，可以使用 if-else if-else 结构：
+
+```go
+func main() {
+    score := 85
+    
+    if score >= 90 {
+        fmt.Println("优秀")
+    } else if score >= 80 {
+        fmt.Println("良好")
+    } else if score >= 60 {
+        fmt.Println("及格")
+    } else {
+        fmt.Println("不及格")
+    }
+}
+```
+
+运行结果：
+```
+良好
+```
+
 ---
 
 ### 🔀 switch 语句
@@ -311,6 +366,149 @@ default:
 - 相比于 Java，Go 只会运行选定的 **`case`**，而非之后所有的 **`case`**。在效果上，Go 的做法相当于这些语言中为每个 **`case`** 后面自动添加了所需的 **`break`** 语句
 - **`switch`** 的 **`case`** 无需为常量，且取值不限于整数
 - 在 case 中以 **`fallthrough`** 语句结束会穿透 switch 语句，只能穿透一个 **`case`** 子句。程序会继续执行下一条 case，且它不会去判断下一个 case 的表达式是否为 true
+
+---
+
+#### 💡 switch 的特殊用法
+
+**1. 一个 case 可以有多个值**
+
+多个值之间使用逗号分隔：
+
+```go
+switch day {
+case 1, 2, 3, 4, 5:
+    fmt.Println("工作日")
+case 6, 7:
+    fmt.Println("周末")
+}
+```
+
+**2. 省略 switch 后的表达式**
+
+这种形式更接近于 if-else 结构：
+
+```go
+score := 85
+switch {
+case score >= 90:
+    fmt.Println("优秀")
+case score >= 80:
+    fmt.Println("良好")
+case score >= 60:
+    fmt.Println("及格")
+default:
+    fmt.Println("不及格")
+}
+```
+
+**3. fallthrough 的使用**
+
+Go 语言中的 switch 默认带有 break 效果，但如果需要继续执行下一个 case，可以使用 **`fallthrough`**：
+
+```go
+switch {
+case score >= 60:
+    fmt.Println("及格")
+    fallthrough
+case score >= 0:
+    fmt.Println("分数有效")
+}
+```
+
+运行结果：
+```
+及格
+分数有效
+```
+
+{{<notice tip>}}
+
+**注意**：`fallthrough` 必须是 case 中的最后一条语句，并且会强制执行下一个 case 的代码块，而不判断条件。
+
+{{</notice>}}
+
+**4. switch 用于类型判断**
+
+```go
+var x interface{} = 25.0
+
+switch v := x.(type) {
+case int:
+    fmt.Printf("x是整数，值为%d\n", v)
+case float64:
+    fmt.Printf("x是浮点数，值为%.2f\n", v)
+case string:
+    fmt.Printf("x是字符串，值为%s\n", v)
+default:
+    fmt.Printf("x的类型未知\n")
+}
+```
+
+运行结果：
+```
+x是浮点数，值为25.00
+```
+
+---
+
+#### 🛠️ 实际应用示例
+
+**1. 错误处理**
+
+```go
+if err := doSomething(); err != nil {
+    fmt.Println("发生错误:", err)
+    return
+}
+```
+
+**2. 类型判断**
+
+```go
+var i interface{} = "Hello"
+
+switch v := i.(type) {
+case string:
+    fmt.Printf("字符串: %s\n", v)
+case int:
+    fmt.Printf("整数: %d\n", v)
+case bool:
+    fmt.Printf("布尔值: %v\n", v)
+default:
+    fmt.Printf("未知类型\n")
+}
+```
+
+**3. 状态机**
+
+```go
+type State int
+
+const (
+    Idle State = iota
+    Running
+    Paused
+    Stopped
+)
+
+func handleState(state State) {
+    switch state {
+    case Idle:
+        fmt.Println("系统空闲中")
+    case Running:
+        fmt.Println("系统运行中")
+    case Paused:
+        fmt.Println("系统已暂停")
+    case Stopped:
+        fmt.Println("系统已停止")
+    }
+}
+```
+
+---
+
+#### 🎯 无条件 switch
 
 ```go
 switch os := runtime.GOOS; os {

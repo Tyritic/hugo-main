@@ -1,7 +1,7 @@
 ---
 date : '2025-06-22T23:37:36+08:00'
 draft : false
-title : 'Go的函数'
+title : 'Go的函数和方法'
 image : ""
 categories : ["Golang"]
 tags : ["后端开发"]
@@ -9,11 +9,11 @@ description : "Go中函数的用法"
 math : true
 ---
 
-## 函数的定义
+## 📝 函数的定义
 
 函数是基本的代码块，用于执行一个任务。
 
-### 声明方式
+### 📝 声明方式
 
 ```go
 func function_name( [parameter list] ) [return_types] {
@@ -27,7 +27,7 @@ func function_name( [parameter list] ) [return_types] {
 - **`return_types`** ：返回类型，函数返回一列值。**`return_types`** 是该列值的数据类型。有些功能不需要返回值，这种情况下 **`return_types`** 不是必须的。
 - 函数体：函数定义的代码集合。
 
-### 注意事项
+### ⚠️ 注意事项
 
 - 数据类型在参数名后面
 - 当连续两个或多个函数的已命名形参类型相同时，除最后一个类型以外，其它都可以省略。
@@ -49,14 +49,14 @@ func split(sum int) (x, y int) {
 }
 ```
 
-## 函数式编程
+## 💻 函数式编程
 
 go支持匿名函数，主要有以下两个用法
 
 - 将匿名函数作为另一个函数的参数：回调函数
 - 将匿名函数作为另一个函数的返回值：闭包
 
-### 回调函数
+### 🔄 回调函数
 
 回调函数：callback，就是将一个函数 func2 作为函数 func1 的一个参数。那么 func2 叫做回调函数，func1 叫做高阶函数。
 
@@ -90,7 +90,7 @@ func main() {
 }
 ```
 
-### 闭包
+### 🔗 闭包
 
 闭包：一个外层函数中，有内层函数，该内层函数中，会操作外层函数的局部变量，并且该外层函数的返回值就是这个内层函数。那么这个内层函数和外层函数的局部变量，统称为闭包结构。
 
@@ -125,7 +125,7 @@ func main(){
 }
 ```
 
-## 延迟函数
+## ⏱️ 延迟函数
 
 在 Go 语言中，**延迟函数（defer）是一种在函数返回前自动执行的机制**，通常用于释放资源、解锁、关闭文件等操作。
 
@@ -151,7 +151,7 @@ func main() {
 // Defer 1
 ```
 
-### 底层原理
+### 💡 底层原理
 
 ```Go
 type _defer struct {
@@ -165,7 +165,7 @@ type _defer struct {
 }
 ```
 
-### defer的注册
+### 📝 defer的注册
 
 ```go
 func A() {
@@ -195,7 +195,7 @@ defer 链表链起来的是一个一个 **`_defer`** 结构体，新注册的 de
 
 ![defer链表](image-20250628091008611.png)
 
-## 可变参数
+## 📋 可变参数
 
 类似于Java，可变参数放在参数列表最后一个，且只支持一个可变参数
 
@@ -206,14 +206,14 @@ func funcName(args ...type){
 }
 ```
 
-## 参数传递机制
+## 🔄 参数传递机制
 
 类似于Java，go的参数传递机制也只有值传递一种
 
 - 值传递：值传递实际上就是一份拷贝，函数内部对该值的修改，不会影响函数外部的值
 - 引用传递：引用传递本质上也是值传递，只不过这份值是一个指针（地址）。 所以我们在函数内对这份值的修改，其实不是改这个值，而是去修改这个值所指向的数据，所以是会影响到函数外部的值的。
 
-## 方法
+## 🎯 方法
 
 方法就是一个包含了接受者的函数，接受者可以是命名类型或者结构体类型的一个值或者是一个指针。用于实现面向对象的方法
 
@@ -249,4 +249,103 @@ func (c Circle) getArea() float64 {
   return 3.14 * c.radius * c.radius
 }
 ```
+
+### 📝 方法的调用
+
+定义在指针类型或者值类型上的方法可以通过指针变量或者值变量来调用。
+
+```go
+package main
+
+import "fmt"
+
+type Student struct {
+    ID int
+    Name string
+    Age int
+    Score int
+}
+
+func (st *Student) SetScore(score int) {
+    st.Score = score
+}
+
+func (st Student) GetScore() int{
+    return st.Score
+}
+
+func main() {
+    st := &Student{
+        ID : 100,
+        Name : "zhangsan",
+        Age : 18,
+        Score : 98,
+    }
+    fmt.Printf("设置前，学生st的分数是: %d\n", st.GetScore())    // 通过指针调用定义在值类型的方法GetScore
+    st.SetScore(100)                                       // 通过指针调用定义在指针类型上的方法
+    fmt.Printf("设置后，学生st的分数是: %d\n", st.GetScore())    // 通过指针调用定义在值类型的方法GetScore
+}   
+```
+
+运行结果：
+```
+设置前，学生st的分数是: 98
+设置后，学生st的分数是: 100
+```
+
+### 🔗 方法的继承（组合）
+
+Go 语言不像 C++ 或者 Java 一样有显示的继承关系，因为 Go 语言没有类的概念，所以自然就不存在父类、子类一说，自然就没有继承的关系。那么，Go 语言是如何实现继承功能的呢？
+
+答案是：**组合**。Go 语言中不论是属性还是方法的继承都是通过组合来实现的。
+
+```go
+package main
+
+import "fmt"
+
+type People struct {
+    Name string
+    Age int
+}
+
+func (p *People) GetName() string{
+    return p.Name
+}
+
+type Student struct {
+    ID int
+    Score int
+    People    // 将People作为Student的一个属性，注意不要加类型，这就是隐式继承
+}
+
+func (st *Student) SetScore(score int) {
+    st.Score = score
+}
+
+func (st Student) GetScore() int{
+    return st.Score
+}
+
+func main() {
+    st := &Student{
+        ID : 100,
+        Score: 98,
+        People : People {
+            Name : "zhangsan",
+            Age : 18,
+        },
+    }
+    fmt.Printf("学生st的分数是: %d\n", st.GetScore())
+    fmt.Printf("学生st的姓名是: %s\n", st.GetName())
+}
+```
+
+运行结果：
+```
+学生st的分数是: 98
+学生st的姓名是: zhangsan
+```
+
+上述例子中，`Student` 通过内嵌 `People` 获得了 `People` 的 `Name` 和 `Age` 属性以及 `GetName` 方法。这就是 Go 语言中实现"继承"的方式——**组合**。
 

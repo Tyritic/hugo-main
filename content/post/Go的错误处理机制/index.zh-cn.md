@@ -11,15 +11,15 @@ math : true
 
 ## 🧠 Go的错误处理机制
 
-### 引言
+### 📖 引言
 
 在软件开发中，错误处理是一个不可避免的重要环节。不同的编程语言采用了不同的错误处理方式，而 Go 语言以其简洁、实用的错误处理机制著称。本文将深入探讨 Go 语言的错误处理机制，包括核心概念、最佳实践和常见模式，帮助开发者更好地理解和应用 Go 的错误处理。
 
 ---
 
-### 核心概念
+### 💡 核心概念
 
-#### error 接口
+#### 🔍 error 接口
 
 在 Go 中，错误是通过 `error` 接口来表示的：
 
@@ -31,7 +31,7 @@ type error interface {
 
 这个接口非常简洁，只包含一个 `Error()` 方法，返回一个描述错误的字符串。任何实现了这个方法的类型都可以作为错误返回。
 
-#### nil 值判断
+#### ⚠️ nil 值判断
 
 在 Go 中，错误处理的标准模式是检查返回的错误是否为 `nil`：
 
@@ -48,9 +48,9 @@ if err != nil {
 
 ---
 
-### 错误返回模式
+### 📝 错误返回模式
 
-#### 单返回值错误
+#### 📝 单返回值错误
 
 对于只返回错误的函数，通常直接返回 `error` 类型：
 
@@ -63,7 +63,7 @@ func validateInput(input string) error {
 }
 ```
 
-#### 多返回值错误
+#### 📋 多返回值错误
 
 对于需要返回结果和错误的函数，通常将错误作为最后一个返回值：
 
@@ -78,9 +78,9 @@ func divide(a, b float64) (float64, error) {
 
 ---
 
-### 错误包装与上下文
+### 📦 错误包装与上下文
 
-#### 标准库错误包装
+#### 📦 标准库错误包装
 
 在 Go 1.13 及以上版本中，标准库提供了 `errors.Wrap` 和 `errors.Wrapf` 函数，用于包装错误并添加上下文信息：
 
@@ -97,7 +97,7 @@ func processFile(filename string) error {
 }
 ```
 
-#### Go 1.13+ 错误包装
+#### 🔧 Go 1.13+ 错误包装
 
 Go 1.13 引入了标准库的错误包装功能，使用 `%w` 动词来包装错误：
 
@@ -114,7 +114,7 @@ func processFile(filename string) error {
 }
 ```
 
-#### 错误链检查
+#### 🔗 错误链检查
 
 使用 `errors.Is` 和 `errors.As` 函数可以检查错误链中的特定错误：
 
@@ -131,9 +131,9 @@ if errors.As(err, &pathError) {
 
 ---
 
-### 自定义错误类型
+### 🔧 自定义错误类型
 
-#### 简单自定义错误
+#### 🛠️ 简单自定义错误
 
 可以通过实现 `error` 接口来创建自定义错误类型：
 
@@ -148,7 +148,7 @@ func (e *ValidationError) Error() string {
 }
 ```
 
-#### 带状态码的错误
+#### 🔢 带状态码的错误
 
 对于需要携带更多信息的错误，可以在自定义错误类型中添加额外字段：
 
@@ -165,9 +165,9 @@ func (e *AppError) Error() string {
 
 ---
 
-### 错误处理最佳实践
+### ✅ 错误处理最佳实践
 
-#### 尽早返回
+#### ⏮️ 尽早返回
 
 采用 "尽早返回" 的原则，一旦发生错误就立即返回，避免嵌套过深的代码：
 
@@ -190,7 +190,7 @@ func process(data string) error {
 }
 ```
 
-#### 错误处理层次
+#### 🏗️ 错误处理层次
 
 在不同层次的代码中，错误处理的策略也不同：
 
@@ -198,7 +198,7 @@ func process(data string) error {
 - **中间层函数**：包装错误并添加上下文
 - **顶层函数**：处理错误并向用户展示
 
-#### 日志记录
+#### 📝 日志记录
 
 在适当的位置记录错误信息，便于调试和问题定位：
 
@@ -211,9 +211,9 @@ if err != nil {
 
 ---
 
-### 常见陷阱
+### ⚠️ 常见陷阱
 
-#### 忽略错误
+#### ⚠️ 忽略错误
 
 永远不要忽略错误，即使你认为它不会发生：
 
@@ -228,7 +228,21 @@ if err != nil {
 }
 ```
 
-#### 错误比较
+#### 🔄 错误比较
+
+**重要知识点**：`errors.New()` 和 `fmt.Errorf()` 创建的 error 对象是**不可以直接比较**的！
+
+- `errors.New()` 返回的是一个地址（指针），不能用来做等值判断
+- `fmt.Errorf()` 内部也是用到了 `errors.New()`，同样不可直接比较
+
+```go
+err3 := errors.New("hello")
+err4 := errors.New("hello")
+fmt.Println(err3 == err4)  // false，即使错误信息相同
+
+// 正确做法：通过 Error() 方法比较字符串
+fmt.Println(err3.Error() == err4.Error())  // true
+```
 
 不要直接比较错误字符串，应该使用 `errors.Is` 或类型断言：
 
@@ -244,7 +258,7 @@ if errors.Is(err, os.ErrNotExist) {
 }
 ```
 
-#### 过度包装
+#### ⚖️ 过度包装
 
 不要过度包装错误，只在需要添加有价值的上下文信息时才进行包装：
 
@@ -270,13 +284,73 @@ func processFile(filename string) error {
 
 ---
 
-### panic和recover机制
+### 🚨 panic和recover机制
 
-#### 基本概念
+#### 💡 基本概念
 
 在Go语言中，`panic`和`recover`是用于处理程序运行时严重错误的机制。`panic`用于触发一个运行时异常，导致程序执行流程中断并开始逐层回溯调用栈进行栈展开（stack unwinding），而`recover`是一个内置函数，用于在`defer`函数中捕获由`panic`引发的异常，从而阻止程序崩溃并恢复正常执行流程。
 
-#### 实现原理
+**📡 panic 传递机制**
+
+当一个函数发生了 `panic` 之后，若在当前函数中没有 `recover`，会一直向外层传递直到主函数，如果迟迟没有 `recover` 的话，那么程序将终止。如果在过程中遇到了最近的 `recover`，则将被捕获。
+
+```go
+package main
+
+import "fmt"
+
+func testPanic1(){
+   fmt.Println("testPanic1上半部分")
+   testPanic2()
+   fmt.Println("testPanic1下半部分")
+}
+
+func testPanic2(){
+   defer func() {
+      recover()
+   }()
+   fmt.Println("testPanic2上半部分")
+   testPanic3()
+   fmt.Println("testPanic2下半部分")
+}
+
+func testPanic3(){
+   fmt.Println("testPanic3上半部分")
+   panic("在testPanic3出现了panic")
+   fmt.Println("testPanic3下半部分")
+}
+
+func main() {
+   fmt.Println("程序开始")
+   testPanic1()
+   fmt.Println("程序结束")
+}
+```
+
+运行结果：
+```
+程序开始
+testPanic1上半部分
+testPanic2上半部分
+testPanic3上半部分
+testPanic1下半部分
+程序结束    
+```
+
+**解析：**
+调用链：`main --> testPanic1 --> testPanic2 --> testPanic3`
+
+1. 在 `testPanic3` 中发生了 `panic`，由于 `testPanic3` 没有 `recover`
+2. 向上传递，在 `testPanic2` 中找到了 `recover`，`panic` 被捕获
+3. 程序接着运行，`testPanic3` 发生 `panic` 后不再继续执行
+4. `testPanic2` 捕获到 `panic` 后也不再继续执行
+5. 跳出 `testPanic2`，到 `testPanic1` 接着运行
+
+**📌 总结：**
+1. `recover()` 只能恢复当前函数级或以当前函数为首的调用链中的函数中的 `panic()`，恢复后调用当前函数结束，但是调用此函数的函数继续执行
+2. 函数发生了 `panic` 之后会一直向上传递，如果直至 `main` 函数都没有 `recover()`，程序将终止，如果是遇见了 `recover()`，将被 `recover` 捕获
+
+#### ⚙️ 实现原理
 
 **panic**：Go运行时维护了一个与goroutine关联的`_g`结构体，其中包含一个`_panic`链表字段。每当发生panic时，runtime会创建一个新的`_panic`结构体节点，并将其插入到当前goroutine的panic链表头部。这个结构体记录了panic的值、是否已被recover捕获等信息。同时，runtime会保存当前的程序计数器（PC）和栈指针（SP），以便后续进行栈展开。随后，系统开始执行当前函数中所有已经defer但尚未执行的函数（LIFO顺序）。
 
@@ -284,32 +358,55 @@ func processFile(filename string) error {
 
 **栈展开**：当panic发生后，Go运行时会从当前函数开始向上逐层退出函数调用帧。每退回到一个函数，就执行其defer列表中的函数。这一过程持续到某一层的defer函数成功调用recover为止。若一直没有recover，则最终到达main函数或goroutine入口，打印panic信息并退出程序。
 
-#### defer执行顺序
+#### 🔢 defer执行顺序
 
 - **先进后出（LIFO, Last In First Out）**：defer 注册的函数会被压入栈，在函数返回时按后进先出的顺序执行。
 - **函数返回时触发**：defer 并不是立即执行，而是在包含它的函数返回时执行，包括正常返回和因 panic 异常返回。
 
-#### defer修改返回值
+#### ✏️ defer修改返回值
 
 在 Go 中，defer 可以修改返回值，但需要满足一定条件：函数必须有命名返回值。
 
 - **匿名返回值**（直接 return expr）的情况：defer 无法直接修改返回值，因为返回值是函数返回语句时才确定的。
 - **命名返回值**（func foo() (ret int) {}）：函数的返回值变量在函数体内是可见的，defer 可以直接修改这个变量的值。当执行 return 时，Go 会先执行 defer，再返回命名返回值的最终值。
 
-#### 哪些异常不会被recover
+#### 🚫 哪些异常不会被recover
 
 - **运行时致命错误**（fatal runtime errors）
 - **栈溢出**（stack overflow）
 - **Go runtime 自身内部错误**（runtime panic 之外的致命错误）
 - **程序直接调用 os.Exit()**
 
-#### defer语句的主要用途
+#### 💡 defer语句的主要用途
 
 1. **释放资源**：defer 可以保证在函数退出时释放资源，常用于文件、网络连接、锁等资源的关闭或释放。
 2. **保证执行顺序**：defer 是后进先出（LIFO），可以保证一组操作按相反顺序执行。
 3. **错误处理与恢复**：与 recover 结合，可以捕获 panic，防止程序崩溃。
 
-#### 在子协程中使用recover
+**📁 资源释放示例**
+
+```go
+func CopyFile(dstFile, srcFile string) (wr int64, err error) {
+    src, err := os.Open(srcFile)
+    if err != nil {
+        return
+    }
+    defer src.Close()
+
+    dst, err := os.Create(dstFile)
+    if err != nil {
+        return
+    }
+    defer dst.Close()
+    
+    wr, err = io.Copy(dst, src)  
+    return wr, err
+}
+```
+
+只要我们正确打开了某个资源，在没有返回错误的情况下，都可以用 defer 延迟调用来关闭资源。这是 Go 语言中非常常见的一种资源关闭方式。
+
+#### 🌐 在子协程中使用recover
 
 建议在子协程（goroutine）中使用 recover，主要是为了防止整个程序因为子协程的 panic 而崩溃。
 
@@ -321,9 +418,9 @@ func processFile(filename string) error {
 - **隔离子协程的错误**：使用 recover 可以捕获子协程的 panic，防止它终止整个程序。主程序可以继续执行，同时对子协程错误进行处理或重启。
 - **实现容错与重启机制**：捕获 panic 后可以记录日志，上报错误，重启该子协程。
 
-#### defer与return的执行顺序
+#### ⏱️ defer与return的执行顺序
 
-return语句的执行是原子性的，它包含两个步骤：
+return语句的执行是原子性的，它包含**三个步骤**：
 1. **第一步**：为返回值赋值
 2. **第二步**：执行defer语句
 3. **第三步**：执行RET指令，返回到调用者
@@ -332,7 +429,91 @@ defer的操作步骤：
 1. **注册阶段**：遇到defer时，将函数压入defer栈
 2. **执行阶段**：在return的第二步执行，按照LIFO顺序
 
-#### panic嵌套
+**⚠️ 重要：defer 参数的确定性**
+
+defer 定义的延迟函数的参数在 defer 语句出现时就已经确定下来了！
+
+**示例 1：基本类型参数**
+
+```go
+func deferRun() {
+  var num = 1
+  defer fmt.Printf("num is %d", num)
+  
+  num = 2
+  return
+}
+
+func main(){
+    deferRun()
+}
+```
+
+运行结果：`num is 1`
+
+**解析**：延迟函数 `defer fmt.Printf("num is %d", num)` 的参数 `num` 在 defer 语句出现的时候就已经确定，`num=1`，所以不管后面怎么修改 `num` 的值，最终传递给 defer 函数的参数已经固定是 `1` 了。
+
+**示例 2：指针类型参数**
+
+```go
+func main() {
+ deferRun()
+}
+
+func deferRun() {
+ var arr = [4]int{1, 2, 3, 4}
+ defer printArr(&arr)
+ 
+ arr[0] = 100
+ return
+}
+
+func printArr(arr *[4]int) {
+ for i := range arr {
+  fmt.Println(arr[i])
+ }
+}   
+```
+
+运行结果：
+```
+100
+2
+3
+4
+```
+
+**解析**：虽然参数在 defer 语句出现时确定，但这里传递的是地址，地址没变，然而地址对应的内容被修改了，所以输出会被修改。
+
+**示例 3：命名返回值 defer 修改**
+
+```go
+func main() {
+   res := deferRun()
+   fmt.Println(res)
+}
+
+func deferRun() (res int) {
+  num := 1
+  
+  defer func() {
+    res++
+  }()
+  
+  return num
+}
+```
+
+运行结果：`2`
+
+**解析**：函数的 return 过程分解为三步：
+1. 设置返回值（res = num = 1）
+2. 执行 defer 语句（res++，所以 res = 2）
+3. 将结果返回（返回 res = 2）
+
+所以最终结果是 `2`。
+
+#### 🔄 panic嵌套
 
 在 Go 语言中，如果一个函数中发生了 panic，然后在 defer 中又发生了 panic，这被称为panic嵌套或二次 panic：
 - 第一个 panic 触发
@@ -346,7 +527,7 @@ defer的操作步骤：
 
 如果没有外层的 recover，程序会崩溃，崩溃信息只显示第二个 panic。
 
-#### 底层原理
+#### ⚙️ 底层原理
 
 当前执行的 **`goroutine`** 中有一个 **`defer`** 链表的头指针，其实它也会有一个 **`panic`** 链表头指针，**`panic`** 链表链起来的是一个个的 **`_panic`** 结构体。
 
@@ -402,7 +583,7 @@ func A() {
 
 ---
 
-### 总结
+### 📚 总结
 
 Go 语言的错误处理机制以其简洁、实用的设计赢得了开发者的青睐。通过理解 `error` 接口、错误返回模式、错误包装与上下文、自定义错误类型以及最佳实践，开发者可以编写更加健壮、可维护的代码。
 

@@ -171,6 +171,61 @@ for k, v := range m {
 
 - Go 中遍历 map 的顺序是不确定的，每次运行可能会不同。
 
+### 🗺️ 嵌套Map
+
+Map 的值可以是另一个 Map，这样就形成了嵌套结构：
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    // 创建一个存储学生成绩的嵌套map
+    studentScores := map[string]map[string]int{
+        "张三": {
+            "数学": 95,
+            "英语": 88,
+            "语文": 92,
+        },
+        "李四": {
+            "数学": 90,
+            "英语": 85,
+            "语文": 88,
+        },
+    }
+    
+    // 获取张三的英语成绩
+    englishScore := studentScores["张三"]["英语"]
+    fmt.Printf("张三的英语成绩是：%d\n", englishScore)
+}
+```
+
+运行结果：
+```
+张三的英语成绩是：88
+```
+
+### 📤 Map作为函数参数
+
+Map 是引用类型，作为函数参数时传递的是底层指针的拷贝：
+
+```go
+func updatePrice(prices map[string]float64, fruit string, price float64) {
+    prices[fruit] = price
+}
+
+func main() {
+    fruitPrices := map[string]float64{
+        "苹果": 5.5,
+        "香蕉": 3.8,
+    }
+    
+    updatePrice(fruitPrices, "苹果", 6.0)
+    fmt.Printf("更新后苹果的价格：%.2f\n", fruitPrices["苹果"])
+}
+```
+
 **💡 面试要点：为什么 Go map 的遍历顺序是随机的？**
 
 **1. 设计原因**
@@ -632,250 +687,4 @@ func tooManyOverflowBuckets(noverflow uint16, B uint8) bool {
 3. **两种扩容方式的区别：**
    - **翻倍扩容**：负载因子 > 6.5 时触发，桶数量翻倍
    - **等量扩容**：溢出桶过多时触发，桶数量不变，重新整理数据
-
----
-
-## 🔐 Sync.Map
-
-**`Map`** 不是并发安全的，**Go** 在 1.09 版本引入了线程安全的 **`Sync.Map`** 。但是遇到写多读少的情况需要频繁加锁，可能比 **Map** 加锁使用时效果更差
-
-```go
-type Map struct{
-    mu Mutex                   // 保护 dirty 的互斥锁
-    read atomic.Value          // 无锁读的 readOnly 结构
-    dirty map[interface{}]*entry // 包含最新数据的 map
-    misses int                 // 记录从 read 读取失败的次数
-}
-
-type readOnly struct {
-    m       map[interface{}]*entry
-    amended bool // 标记 dirty 中是否存在 read 中没有的键
-}
-
-type entry struct {
-    p unsafe.Pointer // 指向 interface{} 类型的值
-}
-```
-
-- **`read`** ：使用 **`atomic.Value`** 存储 **`readOnly`** 结构，支持无锁读操作。
-- **`dirty`**：包含最新数据的普通哈希表，写操作优先更新此表，但需加锁。
-- **`entry.p`** ：三种状态：
-  1. 指向实际值：正常状态
-  2. **`nil`** ：键被删除，但 **`dirty`** 中可能存在
-  3. **`expunged`** ：键被彻底删除，仅存在于 **`read`** 中
-
-### 💡 特点
-
-- **无锁读** ：大部分读操作无需加锁，通过原子操作直接访问 **`read`**，性能极高。
-- **延迟删除** ：删除操作仅标记 **`entry`** 为 **`nil`** ，在 **`dirty`** 提升时才真正删除，减少锁竞争。
-- **读写分离**：**`read`** 存储热点数据，**`dirty`** 存储最新数据，通过 **`amended`** 标记协调两者。
-- **自动迁移**：当 **`misses`** 达到阈值时，**`dirty`** 自动提升为 **`read`**，后续写操作重建 **`dirty`**，避免 **`dirty`** 长期积累大量数据。
-
-**💡 面试要点：Go map 是并发安全的吗？如何实现并发安全？**
-
-**Go map 不是并发安全的**。并发读写会导致 **`panic`**。
-
-**实现并发安全的方式：**
-
-**1. 加锁（`sync.Mutex` 或 `sync.RWMutex`）**
-
-```go
-var (
-    m  = make(map[string]int)
-    mu sync.RWMutex
-)
-
-func read(key string) int {
-    mu.RLock()
-    defer mu.RUnlock()
-    return m[key]
-}
-
-func write(key string, value int) {
-    mu.Lock()
-    defer mu.Unlock()
-    m[key] = value
-}
-```
-
-**2. 使用 `sync.Map`**
-
-适用于读多写少的场景：
-
-```go
-var m sync.Map
-
-// 存储
-m.Store("key", "value")
-
-// 读取
-if v, ok := m.Load("key"); ok {
-    fmt.Println(v)
-}
-
-// 删除
-m.Delete("key")
-```
-
-**面试要点：**
-
-1. **为什么 map 不设计为并发安全？**
-   - 并发安全需要加锁，会降低性能
-   - 大多数场景不需要并发访问
-   - 让使用者根据场景选择合适的方案
-
-2. **`sync.Map` 的原理：**
-   - 读写分离：**`read`** 存储热点数据，**`dirty`** 存储最新数据
-   - 无锁读：大部分读操作无需加锁
-   - 延迟删除：标记删除，减少锁竞争
-
-3. **`sync.Map` 的适用场景：**
-   - 读多写少
-   - key 集合相对稳定
-   - 写多读少时性能不如加锁的 map
-
-### 🔧 基本操作
-
-- 读取：**`func Load(key interface{}) (value interface{}, ok bool)`**
-  - **`value`**：键对应的值（类型需自行转换）。
-  - **`ok`** ：键是否存在的标志。
-
-- 存储/更新：**`func Store(key, value interface{})`**
-  - 若键已存在，新值会覆盖旧值；不支持存储 **`nil`**（会触发 panic）
-
-- 删除键：**`func Delete(key interface{})`**
-  - 实际为逻辑删除（标记 **`entry`** 为 **`nil`** ），在 `dirty` 提升时才物理删除。
-  - 若键不存在，不会报错。
-
-- 若存在则加载否则存储：**`func LoadOrStore(key, value interface{}) (actual interface{}, loaded bool)`**
-  - **`actual`** ：键的当前值（无论是否新存入）。
-  - **`loaded`** ：键是否已存在的标志（ **`true`** 表示已存在，直接加载；**`false`** 表示新存入）。
-
-- 遍历：**`Sync.Map`** 有自带的**`Range`** ，**`Range(func(key, value any) bool`** ，**`any`**（即 **`interface{}`**），要用类型断言才能使用具体类型
-
-  ```go
-  m.Range(func(key, value any) bool {
-      k := key.(string)
-      v := value.(int)
-      fmt.Printf("%s => %d\n", k, v)
-      return true
-  })
-  ```
-
-  
-
-### 🧩 底层原理
-
-#### ⬆️ dirty提升
-
-用于将 **`dirty`** 哈希表中的数据同步到 **`read`** 视图，从而减少后续读操作的锁竞争。
-
-当满足以下条件时，**`dirty`** 会被提升为新的 **`read`** ：
-
-- **`read` 中找不到键**：读操作（如 **`Load`** ）在 **`read`** 中未找到目标键，且 **`amended=true`**（表示 **`dirty`** 包含新数据）。
-- **misses 计数器达到阈值**：连续多次（次数等于 **`len(dirty)`** ）从 `dirty` 读取数据后，触发提升。
-
-```go
-func (m *Map) missLocked() {
-    m.misses++
-    if m.misses < len(m.dirty) {
-        return
-    }
-    // 将 dirty 提升为 read
-    m.read.Store(readOnly{m: m.dirty})
-    m.dirty = nil
-    m.misses = 0
-}
-```
-
-- **复制 `dirty` 到 `read`**：将 **`dirty`** 的引用直接赋值给 **`read`**，并重置 **`amended`** 为 **`false`** 。
-- **清空 `dirty`**：将 **`dirty`** 置为 **`nil`**，等待下次写操作时重建。
-- **重置 `misses`**：计数器归零，准备下一轮统计。
-
-#### 📖 读取
-
-```go
-func (m *Map) Load(key interface{}) (value interface{}, ok bool) {
-    read, _ := m.read.Load().(readOnly)
-    e, ok := read.m[key]
-    if !ok && read.amended { // read 中不存在且 dirty 有新数据
-        m.mu.Lock()
-        // 双重检查，避免加锁前 dirty 已提升为 read
-        read, _ = m.read.Load().(readOnly)
-        e, ok = read.m[key]
-        if !ok && read.amended {
-            e, ok = m.dirty[key]
-            m.missLocked() // 记录一次 miss
-        }
-        m.mu.Unlock()
-    }
-    if !ok {
-        return nil, false
-    }
-    return e.load() // 从 entry 中加载值
-}
-```
-
-- 优先从 **`read`** 无锁读取，若存在直接返回。
-- 若 **`read`** 中不存在且 **`amended=true`**（表示 **`dirty`** 有新数据），加锁从 **`dirty`** 读取，并记录一次 **`miss`** 。
-- 当 **`misses`** 累计达到 **`len(dirty)`** 时，触发 **`dirty`** 提升为 **`read`**，避免频繁加锁。
-
-#### 💾 存储
-
-```go
-func (m *Map) Store(key, value interface{}) {
-    read, _ := m.read.Load().(readOnly)
-    if e, ok := read.m[key]; ok && e.tryStore(&value) {
-        return // 若 read 中存在且未被标记为 expunged，直接更新
-    }
-
-    m.mu.Lock()
-    read, _ = m.read.Load().(readOnly)
-    if e, ok := read.m[key]; ok {
-        if e.unexpungeLocked() { // 若 entry 被标记为 expunged，需恢复并加入 dirty
-            m.dirty[key] = e
-        }
-        e.storeLocked(&value) // 更新 entry
-    } else if e, ok := m.dirty[key]; ok {
-        e.storeLocked(&value) // dirty 中存在，直接更新
-    } else {
-        if !read.amended { // 首次写入 dirty，需复制 read 中的所有未删除 entry
-            m.dirtyLocked()
-            m.read.Store(readOnly{m: read.m, amended: true})
-        }
-        m.dirty[key] = newEntry(value) // 将新 entry 加入 dirty
-    }
-    m.mu.Unlock()
-}
-```
-
-- 尝试无锁更新 **`read`** 中的 **`entry`**（若存在且未被删除）。
-- 若 **`read`** 中不存在或已被标记为 **`expunged`** ，加锁操作：
-  - 若 **`dirty`** 中存在该键，直接更新。
-  - 若 **`dirty`** 中不存在：
-    - 首次写入 **`dirty`** 时，将 **`read`** 中所有未删除的 **`entry`** 复制到 **`dirty`** 。
-    - 将新 **`entry`** 加入 **`dirty`**，并标记 **`amended=true`** 。
-
-#### 🗑️ 删除
-
-```go
-func (m *Map) Delete(key interface{}) {
-    read, _ := m.read.Load().(readOnly)
-    e, ok := read.m[key]
-    if !ok && read.amended {
-        m.mu.Lock()
-        read, _ = m.read.Load().(readOnly)
-        e, ok = read.m[key]
-        if !ok && read.amended {
-            delete(m.dirty, key) // 直接从 dirty 中删除
-        }
-        m.mu.Unlock()
-    } else if ok {
-        e.delete() // 标记 entry 为 nil（逻辑删除）
-    }
-}
-```
-
-- 若 **`read`** 中存在该键，标记 **`entry.p=nil`**（逻辑删除）。
-- 若 **`read`** 中不存在且 **`amended=true`**，加锁从 **`dirty`** 中物理删除该键。
 
