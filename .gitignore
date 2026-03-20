@@ -3,8 +3,14 @@ public
 resources
 .hugo_build.lock
 
+# IDE
+.idea/
+
 # 忽略 CS-Base-main 文件夹
 CS-Base-main/
 
 # 忽略 PDF 文件
 *.pdf
+
+# Codex local environments
+.codex/environments/

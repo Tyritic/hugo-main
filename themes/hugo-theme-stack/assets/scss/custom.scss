@@ -665,4 +665,14 @@ body {
       font-feature-settings: "tnum" on;
     }
   }
+  blockquote {
+    margin: 20px 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
 }
