@@ -163,11 +163,11 @@ str2 := `Hello
 Golang`
 ```
 
-#### 双引号声明
+#### 🗨️ 双引号声明
 
 使用双引号声明的字符串和其他语言中的字符串没有太多的区别，但是这种使用双引号的字符串只能用于单行字符串的初始化，当字符串里使用到一些特殊字符，比如双引号、换行符等等需要用 `\` 进行转义。
 
-#### 反引号声明
+#### 📎 反引号声明
 
 反引号声明的字符串没有这些限制，字符内容即为字符串里的原始内容，所以一般用反引号来声明比较复杂的字符串，比如 **JSON 串**。
 
@@ -225,7 +225,7 @@ HAllo
   <img src="byte-to-string.png" alt="byte转string过程示意图" width="60%">
 </div>
 
-#### string 转 []byte
+#### 🔁 string 转 []byte
 
 `string` 转化为 `byte` 数组同样简单，大致分为两步：
 
@@ -256,7 +256,7 @@ HAllo
 
 ### 📊 五种拼接方式对比
 
-#### 1️⃣ 使用 `+` 运算符
+#### ➕ 使用 `+` 运算符
 
 ```go
 s1 := "Hello"
@@ -271,7 +271,7 @@ result := s1 + " " + s2
 
 ---
 
-#### 2️⃣ 使用 `fmt.Sprintf`
+#### 🧾 使用 `fmt.Sprintf`
 
 ```go
 name := "Go"
@@ -286,7 +286,7 @@ result := fmt.Sprintf("Language: %s, Version: %.2f", name, version)
 
 ---
 
-#### 3️⃣ 使用 `strings.Builder`（推荐）
+#### 🏗️ 使用 `strings.Builder`（推荐）
 
 ```go
 var builder strings.Builder
@@ -318,7 +318,7 @@ result := builder.String()
 
 ---
 
-#### 4️⃣ 使用 `bytes.Buffer`
+#### 🪣 使用 `bytes.Buffer`
 
 ```go
 var buffer bytes.Buffer
@@ -335,7 +335,7 @@ result := buffer.String()
 
 ---
 
-#### 5️⃣ 使用 `[]byte` 切片
+#### 🧱 使用 `[]byte` 切片
 
 ```go
 var buf []byte
@@ -371,7 +371,7 @@ result := string(buf)
 
 ### 🧪 性能测试详解
 
-#### 测试代码
+#### 🧪 测试代码
 
 采用 `testing` 包下的 `benchmark` 测试其性能：
 
@@ -468,7 +468,7 @@ func BenchmarkJoin(b *testing.B) {
 }
 ```
 
-#### 测试结果
+#### 📊 测试结果
 
 ```
 goos: windows
@@ -498,7 +498,7 @@ PASS
 
 可以看到，采用 `fmt.Sprintf` 拼接字符串性能是最差的，性能最好的方式是 `strings.Builder` 和 `strings.Join`。
 
-#### 性能原理分析
+#### 🔬 性能原理分析
 
 | 方法 | 说明 |
 | --- | --- |
@@ -509,7 +509,7 @@ PASS
 | **append** | 直接使用 `[]byte` 扩容机制，可复用，支持预分配内存和自动扩容，性能只比 `+` 和 `Sprintf` 好，但是如果能提前分配好内存的话，性能将会仅次于 `strings.Builder` |
 | **strings.Join** | `strings.Join` 的性能约等于 `strings.Builder`，在已知字符串 slice 的时候可以使用，未知时不建议使用，构造切片也是会有性能损耗的 |
 
-#### 性能对比总结
+#### 📌 性能对比总结
 
 > **性能对比**：`strings.Builder` ≈ `strings.Join` > `bytes.Buffer` > `append` > `+` > `fmt.Sprintf`
 
@@ -529,21 +529,21 @@ PASS
 
 ## 📚 总结
 
-### 核心要点
+### 🎯 核心要点
 
 - string 是**不可变**的只读字符数组，采用 **UTF-8** 编码
 - 底层通过 `StringHeader` 结构体实现，包含数据指针和长度
 - 字符串操作主要使用 **`strings`** 包提供的丰富 API
 - 字符串拼接优先使用 **`strings.Builder`**，在性能敏感场景下预分配内存
 
-### 关键原理
+### 🧠 关键原理
 
 - **底层结构**：`string` 本质是一个结构体，包含指向字节数组的指针和长度
 - **不可变性**：字符串不能被修改，所有操作都是通过拷贝实现
 - **转换开销**：`string` 与 `[]byte` 转换会发生内存拷贝，但在临时场景下会优化
 - **性能选择**：根据场景选择合适的拼接方式，大量拼接使用 `strings.Builder`
 
-### 最佳实践
+### ✅ 最佳实践
 
 1. **少量拼接**：使用 `+` 操作符
 2. **大量拼接**：使用 `strings.Builder` 并预分配内存

@@ -62,7 +62,7 @@ type Context interface {
 | `context.Background()` | 直接调用 | 不可取消、无超时、无值 | 程序入口、主函数、初始化流程、顶级请求 |
 | `context.TODO()` | 直接调用 | 同样不可取消、无超时、无值 | 尚未明确该用哪种 Context 时的占位 |
 
-#### `context.Background()`
+#### 🌍 `context.Background()`
 
 它通常作为主入口的根上下文，适合：
 
@@ -71,7 +71,7 @@ type Context interface {
 - 顶层请求起点
 - 测试入口
 
-#### `context.TODO()`
+#### 📝 `context.TODO()`
 
 它表示“这里以后会补上下文，但现在还没想好”。
 

@@ -145,7 +145,6 @@ for _, k := range keys {
 ```
 
 {{</notice>}}
-```
 
 ---
 
@@ -508,7 +507,7 @@ func handleState(state State) {
 
 ---
 
-#### 🎯 无条件 switch
+#### 🧭 带表达式 switch
 
 ```go
 switch os := runtime.GOOS; os {
@@ -522,7 +521,7 @@ default:
 }
 ```
 
-#### 🎯 无条件 switch
+#### 🎯 无表达式 switch
 
 无条件 switch 语句可以用于代替多次 **`if-then-else`**，写得更加清晰：
 
@@ -560,7 +559,7 @@ func main() {
 // world
 ```
 
-#### 💡 常见用途
+### 💡 常见用途
 
 - 资源释放（关闭文件、解锁互斥锁等）
 - 记录函数执行时间
