@@ -1816,44 +1816,178 @@ var x interface{}
 
 ### 💡 底层实现原理
 
-Go 的接口分为两种：
+一个接口值在运行时，本质上都包含两部分：
 
-**1. 空接口（eface）**
+- **动态类型**：当前接口里装的到底是什么类型
+- **动态值**：这个具体类型对应的那块数据
+
+Go 的接口按底层结构分为两种。
+
+**1. 空接口（`eface`）**
+
+空接口没有方法集，所以只需要保存类型信息和数据指针。
 
 ```go
 type eface struct {
-    _type *_type        // 类型信息
-    data  unsafe.Pointer // 数据指针
+    _type *_type
+    data  unsafe.Pointer
 }
 ```
 
+- **`_type`**：指向动态类型的元数据
+- **`data`**：指向动态值
+
+例如：
+
+```go
+type Apple struct {
+    PhoneName string
+}
+
+func main() {
+    a := Apple{PhoneName: "apple"}
+    var efc interface{}
+    efc = a
+    fmt.Println(efc)
+}
+```
+
+把 `a` 赋值给 `efc` 之后，`efc` 内部就会记录：
+
+- **动态类型**：`Apple`
+- **动态值**：变量 `a` 的那份数据
+
 <div align="center">
-  <img src="eface修改.png" alt="eface" width="60%">
+  <img src="eface修改.png" alt="空接口 eface 的底层结构" width="60%">
 </div>
 
-**2. 带方法的接口（iface）**
+`_type` 对应的底层类型元数据可以抽象成运行时里的 `_type` 结构，里面保存了类型大小、对齐方式、哈希值、种类编号等信息：
+
+```go
+type _type struct {
+    size       uintptr
+    ptrdata    uintptr
+    hash       uint32
+    tflag      tflag
+    align      uint8
+    fieldAlign uint8
+    kind       uint8
+    equal      func(unsafe.Pointer, unsafe.Pointer) bool
+    gcdata     *byte
+    str        nameOff
+    ptrToThis  typeOff
+}
+```
+
+**2. 非空接口（`iface`）**
+
+只要接口里定义了方法，运行时就不只要知道“值是什么”，还要知道“方法怎么调”。因此非空接口会额外持有一个 `itab`。
 
 ```go
 type iface struct {
-    tab  *itab           // 接口表（包含类型和方法信息）
-    data unsafe.Pointer  // 数据指针
+    tab  *itab
+    data unsafe.Pointer
 }
 
 type itab struct {
-    inter *interfacetype // 接口类型信息
-    _type *_type         // 具体类型信息
-    hash  uint32         // 类型哈希值
+    inter *interfacetype
+    _type *_type
+    hash  uint32
     _     [4]byte
-    fun   [1]uintptr     // 方法表
+    fun   [1]uintptr
 }
 ```
+
+- **`data`**：依然指向动态值
+- **`tab`**：指向 `itab`，里面放接口类型、具体类型，以及方法地址表
+
+`itab` 中的 `inter` 会指向 `interfacetype`，它描述了接口自身的方法集合：
+
+```go
+type interfacetype struct {
+    typ     _type
+    pkgpath name
+    mhdr    []imethod
+}
+```
+
+下面这个例子里，`Apple` 被赋值给 `Phone` 接口变量后，运行时会为它们建立方法映射关系：
+
+```go
+type Apple struct {
+    PhoneName string
+}
+
+func (a Apple) Call() {
+    fmt.Printf("%s 有打电话功能\n", a.PhoneName)
+}
+
+func (a Apple) SendMessage() {
+    fmt.Printf("%s 有发短信功能\n", a.PhoneName)
+}
+
+type Phone interface {
+    Call()
+    SendMessage()
+}
+```
+
 <div align="center">
-  <img src="iface修改.png" alt="eface" width="60%">
+  <img src="iface修改.png" alt="非空接口 iface 的底层结构" width="60%">
 </div>
 
 **关键区别：**
 - **`eface`**：只记录类型和数据，没有方法表
-- **`iface`**：额外记录接口类型和方法表，用于方法调用
+- **`iface`**：额外记录接口类型和方法表，用于动态派发方法调用
+
+### 💡 itab 是怎么建立和复用的？
+
+当具体类型赋值给非空接口时，运行时主要会做 3 件事：
+
+1. 记录具体类型的元数据，也就是 `itab._type`
+2. 记录接口自己的方法集合，也就是 `itab.inter`
+3. 把具体类型中真正实现了接口的方法地址拷贝到 `itab.fun` 里
+
+如果某个具体类型没有实现接口要求的全部方法，那么 `fun[0]` 会是 `0`，这意味着它不能赋值给该接口。
+
+这里有一个很重要的性能点：**同一种接口类型 + 同一种具体类型，对应的 `itab` 可以复用**。
+
+例如下面三次赋值，动态值不同，但接口类型和具体类型并没有变：
+
+```go
+var ifc Phone
+a := Apple{PhoneName: "apple1"}
+b := Apple{PhoneName: "apple2"}
+c := Apple{PhoneName: "apple3"}
+
+ifc = a
+ifc = b
+ifc = c
+```
+
+所以 Go 运行时不会每次都重新构造一份 `itab`，而是会把它缓存起来。运行时内部用 `itabTable` 这类结构维护缓存表：
+
+```go
+type itabTableType struct {
+    size    uintptr
+    count   uintptr
+    entries [itabInitSize]*itab
+}
+```
+
+查找时会把接口类型和具体类型的哈希值做异或，得到一个索引键：
+
+```go
+func itabHashFunc(inter *interfacetype, typ *_type) uintptr {
+    return uintptr(inter.typ.hash ^ typ.hash)
+}
+```
+
+<div align="center">
+  <img src="interface-itab-table.png" alt="itabTable 缓存结构示意图" width="60%">
+</div>
+
+这也是为什么接口调用虽然有动态分发成本，但在大量重复使用同一组类型组合时，运行时不会每次都从零开始构造方法表。
 
 ### 💡 nil interface 和空 interface 的区别
 
