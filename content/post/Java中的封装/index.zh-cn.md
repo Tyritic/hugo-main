@@ -3,7 +3,7 @@ date : '2024-11-14T23:02:48+08:00'
 draft : false
 title : 'Java中的封装'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

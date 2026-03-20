@@ -9,13 +9,13 @@ description : "算法题中哈希表的应用"
 math : true
 ---
 
-## 数组作哈希表
+## 🗂️ 数组作哈希表
 
 数组就是简单的哈希表，但是数组的大小是受限的。通常用于在字母计数问题中
 
-### 经典例题
+### 📚 经典例题
 
-#### leetcode 242 有效的字母异位词
+#### 🧪 LeetCode 242. 有效的字母异位词
 
 题目描述
 
@@ -28,8 +28,6 @@ math : true
 示例 2: 输入: s = "rat", t = "car" 输出: false
 
 **说明:** 你可以假设字符串只包含小写字母。
-
-
 
 **思路解析**
 
@@ -64,7 +62,7 @@ class Solution {
 }
 ```
 
-#### leetcode 383 赎金信
+#### 🧪 LeetCode 383. 赎金信
 
 **题目描述**
 
@@ -81,8 +79,6 @@ class Solution {
 canConstruct("a", "b") -> false
 canConstruct("aa", "ab") -> false
 canConstruct("aa", "aab") -> true
-
-
 
 **思路解析**
 
@@ -111,19 +107,21 @@ class Solution {
 }
 ```
 
+---
 
+## 🗂️ Set做哈希表
 
-## Set做哈希表
+### 📚 经典例题
 
-### 经典例题
-
-#### leetcode 349 两个数组的交集
+#### 🧪 LeetCode 349. 两个数组的交集
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/intersection-of-two-arrays/)
 
 题意：给定两个数组，编写一个函数来计算它们的交集。
 
-![349. 两个数组的交集](https://code-thinking-1253855093.file.myqcloud.com/pics/20200818193523911.png)
+<div align="center">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20200818193523911.png" alt="349. 两个数组的交集" width="60%">
+</div>
 
 **说明：** 输出结果中的每个元素一定是唯一的。 我们可以不考虑输出结果的顺序。
 
@@ -161,9 +159,7 @@ class Solution {
 }
 ```
 
-
-
-#### leetcode 202 快乐数
+#### 🧪 LeetCode 202. 快乐数
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/happy-number/)
 
@@ -218,13 +214,13 @@ class Solution {
 }
 ```
 
+---
 
+## 🗂️ Map做哈希表
 
-## Map做哈希表
+### 📚 经典例题
 
-### 经典例题
-
-#### leetcode 49 字母异位词分组
+#### 🧪 LeetCode 49. 字母异位词分组
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/group-anagrams/description/)
 
@@ -261,8 +257,6 @@ class Solution {
 - `0 <= strs[i].length <= 100`
 - `strs[i]` 仅包含小写字母
 
-
-
 **思路解析**
 
 对于此类分组问题，首先要明确分组的标准。题目显式指出分组标准：使用相同的字母。明确了分组标准，只要以分组标准为键，
@@ -298,7 +292,7 @@ class Solution {
 }
 ```
 
-#### leetcode 350 两个数组的交集II
+#### 🧪 LeetCode 350. 两个数组的交集II
 
 **题目描述**
 
@@ -375,7 +369,7 @@ class Solution {
 }
 ```
 
-#### leetcode 1 两数之和
+#### 🧪 LeetCode 1. 两数之和
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/two-sum/)
 
@@ -423,7 +417,7 @@ class Solution {
 }
 ```
 
-#### leetcode 454 四数相加
+#### 🧪 LeetCode 454. 四数相加
 
 **题目描述**
 

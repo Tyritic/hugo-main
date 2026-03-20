@@ -3,7 +3,7 @@ date : '2024-12-04T13:16:44+08:00'
 draft : false
 title : 'Java中的synchronized关键字'
 image : ""
-categories : ["Java并发编程"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "synchronized关键字的底层原理"
 math : true

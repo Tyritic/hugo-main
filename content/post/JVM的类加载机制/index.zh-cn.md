@@ -3,7 +3,7 @@ date : '2025-03-10T16:27:55+08:00'
 draft : false
 title : 'JVM的类加载机制'
 image : ""
-categories : ["JVM"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "JVM的类加载器"
 math : true

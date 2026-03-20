@@ -3,7 +3,7 @@ date : '2025-03-10T15:46:26+08:00'
 draft : false
 title : 'Java内存区域'
 image : ""
-categories : ["JVM"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "JVM内存区域的划分"
 math : true

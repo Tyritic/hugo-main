@@ -3,7 +3,7 @@ date : '2024-11-02T11:20:03+08:00'
 draft : false
 title : 'Java的字面量和基本数据类型'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记的转换"
 math : true

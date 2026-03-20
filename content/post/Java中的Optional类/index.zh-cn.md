@@ -3,7 +3,7 @@ date : '2025-01-16T20:56:03+08:00'
 draft : false
 title : 'Java中的Optional类'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "JDK 8的新特性"
 math : true

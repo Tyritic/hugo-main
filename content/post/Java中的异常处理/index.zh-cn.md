@@ -3,7 +3,7 @@ date : '2024-11-16T15:20:48+08:00'
 draft : false
 title : 'Java中的异常处理'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

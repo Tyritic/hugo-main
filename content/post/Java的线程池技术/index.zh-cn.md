@@ -3,7 +3,7 @@ date : '2025-02-07T13:17:52+08:00'
 draft : false
 title : 'Java的线程池技术'
 image : ""
-categories : ["Java并发编程"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "Java的线程池技术"
 math : true

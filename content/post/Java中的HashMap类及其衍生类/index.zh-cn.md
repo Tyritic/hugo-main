@@ -3,7 +3,7 @@ date : '2024-11-26T13:02:26+08:00'
 draft : false
 title : 'Java中的HashMap类及其衍生类'
 image : ""
-categories : ["Java集合"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

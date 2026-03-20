@@ -3,7 +3,7 @@ date : '2024-11-01T10:53:37+08:00'
 draft : false
 title : 'Java的优势与特点'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "对Java这一编程语言的优劣势的认识"
 math : true

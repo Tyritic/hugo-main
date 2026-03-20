@@ -3,7 +3,7 @@ date : '2024-12-01T10:47:55+08:00'
 draft : false
 title : 'Java中的多线程'
 image : ""
-categories : ["Java并发编程"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "Java中的多线程概念"
 math : true

@@ -3,7 +3,7 @@ date : '2025-02-03T12:54:49+08:00'
 draft : false
 title : 'Java中的锁'
 image : ""
-categories : ["Java并发编程"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "对Java锁机制的理解"
 math : true

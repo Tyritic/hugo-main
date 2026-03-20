@@ -3,7 +3,7 @@ date : '2024-11-03T11:35:06+08:00'
 draft : false
 title : 'Java中的基本数学操作'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

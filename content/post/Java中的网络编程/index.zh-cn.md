@@ -3,7 +3,7 @@ date : '2024-11-20T10:04:34+08:00'
 draft : false
 title : 'Java的网络编程'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

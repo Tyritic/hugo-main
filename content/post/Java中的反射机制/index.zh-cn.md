@@ -3,7 +3,7 @@ date : '2025-01-17T09:15:30+08:00'
 draft : false
 title : 'Java的反射机制'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

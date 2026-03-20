@@ -3,7 +3,7 @@ date : '2024-11-06T23:18:11+08:00'
 draft : false
 title : 'Java中的高精度运算'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

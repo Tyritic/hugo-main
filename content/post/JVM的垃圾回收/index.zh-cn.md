@@ -3,7 +3,7 @@ date : '2025-03-12T11:36:21+08:00'
 draft : false
 title : 'JVM的垃圾回收'
 image : ""
-categories : ["JVM"]
+categories : ["Java"]
 tags : ["Java基础"]
 description : "JVM的垃圾回收机制和垃圾收集器"
 math : true

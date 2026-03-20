@@ -3,7 +3,7 @@ date : '2025-02-06T14:56:39+08:00'
 draft : false
 title : 'Java中的原子操作类'
 image : ""
-categories : ["Java并发编程"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "Java中的原子操作类"
 math : true

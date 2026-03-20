@@ -3,7 +3,7 @@ date : '2025-01-02T14:03:21+08:00'
 draft : false
 title : 'JDK工具包'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "总结项目开发中使用的JDK提供的工具包"
 math : true

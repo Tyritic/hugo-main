@@ -3,7 +3,7 @@ date : '2024-11-03T00:27:14+08:00'
 draft : false
 title : 'Java数组'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记的转换"
 math : true

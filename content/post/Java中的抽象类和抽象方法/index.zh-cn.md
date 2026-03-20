@@ -3,7 +3,7 @@ date : '2024-11-15T10:21:43+08:00'
 draft : false
 title : 'Java中的抽象类和抽象方法'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

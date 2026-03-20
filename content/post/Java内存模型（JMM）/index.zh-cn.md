@@ -3,7 +3,7 @@ date : '2025-02-02T20:48:21+08:00'
 draft : false
 title : 'Java内存模型（JMM）'
 image : ""
-categories : ["Java并发编程"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "Java内存模型的理解"
 math : true

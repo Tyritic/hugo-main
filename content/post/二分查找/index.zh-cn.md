@@ -8,7 +8,7 @@ tags : ["基础算法"]
 description : "二分查找的算法模板和题解思路"
 ---
 
-## 题目特征
+## 🧠 题目特征
 
 前提条件
 
@@ -17,18 +17,20 @@ description : "二分查找的算法模板和题解思路"
 
 题目的前提是数组为有序数组，同时题目还强调数组中无重复元素，因为一旦有重复元素，使用二分查找法返回的元素下标可能不是唯一的，这些都是使用二分法的前提条件，当大家看到题目描述满足如上条件的时候，可要想一想是不是可以用二分法了。
 
-## 算法模板
+---
 
-### 左闭右闭（推荐使用）
+## 🧩 算法模板
+
+### 📚 左闭右闭（推荐使用）
 
 定义 target 是在一个在左闭右闭的区间里，也就是[left, right] 。
 
-#### 临界条件的变化
+#### 🔹 临界条件的变化
 
 - while (left <= right) 要使用 <= ，因为left == right是有意义的，所以使用 <=
 - if (nums[middle] > target) right 要赋值为 middle - 1，因为当前这个nums[middle]一定不是target，那么接下来要查找的左区间结束下标位置就是 middle - 1
 
-#### 代码模板
+#### 💻 代码模板
 
 ```java
 class solution{
@@ -52,23 +54,23 @@ class solution{
 }
 ```
 
-#### 结果分析
+#### 📌 结果分析
 
 若数组中找不到元素此时满足条件
 
 - **left=right+1**
 - 同时nums[left]是大于target的元素中最小的，nums[right]是小于target元素中最大的
 
-### 左闭右开
+### 📚 左闭右开
 
 定义 target 是在一个在左闭右开的区间里，也就是[left, right） 。
 
-#### 临界条件的变化
+#### 🔹 临界条件的变化
 
 - while (left < right) 要使用 < ，因为left == right是没有意义的
 - if (nums[middle] > target) right 要赋值为 middle ，因为当前这个nums[middle]一定不是target，那么接下来要查找的左区间结束下标位置就是 middle，下一个查询区间不会去比较nums[middle]
 
-#### 代码模板
+#### 💻 代码模板
 
 ```java
 class solution{
@@ -92,18 +94,20 @@ class solution{
 }
 ```
 
-#### 结果分析
+#### 📌 结果分析
 
 若数组中找不到元素此时满足条件
 
 - **left=right**
 - 同时nums[left]=nums[right]是大于target的元素中最小的
 
-## 经典例题
+---
 
-### leetcode 704. 二分查找
+## 📚 经典例题
 
-#### 题目描述
+### 🧪 LeetCode 704. 二分查找
+
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/binary-search/)
 
@@ -131,11 +135,11 @@ class solution{
 - n 将在 [1, 10000]之间。
 - nums 的每个元素都将在 [-9999, 9999]之间。
 
-#### 思路分析
+#### 💡 思路分析
 
 直接嵌套算法模板即可
 
-#### 参考代码
+#### 💻 参考代码
 
 左闭右闭版本
 
@@ -179,9 +183,9 @@ class Solution {
 }
 ```
 
-### leetcode 35. 搜索插入位置
+### 🧪 LeetCode 35. 搜索插入位置
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/search-insert-position/)
 
@@ -209,7 +213,7 @@ class Solution {
 - 输入: [1,3,5,6], 0
 - 输出: 0
 
-#### 思路分析
+#### 💡 思路分析
 
 注意这道题目的前提是数组是有序数组
 
@@ -222,7 +226,7 @@ class Solution {
 - 目标值插入数组中的位置 [left, right]，return  right + 1
 - 目标值在数组所有元素之后的情况 [left, right]， 因为是右闭区间，所以 return right + 1
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -252,9 +256,9 @@ class Solution {
 }
 ```
 
-### leetcode 34. 在排序数组中查找元素的第一个和最后一个位置
+### 🧪 LeetCode 34. 在排序数组中查找元素的第一个和最后一个位置
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣链接(opens new window)](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -279,7 +283,7 @@ class Solution {
 - 输入：nums = [], target = 0
 - 输出：[-1,-1]
 
-#### 思路分析
+#### 💡 思路分析
 
 题目条件
 
@@ -294,7 +298,7 @@ class Solution {
 - 如果二分查找失败，则 binarySearch 返回 -1，表明 nums 中没有 target。此时，searchRange 直接返回 {-1, -1}；
 - 如果二分查找成功，则 binarySearch 返回 nums 中值为 target 的一个下标。然后，通过左右滑动指针，来找到等于target的区间
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -336,11 +340,9 @@ class Solution {
 }
 ```
 
+### 🧪 LeetCode 69. x的平方根
 
-
-### leetcode 69. x的平方根
-
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接](https://leetcode.cn/problems/sqrtx/description/)
 
@@ -373,11 +375,11 @@ class Solution {
 
 - `0 <= x <= 231 - 1`
 
-#### 思路分析
+#### 💡 思路分析
 
 题目中隐含条件，平方根在[1,x]中且该区域为有序递增数组，考虑使用二分查找
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -400,11 +402,9 @@ class Solution {
 }
 ```
 
+### 🧪 LeetCode 367. 有效的完全平方数
 
-
-### leetcode 367. 有效的完全平方数
-
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接](https://leetcode.cn/problems/valid-perfect-square/description/)
 
@@ -438,11 +438,11 @@ class Solution {
 
 - `1 <= num <= 231 - 1`
 
-#### 思路分析
+#### 💡 思路分析
 
 同上一题，注意细节：mid*mid非常容易溢出，所以采取的策略是用除法代替乘法
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {

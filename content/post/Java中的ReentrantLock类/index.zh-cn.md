@@ -3,7 +3,7 @@ date : '2025-02-04T20:59:16+08:00'
 draft : false
 title : 'Java中的ReentrantLock类'
 image : ""
-categories : ["Java并发编程"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "重入锁-ReentrantLock类"
 math : true

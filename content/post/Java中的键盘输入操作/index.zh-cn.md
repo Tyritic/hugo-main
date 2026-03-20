@@ -3,7 +3,7 @@ date : '2024-11-03T12:09:48+08:00'
 draft : false
 title : 'Java中的标准输入操作'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记的转换"
 math : true

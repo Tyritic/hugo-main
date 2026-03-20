@@ -3,7 +3,7 @@ date : '2024-11-25T10:21:08+08:00'
 draft : false
 title : 'Java中的Set实现类'
 image : ""
-categories : ["Java集合"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

@@ -1,5 +1,5 @@
 ---
-title: "LLM和Agent智能体"
+title: "Agent"
 image: "OIP.jpg"
 style:
     background: "#2a9d8f"

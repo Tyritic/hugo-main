@@ -9,7 +9,7 @@ description : "二叉树在算法题中的使用"
 math : true
 ---
 
-## 二叉树的统一解题模板
+## 🧠 二叉树的统一解题模板
 
 本质上二叉树的题目是递归的一种，与树相关的递归思路可以从以下方式思考
 
@@ -38,7 +38,9 @@ math : true
 - **确定终止条件：** 写完了递归算法, 运行的时候，经常会遇到栈溢出的错误，就是没写终止条件或者终止条件写的不对，操作系统也是用一个栈的结构来保存每一层递归的信息，如果递归没有终止，操作系统的内存栈必然就会溢出。
 - **确定单层递归的逻辑：** 确定每一层递归需要处理的信息。在这里也就会重复调用自己来实现递归的过程。
 
-## 二叉树的遍历方式
+---
+
+## 🌳 二叉树的遍历方式
 
 二叉树的大部分题目都是基于遍历来解决。二叉树的遍历方式有以下四种
 
@@ -47,7 +49,7 @@ math : true
 - 中序遍历：左根右
 - 层序遍历：将树按照层次进行遍历
 
-### 递归遍历思路
+### 🔁 递归遍历思路
 
 以前序遍历为例
 
@@ -56,7 +58,7 @@ math : true
   - **确定终止条件**：当前遍历的节点是空了，那么本层递归就要结束了，所以如果当前遍历的这个节点是空，就直接return
   - **确定单层递归的逻辑**：前序遍历是中左右的顺序，所以在单层递归的逻辑，是要先取中节点的数值
 
-#### leetcode 144 二叉树的前序遍历
+#### 🧪 LeetCode 144. 二叉树的前序遍历
 
 **题目描述**
 
@@ -72,7 +74,9 @@ math : true
 
 **解释：**
 
-![img](screenshot-2024-08-29-202743.png)
+<div align="center">
+  <img src="screenshot-2024-08-29-202743.png" alt="img" width="60%">
+</div>
 
 **示例 2：**
 
@@ -82,7 +86,9 @@ math : true
 
 **解释：**
 
-![img](tree_2.png)
+<div align="center">
+  <img src="tree_2.png" alt="img" width="60%">
+</div>
 
 **示例 3：**
 
@@ -118,7 +124,7 @@ class Solution {
 }
 ```
 
-#### leetcode 145 二叉树的后序遍历
+#### 🧪 LeetCode 145. 二叉树的后序遍历
 
 **题目描述**
 
@@ -136,7 +142,9 @@ class Solution {
 
 **解释：**
 
-![img](https://assets.leetcode.com/uploads/2024/08/29/screenshot-2024-08-29-202743.png)
+<div align="center">
+  <img src="https://assets.leetcode.com/uploads/2024/08/29/screenshot-2024-08-29-202743.png" alt="img" width="60%">
+</div>
 
 **示例 2：**
 
@@ -146,7 +154,9 @@ class Solution {
 
 **解释：**
 
-![img](https://assets.leetcode.com/uploads/2024/08/29/tree_2.png)
+<div align="center">
+  <img src="https://assets.leetcode.com/uploads/2024/08/29/tree_2.png" alt="img" width="60%">
+</div>
 
 **示例 3：**
 
@@ -189,7 +199,7 @@ class Solution {
 }
 ```
 
-#### leetcode 94 二叉树的中序遍历
+#### 🧪 LeetCode 94. 二叉树的中序遍历
 
 **题目描述**
 
@@ -199,7 +209,9 @@ class Solution {
 
 **示例 1：**
 
-![img](inorder_1.jpg)
+<div align="center">
+  <img src="inorder_1.jpg" alt="img" width="60%">
+</div>
 
 ```
 输入：root = [1,null,2,3]
@@ -227,8 +239,6 @@ class Solution {
 - 树中节点数目在范围 `[0, 100]` 内
 - `-100 <= Node.val <= 100`
 
-
-
 **参考代码**
 
 ```java
@@ -251,11 +261,11 @@ class Solution {
 }
 ```
 
-### 迭代遍历思路
+### 🔍 迭代遍历思路
 
 使用一个栈作为存储结构，但是栈存在 **无法同时解决访问节点（遍历节点）和处理节点（将元素放进结果集）不一致的情况** 。**那我们就将访问的节点放入栈中，把要处理的节点也放入栈中但是要做标记。** 通常可以将要处理的节点后面放入一个空指针
 
-#### 前序遍历
+#### 🔍 前序遍历
 
 栈中的行为
 
@@ -292,7 +302,7 @@ class Solution {
 }
 ```
 
-#### 中序遍历
+#### 🔍 中序遍历
 
 栈中行为
 
@@ -329,7 +339,7 @@ public List<Integer> inorderTraversal(TreeNode root) {
 }
 ```
 
-#### 后序遍历
+#### 🔍 后序遍历
 
 栈中行为
 
@@ -366,11 +376,11 @@ class Solution {
 }
 ```
 
-### 层次遍历思路
+### 🔍 层次遍历思路
 
 使用一个队列来模拟遍历，每次出队时将节点的左右子节点放入队列中
 
-#### 代码模板
+#### 💻 代码模板
 
 ```java
 		Queue<TreeNode>queue=new LinkedList<>();
@@ -392,7 +402,7 @@ class Solution {
         }
 ```
 
-#### leetcode 102 二叉树的层次遍历
+#### 🧪 LeetCode 102. 二叉树的层次遍历
 
 **题目描述**
 
@@ -400,7 +410,9 @@ class Solution {
 
 给你一个二叉树，请你返回其按 层序遍历 得到的节点值。 （即逐层地，从左到右访问所有节点）。
 
-![102.二叉树的层序遍历](https://code-thinking-1253855093.file.myqcloud.com/pics/20210203144842988.png)
+<div align="center">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210203144842988.png" alt="102.二叉树的层序遍历" width="60%">
+</div>
 
 **参考代码**
 
@@ -436,7 +448,7 @@ class Solution {
 }
 ```
 
-#### leetcode 637 二叉树的层平均值
+#### 🧪 LeetCode 637. 二叉树的层平均值
 
 **题目描述**
 
@@ -444,7 +456,9 @@ class Solution {
 
 给定一个非空二叉树, 返回一个由每层节点平均值组成的数组。
 
-![637.二叉树的层平均值](20210203151350500.png)
+<div align="center">
+  <img src="20210203151350500.png" alt="637.二叉树的层平均值" width="60%">
+</div>
 
 **参考代码**
 
@@ -481,7 +495,7 @@ class Solution {
 }
 ```
 
-#### leetcode 515 在每个树行中找最大值
+#### 🧪 LeetCode 515. 在每个树行中找最大值
 
 **题目描述**
 
@@ -489,7 +503,9 @@ class Solution {
 
 您需要在二叉树的每一行中找到最大的值。
 
-![515.在每个树行中找最大值](20210203151532153.png)
+<div align="center">
+  <img src="20210203151532153.png" alt="515.在每个树行中找最大值" width="60%">
+</div>
 
 **参考代码**
 
@@ -525,13 +541,15 @@ class Solution {
 }
 ```
 
-## 二叉树的深度问题
+---
+
+## 🌳 二叉树的深度问题
 
 二叉树的最大深度是根节点到最远叶子节点的最长路径上的节点数。只有一个节点的二叉树深度为1
 
-### 最大深度问题
+### 📏 最大深度问题
 
-#### leetcode 104 二叉树的最大深度
+#### 🧪 LeetCode 104. 二叉树的最大深度
 
 **题目描述**
 
@@ -547,7 +565,9 @@ class Solution {
 
 给定二叉树 [3,9,20,null,null,15,7]，
 
-![104. 二叉树的最大深度](https://code-thinking-1253855093.file.myqcloud.com/pics/20210203153031914-20230310134849764.png)
+<div align="center">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210203153031914-20230310134849764.png" alt="104. 二叉树的最大深度" width="60%">
+</div>
 
 返回它的最大深度 3 。
 
@@ -646,11 +666,11 @@ class Solution {
 }
 ```
 
-### 最小深度问题
+### 📏 最小深度问题
 
 二叉树的最小深度是从根节点到最近叶子节点的最短路径上的节点数量。。只有一个节点的二叉树深度为1。
 
-#### leetcode 111 二叉树的最小深度
+#### 🧪 LeetCode 111. 二叉树的最小深度
 
 **题目描述**
 
@@ -666,7 +686,9 @@ class Solution {
 
 给定二叉树 [3,9,20,null,null,15,7],
 
-![111.二叉树的最小深度1](2021020315582586.png)
+<div align="center">
+  <img src="2021020315582586.png" alt="111.二叉树的最小深度1" width="60%">
+</div>
 
 返回它的最小深度 2.
 
@@ -773,25 +795,29 @@ class Solution {
 }
 ```
 
-## 二叉树的翻转和对称操作
+---
 
-### leetcode 226 翻转二叉树
+## 🌳 二叉树的翻转和对称操作
 
-#### 题目描述
+### 🧪 LeetCode 226. 翻转二叉树
+
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/invert-binary-tree/)
 
 翻转一棵二叉树。
 
-![226.翻转二叉树](20210203192644329.png)
+<div align="center">
+  <img src="20210203192644329.png" alt="226.翻转二叉树" width="60%">
+</div>
 
-#### 递归法解析
+#### 💡 递归法解析
 
 本题可以从递归的思路去思考
 
 从递归的角度思考，本题适合使用后序遍历。后序遍历的遍历顺序是左右中。本题只需要将每个节点的左右子节点反转即可。左右中的遍历顺序可以保证所有节点不会被反转两次
 
-#### 参考代码（递归法）
+#### 💻 参考代码（递归法）
 
 ```java
 class Solution {
@@ -812,15 +838,14 @@ class Solution {
         root.right = tmp;
     }
 
-
 }
 ```
 
-#### 迭代法解析
+#### 💡 迭代法解析
 
 本题可以从迭代的角度思考，本题只需要将每个节点的左右子节点反转即可，可以考虑使用层次遍历
 
-#### 参考代码（迭代法）
+#### 💻 参考代码（迭代法）
 
 ```java
 class Solution {
@@ -850,21 +875,22 @@ class Solution {
         root.right = tmp;
     }
 
-
 }
 ```
 
-### leetcode 101 对称二叉树
+### 🧪 LeetCode 101. 对称二叉树
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/symmetric-tree/)
 
 给定一个二叉树，检查它是否是镜像对称的。
 
-![101. 对称二叉树](20210203144607387.png)
+<div align="center">
+  <img src="20210203144607387.png" alt="101. 对称二叉树" width="60%">
+</div>
 
-#### 思路解析
+#### 💡 思路解析
 
 本题从递归的角度思考，对于二叉树是否对称，要比较的是根节点的左子树与右子树是不是相互翻转的，其实要比较的是两个树（这两个树是根节点的左右子树）。**因为要遍历两棵树而且要比较内侧和外侧节点，所以准确的来说是一个树的遍历顺序是左右中，一个树的遍历顺序是右左中。**
 
@@ -878,15 +904,13 @@ class Solution {
   - 比较内侧节点：比较左侧节点的右节点和左侧节点的左节点
   - 返回外侧节点和内测节点的与运算
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
     public boolean isSymmetric(TreeNode root) {
         return compare(root,root);
     }
-
-
 
     public boolean compare(TreeNode left,TreeNode right)
     {
@@ -906,11 +930,13 @@ class Solution {
 }
 ```
 
-## 二叉树的比较问题
+---
 
-### leetcode 100 相同的树
+## 🌳 二叉树的比较问题
 
-#### 题目描述
+### 🧪 LeetCode 100. 相同的树
+
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/same-tree/)
 
@@ -918,11 +944,15 @@ class Solution {
 
 如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。
 
-![img](20210726172932.png)
+<div align="center">
+  <img src="20210726172932.png" alt="img" width="60%">
+</div>
 
-![img](20210726173011.png)
+<div align="center">
+  <img src="20210726173011.png" alt="img" width="60%">
+</div>
 
-#### 思路解析
+#### 💡 思路解析
 
 本题使用后序遍历的方式进行递归，因为本题适合从左右节点开始比较，并将比较结果汇总中间节点
 
@@ -936,7 +966,7 @@ class Solution {
   - 比较右侧节点：比较两棵树右侧节点
   - 返回左侧节点和右测节点的与运算
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -954,19 +984,19 @@ class Solution {
 }
 ```
 
-### leetcode 572 另一棵树的子树
+### 🧪 LeetCode 572. 另一棵树的子树
 
-#### 题目描述
+#### 📌 题目描述
 
 给你两棵二叉树 `root` 和 `subRoot` 。检验 `root` 中是否包含和 `subRoot` 具有相同结构和节点值的子树。如果存在，返回 `true` ；否则，返回 `false` 。
 
 二叉树 `tree` 的一棵子树包括 `tree` 的某个节点和这个节点的所有后代节点。`tree` 也可以看做它自身的一棵子树。
 
-
-
 **示例 1：**
 
-![img](1724998676-cATjhe-image.png)
+<div align="center">
+  <img src="1724998676-cATjhe-image.png" alt="img" width="60%">
+</div>
 
 ```
 输入：root = [3,4,5,1,2], subRoot = [4,1,2]
@@ -975,14 +1005,14 @@ class Solution {
 
 **示例 2：**
 
-![img](1724998698-sEJWnq-image.png)
+<div align="center">
+  <img src="1724998698-sEJWnq-image.png" alt="img" width="60%">
+</div>
 
 ```
 输入：root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]
 输出：false
 ```
-
-
 
 **提示：**
 
@@ -991,13 +1021,13 @@ class Solution {
 - `-104 <= root.val <= 104`
 - `-104 <= subRoot.val <= 104`
 
-#### 思路解析
+#### 💡 思路解析
 
 本题适合使用后序遍历，遍历 *s* 中的每一个节点，判断这个点的子树是否和 *t* 相等。这个过程单独作为一个递归函数
 
 判断一个节点的子树是否和 *t* 相等的过程则作为另一个递归函数
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -1011,7 +1041,6 @@ class Solution {
         boolean left=isSubtree(root.left,subRoot); // 左节点
         boolean right=isSubtree(root.right,subRoot); // 右节点
         return left||right||check(root,subRoot); // 中节点
-
 
     }
 
@@ -1036,11 +1065,13 @@ class Solution {
 }
 ```
 
-## 二叉树的节点计数问题
+---
 
-### leetcode 222 完全二叉树的节点个数
+## 🌳 二叉树的节点计数问题
 
-#### 题目描述
+### 🧪 LeetCode 222. 完全二叉树的节点个数
+
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/count-complete-tree-nodes/)
 
@@ -1067,7 +1098,7 @@ class Solution {
 - 0 <= Node.val <= 5 * 10^4
 - 题目数据保证输入的树是 完全二叉树
 
-#### 思路解析
+#### 💡 思路解析
 
 本题适合使用后序遍历，因为可以先分别统计左子树和右子树的节点个数，再将两个子树的节点个数相加再加一（中间节点）
 
@@ -1079,7 +1110,7 @@ class Solution {
   - 处理右节点：计算右子树节点个数
   - 处理中间节点：将左右两个子树的节点个数相加再加一
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -1095,11 +1126,9 @@ class Solution {
 }
 ```
 
+### 🧪 LeetCode 404. 左叶子之和
 
-
-### leetcode  404 左叶子之和
-
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/sum-of-left-leaves/)
 
@@ -1107,9 +1136,11 @@ class Solution {
 
 示例：
 
-![404.左叶子之和1](20210204151927654.png)
+<div align="center">
+  <img src="20210204151927654.png" alt="404.左叶子之和1" width="60%">
+</div>
 
-#### 思路解析
+#### 💡 思路解析
 
 本题使用后序遍历，通过递归函数的返回值来累加求取左叶子数值之和
 
@@ -1130,7 +1161,7 @@ class Solution {
     - 当中间节点的左节点没有子节点，加入该节点的值
     - 最后加入中间节点的值和左右节点的计算结果
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -1156,11 +1187,9 @@ class Solution {
 }
 ```
 
+### 🧪 LeetCode 513. 找树左下角的值
 
-
-### leetcode 513 找树左下角的值
-
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/find-bottom-left-tree-value/)
 
@@ -1168,17 +1197,21 @@ class Solution {
 
 示例 1:
 
-![513.找树左下角的值](20210204152956836.png)
+<div align="center">
+  <img src="20210204152956836.png" alt="513.找树左下角的值" width="60%">
+</div>
 
 示例 2:
 
-![513.找树左下角的值1](20210204153017586.png)
+<div align="center">
+  <img src="20210204153017586.png" alt="513.找树左下角的值1" width="60%">
+</div>
 
-#### 迭代法解析
+#### 💡 迭代法解析
 
 可以使用层次遍历的方法，将每一层的最左边的值保留，并随着层次进行更新
 
-#### 参考代码（迭代法）
+#### 💻 参考代码（迭代法）
 
 ```java
 class Solution {
@@ -1214,9 +1247,7 @@ class Solution {
 }
 ```
 
-
-
-#### 递归法解析
+#### 💡 递归法解析
 
 - **确定递归函数的参数和返回值：** 递归函数的参数为树的根节点以及当前节点的深度，返回值为void
 
@@ -1240,13 +1271,15 @@ class Solution {
 
     
 
-## 二叉树的高度问题
+---
+
+## 🌳 二叉树的高度问题
 
 二叉树的高度通常使用后序遍历，因为高度是节点到根节点的距离，通常由由左右节点先中间节点开始计算
 
-### leetcode 101 平衡二叉树
+### 🧪 LeetCode 101. 平衡二叉树
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/balanced-binary-tree/)
 
@@ -1258,7 +1291,9 @@ class Solution {
 
 给定二叉树 [3,9,20,null,null,15,7]
 
-![110.平衡二叉树](https://code-thinking-1253855093.file.myqcloud.com/pics/2021020315542230.png)
+<div align="center">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/2021020315542230.png" alt="110.平衡二叉树" width="60%">
+</div>
 
 返回 true 。
 
@@ -1266,11 +1301,13 @@ class Solution {
 
 给定二叉树 [1,2,2,3,3,null,null,4,4]
 
-![110.平衡二叉树1](https://code-thinking-1253855093.file.myqcloud.com/pics/20210203155447919.png)
+<div align="center">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210203155447919.png" alt="110.平衡二叉树1" width="60%">
+</div>
 
 返回 false 。
 
-#### 思路解析
+#### 💡 思路解析
 
 本题适合使用后序遍历，因为可以先分别统计左节点和右节点的高度，在中间节点将两个节点的高度进行比较，若平衡则返回节点的高度，不平衡返回-1
 
@@ -1289,7 +1326,7 @@ class Solution {
       - 若不平衡返回-1
       - 若平衡返回左右节点高度的较大者+1；
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -1311,15 +1348,15 @@ class Solution {
 }
 ```
 
+---
 
-
-## 二叉树的路径问题
+## 🌳 二叉树的路径问题
 
 通常二叉树的路径计算使用前序遍历，因为通常路径的第一个节点为中间节点，遍历顺序为根左右，同时在左右节点的处理中注意回溯
 
-### 统一解题模板
+### 🧠 统一解题模板
 
-#### 自顶向下
+#### 🔍 自顶向下
 
 ```java
 // 一般路径,要求到叶子节点return
@@ -1372,11 +1409,9 @@ public void check(TreeNode root,int targetSum,List<Integer>path,List<List<Intege
     }
 ```
 
+### 🧪 LeetCode 257. 二叉树的所有路径
 
-
-### leetcode 257 二叉树的所有路径
-
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/binary-tree-paths/)
 
@@ -1386,9 +1421,7 @@ public void check(TreeNode root,int targetSum,List<Integer>path,List<List<Intege
 
 示例: ![257.二叉树的所有路径1](https://code-thinking-1253855093.file.myqcloud.com/pics/2021020415161576.png)
 
-
-
-#### 思路解析
+#### 💡 思路解析
 
 - **确定递归函数的参数和返回值：** 由题可知递归函数的参数为树的根节点，记录单条路径的集合，结果集，返回值为void
 
@@ -1417,7 +1450,7 @@ public void check(TreeNode root,int targetSum,List<Integer>path,List<List<Intege
 
     
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -1462,9 +1495,9 @@ class Solution {
 }
 ```
 
-### leetcode 112 路径总和
+### 🧪 LeetCode 112. 路径总和
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/path-sum/)
 
@@ -1474,11 +1507,13 @@ class Solution {
 
 示例: 给定如下二叉树，以及目标和 sum = 22，
 
-![img](20230407210247.png)
+<div align="center">
+  <img src="20230407210247.png" alt="img" width="60%">
+</div>
 
 返回 true, 因为存在目标和为 22 的根节点到叶子节点的路径 5->4->11->2。
 
-#### 思路解析
+#### 💡 思路解析
 
 本题应当使用前序遍历，因为路径从根节点开始。
 
@@ -1508,7 +1543,7 @@ class Solution {
 
     
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -1545,9 +1580,9 @@ class Solution {
 }
 ```
 
-### leetcode 113 路径总和 II
+### 🧪 LeetCode 113. 路径总和 II
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/path-sum-ii/)
 
@@ -1557,9 +1592,11 @@ class Solution {
 
 示例: 给定如下二叉树，以及目标和 sum = 22，
 
-![113.路径总和ii1.png](20210203160854654.png)
+<div align="center">
+  <img src="20210203160854654.png" alt="113.路径总和ii1.png" width="60%">
+</div>
 
-#### 思路解析
+#### 💡 思路解析
 
 本题应当使用前序遍历，因为路径从根节点开始。
 
@@ -1597,17 +1634,19 @@ class Solution {
 
         
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 
 ```
 
-## 二叉树的构造
+---
 
-### leetcode 106 从中序和后序遍历构造二叉树
+## 🌳 二叉树的构造
 
-#### 题目描述
+### 🧪 LeetCode 106. 从中序和后序遍历构造二叉树
+
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
 
@@ -1620,9 +1659,11 @@ class Solution {
 - 中序遍历 inorder = [9,3,15,20,7]
 - 后序遍历 postorder = [9,15,7,20,3] 返回如下的二叉树：
 
-![106. 从中序与后序遍历序列构造二叉树1](20210203154316774.png)
+<div align="center">
+  <img src="20210203154316774.png" alt="106. 从中序与后序遍历序列构造二叉树1" width="60%">
+</div>
 
-#### 思路解析
+#### 💡 思路解析
 
 实现思路就是以后序数组的最后一个元素为切割点，先切中序数组，根据中序数组，反过来再切后序数组。一层一层切下去，每次后序数组最后一个元素就是节点元素。
 
@@ -1677,7 +1718,7 @@ class Solution {
 
     - 递归处理右节点
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -1717,13 +1758,12 @@ class Solution {
         return root;
     }
 
-
 }
 ```
 
-### leetcode  105 从中序和前序遍历构造二叉树
+### 🧪 LeetCode 105. 从中序和前序遍历构造二叉树
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
 
@@ -1735,13 +1775,15 @@ class Solution {
 
 前序遍历 preorder = [3,9,20,15,7] 中序遍历 inorder = [9,3,15,20,7] 返回如下的二叉树：
 
-![105. 从前序与中序遍历序列构造二叉树](20210203154626672.png)
+<div align="center">
+  <img src="20210203154626672.png" alt="105. 从前序与中序遍历序列构造二叉树" width="60%">
+</div>
 
-#### 思路解析
+#### 💡 思路解析
 
 与上一题一样，但是顺序不同。以前序数组的第一个元素为切割点，先切中序数组，根据中序数组，反过来再切前序数组。一层一层切下去，每次前序数组第一个元素就是节点元素。
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -1782,9 +1824,9 @@ class Solution {
 }
 ```
 
-### leetcode 654 最大二叉树
+### 🧪 LeetCode 654. 最大二叉树
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目地址(opens new window)](https://leetcode.cn/problems/maximum-binary-tree/)
 
@@ -1798,13 +1840,15 @@ class Solution {
 
 示例 ：
 
-![654.最大二叉树](20210204154534796.png)
+<div align="center">
+  <img src="20210204154534796.png" alt="654.最大二叉树" width="60%">
+</div>
 
 提示：
 
 给定的数组的大小在 [1, 1000] 之间。
 
-#### 思路解析
+#### 💡 思路解析
 
 本题依然是根据题意进行数组切割，但是要注意数组的边界问题。这是使用数组下标的左闭右闭区间
 
@@ -1825,7 +1869,7 @@ class Solution {
   - 对右节点的处理
     - 递归求解右半数组
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -1857,13 +1901,15 @@ class Solution {
 }
 ```
 
-## 二叉搜索树
+---
+
+## 🧩 二叉搜索树
 
 根据二叉搜索树的特性，通常使用中序遍历。因为二叉搜索树的中序遍历结果是一个单调递增数列。通常为了保存前一个节点的指会设置一个全局遍历 **`pre`** 来保存
 
-### leetcode 98  验证二叉搜索树
+### 🧪 LeetCode 98. 验证二叉搜索树
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/validate-binary-search-tree/)
 
@@ -1875,15 +1921,17 @@ class Solution {
 - 节点的右子树只包含大于当前节点的数。
 - 所有左子树和右子树自身必须也是二叉搜索树。
 
-![98.验证二叉搜索树](20230310000750.png)
+<div align="center">
+  <img src="20230310000750.png" alt="98.验证二叉搜索树" width="60%">
+</div>
 
-#### 思路解析
+#### 💡 思路解析
 
 可以利用二叉搜索树的性质，对二叉搜索树进行中序遍历，然后检验遍历结果是否为单调递增的数组
 
 但是可以在中序遍历的过程中判断，因为中序遍历的结果是递增，所以可以使用一个全局的pre值保存上一个节点的节点值，比较和上一个节点的大小关系
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -1903,9 +1951,9 @@ class Solution {
 }
 ```
 
-### leetcode 530 二叉搜索树的最小绝对差
+### 🧪 LeetCode 530. 二叉搜索树的最小绝对差
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/minimum-absolute-difference-in-bst/)
 
@@ -1913,15 +1961,17 @@ class Solution {
 
 示例：
 
-![530二叉搜索树的最小绝对差](https://code-thinking-1253855093.file.myqcloud.com/pics/20201014223400123.png)
+<div align="center">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20201014223400123.png" alt="530二叉搜索树的最小绝对差" width="60%">
+</div>
 
 提示：树中至少有 2 个节点。
 
-#### 思路解析
+#### 💡 思路解析
 
 根据二叉搜索树的性质，最小绝对值差是两个在中序遍历结果中相邻的节点。可以使用一个全局变量存储上一个节点，来进行比较
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -1951,9 +2001,9 @@ class Solution {
 }
 ```
 
-### leetcode 501 二叉搜索树中的众数
+### 🧪 LeetCode 501. 二叉搜索树中的众数
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/find-mode-in-binary-search-tree/)
 
@@ -1969,7 +2019,9 @@ class Solution {
 
 给定 BST [1,null,2,2],
 
-![501. 二叉搜索树中的众数](20201014221532206.png)
+<div align="center">
+  <img src="20201014221532206.png" alt="501. 二叉搜索树中的众数" width="60%">
+</div>
 
 返回[2].
 
@@ -1977,7 +2029,7 @@ class Solution {
 
 进阶：你可以不使用额外的空间吗？（假设由递归产生的隐式调用栈的开销不被计算在内）
 
-#### 思路解析
+#### 💡 思路解析
 
 - **确定递归函数的参数和返回值：** 
   - 参数：树节点
@@ -1993,7 +2045,7 @@ class Solution {
   - 对右节点的处理
     - 递归求解右节点
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -2046,9 +2098,9 @@ class Solution {
 }
 ```
 
-### leetcode 701 二叉搜索树的插入
+### 🧪 LeetCode 701. 二叉搜索树的插入
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/insert-into-a-binary-search-tree/)
 
@@ -2056,7 +2108,9 @@ class Solution {
 
 注意，可能存在多种有效的插入方式，只要树在插入后仍保持为二叉搜索树即可。 你可以返回任意有效的结果。
 
-![701.二叉搜索树中的插入操作](../传输层协议/20201019173259554.png)
+<div align="center">
+  <img src="../传输层协议/20201019173259554.png" alt="701.二叉搜索树中的插入操作" width="60%">
+</div>
 
 提示：
 
@@ -2065,7 +2119,7 @@ class Solution {
 - -10^8 <= val <= 10^8
 - 新值和原始二叉搜索树中的任意节点值都不同
 
-#### 思路解析
+#### 💡 思路解析
 
 - 确定递归函数参数以及返回值
   - 参数就是根节点指针，以及要插入元素
@@ -2076,7 +2130,7 @@ class Solution {
   - 若当前节点的值小于目标值，向右递归，将当前节点的右节点设置为递归结果
   - 若当前节点的值大于目标值，向左递归，将当前节点的左节点设置为递归结果
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -2094,11 +2148,9 @@ class Solution {
 }
 ```
 
+### 🧪 LeetCode 450. 二叉搜索树中的删除工作
 
-
-### leetcode 450 二叉搜索树中的删除工作
-
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/delete-node-in-a-bst/)
 
@@ -2110,9 +2162,11 @@ class Solution {
 
 示例:
 
-![450.删除二叉搜索树中的节点](20201020171048265.png)
+<div align="center">
+  <img src="20201020171048265.png" alt="450.删除二叉搜索树中的节点" width="60%">
+</div>
 
-#### 思路解析
+#### 💡 思路解析
 
 - 确定递归函数参数以及返回值
   - 参数为树的节点和目标值
@@ -2124,7 +2178,7 @@ class Solution {
   - 要删除的节点右节点为空，返回左节点
   - 要删除的节点左右不为空，将删除节点的左子树头结点（左孩子）放到删除节点的右子树的最左面节点的左孩子上，返回删除节点右孩子为新的根节点。
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -2155,13 +2209,13 @@ class Solution {
 }
 ```
 
+---
 
+## 🌳 最近公共祖先问题
 
-## 最近公共祖先问题
+### 🧪 LeetCode 236. 二叉树的最近公共祖先
 
-### leetcode 236 二叉树的最近公共祖先
-
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
 
@@ -2171,7 +2225,9 @@ class Solution {
 
 例如，给定如下二叉树: root = [3,5,1,6,2,0,8,null,null,7,4]
 
-![236. 二叉树的最近公共祖先](20201016173414722.png)
+<div align="center">
+  <img src="20201016173414722.png" alt="236. 二叉树的最近公共祖先" width="60%">
+</div>
 
 示例 1: 输入: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1 输出: 3 解释: 节点 5 和节点 1 的最近公共祖先是节点 3。
 
@@ -2182,7 +2238,7 @@ class Solution {
 - 所有节点的值都是唯一的。
 - p、q 为不同节点且均存在于给定的二叉树中。
 
-#### 思路解析
+#### 💡 思路解析
 
 通常会想到从左右节点开始查找，再根据左右节点的返回值来指向中间节点的逻辑，所以适合后序遍历。
 
@@ -2209,7 +2265,7 @@ class Solution {
     - 若左右节点为空，返回null
     - 若左右节点不为空，返回当前节点
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -2233,9 +2289,9 @@ class Solution {
 }
 ```
 
-### leetcode 235 二叉搜索树的最近公共祖先
+### 🧪 LeetCode 235. 二叉搜索树的最近公共祖先
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/)
 
@@ -2245,7 +2301,9 @@ class Solution {
 
 例如，给定如下二叉搜索树: root = [6,2,8,0,4,7,9,null,null,3,5]
 
-![235. 二叉搜索树的最近公共祖先](20201018172243602.png)
+<div align="center">
+  <img src="20201018172243602.png" alt="235. 二叉搜索树的最近公共祖先" width="60%">
+</div>
 
 示例 1:
 
@@ -2264,7 +2322,7 @@ class Solution {
 - 所有节点的值都是唯一的。
 - p、q 为不同节点且均存在于给定的二叉搜索树中。
 
-#### 思路解析
+#### 💡 思路解析
 
 二叉搜索树具有有序性
 
@@ -2279,7 +2337,7 @@ class Solution {
   - 若当前节点的值同时大于p和q，向左遍历
   - 若当前节点的值同时小于p和q，向右遍历
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -2299,11 +2357,13 @@ class Solution {
 }
 ```
 
-## 二叉树与链表转换问题
+---
 
-### leetcode 114 二叉树展开为链表
+## 🌳 二叉树与链表转换问题
 
-#### 题目描述
+### 🧪 LeetCode 114. 二叉树展开为链表
+
+#### 📌 题目描述
 
 [题目链接](https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/description/)
 
@@ -2312,11 +2372,11 @@ class Solution {
 - 展开后的单链表应该同样使用 `TreeNode` ，其中 `right` 子指针指向链表中下一个结点，而左子指针始终为 `null` 。
 - 展开后的单链表应该与二叉树 [**先序遍历**](https://baike.baidu.com/item/先序遍历/6442839?fr=aladdin) 顺序相同。
 
-
-
 **示例 1：**
 
-![img](flaten.jpg)
+<div align="center">
+  <img src="flaten.jpg" alt="img" width="60%">
+</div>
 
 ```
 输入：root = [1,2,5,3,4,null,6]
@@ -2337,22 +2397,18 @@ class Solution {
 输出：[0]
 ```
 
-
-
 **提示：**
 
 - 树中结点数在范围 `[0, 2000]` 内
 - `-100 <= Node.val <= 100`
 
-
-
 **进阶：**你可以使用原地算法（`O(1)` 额外空间）展开这棵树吗？
 
-#### 思路解析
+#### 💡 思路解析
 
 利用递归的方法将树的前序遍历结果放入结果集合中，然后再基于结果集重新构建链表
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -2380,15 +2436,17 @@ class Solution {
 }
 ```
 
-### BM30 二叉搜索树与双向链表
+### 🧪 BM30. 二叉搜索树与双向链表
 
-#### 题目描述
+#### 📌 题目描述
 
 [题目链接](https://www.nowcoder.com/practice/947f6eb80d944a84850b0538bf0ec3a5?tpId=295&tqId=23253&sourceUrl=%2Fexam%2Foj%3FquestionJobId%3D10%26subTabName%3Donline_coding_page)
 
 输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。如下图所示
 
-![img](https://uploadfiles.nowcoder.com/images/20210605/557336_1622886924427/E1F1270919D292C9F48F51975FD07CE2)
+<div align="center">
+  <img src="https://uploadfiles.nowcoder.com/images/20210605/557336_1622886924427/E1F1270919D292C9F48F51975FD07CE2" alt="img" width="60%">
+</div>
 
 数据范围：输入二叉树的节点数 0≤n≤10000≤*n*≤1000，二叉树中每个节点的值 0≤val≤10000≤*v**a**l*≤1000
 要求：空间复杂度O(1)*O*(1)（即在原树上操作），时间复杂度 O(n)*O*(*n*)
@@ -2458,7 +2516,7 @@ From left to right are:1,2,3,4,5;From right to left are:5,4,3,2,1;
 树的形状如上图
 ```
 
-#### 思路解析
+#### 💡 思路解析
 
 - 使用一个指针preNode指向当前结点root的前继
 - 确定递归函数返回值以及参数
@@ -2475,7 +2533,7 @@ From left to right are:1,2,3,4,5;From right to left are:5,4,3,2,1;
   - 处理右节点
     - 递归处理右节点
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 public class Solution {

@@ -3,7 +3,7 @@ date : '2025-02-04T16:24:44+08:00'
 draft : false
 title : 'Java中的AQS'
 image : ""
-categories : ["Java并发编程"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "AQS-抽象队列同步器"
 math : true

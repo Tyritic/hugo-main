@@ -3,7 +3,7 @@ date : '2024-11-14T11:44:37+08:00'
 draft : false
 title : 'Java中的this关键字和就近原则'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

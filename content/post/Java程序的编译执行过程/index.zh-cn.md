@@ -3,7 +3,7 @@ date : '2024-11-02T10:46:06+08:00'
 draft : false
 title : 'Java程序的编译执行过程'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记的转换"
 math : true

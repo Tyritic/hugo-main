@@ -3,7 +3,7 @@ date : '2024-11-25T13:50:30+08:00'
 draft : false
 title : 'Java中的Queue接口和Deque接口'
 image : ""
-categories : ["Java集合"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

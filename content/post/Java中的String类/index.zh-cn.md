@@ -3,7 +3,7 @@ date : '2024-11-03T14:22:08+08:00'
 draft : false
 title : 'Java中的String类'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

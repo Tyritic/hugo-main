@@ -40,7 +40,7 @@ class Solution {
 }
 ```
 
-
+---
 
 ---
 
@@ -219,7 +219,9 @@ class Solution {
 请你计算并返回达到楼梯顶部的最低花费。
 
 <div align="center">
+<div align="center">
   <img src="20221031170131.png" alt="使用最小花费爬楼梯示例图" width="60%">
+</div>
 </div>
 
 #### 💡 思路解析
@@ -353,7 +355,9 @@ class Solution {
 示例:
 
 <div align="center">
+<div align="center">
   <img src="20210113161941835.png" alt="不同的二叉搜索树示例图" width="60%">
+</div>
 </div>
 
 #### 💡 思路解析
@@ -408,7 +412,7 @@ class Solution {
 }
 ```
 
-
+---
 
 ---
 
@@ -429,7 +433,9 @@ class Solution {
 示例 1：
 
 <div align="center">
+<div align="center">
   <img src="20210110174033215.png" alt="不同路径示例图" width="60%">
+</div>
 </div>
 
 - 输入：m = 3, n = 7
@@ -523,7 +529,9 @@ class Solution {
 现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？
 
 <div align="center">
+<div align="center">
   <img src="20210111204901338.png" alt="不同路径II示例图" width="60%">
+</div>
 </div>
 
 网格中的障碍物和空位置分别用 1 和 0 来表示。
@@ -531,7 +539,9 @@ class Solution {
 示例 1：
 
 <div align="center">
+<div align="center">
   <img src="20210111204939971.png" alt="不同路径II示例图2" width="60%">
+</div>
 </div>
 
 - 输入：obstacleGrid = [[0,0,0],[0,1,0],[0,0,0]]
@@ -544,7 +554,9 @@ class Solution {
 示例 2：
 
 <div align="center">
+<div align="center">
   <img src="20210111205857918.png" alt="不同路径II示例图3" width="60%">
+</div>
 </div>
 
 - 输入：obstacleGrid = [[0,1],[0,0]]
@@ -601,6 +613,8 @@ class Solution {
     }
 }
 ```
+
+---
 
 ---
 
@@ -985,6 +999,8 @@ class Solution {
     }
 }
 ```
+
+---
 
 ---
 
@@ -1484,6 +1500,8 @@ class Solution {
 
 ---
 
+---
+
 ## 🏠 打劫问题
 
 ### 📌 LeetCode 198. 打家劫舍
@@ -1511,7 +1529,7 @@ class Solution {
 - 0 <= nums.length <= 100
 - 0 <= nums[i] <= 400
 
-#### **思路解析**
+#### 💡 **思路解析**
 
 - 确定dp数组（dp table）以及下标的含义
   - **dp[i]：考虑下标[0-i]以内的房屋，最多可以偷窃的金额为dp[i]**。
@@ -1530,7 +1548,7 @@ class Solution {
 - 确定遍历顺序
   - dp[i] 是根据dp[i - 2] 和 dp[i - 1] 推导出来的，那么一定是从前到后遍历！
 
-#### **参考代码**
+#### 💻 **参考代码**
 
 ```java
 class Solution {
@@ -1600,7 +1618,6 @@ class Solution {
         int result2=rob(1,nums.length-1,nums);
         return Math.max(result1,result2);
 
-
     }
     public int rob(int start,int end,int[]nums){
         if (end == start) return nums[start];
@@ -1615,6 +1632,8 @@ class Solution {
     }
 }
 ```
+
+---
 
 ---
 
@@ -1926,7 +1945,9 @@ class Solution {
 }
 ```
 
-## 子序列和子数组问题
+---
+
+## 📏 子序列和子数组问题
 
 - 子序列：不要求连续，是序列中删除部分元素或者不删除
 - 子数组：要求连续
@@ -2077,11 +2098,9 @@ class Solution {
 }
 ```
 
-
-
 ---
 
-### 最长连续上升子序列
+### 📏 最长连续上升子序列
 
 #### 📌 LeetCode 674. 最长上升连续序列
 
@@ -2143,7 +2162,7 @@ class Solution {
 
 ---
 
-### 最长重复子数组
+### 📏 最长重复子数组
 
 #### 📌 LeetCode 718. 最长重复子数组
 
@@ -2203,11 +2222,9 @@ class Solution {
 }
 ```
 
-
-
 ---
 
-### 最长公共子序列
+### 📏 最长公共子序列
 
 #### 📌 LeetCode 1143. 最长公共子序列
 
@@ -2298,7 +2315,9 @@ class Solution {
 以这种方法绘制线条，并返回可以绘制的最大连线数。
 
 <div align="center">
+<div align="center">
   <img src="2021032116363533.png" alt="不相交的线示例图" width="60%">
+</div>
 </div>
 
 **思路解析**
@@ -2331,7 +2350,7 @@ class Solution {
 
 ---
 
-### 最大子序和
+### 📚 最大子序和
 
 #### 📌 LeetCode 53. 最大子序和
 
@@ -2392,7 +2411,7 @@ class Solution {
 
 ---
 
-### 编辑距离问题
+### 📚 编辑距离问题
 
 #### 📌 LeetCode 392. 判断子序列
 
@@ -2479,7 +2498,9 @@ class Solution {
 题目数据保证答案符合 32 位带符号整数范围。
 
 <div align="center">
+<div align="center">
   <img src="115.不同的子序列示例.jpg" alt="不同的子序列示例图" width="60%">
+</div>
 </div>
 
 提示：
@@ -2687,7 +2708,7 @@ class Solution {
 
 ---
 
-### 回文子串问题
+### 🔤 回文子串问题
 
 #### 📌 LeetCode 647. 回文子串
 

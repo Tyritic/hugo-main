@@ -3,7 +3,7 @@ date : '2024-11-02T12:23:34+08:00'
 draft : false
 title : 'Java的运算符'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记的转换"
 math : true

@@ -3,7 +3,7 @@ date : '2024-11-02T20:30:52+08:00'
 draft : false
 title : 'Java方法'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

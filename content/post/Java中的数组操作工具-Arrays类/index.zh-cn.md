@@ -3,7 +3,7 @@ date : '2024-11-15T17:32:46+08:00'
 draft : false
 title : 'Java中的数组操作工具 Arrays类'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

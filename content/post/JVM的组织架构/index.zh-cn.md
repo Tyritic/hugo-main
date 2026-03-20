@@ -3,7 +3,7 @@ date : '2025-03-10T15:56:14+08:00'
 draft : false
 title : 'JVM的组织架构'
 image : ""
-categories : ["JVM"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "JVM的组织架构"
 math : true

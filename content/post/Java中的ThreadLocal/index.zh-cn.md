@@ -3,7 +3,7 @@ date : '2025-02-06T13:16:53+08:00'
 draft : false
 title : 'Java中的ThreadLocal'
 image : ""
-categories : ["Java并发编程"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "ThreadLocal——线程的本地变量"
 math : true

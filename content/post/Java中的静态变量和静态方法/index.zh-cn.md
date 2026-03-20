@@ -3,7 +3,7 @@ date : '2024-11-14T17:11:24+08:00'
 draft : false
 title : 'Java中的静态变量和静态方法'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

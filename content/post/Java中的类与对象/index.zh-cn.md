@@ -3,7 +3,7 @@ date : '2024-11-14T10:26:52+08:00'
 draft : false
 title : 'Java中的类与对象'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "手写笔记转换"
 math : true

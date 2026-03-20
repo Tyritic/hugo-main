@@ -3,7 +3,7 @@ date : '2025-01-20T09:40:41+08:00'
 draft : false
 title : 'Java的注解原理'
 image : ""
-categories : ["Java基础"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "Java中注解的实现原理"
 math : true

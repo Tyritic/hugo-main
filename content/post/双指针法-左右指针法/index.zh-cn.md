@@ -9,15 +9,19 @@ description : "算法题中左右指针的应用"
 math : true
 ---
 
-## 题目描述
+## 🧭 题目描述
 
 通常当使用蛮力法需要两个for循环时，将两个for循环削减成一个for循环的优化方法。时间复杂度$O(n^2)$可以优化为$O(n)$
 
 同时数组排序为两端大，中间小
 
-## 算法模板
+---
 
-### 方法步骤
+---
+
+## 🧩 算法模板
+
+### ⚙️ 方法步骤
 
 双指针法（左右指针法）： **通过一个左指针和右指针在一个for循环下完成两个for循环的工作。**
 
@@ -26,7 +30,7 @@ math : true
 - 左指针：定义在数组左侧的指针
 - 右指针：定义在数组尾部的指针
 
-### 代码模板
+### 💻 代码模板
 
 ```
 class solution{
@@ -42,11 +46,15 @@ class solution{
 }
 ```
 
-## 经典例题
+---
 
-### leetcode 977. 有序数组的平方
+---
 
-#### 题目描述
+## 📚 经典例题
+
+### 🧪 LeetCode 977. 有序数组的平方
+
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/squares-of-a-sorted-array/)
 
@@ -63,7 +71,7 @@ class solution{
 - 输入：nums = [-7,-3,2,3,11]
 - 输出：[4,9,9,49,121]
 
-#### 思路解析
+#### 💡 思路解析
 
 数组其实是有序的， 只不过负数平方之后可能成为最大数了。
 
@@ -73,7 +81,7 @@ class solution{
 
 定义一个新数组result，和A数组一样的大小，让k指向result数组终止位置。比较左指针和右指针的平方大小
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -100,11 +108,9 @@ class Solution {
 }
 ```
 
+### 🧪 LeetCode 15. 三数之和
 
-
-### leetcode 15. 三数之和
-
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/3sum/)
 
@@ -118,7 +124,7 @@ class Solution {
 
 满足要求的三元组集合为： [ [-1, 0, 1], [-1, -1, 2] ]
 
-#### 思路解析
+#### 💡 思路解析
 
 一开始的思路为，固定 **a+b** ，然后通过哈希法求出 **0-(a+b)** 是否在数组中出现过。但是题目中出现限制条件：**答案中不可以包含重复的三元组**。而使用哈希法进行去重比较困难。于是考虑先固定 **a** ,然后使用指针移动 **b** 和 **c** ,通过计算他们的和与0的大小关系来移动指针。同时题目不涉及数组下标，然后考虑使用排序+左右指针进行求解。
 
@@ -149,8 +155,7 @@ class Solution {
 
   - **`while (right > left && nums[left] == nums[left + 1]) left++;`**
 
-
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 import java.util.ArrayList;
@@ -214,9 +219,9 @@ class Solution {
 }
 ```
 
-### leetcode 18 四数之和
+### 🧪 LeetCode 18. 四数之和
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/4sum/)
 
@@ -228,7 +233,7 @@ class Solution {
 
 示例： 给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。 满足要求的四元组集合为： [ [-1, 0, 0, 1], [-2, -1, 1, 2], [-2, 0, 0, 2] ]
 
-#### 思路解析
+#### 💡 思路解析
 
 基本思路与三数之和类似，但是在剪枝操作中存在注意点
 
@@ -236,7 +241,7 @@ class Solution {
   - 因为数组经过排序且target的值与零的大小关系不确定，假设 **`nums[i]<0`**，且 **`target<0`** 但是 **`nums[i]>target`** ，那么要是四元组中存在一个负数也能满足条件，例如数组是 **`[-4, -3, -2, -1]`** ，**`target`** 是 **`-10`**
   - 但是只要保证 **`nums[i]>=0&&nums[i]>target`** ，这个条件就能成功跳过不必要的比较
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {
@@ -291,9 +296,9 @@ class Solution {
 }
 ```
 
-### leetcode 941 有效的山脉数组
+### 🧪 LeetCode 941. 有效的山脉数组
 
-#### 题目描述
+#### 📌 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/valid-mountain-array/)
 
@@ -306,7 +311,11 @@ class Solution {
   - arr[0] < arr[1] < ... arr[i-1] < arr[i]
   - arr[i] > arr[i+1] > ... > arr[arr.length - 1]
 
-![示例图](20210729103604.png)
+<div align="center">
+<div align="center">
+  <img src="20210729103604.png" alt="有效的山脉数组示意图" width="60%">
+</div>
+</div>
 
 示例 1：
 
@@ -323,7 +332,7 @@ class Solution {
 - 输入：arr = [0,3,2,1]
 - 输出：true
 
-#### 思路解析
+#### 💡 思路解析
 
 山脉数组保证从左边到山顶是单调递增，从右边到山顶时单调递增
 
@@ -331,7 +340,7 @@ class Solution {
 
 如果left或者right没有移动，说明是一个单调递增或者递减的数组，依然不是山峰
 
-#### 参考代码
+#### 💻 参考代码
 
 ```java
 class Solution {

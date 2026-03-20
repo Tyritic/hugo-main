@@ -3,7 +3,7 @@ date : '2024-12-03T09:32:05+08:00'
 draft : false
 title : 'Java中的volatile关键字'
 image : ""
-categories : ["Java并发编程"]
+categories : ["Java"]
 tags : ["JavaSE"]
 description : "Java中volatile关键字"
 math : true
