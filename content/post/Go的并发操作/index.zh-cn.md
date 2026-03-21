@@ -63,7 +63,7 @@ mu.Unlock()
 
 提到锁，就有一个绕不开的话题：**死锁**。死锁就是一种状态，当两个或以上的 **goroutine** 在执行过程中，因争夺共享资源处在互相等待的状态，如果没有外部干涉将会一直处于这种阻塞状态。
 
-**死锁场景一：Lock/Unlock 不成对**
+#### 死锁场景一：Lock/Unlock 不成对
 
 最常见的场景就是对锁进行拷贝使用：
 
@@ -96,7 +96,7 @@ fatal error: all goroutines are asleep - deadlock!
 
 如果将带有锁结构的变量赋值给其他变量，锁的状态会复制。复制后的新锁拥有了原来的锁状态，那么在 `copyMutex` 函数内执行 `mu.Lock()` 的时候会一直阻塞，因为外层的 `main` 函数已经 `Lock()` 了一次，但是并没有机会 `Unlock()`，导致内层函数会一直等待 `Lock()`，而外层函数一直等待 `Unlock()`，这样就造成了死锁。
 
-**死锁场景二：循环等待**
+#### 死锁场景二：循环等待
 
 A 等 B，B 等 C，C 等 A，循环等待：
 
@@ -453,7 +453,7 @@ compare st2 and v: true, {wangwu 20}
 
 ---
 
-## 🗺️ 并发安全mapsync.Map
+## 🗺️ 并发安全映射 sync.Map
 
 Go 语言内置的 **Map** 并不是并发安全的，在多个 **goroutine** 同时操作 **map** 的时候，会有并发问题。
 
@@ -500,7 +500,7 @@ fatal error: concurrent map writes
 
 程序报错了，说明 **map** 不能同时被多个 **goroutine** 读写。
 
-### 🔐 解决方案一：使用互斥锁保护 map
+**解决方案一：使用互斥锁保护 map**
 
 ```go
 package main
@@ -521,7 +521,7 @@ func setVal(key string, value int) {
 }
 ```
 
-### 🗺️ 解决方案二：使用 sync.Map
+### 🗺️ sync.Map 的基本使用
 
 Go 语言 **sync** 包提供了开箱即用的并发安全版 **map**——**`sync.Map`**，在 Go 1.9 引入。**`sync.Map`** 不用初始化就可以使用，内置了诸多操作方法：
 
@@ -584,50 +584,57 @@ zhangsan
 - **`sync.Map`** 没有提供获取 **map** 数量的方法，需要在遍历时自行计算
 - **`sync.Map`** 为了保证并发安全有一些性能损失，因此在非并发情况下，使用原生 **map** 相比使用 **sync.Map** 会有更好的性能
 
-### 💡 sync.Map 特点
+**sync.Map 的核心特点**
 
-- **无锁读** ：大部分读操作无需加锁，通过原子操作直接访问 **`read`**，性能极高。
-- **延迟删除** ：删除操作仅标记 **`entry`** 为 **`nil`** ，在 **`dirty`** 提升时才真正删除，减少锁竞争。
-- **读写分离**：**`read`** 存储热点数据，**`dirty`** 存储最新数据，通过 **`amended`** 标记协调两者。
-- **自动迁移**：当 **`misses`** 达到阈值时，**`dirty`** 自动提升为 **`read`**，后续写操作重建 **`dirty`**，避免 **`dirty`** 长期积累大量数据。
+- **无锁读**：大部分读操作直接命中 `read`，不需要加锁。
+- **读写分离**：`read` 负责热点读，`dirty` 承接新写入和 read 未命中的数据。
+- **延迟删除**：key 在 `read` 中时，多数删除是“标记删除”，不是立刻物理删除。
+- **空间换时间**：内部维护 `read` 和 `dirty` 两张表，用更多空间换更少锁竞争。
+- **自动提升**：当 `read` 连续未命中到一定程度后，`dirty` 会提升成新的 `read`。
 
-### 🔧 sync.Map 底层原理
+### 🔧 sync.Map 核心原理
 
 #### 📊 数据结构
 
 ```go
-type Map struct{
-    mu Mutex                   // 保护 dirty 的互斥锁
-    read atomic.Value          // 无锁读的 readOnly 结构
-    dirty map[interface{}]*entry // 包含最新数据的 map
-    misses int                 // 记录从 read 读取失败的次数
+type Map struct {
+   mu Mutex             //  用于保护dirty字段的锁
+   read atomic.Value    // 只读字段，其实际的数据类型是一个readOnly结构
+   dirty map[interface{}]*entry  //需要加锁才能访问的map，其中包含在read中除了被expunged(删除)以外的所有元素以及新加入的元素
+   misses int // 计数器，记录在从read中读取数据的时候，没有命中的次数，当misses值等于dirty长度时，dirty提升为read
 }
 
+// readOnly is an immutable struct stored atomically in the Map.read field.
 type readOnly struct {
-    m       map[interface{}]*entry
-    amended bool // 标记 dirty 中是否存在 read 中没有的键
-}
+   m       map[interface{}]*entry   // key为任意可比较类型，value位为entry指针的一个map
+   amended bool // amended为true，表明dirty中包含read中没有的数据，为false表明dirty中的数据在read中都存在
 
 type entry struct {
-    p unsafe.Pointer // 指向 interface{} 类型的值
+    p unsafe.Pointer  // p指向真正的value所在的地址
 }
 ```
 
-- **`read`** ：使用 **`atomic.Value`** 存储 **`readOnly`** 结构，支持无锁读操作。
-- **`dirty`**：包含最新数据的普通哈希表，写操作优先更新此表，但需加锁。
-- **`entry.p`** ：三种状态：
-  1. 指向实际值：正常状态
-  2. **`nil`** ：键被删除，但 **`dirty`** 中可能存在
-  3. **`expunged`** ：键被彻底删除，仅存在于 **`read`** 中
+- `read`：通过 `atomic.Value` 原子保存 `readOnly`，大多数读请求都走这里。
+- `dirty`：普通 map，写操作和 read 未命中后的补充读取会走这里，需要加锁。
+- `misses`：记录从 `read` 未命中并回退到 `dirty` 的次数，用来判断是否该把 `dirty` 提升为新的 `read`。
 
-#### ⬆️ dirty提升
+`entry.p`` 有三种状态：
 
-用于将 **`dirty`** 哈希表中的数据同步到 **`read`** 视图，从而减少后续读操作的锁竞争。
+1. 指向真实 value：正常状态。
+2. `nil`：逻辑删除状态，说明这个 key 被标记删除了。
+3. `expunged`：更彻底的删除标记，表示这个 key 只留在 `read` 中，不在 `dirty` 中。
 
-当满足以下条件时，**`dirty`** 会被提升为新的 **`read`** ：
+sync.Map 的整体结构如下：
 
-- **`read` 中找不到键**：读操作（如 **`Load`** ）在 **`read`** 中未找到目标键，且 **`amended=true`**（表示 **`dirty`** 包含新数据）。
-- **misses 计数器达到阈值**：连续多次（次数等于 **`len(dirty)`** ）从 `dirty` 读取数据后，触发提升。
+![](sync-map-struct.png)
+
+有一个很关键的点：`read.m` 和 `dirty` 这两张表里，相同 key 对应的 value 往往不是两份数据，而是同一个 `entry` 指针。因此改了 `entry.p`，两边看到的是同一份结果。
+
+#### ⬆️ dirty 提升
+
+`dirty` 提升的目的，是把最近经常需要加锁访问的数据同步成新的只读视图，减少后续锁竞争。
+
+触发时机可以简单记成一句话：**read 老是读不到，misses 又越来越多，就该让 dirty 顶上来了。**
 
 ```go
 func (m *Map) missLocked() {
@@ -635,16 +642,17 @@ func (m *Map) missLocked() {
     if m.misses < len(m.dirty) {
         return
     }
-    // 将 dirty 提升为 read
     m.read.Store(readOnly{m: m.dirty})
     m.dirty = nil
     m.misses = 0
 }
 ```
 
-- **复制 `dirty` 到 `read`**：将 **`dirty`** 的引用直接赋值给 **`read`**，并重置 **`amended`** 为 **`false`** 。
-- **清空 `dirty`**：将 **`dirty`** 置为 **`nil`**，等待下次写操作时重建。
-- **重置 `misses`**：计数器归零，准备下一轮统计。
+提升后会发生三件事：
+
+- `dirty` 直接成为新的 `read`
+- 原来的 `dirty` 被置为 `nil`
+- `misses` 清零，等待下一轮统计
 
 #### 📖 读取流程
 
@@ -666,13 +674,18 @@ func (m *Map) Load(key interface{}) (value interface{}, ok bool) {
     if !ok {
         return nil, false
     }
-    return e.load() // 从 entry 中加载值
+    return e.load()
 }
 ```
 
-- 优先从 **`read`** 无锁读取，若存在直接返回。
-- 若 **`read`** 中不存在且 **`amended=true`**（表示 **`dirty`** 有新数据），加锁从 **`dirty`** 读取，并记录一次 **`miss`** 。
-- 当 **`misses`** 累计达到 **`len(dirty)`** 时，触发 **`dirty`** 提升为 **`read`**，避免频繁加锁。
+- 先从 `read` 无锁读取。
+- 如果 `read` 没命中，并且 `amended=true`，说明 `dirty` 里有 read 没有的数据，这时才加锁去 `dirty` 查。
+- 只要走了 `dirty`，就会累计一次 `miss`。
+- 当 `misses >= len(dirty)` 时，`dirty` 会被提升成新的 `read`。
+
+读取流程图：
+
+![](sync-map-load-flow.png)
 
 #### 💾 存储流程
 
@@ -697,18 +710,25 @@ func (m *Map) Store(key, value interface{}) {
             m.dirtyLocked()
             m.read.Store(readOnly{m: read.m, amended: true})
         }
-        m.dirty[key] = newEntry(value) // 将新 entry 加入 dirty
+        m.dirty[key] = newEntry(value)
     }
     m.mu.Unlock()
 }
 ```
 
-- 尝试无锁更新 **`read`** 中的 **`entry`**（若存在且未被删除）。
-- 若 **`read`** 中不存在或已被标记为 **`expunged`** ，加锁操作：
-  - 若 **`dirty`** 中存在该键，直接更新。
-  - 若 **`dirty`** 中不存在：
-    - 首次写入 **`dirty`** 时，将 **`read`** 中所有未删除的 **`entry`** 复制到 **`dirty`** 。
-    - 将新 **`entry`** 加入 **`dirty`**，并标记 **`amended=true`** 。
+- 如果 key 已经存在于 `read`，且 entry 没被 `expunged`，会优先尝试无锁更新。
+- 如果 key 处于 `expunged` 状态，就不能只改 `read`，因为这说明 dirty 和 read 的 key 集已经分叉了，必须加锁把这个 key 重新并回 dirty。
+- 如果 key 是全新的：
+  - `dirty == nil` 时，要先根据 `read` 重建 dirty；
+  - 然后再把新 key 插入 dirty，并把 `read.amended` 设为 `true`。
+
+`p == expunged` 时的结构可以用下面这张图理解：
+
+![](sync-map-store-expunged.png)
+
+存储流程图：
+
+![](sync-map-store-flow.png)
 
 #### 🗑️ 删除流程
 
@@ -725,13 +745,103 @@ func (m *Map) Delete(key interface{}) {
         }
         m.mu.Unlock()
     } else if ok {
-        e.delete() // 标记 entry 为 nil（逻辑删除）
+        e.delete()
     }
 }
 ```
 
-- 若 **`read`** 中存在该键，标记 **`entry.p=nil`**（逻辑删除）。
-- 若 **`read`** 中不存在且 **`amended=true`**，加锁从 **`dirty`** 中物理删除该键。
+- 如果 key 在 `read` 中，删除通常是**延迟删除**：
+  - 只是把 `entry.p` 标成 `nil`
+  - 并没有立刻从 map 结构里把这个 key 移除
+- 如果 key 不在 `read` 中，而是在 `dirty` 中，才会直接 `delete(m.dirty, key)` 做物理删除。
+
+所以可以把它记成：
+
+- **从 read 删除：延迟删除**
+- **从 dirty 删除：直接删除**
+
+删除流程图：
+
+![](sync-map-delete-flow.png)
+
+#### 🔁 Range 流程
+
+`Range` 的处理方式和前面几个方法不太一样。它的目标不是“尽量只看 read”，而是要确保遍历到 map 中所有当前有效的 key。
+
+核心逻辑是：
+
+- 如果 `read.amended=false`，说明 `dirty` 里没有 read 没有的数据，直接遍历 `read` 就够了。
+- 如果 `read.amended=true`，说明 `dirty` 里有 read 里没有的新 key，这时会先把 `dirty` 提升成新的 `read`，再遍历。
+
+```go
+func (m *Map) Range(f func(key, value interface{}) bool) {
+   read, _ := m.read.Load().(readOnly)
+   if read.amended {
+      m.mu.Lock()
+      read, _ = m.read.Load().(readOnly)
+      if read.amended {
+         read = readOnly{m: m.dirty}
+         m.read.Store(read)
+         m.dirty = nil
+         m.misses = 0
+      }
+      m.mu.Unlock()
+   }
+
+   for k, e := range read.m {
+      v, ok := e.load()
+      if !ok {
+         continue
+      }
+      if !f(k, v) {
+         break
+      }
+   }
+}
+```
+
+Range 流程图：
+
+![](sync-map-range-flow.png)
+
+#### 🔄 p 的状态变化
+
+`sync.Map` 里最容易讲清楚底层行为的地方，就是 `entry.p` 在 `正常值 -> nil -> expunged -> 恢复` 之间如何切换。
+
+可以按一条具体链路来理解：
+
+1. 一开始向空的 `sync.Map` 写入 `key1/value1` 和 `key2/value2`，新数据先进入 `dirty`。
+
+![](sync-map-pstate-1.png)
+
+2. 连续读取这些 key，`read` 多次未命中，`misses` 达到阈值后，`dirty` 提升为 `read`，`dirty=nil`。
+
+![](sync-map-pstate-2.png)
+
+3. 删除 `key1` 后，因为它存在于 `read` 中，所以只是把 `key1` 对应的 `p` 标成 `nil`，属于逻辑删除。
+
+![](sync-map-pstate-3.png)
+
+4. 这时如果再插入 `key3`，由于 `dirty` 为空，运行时会基于 `read` 重建 `dirty`。重建过程中，原来 `p=nil` 的 `key1` 会被进一步标为 `expunged`，表示这个 key 只留在 `read` 中，不再进 dirty。
+
+![](sync-map-pstate-4.png)
+
+5. 如果之后又重新 `Store(key1, value0)`，发现它在 `read` 中但状态是 `expunged`，就不能只操作 `read`，而必须先把状态从 `expunged` 恢复，再重新加入 `dirty`，最后更新值。
+
+![](sync-map-pstate-5.png)
+
+这套状态设计的核心目的，是把“是否需要加锁同步 dirty”区分得更细：
+
+- `p == nil`：可以理解为“逻辑删了，但 dirty 可能还跟得上”
+- `p == expunged`：可以理解为“这个 key 已经和 dirty 脱钩了，再操作它必须带上 dirty 一起处理”
+
+**✅ sync.Map 总结**
+
+- `sync.Map` 的核心不是“简单地给 map 加一把大锁”，而是通过 `read + dirty` 两张表做读写分离。
+- 读路径优先无锁命中 `read`，这是它在读多写少场景里性能好的根本原因。
+- 写路径主要落在 `dirty`，并在必要时重建或同步 `dirty`。
+- 删除分成延迟删除和直接删除两种，取决于 key 当前位于 `read` 还是 `dirty`。
+- `entry.p` 的 `nil / expunged / 正常值` 三种状态，是理解 `sync.Map` 行为的关键。
 
 **💡 面试要点：sync.Map 的适用场景**
 
