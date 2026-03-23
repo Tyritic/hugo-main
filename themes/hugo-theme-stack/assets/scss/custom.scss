@@ -381,6 +381,13 @@ button, .button {
     height: auto !important;
     border-radius: 8px;
   }
+
+  figure.gallery-image {
+    a,
+    img {
+      cursor: zoom-in;
+    }
+  }
 }
 //右侧标签放大动画
 .tagCloud .tagCloud-tags a {

@@ -38,11 +38,14 @@ class StackGallery {
 
         for (const el of figures) {
             const figcaption = el.querySelector('figcaption'),
-                img = el.querySelector('img');
+                img = el.querySelector('img') as HTMLImageElement;
+
+            const width = StackGallery.getImageDimension(img, 'width');
+            const height = StackGallery.getImageDimension(img, 'height');
 
             let aux: PhotoSwipeItem = {
-                w: parseInt(img.getAttribute('width')),
-                h: parseInt(img.getAttribute('height')),
+                w: width,
+                h: height,
                 src: img.src,
                 msrc: img.getAttribute('data-thumb') || img.src,
                 el: el
@@ -56,56 +59,56 @@ class StackGallery {
         }
     }
 
+    private static getImageDimension(img: HTMLImageElement, dimension: 'width' | 'height'): number {
+        const attrValue = img.getAttribute(dimension)?.trim();
+        if (attrValue && /^\d+$/.test(attrValue)) {
+            return parseInt(attrValue, 10);
+        }
+
+        if (dimension === 'width') {
+            return img.naturalWidth || img.width;
+        }
+
+        return img.naturalHeight || img.height;
+    }
+
     public static createGallery(container: HTMLElement) {
         /// The process of wrapping image with figure tag is done using JavaScript instead of only Hugo markdown render hook
         /// because it can not detect whether image is being wrapped by a link or not
         /// and it lead to a invalid HTML construction (<a><figure><img></figure></a>)
 
-        const images = container.querySelectorAll('img.gallery-image');
-        for (const img of Array.from(images)) {
-            /// Images are wrapped with figure tag if the paragraph has only images without texts
-            /// This is done to allow inline images within paragraphs
-            const paragraph = img.closest('p');
+        const images = container.querySelectorAll('img');
+        for (const img of Array.from(images) as HTMLImageElement[]) {
+            if (img.closest('figure.gallery-image')) continue;
 
-            if (!paragraph || !container.contains(paragraph)) continue;
+            const standaloneWrapper = StackGallery.getStandaloneWrapper(container, img);
+            if (!standaloneWrapper) continue;
 
-            if (paragraph.textContent.trim() == '') {
-                /// Once we insert figcaption, this check no longer works
-                /// So we add a class to paragraph to mark it
-                paragraph.classList.add('no-text');
-            }
+            const link = img.parentElement?.tagName == 'A' ? img.parentElement as HTMLAnchorElement : null;
+            let el: HTMLElement = link || img;
 
-            let isNewLineImage = paragraph.classList.contains('no-text');
-            if (!isNewLineImage) continue;
-
-            const hasLink = img.parentElement.tagName == 'A';
-
-            let el: HTMLElement = img;
             /// Wrap image with figure tag, with flex-grow and flex-basis values extracted from img's data attributes
             const figure = document.createElement('figure');
+            figure.className = 'gallery-image';
             figure.style.setProperty('flex-grow', img.getAttribute('data-flex-grow') || '1');
             figure.style.setProperty('flex-basis', img.getAttribute('data-flex-basis') || '0');
-            if (hasLink) {
-                /// Wrap <a> if it exists
-                el = img.parentElement;
-            }
             el.parentElement.insertBefore(figure, el);
             figure.appendChild(el);
 
             /// Add figcaption if it exists
-            if (img.hasAttribute('alt')) {
+            const alt = img.getAttribute('alt')?.trim();
+            if (alt) {
                 const figcaption = document.createElement('figcaption');
-                figcaption.innerText = img.getAttribute('alt');
+                figcaption.innerText = alt;
                 figure.appendChild(figcaption);
             }
 
             /// Wrap img tag with <a> tag if image was not wrapped by <a> tag
-            if (!hasLink) {
-                figure.className = 'gallery-image';
-
+            if (!link) {
                 const a = document.createElement('a');
                 a.href = img.src;
                 a.setAttribute('target', '_blank');
+                a.setAttribute('rel', 'noreferrer');
                 img.parentNode.insertBefore(a, img);
                 a.appendChild(img);
             }
@@ -134,6 +137,32 @@ class StackGallery {
         if (currentGallery.length > 0) {
             StackGallery.wrap(currentGallery);
         }
+    }
+
+    private static getStandaloneWrapper(container: HTMLElement, img: HTMLImageElement): HTMLElement | null {
+        const wrapper = img.closest('p, div');
+        if (!wrapper || !container.contains(wrapper)) return null;
+        if (wrapper.matches('.gallery, figure, .highlight, .notice')) return null;
+        if (!this.isStandaloneImageWrapper(wrapper, img)) return null;
+
+        if (wrapper.textContent.trim() == '') {
+            wrapper.classList.add('no-text');
+        }
+
+        return wrapper.classList.contains('no-text') ? wrapper as HTMLElement : null;
+    }
+
+    private static isStandaloneImageWrapper(wrapper: Element, img: HTMLImageElement): boolean {
+        const directImages = Array.from(wrapper.querySelectorAll('img'))
+            .filter(child => child.closest('p, div') === wrapper);
+        if (!directImages.includes(img)) return false;
+
+        const hasNestedBlocks = Array.from(wrapper.children).some(child => {
+            if (child === img || child.contains(img)) return false;
+            return child.tagName !== 'A' && child.tagName !== 'BR';
+        });
+
+        return !hasNestedBlocks;
     }
 
     /**
@@ -174,6 +203,7 @@ class StackGallery {
     private bindClick() {
         for (const [index, item] of this.items.entries()) {
             const a = item.el.querySelector('a');
+            if (!a) continue;
 
             a.addEventListener('click', (e) => {
                 e.preventDefault();
