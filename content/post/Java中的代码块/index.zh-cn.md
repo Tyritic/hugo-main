@@ -59,7 +59,7 @@ public class Test {
 ### 🔧 构造代码块的实现原理
 
 对象在初始化的时候会先调用构造方法，构造方法在执行的时候会把代码初始化块放在构造方法中其他代码之前<div align="center">
-  <img src="22-01.png" alt="示意图" width="60%">
+  <img src="22-01.png" alt="示意图" width="82%">
 </div>
 
 ---

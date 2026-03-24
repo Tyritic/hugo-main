@@ -14,7 +14,7 @@ math : true
 在计算机网络中，**BIO (Blocking I/O)** 是一种同步的 I/O 模型。它的工作原理是：在 BIO 模式下，调用方在发起I/O操作时会被阻塞，直到操作完成后才继续执行
 
 它通常用于基于传统 TCP/IP 协议的客户端和服务器通信。<div align="center">
-  <img src="image-20240820112641716.png" alt="BIO模式示意图" width="60%">
+  <img src="image-20240820112641716.png" alt="BIO模式示意图" width="82%">
 </div>
 
 ### ✨ BIO模式的特点
@@ -36,7 +36,7 @@ math : true
 **NIO (New Input/Output)** 是 Java 1.4 引入的一种非阻塞式 I/O 模型，它相较于传统的 **BIO (Blocking I/O)** 模型，提供了更高效的 I/O 操作，特别是在处理大量并发连接时。NIO 通过支持非阻塞 I/O 操作、缓冲区、选择器等机制，N基于I/O多路复用实现的，它可以只用一个线程处理多个客户端I/O，线程不会在执行读取或写入操作时被阻塞。线程可以在等待数据时继续做其他事情，当数据准备好时，NIO 会通过回调机制告知应用程序，显著提高了系统的性能，尤其适用于高并发的网络编程。
 
 <div align="center">
-  <img src="image-20240820112656259.png" alt="NIO模式示意图" width="60%">
+  <img src="image-20240820112656259.png" alt="NIO模式示意图" width="82%">
 </div>
 
 ### ✨ NIO的特点

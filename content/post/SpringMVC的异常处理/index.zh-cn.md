@@ -15,7 +15,7 @@ description : "项目中对于异常的处理办法"
 ## ⚙️ 全局异常处理器
 
 <div align="center">
-  <img src="微信截图_20241107164515.png" alt="全局异常处理器" width="60%">
+  <img src="微信截图_20241107164515.png" alt="全局异常处理器" width="82%">
 </div>
 
 **`@RestControllerAdvice`**：用于修饰类表示全局异常处理器。

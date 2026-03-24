@@ -39,7 +39,7 @@ math : true
 **单链表 ** 虽然是一种线性表，但是并不会按线性的顺序存储数据，使用的不是连续的内存空间来存储数据。单链表只有一个方向，结点只有一个后继指针 next 指向后面的节点，通过连续的节点组成，但是节点在内存中不是连续分布的 ，而是散乱分布在内存中的某地址上。链表通常有一个不保存任何值的 head 节点(头结点)，通过头结点我们可以遍历整个链表。尾结点通常指向 null。
 
 <div align="center">
-  <img src="single-linkedlist.png" alt="单链表示意图" width="60%" />
+  <img src="single-linkedlist.png" alt="单链表示意图" width="82%" />
 </div>
 
 ```java
@@ -65,7 +65,7 @@ static class ListNode{
 - 插入元素：$O(1)$
 
 <div align="center">
-  <img src="20200806195134331-20230310121503147.png" alt="链表添加节点" width="60%" />
+  <img src="20200806195134331-20230310121503147.png" alt="链表添加节点" width="82%" />
 </div>
   - 找到要插入位置的前驱节点 **`pre`** 和后驱节点 **`temp=pre.next`**
   - 前驱节点 **`pre`** 指向目标节点 **`target`** ：**`pre.next=target`**
@@ -73,7 +73,7 @@ static class ListNode{
 - 删除元素：$O(1)$
 
 <div align="center">
-  <img src="20200806195114541-20230310121459257.png" alt="链表删除节点" width="60%" />
+  <img src="20200806195114541-20230310121459257.png" alt="链表删除节点" width="82%" />
 </div>
   - 找到要删除位置的前驱节点 **`pre`**
   - 将前驱节点 **`pre`** 指向目标节点的后驱节点：**`pre.next=pre.next.next`**
@@ -85,7 +85,7 @@ static class ListNode{
 基本定义与单链表一致，但是 **双向链表** 包含两个指针，一个 prev 指向前一个节点，一个 next 指向后一个节点。因此双向链表支持反向遍历
 
 <div align="center">
-  <img src="bidirectional-linkedlist.png" alt="双向链表示意图" width="60%" />
+  <img src="bidirectional-linkedlist.png" alt="双向链表示意图" width="82%" />
 </div>
 
 #### 🧰 基本操作
@@ -94,7 +94,7 @@ static class ListNode{
 - 插入元素：$O(1)$
 
 <div align="center">
-  <img src="R-C.8689c31dff2149b3d9742e26b9a06ed3.png" alt="双向链表的插入" width="60%" />
+  <img src="R-C.8689c31dff2149b3d9742e26b9a06ed3.png" alt="双向链表的插入" width="82%" />
 </div>
   - 找到要插入位置的前驱节点 **`pre`** 和后驱节点 **`temp=pre.next`**
   - 前驱节点 **`pre`** 和目标节点 **`target`** 建立双向链接
@@ -106,7 +106,7 @@ static class ListNode{
 - 删除元素：$O(1)$
 
 <div align="center">
-  <img src="00537f0ad4d843679655ded36e8e8503.png" alt="双向链表的删除" width="60%" />
+  <img src="00537f0ad4d843679655ded36e8e8503.png" alt="双向链表的删除" width="82%" />
 </div>
   - 找到要删除位置的前驱节点 **`pre`**
   - 将前驱节点 **`pre`** 指向目标节点的后驱节点 **`temp`** 建立双向联系
@@ -142,7 +142,7 @@ static class ListNode{
 - **入栈和出栈**：只对栈顶的元素进行操作，时间复杂度为 $O(1)$
 
 <div align="center">
-  <img src="image-20240725233451930.png" alt="入栈和出栈" width="60%" />
+  <img src="image-20240725233451930.png" alt="入栈和出栈" width="82%" />
 </div>
 
 ### 🎯 常见应用场景
@@ -150,7 +150,7 @@ static class ListNode{
 #### 🌐 浏览器的回退和前进
 
 <div align="center">
-  <img src="栈实现浏览器倒退和前进.png" alt="栈实现浏览器倒退和前进" width="60%" />
+  <img src="栈实现浏览器倒退和前进.png" alt="栈实现浏览器倒退和前进" width="82%" />
 </div>
 
 可以使用两个栈来实现浏览器的回退和前进。一个栈Stack1用于保存当前浏览的界面，另一个栈Stack2用于回退的页面。
@@ -172,7 +172,7 @@ static class ListNode{
 - **入队和出队**：只对队头和队尾的元素进行操作，时间复杂度为 $O(1)$
 
 <div align="center">
-  <img src="OIP-C.G5n6ACcW_VofRsdMgqID4wHaCM.png" alt="队列的基本操作" width="60%" />
+  <img src="OIP-C.G5n6ACcW_VofRsdMgqID4wHaCM.png" alt="队列的基本操作" width="82%" />
 </div>
 
 ---

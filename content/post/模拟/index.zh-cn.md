@@ -24,7 +24,7 @@ math : true
 **示例 1：**
 
 <div align="center">
-  <img src="mat1.jpg" alt="img" width="60%">
+  <img src="mat1.jpg" alt="img" width="82%">
 </div>
 
 ```
@@ -35,7 +35,7 @@ math : true
 **示例 2：**
 
 <div align="center">
-  <img src="mat2.jpg" alt="img" width="60%">
+  <img src="mat2.jpg" alt="img" width="82%">
 </div>
 
 ```

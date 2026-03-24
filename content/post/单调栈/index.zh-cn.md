@@ -269,7 +269,7 @@ class Solution {
 示例 1：
 
 <div align="center">
-  <img src="20210713205038.png" alt="img" width="60%">
+  <img src="20210713205038.png" alt="img" width="82%">
 </div>
 
 - 输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
@@ -340,11 +340,11 @@ class Solution {
 求在该柱状图中，能够勾勒出来的矩形的最大面积。
 
 <div align="center">
-  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210803220437.png" alt="img" width="60%">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210803220437.png" alt="img" width="82%">
 </div>
 
 <div align="center">
-  <img src="20210803220506.png" alt="img" width="60%">
+  <img src="20210803220506.png" alt="img" width="82%">
 </div>
 
 - 1 <= heights.length <=10^5

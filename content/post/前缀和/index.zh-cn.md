@@ -31,7 +31,7 @@ p[j] - p[i] = vec[i+1] + vec[i+2] + vec[i+3] + ... +vec[j];
 ```
 
 <div align="center">
-  <img src="20240627111319.png" alt="img" width="60%">
+  <img src="20240627111319.png" alt="img" width="82%">
 </div>
 
 ### 💻 代码模板

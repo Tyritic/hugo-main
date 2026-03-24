@@ -143,7 +143,7 @@ type slice struct {
 ```
 
 <div align="center">
-  <img src="slice-struct.png" alt="slice 底层结构示意图" width="60%">
+  <img src="slice-struct.png" alt="slice 底层结构示意图" width="82%">
 </div>
 
 其中：
@@ -249,6 +249,91 @@ arr2=[100 4], cap=6
 
 - **新切片的容量**：从新切片起始元素开始，一直到原底层数组末尾
 - **新切片共享原底层数组**：所以修改 `arr2[0]` 会直接影响 `arr1`
+
+在实际开发里，更容易出错的是“从切片再切出新切片，然后继续 `append`”。这时是否会影响原切片，关键取决于**是否触发扩容**。
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    slice := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    s1 := slice[2:5]
+    s2 := s1[2:6:7]
+
+    s2 = append(s2, 100)
+    s2 = append(s2, 200)
+
+    s1[2] = 20
+
+    fmt.Println("s1   =", s1)
+    fmt.Println("s2   =", s2)
+    fmt.Println("base =", slice)
+}
+```
+
+运行结果：
+
+```go
+s1   = [2 3 20]
+s2   = [4 5 6 7 100 200]
+base = [0 1 2 3 20 5 6 7 100 9]
+```
+
+这个过程可以拆成两步理解：
+
+1. 第一次 `append(100)` 时，`s2` 容量还够，直接写回原底层数组，因此会影响 `slice`
+2. 第二次 `append(200)` 时，`s2` 容量不足，触发扩容，之后 `s2` 拥有自己的新底层数组，再修改就不会影响原数组
+
+这里还顺带用了**完整切片表达式**：
+
+```go
+s2 := s1[2:6:7]
+```
+
+它的含义是：
+
+- 长度为 `high - low`
+- 容量为 `max - low`
+
+也就是说，完整切片表达式可以主动“卡住容量”，这在控制后续 `append` 是否复用原底层数组时非常有用。
+
+先看 `s1` 和 `s2` 刚切出来时，它们与原始切片共享同一块底层数组，但可见范围和容量已经不同：
+
+<div align="center">
+  <img src="slice-subslice-step-1.png" alt="s1 与 s2 从原始 slice 截取后的共享关系" width="82%">
+</div>
+
+第一次执行：
+
+```go
+s2 = append(s2, 100)
+```
+
+因为这时 `s2` 容量还够，所以新元素会直接写回原底层数组，对应位置也会反映到原始 `slice` 上：
+
+<div align="center">
+  <img src="slice-subslice-step-2.png" alt="第一次 append 时 s2 仍复用原底层数组" width="82%">
+</div>
+
+第二次执行：
+
+```go
+s2 = append(s2, 200)
+```
+
+这时容量不够，`s2` 会触发扩容，分配新的底层数组，并把原有元素复制过去：
+
+<div align="center">
+  <img src="slice-subslice-step-3.png" alt="第二次 append 触发扩容后 s2 脱离原底层数组" width="82%">
+</div>
+
+因此在扩容之后，再去修改 `s1` 或原始 `slice`，就不会再影响已经“搬家”的 `s2`：
+
+<div align="center">
+  <img src="slice-subslice-step-4.png" alt="扩容后修改 s1 只影响原底层数组不再影响 s2" width="82%">
+</div>
 
 ### 🔄 追加元素
 
@@ -432,7 +517,7 @@ arr2=[100 2 3 4 5]
 ```
 
 <div align="center">
-  <img src="slice-copy-assign.png" alt="slice 赋值复制共享底层数组" width="60%">
+  <img src="slice-copy-assign.png" alt="slice 赋值复制共享底层数组" width="82%">
 </div>
 
 如果你想要一份真正独立的新切片，就需要先分配新空间，再用 `copy` 复制内容：
@@ -518,6 +603,57 @@ fmt.Println(a) // [1 2 3 4]
 
 因此要想真的改变外层 slice，只有将返回的新的 slice 赋值到原始 slice，或者向函数传递一个指向 slice 的指针。
 
+可以结合下面这个例子来理解：
+
+```go
+package main
+
+import "fmt"
+
+func modifyElem(s []int) {
+    for i := range s {
+        s[i]++
+    }
+}
+
+func appendValue(s []int) {
+    s = append(s, 100)
+    fmt.Println("appendValue:", s)
+}
+
+func appendByPtr(s *[]int) {
+    *s = append(*s, 100)
+}
+
+func main() {
+    s := []int{1, 1, 1}
+
+    modifyElem(s)
+    fmt.Println("after modifyElem:", s)
+
+    appendValue(s)
+    fmt.Println("after appendValue:", s)
+
+    appendByPtr(&s)
+    fmt.Println("after appendByPtr:", s)
+}
+```
+
+运行结果：
+
+```go
+after modifyElem: [2 2 2]
+appendValue: [2 2 2 100]
+after appendValue: [2 2 2]
+after appendByPtr: [2 2 2 100]
+```
+
+这个例子说明了三件事：
+
+- 传 `slice` 时，虽然切片头是值拷贝，但它们仍然指向同一块底层数组，所以**修改元素会影响外层**
+- 传 `slice` 时，在函数内部执行 `append`，修改的是切片头副本，**外层的 `len` / `cap` 不会跟着变**
+- 传 `*[]T` 时，既能改底层数据，也能直接改外层切片头本身
+
 ---
 
 ## ⚙️ nil 切片、值为 nil 的切片与空切片
@@ -585,7 +721,7 @@ slice底层数据结构：
 使用 **`append`** 添加数据后，触发扩容产生新的array，与原数组不是同一个内存空间，所以修改原数组不会对切片产生影响。
 
 <div align="center">
-  <img src="slice-share-array.png" alt="slice 截取后共享底层数组" width="60%">
+  <img src="slice-share-array.png" alt="slice 截取后共享底层数组" width="82%">
 </div>
 
 ### ❓ 从一个切片截取另一个切片，修改新切片的值会影响原来的切片内容吗？
@@ -654,7 +790,7 @@ type slice struct {
 }
 ```
 <div align="center">
-  <img src="slice-struct.png" alt="slice 结构体" width="60%">
+  <img src="slice-struct.png" alt="slice 结构体" width="82%">
 </div>
 
 
@@ -767,7 +903,7 @@ arr3: ptr → 底层数组, len=2, cap=4, 值=[1, 3]
 ```
 
 <div align="center">
-  <img src="slice-append-overwrite.png" alt="append 复用底层数组导致覆盖" width="60%">
+  <img src="slice-append-overwrite.png" alt="append 复用底层数组导致覆盖" width="82%">
 </div>
 
 #### ⚠️ 关键要点
@@ -903,7 +1039,7 @@ newcap = oldcap + (oldcap + 3*256) / 4
 ```
 
 <div align="center">
-  <img src="slice-grow-formula.png" alt="Go 1.18 之后的 slice 扩容公式" width="60%">
+  <img src="slice-grow-formula.png" alt="Go 1.18 之后的 slice 扩容公式" width="82%">
 </div>
 
 简单看一个触发扩容的例子：

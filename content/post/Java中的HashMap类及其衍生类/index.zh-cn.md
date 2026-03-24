@@ -158,7 +158,7 @@ public class MapTraversalExample {
 在 JDK 1.7 版本之前， **`HashMap`** 数据结构是数组和链表，**`HashMap`** 通过哈希算法将元素的键映射到数组中的槽位。如果多个键映射到同一个槽位，它们会以链表的形式存储在同一个槽位上，因为链表的查询时间是$O(n)$，所以冲突很严重，一个索引上的链表非常长，效率就很低了。
 
 **`HashMap`** 的默认初始容量为 **16**，负载因子为 **0.75**。也就是说，当存储的元素数量超过 16 × 0.75 = 12 个时，**`HashMap`** 会触发扩容操作，<div align="center">
-  <img src="1719565480532-57a14329-c36b-4514-8e7d-2f2f1df88a82.webp" alt="示意图" width="60%">
+  <img src="1719565480532-57a14329-c36b-4514-8e7d-2f2f1df88a82.webp" alt="示意图" width="82%">
 </div>
 
 当要塞入一个键值对的时候，会根据一个 **`hash`** 算法计算 key 的 **`hash`** 值，然后通过数组大小 **`n-1 & hash`** 值之后，得到一个数组的下标，然后往那个位置塞入这键值对。当发生哈希冲突时会使用闭散列法
@@ -166,7 +166,7 @@ public class MapTraversalExample {
 链表的插入采用的是头插法，即每当发生哈希冲突时，新的节点总是插入到链表的头部，老节点依次向后移动，形成新的链表结构。
 
 <div align="center">
-  <img src="20220219202908_mianshiya.png" alt="头插法" width="60%">
+  <img src="20220219202908_mianshiya.png" alt="头插法" width="82%">
 </div>
 
 
@@ -180,13 +180,13 @@ public class MapTraversalExample {
 在 JDK 1.8 版本的时候做了优化，当一个链表的长度超过 **8** 且数组大小大于等于 **64** 的时候就转换数据结构，不再使用链表存储，而是使用**红黑树**，查找时使用红黑树，时间复杂度为$O(log n)$，可以提高查询性能，但是在红黑树节点数量较少时，即数量小于**6** 时，会将红黑树转换回链表。
 
 <div align="center">
-  <img src="1719565481289-0c2164f4-f755-46e3-bb39-b5f28621bb6b.webp" alt="示意图" width="60%">
+  <img src="1719565481289-0c2164f4-f755-46e3-bb39-b5f28621bb6b.webp" alt="示意图" width="82%">
 </div>
 
 在 JDK1.8 的时候，改成了尾插法，即新的节点插入到链表的尾部，保持插入的顺序。并且引入了红黑树。
 
 <div align="center">
-  <img src="20220219202916_mianshiya.png" alt="示意图" width="60%">
+  <img src="20220219202916_mianshiya.png" alt="示意图" width="82%">
 </div>
 
 ### 🔨 hash方法的底层实现
@@ -271,7 +271,7 @@ Hash 碰撞是指在使用哈希算法时，不同的输入数据通过哈希函
 - 需要额外的内存来存储链表的指针。
 
 <div align="center">
-  <img src="ndrY3lLs_image_mianshiya.png" alt="示意图" width="60%">
+  <img src="ndrY3lLs_image_mianshiya.png" alt="示意图" width="82%">
 </div>
 
 #### 💡 开放寻址法（闭散列法）
@@ -291,7 +291,7 @@ Hash 碰撞是指在使用哈希算法时，不同的输入数据通过哈希函
 
 - 随着哈希表的填充度增加，探查的次数会增加，导致性能下降。
 - 删除元素时候，不能真的删除，只能打标，否则会导致查找错误。只能在下一个元素插入时，发现标记后才能替换原来的元素。<div align="center">
-  <img src="snEDo77X_image_mianshiya.png" alt="示意图" width="60%">
+  <img src="snEDo77X_image_mianshiya.png" alt="示意图" width="82%">
 </div>
 
 #### 💡 再哈希法（双重哈希）
@@ -299,7 +299,7 @@ Hash 碰撞是指在使用哈希算法时，不同的输入数据通过哈希函
 在出现碰撞时，使用第二个哈希函数计算新的索引位置，减少碰撞的概率
 
 <div align="center">
-  <img src="3A87Qnvx_image_mianshiya.png" alt="image.png" width="60%">
+  <img src="3A87Qnvx_image_mianshiya.png" alt="image.png" width="82%">
 </div>
 
 ### ⚙️ 扩容机制
@@ -313,7 +313,7 @@ Hash 碰撞是指在使用哈希算法时，不同的输入数据通过哈希函
 JDK 1.7以前，所有元素的哈希值，并将它们重新分配到新的哈希桶中
 
 JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。因为元素的新位置只与高位有关<div align="center">
-  <img src="1713514753772-9467a399-6b18-4a47-89d4-957adcc53cc0.webp" alt="n由16拓展到32的示例" width="60%">
+  <img src="1713514753772-9467a399-6b18-4a47-89d4-957adcc53cc0.webp" alt="n由16拓展到32的示例" width="82%">
 </div>
 
 此时重新哈希只要判断原来的hash拓展后新增的位是0还是1
@@ -832,7 +832,7 @@ public class TreeSetExample2 {
 - **`HashEntry`**：表示一个键值对节点，类似于 **`HashMap`** 的链表节点
 
 <div align="center">
-  <img src="1721807523151-41ad316a-6264-48e8-9704-5b362bc0083c.webp" alt="示意图" width="60%">
+  <img src="1721807523151-41ad316a-6264-48e8-9704-5b362bc0083c.webp" alt="示意图" width="82%">
 </div>
 
 分段锁技术将数据分成一段一段的存储，然后给每一段数据配一把锁，不同 **`Segment`** 之间的操作互不影响，从而提高并发性能。。当一个线程占用锁访问其中一个段数据的时候，其他段的数据也能被其他线程访问，能够实现真正的并发访问。
@@ -841,7 +841,7 @@ public class TreeSetExample2 {
 - 再次通过 `key` 的 `hash` 函数得到 **`Segment`** 里 **`HashEntry`** 数组的下标
 
 <div align="center">
-  <img src="20220219203435_mianshiya.png" alt="分段锁示意图" width="60%">
+  <img src="20220219203435_mianshiya.png" alt="分段锁示意图" width="82%">
 </div>
 
 可以简化理解：每个 **`Segment`** 数组存放的就是一个单独的 **HashMap**
@@ -855,7 +855,7 @@ public class TreeSetExample2 {
 **`ConcurrentHashMap`** 做了更细粒度的锁控制，可以理解为 **`HashMap`** 的节点数组的每个位置都是一把锁，这样扩容了锁也会变多，并发度也会增加。
 
 <div align="center">
-  <img src="1721807523128-7b1419e7-e6ba-47e6-aba0-8b29423a8ce7.webp" alt="内存示意图" width="60%">
+  <img src="1721807523128-7b1419e7-e6ba-47e6-aba0-8b29423a8ce7.webp" alt="内存示意图" width="82%">
 </div>
 
 ### ⚙️ 加锁机制

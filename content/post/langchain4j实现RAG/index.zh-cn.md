@@ -32,7 +32,7 @@ math : true
 5. **增强生成（Augmented Generation）**：把用户问题 + 检索到的相关片段组装成提示，发送给 **LLM**，让模型根据这些信息回答问题。
 
 <div align="center">
-  <img src="image.png" alt="RAG流程图" width="60%">
+  <img src="image.png" alt="RAG流程图" width="82%">
 </div>
 
 ---

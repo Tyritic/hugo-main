@@ -1858,7 +1858,7 @@ func main() {
 - **动态值**：变量 `a` 的那份数据
 
 <div align="center">
-  <img src="eface修改.png" alt="空接口 eface 的底层结构" width="60%">
+  <img src="eface修改.png" alt="空接口 eface 的底层结构" width="82%">
 </div>
 
 `_type` 对应的底层类型元数据可以抽象成运行时里的 `_type` 结构，里面保存了类型大小、对齐方式、哈希值、种类编号等信息：
@@ -1933,7 +1933,7 @@ type Phone interface {
 ```
 
 <div align="center">
-  <img src="iface修改.png" alt="非空接口 iface 的底层结构" width="60%">
+  <img src="iface修改.png" alt="非空接口 iface 的底层结构" width="82%">
 </div>
 
 **关键区别：**
@@ -1984,7 +1984,7 @@ func itabHashFunc(inter *interfacetype, typ *_type) uintptr {
 ```
 
 <div align="center">
-  <img src="interface-itab-table.png" alt="itabTable 缓存结构示意图" width="60%">
+  <img src="interface-itab-table.png" alt="itabTable 缓存结构示意图" width="82%">
 </div>
 
 这也是为什么接口调用虽然有动态分发成本，但在大量重复使用同一组类型组合时，运行时不会每次都从零开始构造方法表。

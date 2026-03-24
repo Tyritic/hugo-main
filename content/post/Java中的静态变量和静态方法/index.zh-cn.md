@@ -47,7 +47,7 @@ public class Student {
 ```
 
 <div align="center">
-  <img src="19-01.png" alt="内存示意图" width="60%">
+  <img src="19-01.png" alt="内存示意图" width="82%">
 </div>
 
 - **`s1`** 和 **`s2`** 这两个引用变量存放在栈区（stack）

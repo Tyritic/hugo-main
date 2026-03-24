@@ -33,7 +33,7 @@ Maven-name/
 ```
 
 &lt;div align="center"&gt;
-  &lt;img src="Maven项目结构图.png" alt="Maven项目结构图" width="60%"&gt;
+  &lt;img src="Maven项目结构图.png" alt="Maven项目结构图" width="82%"&gt;
 &lt;/div&gt;
 
 ---
@@ -41,7 +41,7 @@ Maven-name/
 ## 🏗️ Maven项目模型
 
 &lt;div align="center"&gt;
-  &lt;img src="Maven项目模型.png" alt="Maven项目模型" width="60%"&gt;
+  &lt;img src="Maven项目模型.png" alt="Maven项目模型" width="82%"&gt;
 &lt;/div&gt;
 
 **仓库**：用于存储资源以及各种JAR包
@@ -71,7 +71,7 @@ Maven坐标是依赖资源的唯一标识，可以唯一定位资源的位置，
 - **version**：版本号
 
 &lt;div align="center"&gt;
-  &lt;img src="Maven坐标.png" alt="Maven坐标" width="60%"&gt;
+  &lt;img src="Maven坐标.png" alt="Maven坐标" width="82%"&gt;
 &lt;/div&gt;
 
 ---
@@ -126,7 +126,7 @@ Maven坐标是依赖资源的唯一标识，可以唯一定位资源的位置，
    {{&lt; /notice &gt;}}
 
    &lt;div align="center"&gt;
-     &lt;img src="依赖排除.png" alt="依赖排除" width="60%"&gt;
+     &lt;img src="依赖排除.png" alt="依赖排除" width="82%"&gt;
    &lt;/div&gt;
 
 ---
@@ -165,7 +165,7 @@ Maven中有三套独立的生命周期
 #### 生命周期的阶段
 
 &lt;div align="center"&gt;
-  &lt;img src="Maven生命周期.png" alt="Maven生命周期" width="60%"&gt;
+  &lt;img src="Maven生命周期.png" alt="Maven生命周期" width="82%"&gt;
 &lt;/div&gt;
 
 {{&lt; notice tip &gt;}}

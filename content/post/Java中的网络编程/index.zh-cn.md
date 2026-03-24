@@ -56,7 +56,7 @@ Network = IP & Mask = 101.202.99.0
 网络通信的规则
 
 <div align="center">
-  <img src="network-base-20230330190328.png" alt="img" width="60%">
+  <img src="network-base-20230330190328.png" alt="img" width="82%">
 </div>
 
 ### 🌐 网络套接字Socket

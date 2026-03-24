@@ -11,7 +11,7 @@ description : "项目开发中登录鉴权机制的实现"
 ## 🔐 登录功能实现的基本思路
 
 <div align="center">
-  <img src="微信截图_20241107132152.png" alt="登录功能实现的基本思路" width="60%">
+  <img src="微信截图_20241107132152.png" alt="登录功能实现的基本思路" width="82%">
 </div>
 
 ### 🏷️ 登录标记
@@ -52,7 +52,7 @@ description : "项目开发中登录鉴权机制的实现"
 #### 🍪 Cookie
 
 <div align="center">
-  <img src="微信截图_20241107134132.png" alt="Cookie" width="60%">
+  <img src="微信截图_20241107134132.png" alt="Cookie" width="82%">
 </div>
 
 什么是 **Cookie**
@@ -91,7 +91,7 @@ description : "项目开发中登录鉴权机制的实现"
 #### 📦 Session
 
 <div align="center">
-  <img src="微信截图_20241107135533.png" alt="Session" width="60%">
+  <img src="微信截图_20241107135533.png" alt="Session" width="82%">
 </div>
 
 什么是 **Session**
@@ -119,7 +119,7 @@ description : "项目开发中登录鉴权机制的实现"
 #### 🔑 令牌技术
 
 <div align="center">
-  <img src="微信截图_20241107140535.png" alt="令牌技术" width="60%">
+  <img src="微信截图_20241107140535.png" alt="令牌技术" width="82%">
 </div>
 
 基本流程
@@ -139,7 +139,7 @@ description : "项目开发中登录鉴权机制的实现"
 ## 🎫 Session-Cookie 方案
 
 <div align="center">
-  <img src="session-cookie-authentication-process.png" alt="Session-Cookie鉴权的流程" width="60%">
+  <img src="session-cookie-authentication-process.png" alt="Session-Cookie鉴权的流程" width="82%">
 </div>
 
 - 用户向服务器发送用户名、密码、验证码用于登陆系统。
@@ -165,7 +165,7 @@ description : "项目开发中登录鉴权机制的实现"
   - 存放在服务端的密钥（一定不要泄露出去）。
 
 <div align="center">
-  <img src="微信截图_20241107141059.png" alt="令牌结构" width="60%">
+  <img src="微信截图_20241107141059.png" alt="令牌结构" width="82%">
 </div>
 
 ### ✨ 优点
@@ -265,7 +265,7 @@ public String createJwt(Map<String, Object>claims)
 在基于 **JWT** 进行身份验证的的应用程序中，服务器通过 **Payload、Header** 和 **Secret**（密钥）创建 **JWT** 并将 **JWT** 发送给客户端。客户端接收到 **JWT** 之后，会将其保存在 **Cookie** 或者 **localStorage** 里面，以后客户端发出的所有请求都会携带这个令牌。
 
 <div align="center">
-  <img src="jwt-authentication process.png" alt="JWT 身份验证示意图" width="60%">
+  <img src="jwt-authentication process.png" alt="JWT 身份验证示意图" width="82%">
 </div>
 
 - 用户向服务器发送用户名、密码以及验证码用于登陆系统。

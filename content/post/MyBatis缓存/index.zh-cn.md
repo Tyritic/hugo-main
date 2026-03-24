@@ -36,7 +36,7 @@ description : "MyBatis的缓存相关知识"
 ### 🔍 一级缓存的工作流程
 
 &lt;div align="center"&gt;
-  &lt;img src="微信截图_20241107163317.png" alt="一级缓存工作流程" width="60%"&gt;
+  &lt;img src="微信截图_20241107163317.png" alt="一级缓存工作流程" width="82%"&gt;
 &lt;/div&gt;
 
 1. 第一次发起查询用户id为1的用户信息，先去找缓存中是否有id为1的用户信息，如果没有，从数据库查询用户信息。
@@ -91,7 +91,7 @@ MyBatis的一级缓存默认开启
 ### 🔍 二级缓存工作流程
 
 &lt;div align="center"&gt;
-  &lt;img src="微信截图_20241107165832.png" alt="二级缓存工作流程" width="60%"&gt;
+  &lt;img src="微信截图_20241107165832.png" alt="二级缓存工作流程" width="82%"&gt;
 &lt;/div&gt;
 
 1. 当用户第一次查询某条数据时，会将查出来的数据放到一级缓存中

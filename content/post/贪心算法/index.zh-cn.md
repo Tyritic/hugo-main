@@ -132,7 +132,7 @@ class Solution {
 
 <div align="center">
 <div align="center">
-  <img src="20230106170449.png" alt="摆动序列中的平坡情况" width="60%">
+  <img src="20230106170449.png" alt="摆动序列中的平坡情况" width="82%">
 </div>
 </div>
 
@@ -144,7 +144,7 @@ class Solution {
 
 <div align="center">
 <div align="center">
-  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20201124174357612.png" alt="摆动序列两端处理示意图" width="60%">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20201124174357612.png" alt="摆动序列两端处理示意图" width="82%">
 </div>
 </div>
 
@@ -154,7 +154,7 @@ class Solution {
 
 <div align="center">
 <div align="center">
-  <img src="20230108171505.png" alt="单调坡中的平坡情况" width="60%">
+  <img src="20230108171505.png" alt="单调坡中的平坡情况" width="82%">
 </div>
 </div>
 

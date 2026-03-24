@@ -3,7 +3,7 @@ date : '2025-03-27T10:00:39+08:00'
 draft : false
 title : '模型上下文协议（MCP）'
 image : ""
-categories : ["LLM和Agent智能体"]
+categories : ["Agent"]
 tags : ["后端开发"]
 description : "对模型上下文协议（MCP）的一些个人理解和官方文档的阅读"
 math : true

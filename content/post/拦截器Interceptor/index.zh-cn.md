@@ -73,7 +73,7 @@ description : "Interceptor组件"
 ## 🔄 执行流程
 
 <div align="center">
-  <img src="微信截图_20241107162538.png" alt="执行流程" width="60%">
+  <img src="微信截图_20241107162538.png" alt="执行流程" width="82%">
 </div>
 
 - 请求先进入过滤器还未进入 **Spring** 容器中

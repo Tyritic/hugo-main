@@ -123,7 +123,7 @@ math : true
 **`ArrayDeque`**底层通过数组实现，为了满足可以同时在数组两端插入或删除元素的需求，该数组还必须是循环的，即**循环数组**，也就是说数组的任何一点都可能被看作起点或者终点。
 
 <div align="center">
-  <img src="arraydeque-1e7086a3-3d31-4553-aa16-5eaf2193649e.png" alt="示意图" width="60%">
+  <img src="arraydeque-1e7086a3-3d31-4553-aa16-5eaf2193649e.png" alt="示意图" width="82%">
 </div>
 
 **`head`指向首端第一个有效元素，**

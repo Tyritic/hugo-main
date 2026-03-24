@@ -75,7 +75,7 @@ math : true
 **解释：**
 
 <div align="center">
-  <img src="screenshot-2024-08-29-202743.png" alt="img" width="60%">
+  <img src="screenshot-2024-08-29-202743.png" alt="img" width="82%">
 </div>
 
 **示例 2：**
@@ -87,7 +87,7 @@ math : true
 **解释：**
 
 <div align="center">
-  <img src="tree_2.png" alt="img" width="60%">
+  <img src="tree_2.png" alt="img" width="82%">
 </div>
 
 **示例 3：**
@@ -143,7 +143,7 @@ class Solution {
 **解释：**
 
 <div align="center">
-  <img src="https://assets.leetcode.com/uploads/2024/08/29/screenshot-2024-08-29-202743.png" alt="img" width="60%">
+  <img src="https://assets.leetcode.com/uploads/2024/08/29/screenshot-2024-08-29-202743.png" alt="img" width="82%">
 </div>
 
 **示例 2：**
@@ -155,7 +155,7 @@ class Solution {
 **解释：**
 
 <div align="center">
-  <img src="https://assets.leetcode.com/uploads/2024/08/29/tree_2.png" alt="img" width="60%">
+  <img src="https://assets.leetcode.com/uploads/2024/08/29/tree_2.png" alt="img" width="82%">
 </div>
 
 **示例 3：**
@@ -210,7 +210,7 @@ class Solution {
 **示例 1：**
 
 <div align="center">
-  <img src="inorder_1.jpg" alt="img" width="60%">
+  <img src="inorder_1.jpg" alt="img" width="82%">
 </div>
 
 ```
@@ -411,7 +411,7 @@ class Solution {
 给你一个二叉树，请你返回其按 层序遍历 得到的节点值。 （即逐层地，从左到右访问所有节点）。
 
 <div align="center">
-  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210203144842988.png" alt="102.二叉树的层序遍历" width="60%">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210203144842988.png" alt="102.二叉树的层序遍历" width="82%">
 </div>
 
 **参考代码**
@@ -457,7 +457,7 @@ class Solution {
 给定一个非空二叉树, 返回一个由每层节点平均值组成的数组。
 
 <div align="center">
-  <img src="20210203151350500.png" alt="637.二叉树的层平均值" width="60%">
+  <img src="20210203151350500.png" alt="637.二叉树的层平均值" width="82%">
 </div>
 
 **参考代码**
@@ -504,7 +504,7 @@ class Solution {
 您需要在二叉树的每一行中找到最大的值。
 
 <div align="center">
-  <img src="20210203151532153.png" alt="515.在每个树行中找最大值" width="60%">
+  <img src="20210203151532153.png" alt="515.在每个树行中找最大值" width="82%">
 </div>
 
 **参考代码**
@@ -566,7 +566,7 @@ class Solution {
 给定二叉树 [3,9,20,null,null,15,7]，
 
 <div align="center">
-  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210203153031914-20230310134849764.png" alt="104. 二叉树的最大深度" width="60%">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210203153031914-20230310134849764.png" alt="104. 二叉树的最大深度" width="82%">
 </div>
 
 返回它的最大深度 3 。
@@ -687,7 +687,7 @@ class Solution {
 给定二叉树 [3,9,20,null,null,15,7],
 
 <div align="center">
-  <img src="2021020315582586.png" alt="111.二叉树的最小深度1" width="60%">
+  <img src="2021020315582586.png" alt="111.二叉树的最小深度1" width="82%">
 </div>
 
 返回它的最小深度 2.
@@ -808,7 +808,7 @@ class Solution {
 翻转一棵二叉树。
 
 <div align="center">
-  <img src="20210203192644329.png" alt="226.翻转二叉树" width="60%">
+  <img src="20210203192644329.png" alt="226.翻转二叉树" width="82%">
 </div>
 
 #### 💡 递归法解析
@@ -887,7 +887,7 @@ class Solution {
 给定一个二叉树，检查它是否是镜像对称的。
 
 <div align="center">
-  <img src="20210203144607387.png" alt="101. 对称二叉树" width="60%">
+  <img src="20210203144607387.png" alt="101. 对称二叉树" width="82%">
 </div>
 
 #### 💡 思路解析
@@ -945,11 +945,11 @@ class Solution {
 如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。
 
 <div align="center">
-  <img src="20210726172932.png" alt="img" width="60%">
+  <img src="20210726172932.png" alt="img" width="82%">
 </div>
 
 <div align="center">
-  <img src="20210726173011.png" alt="img" width="60%">
+  <img src="20210726173011.png" alt="img" width="82%">
 </div>
 
 #### 💡 思路解析
@@ -995,7 +995,7 @@ class Solution {
 **示例 1：**
 
 <div align="center">
-  <img src="1724998676-cATjhe-image.png" alt="img" width="60%">
+  <img src="1724998676-cATjhe-image.png" alt="img" width="82%">
 </div>
 
 ```
@@ -1006,7 +1006,7 @@ class Solution {
 **示例 2：**
 
 <div align="center">
-  <img src="1724998698-sEJWnq-image.png" alt="img" width="60%">
+  <img src="1724998698-sEJWnq-image.png" alt="img" width="82%">
 </div>
 
 ```
@@ -1137,7 +1137,7 @@ class Solution {
 示例：
 
 <div align="center">
-  <img src="20210204151927654.png" alt="404.左叶子之和1" width="60%">
+  <img src="20210204151927654.png" alt="404.左叶子之和1" width="82%">
 </div>
 
 #### 💡 思路解析
@@ -1198,13 +1198,13 @@ class Solution {
 示例 1:
 
 <div align="center">
-  <img src="20210204152956836.png" alt="513.找树左下角的值" width="60%">
+  <img src="20210204152956836.png" alt="513.找树左下角的值" width="82%">
 </div>
 
 示例 2:
 
 <div align="center">
-  <img src="20210204153017586.png" alt="513.找树左下角的值1" width="60%">
+  <img src="20210204153017586.png" alt="513.找树左下角的值1" width="82%">
 </div>
 
 #### 💡 迭代法解析
@@ -1292,7 +1292,7 @@ class Solution {
 给定二叉树 [3,9,20,null,null,15,7]
 
 <div align="center">
-  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/2021020315542230.png" alt="110.平衡二叉树" width="60%">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/2021020315542230.png" alt="110.平衡二叉树" width="82%">
 </div>
 
 返回 true 。
@@ -1302,7 +1302,7 @@ class Solution {
 给定二叉树 [1,2,2,3,3,null,null,4,4]
 
 <div align="center">
-  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210203155447919.png" alt="110.平衡二叉树1" width="60%">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210203155447919.png" alt="110.平衡二叉树1" width="82%">
 </div>
 
 返回 false 。
@@ -1508,7 +1508,7 @@ class Solution {
 示例: 给定如下二叉树，以及目标和 sum = 22，
 
 <div align="center">
-  <img src="20230407210247.png" alt="img" width="60%">
+  <img src="20230407210247.png" alt="img" width="82%">
 </div>
 
 返回 true, 因为存在目标和为 22 的根节点到叶子节点的路径 5->4->11->2。
@@ -1593,7 +1593,7 @@ class Solution {
 示例: 给定如下二叉树，以及目标和 sum = 22，
 
 <div align="center">
-  <img src="20210203160854654.png" alt="113.路径总和ii1.png" width="60%">
+  <img src="20210203160854654.png" alt="113.路径总和ii1.png" width="82%">
 </div>
 
 #### 💡 思路解析
@@ -1660,7 +1660,7 @@ class Solution {
 - 后序遍历 postorder = [9,15,7,20,3] 返回如下的二叉树：
 
 <div align="center">
-  <img src="20210203154316774.png" alt="106. 从中序与后序遍历序列构造二叉树1" width="60%">
+  <img src="20210203154316774.png" alt="106. 从中序与后序遍历序列构造二叉树1" width="82%">
 </div>
 
 #### 💡 思路解析
@@ -1776,7 +1776,7 @@ class Solution {
 前序遍历 preorder = [3,9,20,15,7] 中序遍历 inorder = [9,3,15,20,7] 返回如下的二叉树：
 
 <div align="center">
-  <img src="20210203154626672.png" alt="105. 从前序与中序遍历序列构造二叉树" width="60%">
+  <img src="20210203154626672.png" alt="105. 从前序与中序遍历序列构造二叉树" width="82%">
 </div>
 
 #### 💡 思路解析
@@ -1841,7 +1841,7 @@ class Solution {
 示例 ：
 
 <div align="center">
-  <img src="20210204154534796.png" alt="654.最大二叉树" width="60%">
+  <img src="20210204154534796.png" alt="654.最大二叉树" width="82%">
 </div>
 
 提示：
@@ -1922,7 +1922,7 @@ class Solution {
 - 所有左子树和右子树自身必须也是二叉搜索树。
 
 <div align="center">
-  <img src="20230310000750.png" alt="98.验证二叉搜索树" width="60%">
+  <img src="20230310000750.png" alt="98.验证二叉搜索树" width="82%">
 </div>
 
 #### 💡 思路解析
@@ -1962,7 +1962,7 @@ class Solution {
 示例：
 
 <div align="center">
-  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20201014223400123.png" alt="530二叉搜索树的最小绝对差" width="60%">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20201014223400123.png" alt="530二叉搜索树的最小绝对差" width="82%">
 </div>
 
 提示：树中至少有 2 个节点。
@@ -2020,7 +2020,7 @@ class Solution {
 给定 BST [1,null,2,2],
 
 <div align="center">
-  <img src="20201014221532206.png" alt="501. 二叉搜索树中的众数" width="60%">
+  <img src="20201014221532206.png" alt="501. 二叉搜索树中的众数" width="82%">
 </div>
 
 返回[2].
@@ -2109,7 +2109,7 @@ class Solution {
 注意，可能存在多种有效的插入方式，只要树在插入后仍保持为二叉搜索树即可。 你可以返回任意有效的结果。
 
 <div align="center">
-  <img src="../传输层协议/20201019173259554.png" alt="701.二叉搜索树中的插入操作" width="60%">
+  <img src="../传输层协议/20201019173259554.png" alt="701.二叉搜索树中的插入操作" width="82%">
 </div>
 
 提示：
@@ -2163,7 +2163,7 @@ class Solution {
 示例:
 
 <div align="center">
-  <img src="20201020171048265.png" alt="450.删除二叉搜索树中的节点" width="60%">
+  <img src="20201020171048265.png" alt="450.删除二叉搜索树中的节点" width="82%">
 </div>
 
 #### 💡 思路解析
@@ -2226,7 +2226,7 @@ class Solution {
 例如，给定如下二叉树: root = [3,5,1,6,2,0,8,null,null,7,4]
 
 <div align="center">
-  <img src="20201016173414722.png" alt="236. 二叉树的最近公共祖先" width="60%">
+  <img src="20201016173414722.png" alt="236. 二叉树的最近公共祖先" width="82%">
 </div>
 
 示例 1: 输入: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1 输出: 3 解释: 节点 5 和节点 1 的最近公共祖先是节点 3。
@@ -2302,7 +2302,7 @@ class Solution {
 例如，给定如下二叉搜索树: root = [6,2,8,0,4,7,9,null,null,3,5]
 
 <div align="center">
-  <img src="20201018172243602.png" alt="235. 二叉搜索树的最近公共祖先" width="60%">
+  <img src="20201018172243602.png" alt="235. 二叉搜索树的最近公共祖先" width="82%">
 </div>
 
 示例 1:
@@ -2375,7 +2375,7 @@ class Solution {
 **示例 1：**
 
 <div align="center">
-  <img src="flaten.jpg" alt="img" width="60%">
+  <img src="flaten.jpg" alt="img" width="82%">
 </div>
 
 ```
@@ -2445,7 +2445,7 @@ class Solution {
 输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。如下图所示
 
 <div align="center">
-  <img src="https://uploadfiles.nowcoder.com/images/20210605/557336_1622886924427/E1F1270919D292C9F48F51975FD07CE2" alt="img" width="60%">
+  <img src="https://uploadfiles.nowcoder.com/images/20210605/557336_1622886924427/E1F1270919D292C9F48F51975FD07CE2" alt="img" width="82%">
 </div>
 
 数据范围：输入二叉树的节点数 0≤n≤10000≤*n*≤1000，二叉树中每个节点的值 0≤val≤10000≤*v**a**l*≤1000

@@ -45,7 +45,7 @@ math : true
 #### ✅ 底层实现
 
 使用构造函数创建 **`String`** 对象的时候，先在**堆区**中创建一个新的 **`String`** 对象（引用常量池中的字面量），同时在字符串常量池中保存其字面量，在栈中保存字符串对象的引用。若常量池中存在相同的字面值则只会在堆区中创建新的 **`String`** 对象<div align="center">
-  <img src="LT51yuh0_image_mianshiya.png" alt="内存示意图" width="60%">
+  <img src="LT51yuh0_image_mianshiya.png" alt="内存示意图" width="82%">
 </div>
 
 [参考补充材料](https://www.mianshiya.com/bank/1787463103423897602/question/1780933294678896641#heading-1)
@@ -71,7 +71,7 @@ String s="abc"
   - 若存在则复用常量池中的字面量
 
 <div align="center">
-  <img src="ec61129a598b639f825bb7587de3e45a.png" alt="内存示意图" width="60%">
+  <img src="ec61129a598b639f825bb7587de3e45a.png" alt="内存示意图" width="82%">
 </div>
 
 ### 📌 两者创建方式的比较

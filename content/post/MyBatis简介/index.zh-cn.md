@@ -67,7 +67,7 @@ description : "对MyBatis框架的基本理解"
 - 释放空闲时间超过最大空闲时间的连接，来避免因为没有释放连接而引起的数据库连接遗漏
 
 &lt;div align="center"&gt;
-  &lt;img src="微信截图_20241106171551.png" alt="数据库连接池" width="60%"&gt;
+  &lt;img src="微信截图_20241106171551.png" alt="数据库连接池" width="82%"&gt;
 &lt;/div&gt;
 
 ---

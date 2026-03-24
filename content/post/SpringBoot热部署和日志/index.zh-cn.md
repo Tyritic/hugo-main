@@ -141,7 +141,7 @@ JUL全称 **Java Util Logging**，核心类在java.util.logging包下，它是ja
 **组件构成**
 
 &lt;div align="center"&gt;
-  &lt;img src="51d4c386423747b7edacbc04f1288f84.png" alt="JUL组件构成" width="60%"&gt;
+  &lt;img src="51d4c386423747b7edacbc04f1288f84.png" alt="JUL组件构成" width="82%"&gt;
 &lt;/div&gt;
 
 - Logger：被称为记录器，应用程序通过获取Logger对象，调用其API来发布日志信息。Logger通常被认为是访问日志系统的入口程序。
@@ -196,7 +196,7 @@ public static void test02() {
 ## 🚀 SpringBoot日志框架
 
 &lt;div align="center"&gt;
-  &lt;img src="微信截图_20241110182327.png" alt="SpringBoot日志框架" width="60%"&gt;
+  &lt;img src="微信截图_20241110182327.png" alt="SpringBoot日志框架" width="82%"&gt;
 &lt;/div&gt;
 
 SpringBoot框架底层使用slf4j+logback的方式进行日志记录同时对于其他日志实现都提供了slf4j日志门面的集成
@@ -257,7 +257,7 @@ public class userController{
 #### 默认格式
 
 &lt;div align="center"&gt;
-  &lt;img src="微信截图_20241110184311.png" alt="日志默认格式" width="60%"&gt;
+  &lt;img src="微信截图_20241110184311.png" alt="日志默认格式" width="82%"&gt;
 &lt;/div&gt;
 
 - 日期和时间：毫秒精度，易于排序

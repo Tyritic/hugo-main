@@ -20,7 +20,7 @@ math : true
 **Nginx** 可以被用作正向代理服务器。
 
 <div align="center">
-  <img src="watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0p1c3RpblFpbg==,size_16,color_FFFFFF,t_70.png" alt="正向代理" width="60%">
+  <img src="watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0p1c3RpblFpbg==,size_16,color_FFFFFF,t_70.png" alt="正向代理" width="82%">
 </div>
 
 **Nginx** 位于 **客户端（用户）和目标服务器** 之间，代表客户端向外部服务器请求资源。简而言之，正向代理就是代理客户端，代理客户端向服务端发送请求

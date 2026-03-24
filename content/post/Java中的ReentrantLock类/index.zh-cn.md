@@ -53,7 +53,7 @@ math : true
 是否是公平锁的区别在于：线程获取锁时是加入到同步队列尾部还是直接利用 CAS 争抢锁。
 
 <div align="center">
-  <img src="VWa8SBRY_image_mianshiya.png" alt="运行逻辑" width="60%">
+  <img src="VWa8SBRY_image_mianshiya.png" alt="运行逻辑" width="82%">
 </div>
 
 ### ✅ 非公平锁的实现

@@ -20,7 +20,7 @@ math : true
 在卷积神经网络中，**卷积操作**是指将一个可移动的小窗口（称为数据窗口）与图像进行逐元素相乘然后相加的操作。这个小窗口其实是一组固定的权重，它可以被看作是一个特定的**滤波器**（filter）或**卷积核**。这个操作的名称"卷积"，源自于这种元素级相乘和求和的过程。简而言之，卷积操作就是用一个可移动的小窗口来提取图像中的特征，这个小窗口包含了一组特定的权重，通过与图像的不同位置进行卷积操作，网络能够学习并捕捉到不同特征的信息。每次滑动算一个值，组成新的矩阵，叫**特征图**（feature map）。
 
 <div align="center">
-  <img src="7b8af7c9507e7652df6ff7e3c14f8a1f.png" alt="卷积过程" width="60%">
+  <img src="7b8af7c9507e7652df6ff7e3c14f8a1f.png" alt="卷积过程" width="82%">
 </div>
 
 ---
@@ -28,7 +28,7 @@ math : true
 ## 🏗️ 网络结构
 
 <div align="center">
-  <img src="1686919918947.jpeg" alt="网络结构" width="60%">
+  <img src="1686919918947.jpeg" alt="网络结构" width="82%">
 </div>
 
 一个卷积神经网络主要:以下 5 层组成：
@@ -40,7 +40,7 @@ math : true
 - [全连接层](https://zhida.zhihu.com/search?content_id=123005549&content_type=Article&match_order=1&q=全连接层&zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3Njc5Mzk2MjksInEiOiLlhajov57mjqXlsYIiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxMjMwMDU1NDksImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.8obuzsFr886mbJfGWkqOfxdyS6Oalc9AwgTwAhO8s-A&zhida_source=entity) / FC layer
 
 <div align="center">
-  <img src="3c266da23107494b04b09683b8427f0e.png" alt="过程" width="60%">
+  <img src="3c266da23107494b04b09683b8427f0e.png" alt="过程" width="82%">
 </div>
 
 ### 📥 输入层
@@ -61,7 +61,7 @@ math : true
 - **窗口（receptive field）滑动**：filter 对局部数据计算
 
 <div align="center">
-  <img src="v2-ae8a4d6f0ded77d731f179f361254db1_1440w.jpg" alt="卷积计算过程" width="60%">
+  <img src="v2-ae8a4d6f0ded77d731f179f361254db1_1440w.jpg" alt="卷积计算过程" width="82%">
 </div>
 
 在此之前，想象一个场景：当你把 $5 \times 5 \times 3$ 的过滤器用在 $32 \times 32 \times 3$ 的输入上时，会发生什么？输出的大小会是 $28 \times 28 \times 3$。注意，这里空间维度减小了。如果我们继续用卷积层，尺寸减小的速度就会超过我们的期望。在网络的早期层中，我们想要尽可能多地保留原始输入内容的信息，这样我们就能提取出那些低层的特征。比如说我们想要应用同样的卷积层，但又想让输出量维持为 $32 \times 32 \times 3$。为做到这点，我们可以对这个层应用大小为 2 的**零填充**（zero padding）。零填充在输入内容的边界周围补充零。如果我们用两个零填充，就会得到一个 $36 \times 36 \times 3$ 的输入卷。
@@ -95,13 +95,13 @@ $$
 激活层通常在卷积层之后，应用非线性激活函数，如 **ReLU**（Rectified Linear Unit），以引入非线性特性，使网络能够学习更复杂的模式。
 
 <div align="center">
-  <img src="v2-4f12096f7b6fb83ce6dc96b3ecf915c8_1440w.jpg" alt="激活层" width="60%">
+  <img src="v2-4f12096f7b6fb83ce6dc96b3ecf915c8_1440w.jpg" alt="激活层" width="82%">
 </div>
 
 CNN 采用的激活函数一般为 **ReLU**（The Rectified Linear Unit / 修正线性单元），它的特点是收敛快，求梯度简单，但较脆弱，图像如下。
 
 <div align="center">
-  <img src="v2-a559927aa4df378c6b1a25c2cb86db5b_1440w.jpg" alt="ReLU" width="60%">
+  <img src="v2-a559927aa4df378c6b1a25c2cb86db5b_1440w.jpg" alt="ReLU" width="82%">
 </div>
 
 常用激活函数：
@@ -123,13 +123,13 @@ CNN 采用的激活函数一般为 **ReLU**（The Rectified Linear Unit / 修正
 - 在一定程度上**防止过拟合**，更方便优化。
 
 <div align="center">
-  <img src="v2-deeacf1fc2ef42c0e41070fae4fb5381_1440w.jpg" alt="池化过程" width="60%">
+  <img src="v2-deeacf1fc2ef42c0e41070fae4fb5381_1440w.jpg" alt="池化过程" width="82%">
 </div>
 
 池化层用的方法有 **Max pooling** 和 **average pooling**，而实际用的较多的是 Max pooling。
 
 <div align="center">
-  <img src="v2-7b28abd70e3bc4294b2b28cc6ff348ef_1440w.jpg" alt="Max polling" width="60%">
+  <img src="v2-7b28abd70e3bc4294b2b28cc6ff348ef_1440w.jpg" alt="Max polling" width="82%">
 </div>
 
 ---
@@ -161,13 +161,13 @@ $$
 #### 📉 退化现象
 
 <div align="center">
-  <img src="3630241-20250608221623257-37228082.png" alt="退化现象" width="60%">
+  <img src="3630241-20250608221623257-37228082.png" alt="退化现象" width="82%">
 </div>
 
 虽然我们通过数据的归一化的 BN 层的设置来处理梯度爆炸与梯度消失的问题，但是当网络加深的时候又会带来新的问题就是退化现象。什么是退化现象，就是通俗来说是网络性能的退化现象，可以理解为随着训练轮数（epoch）的增加，精度到达一定程度后，就开始下降了。可能有些同学会有疑问，会不会是因为出现了过拟合的现象呢？其实从图中可以清晰看出，如果出现过拟合的话就会导致训练的时候的误差会很小，测试的误差会很大，即过度的拟合了训练数据。但是我们看图，训练的时候的误差 56 层的也是大于 20 层的，所以这就不会是过拟合的现象。所以网络层数越深，训练误差越高，导致训练和测试效果变差，这一现象称为**退化**。
 
 <div align="center">
-  <img src="3630241-20250608221623153-2115268650.png" alt="退化现象对比" width="60%">
+  <img src="3630241-20250608221623153-2115268650.png" alt="退化现象对比" width="82%">
 </div>
 
 **解决方法**：如果我们仅仅单纯地增加神经网络的深度，可能会引发网络模型的退化，进而导致网络早期层所捕获的特征丢失。可以这样理解，假设在层数达到 40 层时，模型已经达到了最佳状态，但继续增加层数，由于激活函数和卷积等操作的影响，只会增强整个网络的非线性，从而使性能下降。
@@ -187,7 +187,7 @@ $$
 其中，$x$ 为输入特征，$F(x, {W_i})$ 为残差函数（通常由卷积层 + 激活函数组成），$y$ 为输出。这种设计使得网络只需学习输入与输出之间的"残差"而非完整映射，降低了优化难度。
 
 <div align="center">
-  <img src="4160654a49764574a84842bcc3ee28aa.png" alt="残差公式" width="60%">
+  <img src="4160654a49764574a84842bcc3ee28aa.png" alt="残差公式" width="82%">
 </div>
 
 假设映射为 $F$，映射后的输出为 $H(x)$
@@ -207,5 +207,5 @@ ResNet 中一共有两种不同的 ResNet Block。左边的用于浅层网络的
 即将两个的卷积层替换为，它通过**$1 \times 1$ conv**来巧妙地缩减或扩张 feature map 维度，从而使得我们的**$1 \times 1$ conv**的 filters 数目不受上一层输入的影响，它的输出也不会影响到下一层。中间的卷积层首先在一个降维卷积层下减少了计算，然后在另一个的卷积层下做了还原。既保持了模型精度又减少了网络参数和计算量，节省了计算时间。
 
 <div align="center">
-  <img src="3630241-20250608221623315-817806686.png" alt="ResNet Block" width="60%">
+  <img src="3630241-20250608221623315-817806686.png" alt="ResNet Block" width="82%">
 </div>

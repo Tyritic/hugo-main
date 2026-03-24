@@ -12,7 +12,7 @@ math : true
 ## 🏛️ 集合体系结构
 
 <div align="center">
-  <img src="1717481094793-b8ffe6ae-2ee6-4de5-b61b-8468e32bf269.webp" alt="体系结构示意图" width="60%">
+  <img src="1717481094793-b8ffe6ae-2ee6-4de5-b61b-8468e32bf269.webp" alt="体系结构示意图" width="82%">
 </div>
 
 - **`Collection`** 接口：单列数据，所有集合类的根接口，提供基本的集合操作方法

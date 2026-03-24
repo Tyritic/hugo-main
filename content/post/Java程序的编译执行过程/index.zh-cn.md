@@ -18,7 +18,7 @@ math : true
    2. 字节码中不经常调用的部分（非热点代码）用解释器进行解释执行，然后字节码也是经过解释器进行解释运行的
 
 <div align="center">
-  <img src="1715928000183-44fc6130-8abc-4f0b-8f6d-79de0ab09509.webp" alt="Java 程序编译执行过程示意图" width="60%">
+  <img src="1715928000183-44fc6130-8abc-4f0b-8f6d-79de0ab09509.webp" alt="Java 程序编译执行过程示意图" width="82%">
 </div>
 
 {{<notice tip>}}

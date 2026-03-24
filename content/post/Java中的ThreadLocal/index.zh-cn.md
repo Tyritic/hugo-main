@@ -42,7 +42,7 @@ math : true
 ## 🔧 ThreadLocal 的实现原理
 
 **`ThreadLocal`** 提供了一种线程内独享的变量机制，使每个线程都能有自己独立的变量副本。每个线程内部维护一个 **`ThreadLocalMap`**，这个 **`ThreadLocalMap`** 用于存储线程独立的变量副本。**`ThreadLocalMap`** 以 **`ThreadLocal`** 实例作为键，以线程独立的变量副本作为值。不同线程通过 **`ThreadLocal`** 获取各自的变量副本，而不会影响其他线程的数据。<div align="center">
-  <img src="68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f79657373696d6964612f63646e5f696d6167652f696d672f32303232303132333136353032302e706e67_mianshiya.png" alt="示意图" width="60%">
+  <img src="68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f79657373696d6964612f63646e5f696d6167652f696d672f32303232303132333136353032302e706e67_mianshiya.png" alt="示意图" width="82%">
 </div>
 
 **`ThreadLocal` 可以理解为 `ThreadLocalMap`的封装，传递了变量值。** 
@@ -50,7 +50,7 @@ math : true
 **每个`Thread`中都具备一个`ThreadLocalMap`，而 `ThreadLocalMap` 可以存储以`ThreadLocal`为 key ，Object 对象为 value 的键值对。**
 
 <div align="center">
-  <img src="threadlocal-data-structure.png" alt="ThreadLocal 数据结构" width="60%">
+  <img src="threadlocal-data-structure.png" alt="ThreadLocal 数据结构" width="82%">
 </div>
 
 {{<notice tip>}}

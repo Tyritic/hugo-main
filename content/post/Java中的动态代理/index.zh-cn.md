@@ -123,7 +123,7 @@ public class ProxyExample {
 CGLIB（Code Generation Library）是一个强大的高性能的代码生成库，它可以在运行时动态生成一个目标类的子类。CGLIB代理不需要目标类实现接口，而是通过继承的方式创建代理类。因此，如果目标对象没有实现任何接口，可以使用CGLIB来创建动态代理。
 
 <div align="center">
-  <img src="640.png" alt="示意图" width="60%">
+  <img src="640.png" alt="示意图" width="82%">
 </div>
 
 ### 🔧 工作原理

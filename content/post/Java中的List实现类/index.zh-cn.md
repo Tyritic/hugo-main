@@ -235,7 +235,7 @@ public void add(int index, E element) {
 ```
 
 <div align="center">
-  <img src="arraylist-01.png" alt="示意图" width="60%">
+  <img src="arraylist-01.png" alt="示意图" width="82%">
 </div>
 
 #### 💡 修改

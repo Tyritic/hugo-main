@@ -166,7 +166,7 @@ public static void insertionSort(int[] a) {
 - 每趟排序，根据对应的增量 $t$，将待排序列分割成若干长度为 $m$ 的子序列，分别对各子表进行直接插入排序。仅增量因子为 1 时，整个序列作为一个表来处理，表长度即为整个序列的长度。
 
 <div align="center">
-  <img src="e5f6b2136e5c2d3657746c2cc403be8e.png" alt="希尔排序示意图" width="60%" />
+  <img src="e5f6b2136e5c2d3657746c2cc403be8e.png" alt="希尔排序示意图" width="82%" />
 </div>
 
 #### 💻 代码实现

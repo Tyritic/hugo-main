@@ -220,7 +220,7 @@ class Solution {
 
 <div align="center">
 <div align="center">
-  <img src="20221031170131.png" alt="使用最小花费爬楼梯示例图" width="60%">
+  <img src="20221031170131.png" alt="使用最小花费爬楼梯示例图" width="82%">
 </div>
 </div>
 
@@ -356,7 +356,7 @@ class Solution {
 
 <div align="center">
 <div align="center">
-  <img src="20210113161941835.png" alt="不同的二叉搜索树示例图" width="60%">
+  <img src="20210113161941835.png" alt="不同的二叉搜索树示例图" width="82%">
 </div>
 </div>
 
@@ -434,7 +434,7 @@ class Solution {
 
 <div align="center">
 <div align="center">
-  <img src="20210110174033215.png" alt="不同路径示例图" width="60%">
+  <img src="20210110174033215.png" alt="不同路径示例图" width="82%">
 </div>
 </div>
 
@@ -530,7 +530,7 @@ class Solution {
 
 <div align="center">
 <div align="center">
-  <img src="20210111204901338.png" alt="不同路径II示例图" width="60%">
+  <img src="20210111204901338.png" alt="不同路径II示例图" width="82%">
 </div>
 </div>
 
@@ -540,7 +540,7 @@ class Solution {
 
 <div align="center">
 <div align="center">
-  <img src="20210111204939971.png" alt="不同路径II示例图2" width="60%">
+  <img src="20210111204939971.png" alt="不同路径II示例图2" width="82%">
 </div>
 </div>
 
@@ -555,7 +555,7 @@ class Solution {
 
 <div align="center">
 <div align="center">
-  <img src="20210111205857918.png" alt="不同路径II示例图3" width="60%">
+  <img src="20210111205857918.png" alt="不同路径II示例图3" width="82%">
 </div>
 </div>
 
@@ -2316,7 +2316,7 @@ class Solution {
 
 <div align="center">
 <div align="center">
-  <img src="2021032116363533.png" alt="不相交的线示例图" width="60%">
+  <img src="2021032116363533.png" alt="不相交的线示例图" width="82%">
 </div>
 </div>
 
@@ -2499,7 +2499,7 @@ class Solution {
 
 <div align="center">
 <div align="center">
-  <img src="115.不同的子序列示例.jpg" alt="不同的子序列示例图" width="60%">
+  <img src="115.不同的子序列示例.jpg" alt="不同的子序列示例图" width="82%">
 </div>
 </div>
 

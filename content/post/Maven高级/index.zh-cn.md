@@ -12,7 +12,7 @@ description : "Maven的高级应用"
 ## 🏗️ 分模块设计与开发
 
 &lt;div align="center"&gt;
-  &lt;img src="微信截图_20241109164003.png" alt="分模块设计" width="60%"&gt;
+  &lt;img src="微信截图_20241109164003.png" alt="分模块设计" width="82%"&gt;
 &lt;/div&gt;
 
 将项目的不同业务功能划分为不同的Maven模块

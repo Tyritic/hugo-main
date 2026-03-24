@@ -30,7 +30,7 @@ math : true
 ## 🏛️ AQS的底层数据结构
 
 <div align="center">
-  <img src="640.png" alt="AQS的数据结构" width="60%">
+  <img src="640.png" alt="AQS的数据结构" width="82%">
 </div>
 
 ### 📊 状态
@@ -79,7 +79,7 @@ static final class Node {
 - 共享模式：多个线程可以同时获取同步状态，例如 **`Semaphore`** 和 **`ReadWriteLock`**。
 
 如果共享资源被占用，需要一种特定的阻塞等待唤醒机制来保证锁的分配，**`AQS`** 会将竞争共享资源失败的线程添加到一个 CLH 队列中。<div align="center">
-  <img src="javathread-41.png" alt="CLH队列" width="60%">
+  <img src="javathread-41.png" alt="CLH队列" width="82%">
 </div>
 
 在 CLH 锁中，当一个线程尝试获取锁并失败时，它会将自己添加到队列的尾部并自旋，等待前一个节点的线程释放锁。

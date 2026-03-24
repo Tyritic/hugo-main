@@ -55,7 +55,7 @@ math : true
 这意味着，当线程 A 更新一个 **`volatile`** 变量时，其他线程（如线程 B）在读取该 **`volatile`** 变量时，可以看到线程 A 写入的最新值。
 
 <div align="center">
-  <img src="javathread-28.png" alt="volatile插入写屏障后生成的指令序列示意图" width="60%">
+  <img src="javathread-28.png" alt="volatile插入写屏障后生成的指令序列示意图" width="82%">
 </div>
 
 写屏障保证
@@ -71,7 +71,7 @@ math : true
 - 每个 **`volatile`** 读操作的后面插入一个 **`LoadStore`** 屏障
 
 <div align="center">
-  <img src="javathread-29.png" alt="volatile写插入内存屏障后生成的指令序列示意图" width="60%">
+  <img src="javathread-29.png" alt="volatile写插入内存屏障后生成的指令序列示意图" width="82%">
 </div>
 
 保证

@@ -46,7 +46,7 @@ java.lang.Object
 ```
 
 <div align="center">
-  <img src="1720683900898-1d0ce69d-4b5d-41a6-a5df-022e42f8f4c5.webp" alt="层次结构图" width="60%">
+  <img src="1720683900898-1d0ce69d-4b5d-41a6-a5df-022e42f8f4c5.webp" alt="层次结构图" width="82%">
 </div>
 
 ### 📦 Throwable 类

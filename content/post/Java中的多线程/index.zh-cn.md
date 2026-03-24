@@ -15,7 +15,7 @@ math : true
 - 并发：单核 CPU 上的多任务处理，多个任务在同一时间段内交替执行，通过时间片轮转实现交替执行。
 
 <div align="center">
-  <img src="javathread-1.png" alt="并行和并发的区别" width="60%">
+  <img src="javathread-1.png" alt="并行和并发的区别" width="82%">
 </div>
 
 ---
@@ -80,10 +80,10 @@ math : true
 
 - **活跃性**：
   - **死锁**是指多个线程因为环形等待锁的关系而永远地阻塞下去。<div align="center">
-  <img src="thread-bring-some-problem-d4e65d5f-3de1-4a1c-8ae1-02cb3bfb528c.png" alt="死锁示意图" width="60%">
+  <img src="thread-bring-some-problem-d4e65d5f-3de1-4a1c-8ae1-02cb3bfb528c.png" alt="死锁示意图" width="82%">
 </div>
   - **活锁**：线程没有阻塞。当多个线程都在运行并且都在修改各自的状态，而其他线程又依赖这个状态，就导致任何一个线程都无法继续执行，只能重复着自身的动作，于是就发生了活锁。<div align="center">
-  <img src="thread-bring-some-problem-d1f9e916-0985-46fe-bf87-63fccfd27bae.png" alt="活锁示意图" width="60%">
+  <img src="thread-bring-some-problem-d1f9e916-0985-46fe-bf87-63fccfd27bae.png" alt="活锁示意图" width="82%">
 </div>
   - **饥饿**：如果一个线程无其他异常却迟迟不能继续运行。
     - 高优先级的线程一直在运行消耗 CPU，所有的低优先级线程一直处于等待；
@@ -471,7 +471,7 @@ public void run() {
 ## 📊 线程的状态
 
 <div align="center">
-  <img src="1712648206670-824228d1-be28-449d-8509-fd4df4ff63d3.webp" alt="状态转移图" width="60%">
+  <img src="1712648206670-824228d1-be28-449d-8509-fd4df4ff63d3.webp" alt="状态转移图" width="82%">
 </div>
 
 可以使用Thread中的 **`getState()`** 方法获取状态

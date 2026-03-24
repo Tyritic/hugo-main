@@ -120,7 +120,7 @@ class Solution {
 题意：给定两个数组，编写一个函数来计算它们的交集。
 
 <div align="center">
-  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20200818193523911.png" alt="349. 两个数组的交集" width="60%">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20200818193523911.png" alt="349. 两个数组的交集" width="82%">
 </div>
 
 **说明：** 输出结果中的每个元素一定是唯一的。 我们可以不考虑输出结果的顺序。

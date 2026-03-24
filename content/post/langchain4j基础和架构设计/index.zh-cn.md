@@ -55,7 +55,7 @@ langchain4j 的设计围绕"模型抽象"、"链式处理"、"记忆管理"、"R
    - `Tool` 接口 + `@Tool` 注解 + `Tools` 工具类，可以快速暴露 Java 方法供模型调用。
 
 <div align="center">
-  <img src="image.png" alt="langchain4j架构图" width="60%">
+  <img src="image.png" alt="langchain4j架构图" width="82%">
 </div>
 
 ---

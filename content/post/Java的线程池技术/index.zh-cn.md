@@ -293,7 +293,7 @@ public class CustomRejectedExecutionHandler implements RejectedExecutionHandler 
 - **TERMINATED**：线程池彻底终止。线程池在 **TIDYING** 状态执行完 **`terminated()`** 方法就会转变为 **TERMINATED** 状态。
 
 <div align="center">
-  <img src="131e1c88a515e066c2e08bd5c6e61ce4.png" alt="线程池状态转移图" width="60%">
+  <img src="131e1c88a515e066c2e08bd5c6e61ce4.png" alt="线程池状态转移图" width="82%">
 </div>
 
 ---

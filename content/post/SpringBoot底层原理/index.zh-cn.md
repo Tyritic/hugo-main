@@ -237,7 +237,7 @@ public class springbootWebconfig2Application{
 - **`META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`** 中封装了Bean对象的声明。
 
 &lt;div align="center"&gt;
-  &lt;img src="640.png" alt="自动配置原理" width="60%"&gt;
+  &lt;img src="640.png" alt="自动配置原理" width="82%"&gt;
 &lt;/div&gt;
 
 总而言之：

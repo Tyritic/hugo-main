@@ -313,7 +313,7 @@ class Solution {
 
 <div align="center">
 <div align="center">
-  <img src="20210729103604.png" alt="有效的山脉数组示意图" width="60%">
+  <img src="20210729103604.png" alt="有效的山脉数组示意图" width="82%">
 </div>
 </div>
 

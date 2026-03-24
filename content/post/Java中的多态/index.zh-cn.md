@@ -106,7 +106,7 @@ public class Test {
 ### 📌 动态绑定
 
 多态通过动态绑定实现，Java 使用虚方法表存储方法指针，方法调用时根据对象实际类型从虚方法表查找具体实现。<div align="center">
-  <img src="javase-20241126104207.png" alt="虚拟方法表" width="60%">
+  <img src="javase-20241126104207.png" alt="虚拟方法表" width="82%">
 </div>
 
 ---
@@ -172,7 +172,7 @@ public class Test {
 ### 📌 向上转型（儿子变父亲）
 
 向上转型是使用父类类型的引用指向子类对象，通过子类对象(小范围)实例化父类对象(大范围)<div align="center">
-  <img src="extends-bigsai-0cd258c9-b897-4be3-bdb2-2ddd9c073609.png" alt="示意图" width="60%">
+  <img src="extends-bigsai-0cd258c9-b897-4be3-bdb2-2ddd9c073609.png" alt="示意图" width="82%">
 </div>
 
 父类引用变量指向子类对象后，只能使用父类已声明的方法，但方法如果被重写会执行子类的方法，如果方法未被重写那么将执行父类的方法。
@@ -190,7 +190,7 @@ father_className father=new son_className ()
 向下转型是将父类引用转回其子类类型，通过父类对象(大范围)实例化子类对象(小范围)，但在执行前需要确认父类引用变量实际引用必须是子类对象才能成功转型以避免 **`ClassCastException`**
 
 向下转型允许我们通过父类引用访问子类特有的方法和属性<div align="center">
-  <img src="extends-bigsai-ef0d4716-8b4f-4adf-845e-dd293871b7a7.png" alt="示意图" width="60%">
+  <img src="extends-bigsai-ef0d4716-8b4f-4adf-845e-dd293871b7a7.png" alt="示意图" width="82%">
 </div>
 
 #### 💡 语法格式

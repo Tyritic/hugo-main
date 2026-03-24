@@ -173,7 +173,7 @@ public static void change(int[] nums)
 方法执行完成后出栈，原来栈区中的变量指向的内存区域已经受到影响
 
 <div align="center">
-  <img src="image-20250109210750716.png" alt="内存示意图" width="60%">
+  <img src="image-20250109210750716.png" alt="内存示意图" width="82%">
 </div>
 
 ### 📌 总结
@@ -214,7 +214,7 @@ public static void change(String s2){
 **方法调用前**
 
 <div align="center">
-  <img src="image-20250109212047466.png" alt="调用前的内存示意图" width="60%">
+  <img src="image-20250109212047466.png" alt="调用前的内存示意图" width="82%">
 </div>
 
 - 首先 **`String s=new String("张三")`**，在堆中开辟内存放对象，变量 **`s1`** 在栈中，存放的是堆的地址
@@ -227,7 +227,7 @@ public static void change(String s2){
 **方法调用后**
 
 <div align="center">
-  <img src="image-20250109212548718.png" alt="方法调用后内存示意图" width="60%">
+  <img src="image-20250109212548718.png" alt="方法调用后内存示意图" width="82%">
 </div>
 
 `s1`和`s2`最终存储的地址不同
@@ -257,7 +257,7 @@ public static void change(Person p2){
 **方法调用前**
 
 <div align="center">
-  <img src="image-20250109213227553.png" alt="方法调用前内存示意图" width="60%">
+  <img src="image-20250109213227553.png" alt="方法调用前内存示意图" width="82%">
 </div>
 
 - 首先 `Person s=new Person("张三")`，在堆中开辟内存放对象，变量`p1`在栈中，存放的是堆的地址
@@ -268,7 +268,7 @@ public static void change(Person p2){
 - `p2.name="李四"`；要知道通过=赋值是直接先去常量池寻找是否存在与“李四”相同的值，有的话直接将其地址返回。否则创建一个值，再返回其地址。与上一问题不同的是，这里我们改变的是`name`，而`name`在堆中，所以常量池中地址是复制给了`name`
 
 **方法调用后**<div align="center">
-  <img src="image-20250109213715345.png" alt="方法调用后内存示意图" width="60%">
+  <img src="image-20250109213715345.png" alt="方法调用后内存示意图" width="82%">
 </div>
 
 `p1.name`和`p2.name`最终存储的地址相同

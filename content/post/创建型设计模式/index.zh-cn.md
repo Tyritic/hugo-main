@@ -127,7 +127,7 @@ public class Singleton {
 - 具体工厂（Concrete Factory）：实现了抽象工厂接口，负责实际创建具体产品的对象。
 
 <div align="center">
-  <img src="AB6B814A-0B09-4863-93D6-1E22D6B07FF8.jpg" alt="简单工厂模式 UML 图" width="60%" />
+  <img src="AB6B814A-0B09-4863-93D6-1E22D6B07FF8.jpg" alt="简单工厂模式 UML 图" width="82%" />
 </div>
 
 ### 💻 具体实现

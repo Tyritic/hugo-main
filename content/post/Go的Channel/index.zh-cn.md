@@ -32,6 +32,16 @@ Go 官方对 `Channel` 的定义是：
 - **可缓冲**：有缓冲 `Channel` 可以在一定程度上解耦发送方和接收方。
 - **并发安全**：多个 `goroutine` 可以同时操作同一个 `Channel`。
 
+### 🧩 Channel 与 CSP
+
+`Channel` 背后对应的是 Go 一直强调的 **CSP（Communicating Sequential Processes）** 思想，也就是“通过通信共享内存，而不是通过共享内存来通信”。
+
+从这个角度看，`goroutine` 更像独立执行的顺序进程，而 `Channel` 则是它们之间传递消息和同步状态的通信通道。这样设计有几个很直接的好处：
+
+- **避免直接共享内存**：不同协程尽量不直接改同一份状态，减少竞态条件。
+- **天然带同步语义**：发送和接收本身就能形成协作点，很多场景下不必再手动加锁。
+- **更容易组合并发模式**：像生产者消费者、管道、超时控制、取消传播，都可以围绕 `Channel` 组合出来。
+
 ---
 
 ## ⚙️ Channel 的实现位置
@@ -66,13 +76,13 @@ Go 官方对 `Channel` 的定义是：
 先看正常写入时的状态：
 
 <div align="center">
-  <img src="channel1.png" alt="有缓冲 Channel 的正常写入状态" width="60%">
+  <img src="channel1.png" alt="有缓冲 Channel 的正常写入状态" width="82%">
 </div>
 
 当缓冲区被写满之后，发送方同样会阻塞：
 
 <div align="center">
-  <img src="channel2.png" alt="有缓冲 Channel 队列写满后的状态" width="60%">
+  <img src="channel2.png" alt="有缓冲 Channel 队列写满后的状态" width="82%">
 </div>
 
 因此，有缓冲 `Channel` 只是把阻塞点后移，而不是完全消除阻塞。
@@ -90,7 +100,7 @@ Go 官方对 `Channel` 的定义是：
 先看整体结构示意图：
 
 <div align="center">
-  <img src="channel的底层原理.png" alt="Channel 的整体底层结构" width="60%">
+  <img src="channel的底层原理.png" alt="Channel 的整体底层结构" width="82%">
 </div>
 
 `hchan` 的定义如下：
@@ -164,7 +174,7 @@ type sudog struct {
 再看一张更直观的结构示意图：
 
 <div align="center">
-  <img src="image.png" alt="Channel 底层缓冲区与索引示意图" width="60%">
+  <img src="image.png" alt="Channel 底层缓冲区与索引示意图" width="82%">
 </div>
 
 在这张图里，缓冲区容量是 `8`，当前已有 `4` 个元素，因此 `sendx` 指向下一个写入位置，`recvx` 指向下一个读取位置。
@@ -442,28 +452,30 @@ func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
 先看整体发送路径：
 
 <div align="center">
-  <img src="image-1.png" alt="Channel 发送流程总览" width="60%">
+  <img src="image-1.png" alt="Channel 发送流程总览" width="82%">
 </div>
 
 当发送方因为缓冲区满而阻塞时，运行时会创建一个 `sudog` 节点，把当前 `goroutine` 挂到 `sendq` 上：
 
 <div align="center">
-  <img src="boxcn9ULtLcD2jviAdDERfbrNNb.png" alt="发送方阻塞并进入等待队列的过程" width="60%">
+  <img src="boxcn9ULtLcD2jviAdDERfbrNNb.png" alt="发送方阻塞并进入等待队列的过程" width="82%">
 </div>
 
 等到其他 `goroutine` 消费数据后，运行时会把等待中的发送者重新唤醒：
 
 <div align="center">
-  <img src="image-2.png" alt="接收方消费数据后唤醒发送方的过程" width="60%">
+  <img src="image-2.png" alt="接收方消费数据后唤醒发送方的过程" width="82%">
 </div>
 
 完成数据回填与调度恢复之后，发送方会从等待队列中移除：
 
 <div align="center">
-  <img src="boxcnd31UrNwnvthDJwEnkwotle.png" alt="发送方恢复执行后的队列状态" width="60%">
+  <img src="boxcnd31UrNwnvthDJwEnkwotle.png" alt="发送方恢复执行后的队列状态" width="82%">
 </div>
 
 如果是无缓冲 `Channel`，数据不会进入 `buf`，而是直接从发送方拷贝到接收方内存区域，只是调度流程仍然类似。
+
+如果这时 `recvq` 中已经挂着等待接收的 `goroutine`，发送方会先取出对应的 `sudog`，然后把待发送的数据直接拷贝到对方 `elem` 指向的地址上。这个地址通常就是接收方栈上的目标变量，因此很多面试题里会强调一句话：无缓冲 `Channel` 的一次发送，本质上可能是“一个协程把数据直接写进另一个协程的接收位置”，随后再通过 `goready` 把对方唤醒。
 
 针对不同状态，发送结果如下：
 
@@ -538,7 +550,7 @@ func chanrecv(c *hchan, ep unsafe.Pointer, block bool) (selected, received bool)
 下面这张图更直观地展示了消费过程：
 
 <div align="center">
-  <img src="image-3.png" alt="Channel 的接收与消费流程" width="60%">
+  <img src="image-3.png" alt="Channel 的接收与消费流程" width="82%">
 </div>
 
 从行为层面看，可以总结为：
@@ -616,6 +628,7 @@ func closechan(c *hchan) {
 - **重复关闭同一个 `Channel` 会 `panic`**。
 - **向已关闭 `Channel` 发送数据会 `panic`**。
 - **从已关闭 `Channel` 接收数据不会 `panic`**，但读空后只会得到零值。
+- **只能关闭发送方持有的通道**：如果变量类型是 `<-chan T`，连 `close` 都无法调用，会在编译期直接报错。
 
 {{< notice tip >}}
 🧩 为什么关闭会唤醒等待中的协程
@@ -823,6 +836,18 @@ func main() {
 - **适当加缓冲**：减轻发送与接收的强耦合。
 - **使用超时控制**：通过 `select` 和 `time.After` 兜底。
 - **正确关闭 `Channel`**：让接收方有机会退出等待。
+
+### 🧠 Channel 为什么会引出内存泄漏
+
+`Channel` 本身通常不是“泄漏对象”，更常见的问题是它把某个 `goroutine` 永久卡住，进而导致 **goroutine 泄漏**，最后表现成内存迟迟不释放。
+
+典型场景有这些：
+
+- 接收方一直等数据，但发送方已经提前退出。
+- 发送方一直等接收者，但接收端已经没人再读。
+- `select` 没有 `default`，也没有超时或取消分支，所有 `case` 又都长期不可执行。
+
+一旦协程一直挂在 `sendq`、`recvq` 或相关等待路径上，它引用的变量、闭包环境和调用栈就都没法及时被回收，所以线上排查时经常会把这类问题描述成“Channel 导致的内存泄漏”。
 
 ---
 
@@ -1079,6 +1104,30 @@ default:
 - **随机重排**：运行时会对多个 `case` 做随机化处理，降低饥饿风险。
 - **只执行一个分支**：一次 `select` 最多执行一个就绪 `case`。
 - **天然适合并发控制**：特别适合超时、取消、优先级选择等场景。
+
+### ⚙️ `select` 的运行时实现
+
+在 runtime 层面，`select` 最终会落到 `selectgo`。编译器会先把每个 `case` 转成内部结构，再把这些结构交给运行时统一处理。
+
+运行时里每个分支可以抽象成一个 `scase`，它会记录当前分支关联的 `Channel`、操作类型，以及发送或接收所需的数据地址。可以把它理解成“供调度器消费的 `case` 描述对象”。
+
+```go
+type scase struct {
+    c    *hchan
+    elem unsafe.Pointer
+    kind uint16
+    pc   uintptr
+    releasetime int64
+}
+```
+
+`selectgo` 的核心执行思路可以概括为三步：
+
+1. 先把多个 `case` 随机打散，尽量避免总是优先命中同一个分支。
+2. 第一轮扫描所有 `case`，只要发现某个分支已经就绪，就直接执行。
+3. 如果第一轮一个都没命中，并且也没有 `default`，就把当前 `goroutine` 挂到相关 `Channel` 的等待队列里，进入阻塞；后续一旦有某个分支被唤醒，再把它从其他等待队列中摘掉，只执行最终命中的那个分支。
+
+所以从运行时视角看，`select` 的关键不是“语法糖”，而是“随机化 + 两轮扫描 + 挂队列等待”的组合策略。
 
 ---
 

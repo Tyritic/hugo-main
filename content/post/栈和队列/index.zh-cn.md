@@ -564,7 +564,7 @@ class Solution {
 
 <div align="center">
 <div align="center">
-  <img src="https://code-thinking.cdn.bcebos.com/pics/239.%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%9C%80%E5%A4%A7%E5%80%BC.png" alt="滑动窗口最大值示意图" width="60%">
+  <img src="https://code-thinking.cdn.bcebos.com/pics/239.%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%9C%80%E5%A4%A7%E5%80%BC.png" alt="滑动窗口最大值示意图" width="82%">
 </div>
 </div>
 

@@ -59,7 +59,7 @@ math : true
 **Thrift** 是一套包含序列化功能和支持服务通信的 **RPC 框架**，主要包含三大部分：**代码生成**、**序列化框架**、**RPC 框架**，大致相当于 `protoc + protobuf + grpc`，并且支持大量语言，保证常用功能在跨语言间功能一致，是一套**全栈式的 RPC 解决方案**。
 
 <div align="center">
-  <img src="Thrift框架.png" alt="Thrift架构图" width="60%">
+  <img src="Thrift框架.png" alt="Thrift架构图" width="82%">
 </div>
 
 {{<notice tip>}}
