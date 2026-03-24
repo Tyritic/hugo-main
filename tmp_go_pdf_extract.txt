@@ -1,0 +1,2405 @@
+--- PAGE 1 ---
+语法基础
+int和int32有什么区别
+位宽与取值范围
+int：平台相关
+64 位架构通常是 int64（64-bit）
+32 位架构是 int32（32-bit）
+int32：永远是 32 位有符号整数
+选 int 更适合索引和通⽤计数，选 int32 更适合需要固定宽度的协议和数据结构。
+string
+Go的字符串是如何实现的？rune和byte有什么区别？
+G o语⾔的字符串是不可变的字节序列，底层实现为包含指向字节数组的指针和⻓度字段的结构
+体。字符串采⽤UTF-8编码，⽀持U nicode字符，但内部存储的是字节序列。字符串的不可变性
+保证了并发安全和内存效率，多个字符串可以共享相同的底层字节数组。
+byte是uint8的别名，表⽰单个字节（8位），适合处理ASCII字符或⼆进制数据。
+rune是int32的别名，表⽰U nicode码点，能够正确处理多字节字符。在UTF-8编码中，⼀个
+rune可能对应1-4个byte，因此字符串的字节⻓度可能⼤于其rune数量。
+底层数据结构采⽤了⼀个包含两个字段的结构体：⼀个指向字节数组的指针和⼀个表⽰⻓度
+的整数。这种设计让字符串具有固定的⼤⼩（在64位系统上为16字节），⽆论字符串内容多
+⻓，字符串变量本⾝的⼤⼩都是恒定的。指针指向的字节数组是只读的，多个字符串可以共享
+同⼀个底层数组，这种共享机制⼤⼤提⾼了内存使⽤效率。
+UTF-8编码⽀持是G o字符串的重要特性。U TF-8是⼀种变⻓编码，ASCII字符使⽤1个字节，⽽
+其他U nicode字符可能使⽤2-4个字节。G o语⾔原⽣⽀持U TF-8，这意味着字符串可以包含任
+何U nicode字符，但内部仍然以字节序列的形式存储。这种设计既保证了与现有系统的兼容
+性，⼜提供了对国际化应⽤的⽀持。
+字符串转成 byte 数组，会发⽣内存拷⻉吗？
+
+--- PAGE 2 ---
+字符串转成切⽚，会产⽣拷⻉。严格来说，只要是发⽣类型强转都会发⽣内存拷⻉。那么问题来
+了。频繁的内存拷⻉操作听起来对性能不⼤友好。
+字符串不能改，那转成数组能改吗，怎么改
+G o 的 字符串（string）是不可变的。也就是说，⼀旦字符串被创建，你不能直接修改其中的字
+符。虽然字符串本⾝不可改，但你可以把它 转成可修改的数组（切⽚），修改后再转回字符串。
+for-range的底层原理
+package main1
+2
+import "fmt"3
+4
+func main() {5
+s := []int{1,2,3,4,5}6
+for _, v:=range s {7
+s =append(s, v)8
+fmt.Printf("len(s)=%v\n",len(s))9
+}10
+}11
+这个代码会造成死循环吗？
+不会死循环，for range其实是golang的语法糖，在循环开始前会获取切⽚的⻓度 len( 切⽚ )，然
+后再执⾏len( 切⽚ )次数的循环。
+Golang中for range 遍历 slice/map 时，变量的内存地址是否变化?为什么会出现“遍
+历赋值后值不对”的问题?
+G o 1.21 及之前（旧语义）：for i, v := range ... ⾥的 i、v 是同⼀对变量被反复复⽤，每
+轮只是“赋新值”。&v（或 &i）每⼀轮基本是同⼀个地址
+G o 1.22+（新语义）：每次迭代都会产⽣新的循环变量（更符合直觉）
+“遍历后值不对”最常⻅两种：
+Go
+
+--- PAGE 3 ---
+取 &v / 闭包捕获 v → 多个引⽤指向同⼀个迭代变量1.
+改 v 不会写回容器（v 是拷⻉）→ slice ⽤ arr[i]，m ap ⽤ m[k]=...2.
+指针
+Go的参数传递类型有哪些
+Golang⾥所有的内置类型传递都是值传递，不过有些类型表现得像引⽤传递，这其实是底层实现
+造成的假象。像int、ﬂoat、bool、string这些基本类型，传递时会复制整个值，函数内部对参数
+的修改不会影响原始数据。结构体也是值传递，哪怕结构体很⼤，传递时也会完整复制⼀份。
+⽽slice、m ap、channel和指针，虽然看起来像引⽤传递，但本质上还是值传递。以slice为例，
+它的底层是⼀个包含指针、⻓度和容量的结构体，传递slice时，复制的是这个结构体，⽽不是底
+层数组。所以函数内部可以通过这个复制的结构体修改底层数组的数据，但如果对slice本⾝进⾏
+扩容等操作，原始slice是不受影响的。
+m ap和channel也是类似，传递的是指向底层数据结构的指针的复制，因此可以修改原始数据。
+指针就更明显了，传递的是地址的复制，通过这个复制的地址依然能修改原始数据。
+所以，G olang⾥没有真正的引⽤传递，只有值传递。那些看起来像引⽤传递的类型，是因为它们
+的底层实现包含了指针，复制的是指针的值，从⽽可以间接修改原始数据。
+Golang 中指针运算有哪些?
+取地址 &：⽤于获取变量的内存地址。
+指针解引⽤*：通过指针访问或修改它指向的值。
+指针⽐较：可以⽐较两个指针是否指向同⼀个地址。
+Go 中的指针传递与值传递时机
+传递指针的时机
+当数据量⼤时 → 避免复制开销
+当函数需要修改原变量时
+当⽅法接收者需要修改状态时 → ⽤指针接收者
+当 nil 有语义意义时 → 可⽤指针表⽰“未赋值”
+
+--- PAGE 4 ---
+Go语⾔的nil跟空值的区别
+在G o语⾔中，nil是⼀个预定义的标识符，表⽰某些类型的零值（如指针、切⽚、m ap、
+channel、函数、接⼝等）的“⽆指向”或“未初始化”状态
+空值（em pty value）通常指的是该类型的⼀个有效但内容为空的实例，例如⻓度为0的切
+⽚、空的m ap、空字符串等。nil和空值在语义和⾏为上是不同的，不能⼀概⽽论。
+两个int指针都赋值nil后⽐较会相等吗？
+两个int指针在都被赋值为nil后进⾏⽐较会相等
+struct
+Go struct能不能⽐较？
+在 G o ⾥，struct 可以使⽤ == 和 != ⽐较，前提是 struct 内的所有字段都是可⽐较的
+（comparable）。
+可⽐较类型：基本类型可⽐较，指针、channel、interface 可⽐较
+不可⽐较类型：slice、m ap、func 在 G o 中不是可⽐较类型。它们只能与 nil ⽐较。
+两个interface能⽐较吗？
+interface ⽐较本质是：⽐较动态类型是否相同；如果相同 → 再⽐较动态值（底层值类型必须可
+⽐较）。如果底层类型不可⽐较，会 panic。G o 中的 interface 可以⽐较，但前提是 接⼝⾥的动态
+类型⼀致，且动态值的底层类型必须可⽐较。底层不可⽐较类型（slice、m ap、func）放进 
+interface 后，⽤ == ⽐较会直接 panic。
+Golang 有没有 this 指针？
+G o 语⾔⾥ 没有像 Java 或 C++ 那样的 this 指针，但它有⼀个等价但更灵活的概念：⽅法的接收
+者（receiver）。
+G o 在定义⽅法时，显式声明接收者是谁。也就是说，需要得⼿动写出 “相当于 this 的对象”。
+如何判断⼀个结构体是否实现了某接⼝？
+
+--- PAGE 5 ---
+类型断⾔来判断⼀个结构体是否实现了某接⼝。使⽤类型断⾔来检查结构体是否实现了该接
+⼝。如果结构体实现了该接⼝，类型断⾔会返回true；否则返回false。
+如果结构体实现了接⼝所有⽅法就是实现接⼝
+Go语⾔的接⼝机制是怎样的？类型断⾔有什么作⽤？
+G o语⾔的接⼝是⼀种抽象类型，它定义了⼀组⽅法集合。空接⼝（interface{}）可以存储任意类
+型的值。类型断⾔允许在运⾏时检查接⼝值的具体类型，是G o语⾔类型系统的重要组成部分。
+Go语⾔的类型别名和类型定义有什么区别？
+G o语⾔的类型别名（type alias）和类型定义（type deﬁnition）都可以创建新的类型，但类型别
+名只是给现有类型起⼀个新名字，⽽类型定义会创建⼀个全新的类型。
+// 类型别名1
+type MyInt = int2
+type StringSlice = []string3
+4
+// 类型定义5
+type MyString string6
+type IntSlice []int7
+type UserID int8
+类型兼容性：
+类型别名与原类型完全兼容，可以互相赋值
+类型定义与原类型不兼容，需要显式转换
+⽅法⽀持：
+类型别名不能添加⽅法
+类型定义可以添加⽅法，实现接⼝
+类型安全：
+类型别名提供类型安全，但允许隐式转换
+类型定义提供更强的类型安全，防⽌意外转换
+Go
+
+--- PAGE 6 ---
+结构体嵌⼊是如何⼯作的？与继承有什么区别？
+结构体嵌⼊通过匿名字段实现，被嵌⼊类型的字段和⽅法会⾃动提升到外层结构体，可以直接访
+问。嵌⼊⽀持多层嵌套和多重嵌⼊，当出现同名冲突时，外层成员会覆盖内层，可通过显式选择
+器访问被覆盖的成员。嵌⼊类型的⽅法集也会被提升，外层结构体可以直接调⽤内层的⽅法。
+与继承的区别在于：嵌⼊是组合关系⽽⾮继承关系，外层结构体不会获得内层的类型⾝份，不能
+⽤于类型断⾔或接⼝实现。嵌⼊强调按需组合和松耦合设计，避免了继承的脆弱基类问题。
+值接收者和指针接收者有什么区别？
+G o语⾔的⽅法是带接收者的函数，语法为func (r T) M(...)或func (r *T) M(...)。⽅法只能
+为本包的命名类型定义，体现了G o的封装设计。⽅法集决定了接⼝实现：T只包含值接收者⽅
+法，*T包含值接收者和指针接收者⽅法。
+值接收者通过拷⻉传递，不修改原对象，适合⼩对象和只读操作
+指针接收者共享原对象，可原地修改，适合⼤对象和状态维护。编译器会⾃动处理取址/解
+址，但不会改变⽅法集规则。
+⾃动取址与解址机制是G o语⾔提供的⼀种语法便利，编译器会⾃动处理值类型和指针类型之间的
+转换。当调⽤指针接收者⽅法时，如果接收者是值类型，编译器会⾃动取址；当调⽤值接收者⽅
+法时，如果接收者是指针类型，编译器会⾃动解址。这种机制让⽅法调⽤更加⾃然，但不会改变
+⽅法集的规则。
+Golang的interface{}空接⼝的底层实现?为什么空接⼝可以接收任意类型?
+在 G o runtim e ⾥，接⼝值本质上是 “类型信息 + 数据指针” 的⼆元组。
+对应空接⼝
+type eface struct {1
+    _type *_type        // 指向运⾏时类型信息（包含⼤⼩、对⻬、指针位图、 hash 等）2
+    data  unsafe.Pointer // 指向实际数据（或直接存放指针 / 指向副本）3
+}4
+_type：运⾏时的类型描述（RTTI）
+data：指向值的地址（值可能被拷⻉到堆上，也可能直接就是⼀个指针值，取决于具体类型/
+逃逸等）
+Go
+
+--- PAGE 7 ---
+为什么空接⼝能接收任意类型？
+因为 G o 的“实现接⼝”是隐式的：⼀个类型只要实现了接⼝要求的所有⽅法，就实现了该接
+⼝。⽽ interface{} ⽅法集合为空（0 个⽅法），所以：
+任何类型都“天然实现”空接⼝
+因此任何值都能赋给 interface{}
+从运⾏时⻆度：把这个值装箱成 eface{_type, data} 就完事了。
+类型断⾔的两种⽅式及区别?
+直接断⾔：失败会 panic，
+v := x.(T)1
+com m a-ok 断⾔：失败不 panic
+v, ok := x.(T)1
+json包
+json包⾥使⽤的时候，结构体⾥的变量不加tag能不能正常转成json⾥的字段？
+如果变量⾸字⺟⼩写，则为private。⽆论如何不能转，因为取不到反射信息。
+如果变量⾸字⺟⼤写，则为public。
+不加 tag，可以正常转为json⾥的字段，json内字段名跟结构体内字段原名⼀致。
+加了 tag，从struct转json的时候，json的字段名就是tag⾥的字段名，原字段名已经没⽤
+解析 JSON 数据时，默认将数值当做哪种类型
+使⽤ encoding/json 包解析到 interface{}
+Go
+Go
+
+--- PAGE 8 ---
+解析到⾃定义结构体
+如果你事先定义了结构体并且指定了字段类型，json.Unmarshal 会按你定义的类型解析
+Go语⾔的标签（tag）有什么作⽤？
+G o语⾔的标签（tag）是结构体字段的元数据，通过反射机制在运⾏时提供字段的额外信息。标
+签⽀持多种格式，包括J SON序列化、数据库映射、表单验证等，使结构体能够适应不同的使⽤场
+景，是G o语⾔灵活性的重要体现。
+panic和recover
+Go语⾔中panic和recover的机制是什么？
+在G o语⾔中，panic和recover是⽤于处理程序运⾏时严重错误的机制。panic⽤于触发⼀个运⾏
+时异常，导致程序执⾏流程中断并开始逐层回溯调⽤栈进⾏栈展开（stack unwinding），⽽
+recover是⼀个内置函数，⽤于在defer函数中捕获由panic引发的异常，从⽽阻⽌程序崩溃并恢复
+正常执⾏流程。
+说⼀下背后的实现原理
+JSON 类型 Go 默认类型
+数字（整数或浮点） float64
+字符串 string
+布尔值 bool
+null nil
+对象 map[string]interface{}
+数组 []interface{}
+
+--- PAGE 9 ---
+panic：G o运⾏时维护了⼀个与goroutine关联的_g结构体，其中包含⼀个_panic链表字段。
+每当发⽣panic时，runtim e会创建⼀个新的_panic结构体节点，并将其插⼊到当前goroutine
+的panic链表头部。这个结构体记录了panic的值、是否已被recover捕获等信息。同时，
+runtim e会保存当前的程序计数器（PC）和栈指针（SP），以便后续进⾏栈展开。随后，系统
+开始执⾏当前函数中所有已经defer但尚未执⾏的函数（LIFO顺序）。
+recover：recover也是内置函数，在编译期间被特殊处理。它只能在defer函数体内有效调
+⽤。其内部逻辑是检查当前goroutine是否存在未被处理的_panic对象，并判断该_panic是否
+正在被当前defer函数处理。如果是，则将该_panic标记为“已recover”，并返回其value字
+段；否则返回nil。
+栈展开：当panic发⽣后，G o运⾏时会从当前函数开始向上逐层退出函数调⽤帧。每退回到⼀
+个函数，就执⾏其defer列表中的函数。这⼀过程持续到某⼀层的defer函数成功调⽤recover
+为⽌。若⼀直没有recover，则最终到达main函数或goroutine⼊⼝，打印panic信息并退出程
+序。
+defer执⾏顺序
+先进后出（LIFO, Last In First Out）
+defer 注册的函数会被 压⼊栈，在函数返回时按 后进先出 的顺序执⾏。
+换句话说，最后⼀个 defer 先执⾏，第⼀个 defer 后执⾏。
+函数返回时触发
+defer 并不是⽴即执⾏，⽽是在 包含它的函数返回时执⾏。
+包括 正常返回 和 因 panic 异常返回。
+defer可以修改返回值吗
+在 Go 中，defer 可以修改返回值，但需要满⾜⼀定条件：函数必须有命名返回值。
+匿名返回值（直接 return expr）的情况：defer ⽆法直接修改返回值，因为返回值是函数返
+回语句时才确定的。
+命名返回值（func foo() (ret int) {}）：
+函数的返回值变量在函数体内是可⻅的。
+defer 可以直接修改这个变量的值。
+当执⾏ return 时，G o 会先执⾏ defer，再返回命名返回值的最终值。
+
+--- PAGE 10 ---
+哪些异常不会被recover
+运⾏时致命错误（fatal runtim e errors）
+栈溢出（stack overﬂow）
+G o runtim e ⾃⾝内部错误（runtim e panic 之外的致命错误）
+程序直接调⽤ os.Exit()
+defer 语句的主要⽤途是什么？
+释放资源（资源清理）：defer 可以保证在函数退出时释放资源。常⽤于 ⽂件、⽹络连接、锁
+等资源的关闭或释放。
+保证执⾏顺序：defer 是 后进先出（LIFO），可以保证⼀组操作按相反顺序执⾏。
+错误处理与恢复：与 recover 结合，可以捕获 panic，防⽌程序崩溃。
+为什么建议在⼦协程中使⽤recover
+建议在 ⼦协程（goroutine）中使⽤ recover，主要是为了防⽌整个程序因为⼦协程的 panic ⽽
+崩溃。
+原因：每个 goroutine 是独⽴执⾏的线程单元。如果⼦协程内部发⽣ panic，⽽没有被 
+recover 捕获
+panic 会沿着当前 goroutine 的调⽤栈向上传播。
+不会⾃动传播到其他 goroutine，但会终⽌整个程序。
+也就是说，即使主 goroutine 没有出错，⼦协程的 panic 也可能导致整个程序崩溃。
+作⽤
+隔离⼦协程的错误：使⽤ recover 可以 捕获⼦协程的 panic，防⽌它终⽌整个程序。主程
+序可以继续执⾏，同时对⼦协程错误进⾏处理或重启。
+实现容错与重启机制：捕获 panic 后可以记录⽇志，上报错误，重启该⼦协程
+函数返回值初始化与defer间接影响
+G o语⾔中，命名返回值在函数开始时就被初始化，defer可以修改这些返回值。
+
+--- PAGE 11 ---
+命名返回值的情况：可以修改
+匿名返回值的情况：不可以修改
+命名返回值在函数开始时就被初始化为零值
+return语句执⾏两步操作：先为返回值赋值，然后执⾏defer
+defer可以修改命名返回值，影响最终返回结果
+匿名返回值通过值传递，defer⽆法修改
+通过指针传递或闭包捕获，defer可以修改匿名返回值
+defer与return的执⾏顺序
+defer和return的执⾏顺序是G o语⾔中的⼀个重要概念。return语句的执⾏是⾮原⼦性的，它包含
+两个步骤：
+return的操作步骤：
+第⼀步：为返回值赋值1.
+第⼆步：执⾏defer语句2.
+第三步：执⾏RET指令，返回到调⽤者3.
+defer的操作步骤：
+注册阶段：遇到defer时，将函数压⼊defer栈1.
+执⾏阶段：在return的第⼆步执⾏，按照LIFO顺序2.
+如果⼀个函数⾥发⽣了panic，然后在defer⾥⾯⼜再 panic⼀次，会怎么样
+在 G o 语⾔中，如果⼀个函数中发⽣了 panic，然后在 defer 中⼜发⽣了 panic，这被称为panic 
+嵌套或⼆次 panic。
+第⼀个 panic 触发
+函数执⾏被中断
+开始执⾏ defer 函数（按照 LIFO 顺序）
+在 defer 中发⽣第⼆个 panic
+
+--- PAGE 12 ---
+当前的 panic 处理过程被中断
+第⼆个 panic 会替代第⼀个 panic
+第⼀个 panic 的信息会丢失
+程序终⽌
+如果没有外层的 recover，程序会崩溃
+崩溃信息只显⽰第⼆个 panic
+切⽚Slice
+基本使⽤
+空切⽚和nil切⽚的区别
+nil切⽚：底层指向数组为nil（⽆指向任何实际地址），不可以直接进⾏访问，常⻅于声明阶段 
+var s []int
+空切⽚：底层指向数组为空数组（⾮nil），常⻅于初始化阶段 s := []int{}
+切⽚和底层数组的关系
+切⽚（slice） 是对 底层数组（array） 的⼀种轻量级抽象，它提供了⽐数组更灵活的使⽤⽅式，
+但底层实际上仍然依赖数组来存储数据。
+type slice struct {1
+Go
+
+--- PAGE 13 ---
+    ptr *ElementType  // 指向底层数组的指针2
+    len int           // 当前切⽚的⻓度（可访问的元素个数）3
+    cap int           // 当前切⽚的容量（从  ptr 开始到底层数组末尾的元素个数）4
+}5
+对数组进⾏截取操作后赋值给切⽚（并没有拷⻉），与原数组共⽤内存空间，所以修改切⽚也
+会修改原数组对应的数据。
+当使⽤ append 导致切⽚扩容时，G o 会为新切⽚分配新的底层数组。扩容后的切⽚与原数组
+不再共享内存，因此修改原数组不会影响新切⽚。但如果 append 未触发扩容，两个切⽚仍共
+享底层数组，修改任意⼀⽅都会相互影响。
+array和slice的区别
+本质区别
+array：值类型，存储元素的连续内存
+slice：对数组的引⽤视图，底层依赖数组
+内存结构
+array：存储实际数据的连续内存，是值类型
+slice：三个字段：ptr（指向底层数组）、len（⻓度）、cap（容量），是引⽤类型
+拷⻉⼤切⽚⼀定⽐⼩切⽚代价⼤吗？
+并不是，所有切⽚的⼤⼩相同；三个字段（⼀个 uintptr，两个 int）。切⽚中的第⼀个字是指向切
+⽚底层数组的指针，这是切⽚的存储空间，第⼆个字段是切⽚的⻓度，第三个字段是容量。将⼀
+个 slice 变量分配给另⼀个变量只会复制三个机器字。所以拷⻉⼤切⽚跟⼩切⽚的代价应该是⼀样
+的。
+make和new什么区别
+new 的特点
+⽤途：分配内存并返回指向类型的指针。
+适⽤类型：任何类型（基础类型、结构体、数组等）。
+返回值：指向类型的指针 *T。
+
+--- PAGE 14 ---
+初始化情况：只是分配内存并置零，不初始化内部结构（零值初始化）m ap/slice/channel 仍
+不可⽤。
+m ake 的特点
+⽤途：为 G o 的三种内建引⽤类型分配并初始化内存：
+适⽤类型：只能是 slice、map 或 channel。
+返回值：返回初始化后的类型本⾝（不是指针）。
+初始化情况：会创建底层数据结构，使其可⽤。
+不同的Slice在复制和传值时，是深拷⻉还是浅拷⻉？
+不同的Slice在复制和传值时属于浅拷⻉。这意味着当你复制⼀个Slice时，实际上只是复制了Slice
+的指针和⻓度信息，⽽底层数组并没有被复制，多个Slice会共享相同的底层数组。这也意味着如
+果你修改⼀个Slice的元素，其他共享底层数组的Slice也会受到影响。
+将slice作为参数传⼊函数时什么时候会修改切⽚
+修改底层数组：会影响外部数组
+修改切⽚（append操作）：不会影响外部数组
+A函数传递切⽚给B函数，切⽚是值传递还是引⽤传递，如果B对切⽚做append操作，A的切⽚能
+感知到吗
+在 G o ⾥：切⽚（slice）作为参数传递是值传递，但这个“值”是⼀个 slice header（三元组）
+包含：ptr：指向底层数组的指针，len，cap，所以经常说它“像引⽤”，是因为 header ⾥的 
+ptr 指向同⼀块底层数组。
+append 没扩容（cap 够）：B 的 append 只是把新元素写进 同⼀个底层数组，但注意：A 的 
+len 不会⾃动变⼤（因为 A 的 header 是拷⻉），所以 A 直接 len(s) 看不到新增⻓度，但如果 
+A ⽤更⻓的切⽚去“重新切⽚”到新⻓度范围，可看到新增元素
+append 扩容了（cap 不够）：B 的 append 会分配⼀个新的底层数组。B 的 slice header 的 
+ptr 指向新数组，A 仍指向旧数组，所以 A 完全感知不到 B append 的新增元素。
+
+--- PAGE 15 ---
+有没有导致GC没办法回收Slice的场景？
+G o 中 Slice 是⼀个三元组结构（ptr/len/cap），它的 G C ⾏为经常会“坑”到开发者：Slice 本⾝
+被 GC 回收不等于底层数组会被回收。
+切⽚引⽤了⼤底层数组的部分，导致整个数组⽆法释放
+切⽚作为 m ap 的 value 存在，导致所有底层数据存活
+全局变量 / ⻓⽣命周期结构体持有 slice
+闭包捕获 slice，导致整个数组保活
+如果在slice⾥存放指针，对slice进⾏复制，修改新的某个下标变量时会影响⽼的吗
+slice ⾥放指针时，复制 slice 通常是浅拷⻉
+如果只是 s2 := s1，改 s2[i] 会影响 s1[i]
+如果 copy 到新 slice，改 s2[i] 不影响 s1[i]，但改 s2[i].field 仍会影响 s1[i].field，因
+为指针指向同⼀对象。
+扩容机制
+slice的扩容触发条件是什么
+当执⾏ append(slice, elem...) 时
+检查当前切⽚的 len 和 cap
+如果 len + 要添加的元素数  > cap，则触发扩容
+否则直接在原底层数组中追加。
+扩容策略在Go1.18前后的区别
+G o1.18之前
+// src/runtime/slice.go1
+2
+func growslice(et *_type, old slice, cap int) slice {3
+    // ...4
+Go
+
+--- PAGE 16 ---
+5     newcap := old.cap6
+    doublecap := newcap + newcap7
+    if cap > doublecap {8
+        newcap = cap9
+    } else {10
+        if old.cap < 1024 {11
+            newcap = doublecap12
+        } else {13
+            // Check 0 < newcap to detect overflow14
+            // and prevent an infinite loop.15
+            for 0 < newcap && newcap < cap {16
+                newcap += newcap / 417
+            }18
+            // Set newcap to the requested cap when19
+            // the newcap calculation overflowed.20
+            if newcap <= 0 {21
+                newcap = cap22
+            }23
+        }24
+    }25
+26
+    // ...27
+28
+    return slice{p, old.len, newcap}29
+}30
+如果旧容量⼩于 1024：每次扩容为原来的 2 倍。即指数增⻓，快速扩容。
+如果旧容量 ≥ 1024：每次扩容为原容量的 1.25 倍（+25%）。避免⼤切⽚占⽤过多内存。
+如果 append ⼀次加的元素很多，期望的容量⼤于当前容量的两倍：新容量⾄少能容纳所有新
+元素（即 >= len + 新增元素数）。
+G o1.18之后
+func growslice(et *_type, old slice, cap int) slice {1
+    // ...2
+3
+    newcap := old.cap4
+    doublecap := newcap + newcap5
+    if cap > doublecap {6
+        newcap = cap7
+    } else {8
+Go
+
+--- PAGE 17 ---
+        const threshold = 2569
+        if old.cap < threshold {10
+            newcap = doublecap11
+        } else {12
+            // Check 0 < newcap to detect overflow13
+            // and prevent an infinite loop.14
+            for 0 < newcap && newcap < cap {15
+                // Transition from growing 2x for small slices16
+                // to growing 1.25x for large slices. This formula17
+                // gives a smooth-ish transition between the two.18
+                newcap += (newcap + 3*threshold) / 419
+            }20
+            // Set newcap to the requested cap when21
+            // the newcap calculation overflowed.22
+            if newcap <= 0 {23
+                newcap = cap24
+            }25
+        }26
+    }27
+28
+    // ...29
+30
+    return slice{p, old.len, newcap}31
+}32
+期望容量⼤于当前容量的两倍则扩容到期望容量
+当前容量⼩于 256 时直接扩容到原来的两倍
+当前容量⼤于 256 时逐步扩容，逐步增加约 1.25 倍（公式为newcap += (newcap + 
+3*threshold) / 4）直到⼤于期望容量。
+总⽽⾔之：在1.18中，优化了切⽚扩容的策略，让底层数组⼤⼩的增⻓更加平滑：通过减⼩阈值
+并固定增加⼀个常数，使得优化后的扩容的系数在阈值前后不再会出现从2到1.25的突变，该
+com m it作者给出了⼏种原始容量下对应的“扩容系数”
+oldcap 扩容系数
+256 2.0
+512 1.63
+1024 1.44
+2048 1.35
+
+--- PAGE 18 ---
+扩容之后的容量并不是严格按照这个策略的。那是为什么呢？
+实际上，growslice 的后半部分还有更进⼀步的优化（内存对⻬等），靠的是 roundupsize 函数，
+在计算完 newcap 值之后，还会有⼀个步骤计算最终的容量。因此扩容不总是精确的 2 倍或 1.25 
+倍
+func roundupsize(size uintptr) uintptr {1
+    if size < _MaxSmallSize {2
+        if size <= smallSizeMax-8 {3
+            return 
+uintptr(class_to_size[size_to_class8[(size+smallSizeDiv-1)/smallSizeDiv]])
+4
+        } else {5
+        return uintptr(class_to_size[size_to_class128[(size-
+smallSizeMax+largeSizeDiv-1)/largeSizeDiv]])
+6
+        }7
+    }8
+    if size+_PageSize < size {9
+        return size10
+    }11
+    return alignUp(size, _PageSize)12
+}13
+14
+映射M ap
+M ap
+基本使⽤
+map不初始化使⽤会怎么样
+在 G o 中，map 的零值是 nil。也就是说，当你声明但不初始化时，它其实是⼀个 nil m ap
+读操作（访问键）是安全的：对 nil m ap 进⾏ 读操作是安全的。如果键不存在，返回该 value 
+类型的 零值（这⾥是 int 的零值 0）。不会 panic。
+写操作（赋值）会 panic：nil m ap 其实没有分配底层哈希表结构，⽆法存储键值对。
+Go
+4096 1.30
+
+--- PAGE 19 ---
+删除操作（delete）是安全但⽆效的：G o 允许对 nil m ap 执⾏ delete 操作，不会崩溃，但
+没有任何效果。
+判断键存在是安全的：不会 panic，ok 为 false。
+map不初始化⻓度和初始化⻓度的区别
+G o 的 map 在初始化时指定⻓度（容量）与不指定⻓度，表⾯上结果⼀样，实际上在底层性能上有
+明显区别。
+不指定⻓度：G o ⾃动初始化⼀个 m ap，底层哈希表会从⼀个较⼩的桶（bucket）数量开
+始。后续插⼊键值时，m ap 会⾃动扩容。
+指定⻓度： G o 运⾏时根据这个值，预先分配⾜够多的哈希桶，减少扩容次数
+使⽤range 迭代 map 是有序的吗?
+G o 中使⽤ range 遍历 map 是⽆序的，⽽且每次遍历顺序都可能不同。每次遍历都会从随机桶开
+始，在每个桶内也从随机槽位开始遍历，确保完全⽆序性。
+键（key）通过哈希函数计算分布到不同的 桶（bucket） 中，桶的顺序与哈希值有关，⽽哈
+希值本⾝在 G o 运⾏时不是稳定的顺序。
+为防⽌依赖遍历顺序的代码（导致 bug 或安全⻛险），m ap 的迭代顺序会被随机打乱。m ap 
+的迭代起始点是⼀个随机⽣成种⼦
+map的iterator是否安全？能不能⼀边delete⼀边遍历？
+G o 的 m ap 在并发读写时是不安全的。在遍历 m ap 时，可以安全地删除当前键（或其他键），但
+不能在遍历期间对 m ap 进⾏新增操作（insert new key）。
+线程安全
+map是线程安全的吗
+m ap不是并发安全的。G o语⾔的m ap在并发环境下存在数据竞争问题，特别是写操作会导致程序
+崩溃。当多个goroutine同时对m ap进⾏读写操作时，会触发concurrent map 
+read/write或concurrent map writes错误，这些错误⽆法被recover捕获，会导致程序直接退
+出。
+
+--- PAGE 20 ---
+G o语⾔的m ap在运⾏时维护了⼀个写标志位（hashW riting），⽤于检测并发写操作。当进⾏写操
+作时，m ap会先检查这个标志位是否为0，如果是0则将其设置为1，然后执⾏写操作，最后再将
+其恢复为0。如果在写操作过程中，其他goroutine也尝试进⾏写操作，就会检测到标志位为1，此
+时就会触发panic。
+m ap的底层是哈希表，当多个goroutine同时访问时会出现以下问题：
+数据竞争：多个goroutine同时访问同⼀个桶或溢出桶，可能导致数据不⼀致和链表结构损
+坏。
+扩容竞争：m ap采⽤渐进式扩容策略，在扩容过程中会同时维护新旧两个桶数组。新插⼊的
+key进⼊新桶，⽽查找操作需要同时访问新旧桶，数据迁移操作不是原⼦的，可能导致数据丢
+失或重复。
+G o 的 m ap 底层是可变的哈希表结构，写⼊和扩容会原地修改 bucket 和元数据，⽽这些操作没
+有加锁或原⼦保护；并发读写会破坏内部状态，导致未定义⾏为，所以 G o 运⾏时直接在并发访
+问时 panic。G o 不给 m ap 内置锁是为了性能和灵活性，把并发控制交给⽤⼾。
+普通map如何不⽤锁解决协程安全问题
+可以使⽤只读 m ap + Copy-On-W rite（写时复制）
+所有 goroutine 并发读时都访问同⼀个 m ap；
+当要写（新增/修改）时：
+复制⼀份 m ap；
+修改副本；
+⽤原⼦操作替换掉旧 m ap 的引⽤。
+package main1
+2
+import (3
+    "sync/atomic"4
+    "unsafe"5
+)6
+7
+func main() {8
+    var m atomic.Value9
+    m.Store(map[string]int{"a": 1})10
+Go
+
+--- PAGE 21 ---
+11     // 读操作12
+    go func() {13
+        data := m.Load().(map[string]int)14
+        _ = data["a"]15
+    }()16
+17
+    // 写操作（ Copy-On-Write ）18
+    go func() {19
+        oldMap := m.Load().(map[string]int)20
+        newMap := make(map[string]int, len(oldMap)+1)21
+        for k, v := range oldMap {22
+            newMap[k] = v23
+        }24
+        newMap["b"] = 225
+        m.Store(newMap)26
+    }()27
+}28
+29
+如果要实现⼀个并发安全的map，该怎么做？
+为了实现⼀个并发安全的m ap，可以采⽤分桶加锁的⽅式。即将整个m ap分成多个⼩的bucket，
+每个bucket都有⼀个独⽴的锁来保护并发访问。基于分段锁机制保证线程安全。将整个数据结构
+分为多个 Segment（默认为16个），每个 Segment 都类似于⼀个⼩的 HashMap，每个 Segment 都有
+⾃⼰的锁，不同 Segment 之间的操作互不影响，从⽽提⾼并发性能。分段锁m ap的核⼼思想是将
+数据分⽚，每个分⽚使⽤独⽴的锁来保护。这种设计⼤⼤减⼩了锁的粒度，使得不同分⽚可以并
+发访问，从⽽提⾼了并发性能。通过锁粒度细化，我们可以显著减少锁竞争，提⾼系统的吞吐
+量。
+分⽚策略：使⽤哈希函数将key分配到不同的段，确保数据分布均匀，避免热点问题。
+独⽴锁保护：每个段使⽤独⽴的读写锁，不同段可以并发访问，只有访问同⼀段的goroutine
+才会发⽣锁竞争。
+可扩展性：可以通过增加段的数量来提⾼并发性能，但需要在内存占⽤和性能之间找到平
+衡。
+package main1
+2
+import (3
+    "hash/fnv"4
+Go
+
+--- PAGE 22 ---
+    "sync"5
+)6
+7
+// ShardedMap 分段锁 map 结构8
+type ShardedMap struct {9
+    shards []*Shard        // 分⽚数组10
+    hash   func(key string) uint32  // 哈希函数11
+}12
+13
+// Shard 单个分⽚结构14
+type Shard struct {15
+    data map[string]interface{}  // 数据存储16
+    mu   sync.RWMutex           // 读写锁17
+}18
+19
+// NewShardedMap 创建新的分段锁 map20
+func NewShardedMap(shardCount int) *ShardedMap {21
+    sm := &ShardedMap{22
+        shards: make([]*Shard, shardCount),23
+        hash:   fnv.New32a(),  // 使⽤ FNV 哈希算法24
+    }25
+    26
+    // 初始化所有分⽚27
+    for i := 0; i < shardCount; i++ {28
+        sm.shards[i] = &Shard{29
+            data: make(map[string]interface{}),30
+        }31
+    }32
+    return sm33
+}34
+35
+// getShard 根据 key 获取对应的分⽚36
+func (sm *ShardedMap) getShard(key string) *Shard {37
+    sm.hash.Write([]byte(key))38
+    hash := sm.hash.Sum32()39
+    sm.hash.Reset()40
+    return sm.shards[hash%uint32(len(sm.shards))]41
+}42
+43
+// Set 设置键值对44
+func (sm *ShardedMap) Set(key string, value interface{}) {45
+    shard := sm.getShard(key)46
+    shard.mu.Lock()47
+    defer shard.mu.Unlock()48
+    shard.data[key] = value49
+}50
+51
+// Get 获取键值对52
+
+--- PAGE 23 ---
+func (sm *ShardedMap) Get(key string) (interface{}, bool) {53
+    shard := sm.getShard(key)54
+    shard.mu.RLock()55
+    defer shard.mu.RUnlock()56
+    value, exists := shard.data[key]57
+    return value, exists58
+}59
+60
+// Delete 删除键值对61
+func (sm *ShardedMap) Delete(key string) {62
+    shard := sm.getShard(key)63
+    shard.mu.Lock()64
+    defer shard.mu.Unlock()65
+    delete(shard.data, key)66
+}67
+68
+// Range 遍历所有键值对69
+func (sm *ShardedMap) Range(f func(key string, value interface{}) bool) {70
+    for _, shard := range sm.shards {71
+        shard.mu.RLock()72
+        for k, v := range shard.data {73
+            if !f(k, v) {74
+                shard.mu.RUnlock()75
+                return76
+            }77
+        }78
+        shard.mu.RUnlock()79
+    }80
+}81
+多个 goroutine 对同⼀个 map 写会触发异常，这种异常是否可以⽤ defer 捕获？
+多个goroutine对同⼀个m ap进⾏写操作会触发fatal error，这种异常⽆法被defer recover捕获。
+这是因为G o语⾔在m ap的并发写操作检测到时会直接触发系统级的致命错误，这种错误是程序⽆
+法恢复的严重错误。m ap的并发写检测是在运⾏时层⾯实现的，当检测到并发写操作时，G o运⾏
+时会直接调⽤fatal函数，触发系统级的致命错误。
+G o语⾔中的错误处理分为三个层次：
+普通错误（Error）：可预期的错误，通过返回值处理
+异常（Panic）：可恢复的异常，可通过defer recover捕获
+
+--- PAGE 24 ---
+致命错误（Fatal Error）：不可恢复的严重错误，程序直接退出
+底层原理
+底层数据结构是什么
+在 G o 语⾔中，m ap 类型的底层实现就是哈希表，map 类型的变量 本质上是⼀个指针*hmap，指
+向hmap结构体。m ap的底层实现基于哈希表，由hm ap和bmap两个核⼼结构体组成。hm ap管理
+整体结构，包含桶数组、元素计数、扩容状态等；bmap是具体的数据桶，每个桶可存储8个键值
+对。
+// 其定义在  src/runtime/map.go 中1
+type hmap struct {2
+    count     int    // 元素个数3
+    flags     uint8  // 状态标志4
+    B         uint8  // 桶的数量的对数  ( 即桶数量为  2^B)5
+    noverflow uint16 // 溢出桶的数量6
+    hash0     uint32 // hash 种⼦，为 hash 函数引⼊随机性7
+8
+    buckets    unsafe.Pointer // 指向桶数组的指针9
+    oldbuckets unsafe.Pointer // 扩容时指向旧桶的指针10
+    nevacuate  uintptr       // 扩容时的进度计数器11
+12
+    extra *mapextra // 额外信息13
+}14
+15
+type bmap struct {16
+   tophash [bucketCnt]uint8 // 存储每个 key 哈希值的⾼ 8 位，⻓度为 817
+   keys    [bucketCnt]keytype   // 8 个 key 的数组18
+   values  [bucketCnt]valuetype // 8 个 value 的数组19
+   overflow *bmap               // 指向溢出桶的指针20
+}21
+22
+23
+G o m ap 的底层是⼀个 buckets 数组
+数组的每个元素都是⼀个桶（bucket）
+每个桶可以存储 8 个 kv，当桶满时，会创建溢出桶
+Go
+
+--- PAGE 25 ---
+为什么设置为 8 个 k-v 键值对
+8 个键值对的⼤⼩正好接近 CPU  的缓存⾏⼤⼩（通常是 64 字节），可以⼀次将整个桶加载到 CPU  
+缓存中，减少了 CPU  缓存未命中的概率，提升了访问性能
+map删除key后内存会⽴即释放吗？
+不会⽴即释放。m ap删除key采⽤标记删除机制，只是将对应槽位标记为空（em ptyOne），并不
+会真正释放内存。只有当整个m ap被置为nil或不再被引⽤时，垃圾回收器才会回收map占⽤的内
+存。这种设计避免了频繁的内存分配和释放，提⾼了性能，同时为后续插⼊操作提供了快速定位
+空位的能⼒。
+原理
+性能优化考虑
+避免频繁分配：如果每次删除都释放内存，后续插⼊时需要重新分配，性能开销⼤
+减少内存碎⽚：保持m ap的连续性，避免内存碎⽚化
+快速插⼊：删除后留下的空位可以被后续插⼊操作快速利⽤
+内存重⽤机制：当m ap中有⼤量删除操作后，会形成"稀疏"状态：
+空位被标记为emptyOne，但内存仍然被占⽤
+新插⼊的key会优先使⽤这些空位
+这种机制有效避免了不必要的内存分配
+垃圾回收策略：m ap的内存释放完全依赖G o语⾔的垃圾回收器：
+只有当m ap被置为nil或不再被引⽤时，才会被回收
+垃圾回收器会⼀次性回收整个m ap占⽤的内存
+这种批量回收策略⽐频繁的⼩块释放更⾼效
+扩容机制
+扩容类型以及触发条件是什么
+增量扩容：
+触发条件：当元素个数/桶数量 > 6.5或溢出桶数量过多（链表太⻓）时触发
+扩容⽅式：桶数量翻倍（B值加1）
+
+--- PAGE 26 ---
+适⽤场景：数据量增⻓导致的扩容
+迁移策略：所有key需要重新计算哈希值并迁移到新位置
+等量扩容：
+触发条件：当溢出桶数量超过 （主桶数量）时触发2 个B
+扩容⽅式：桶数量不变，只整理数据分布
+适⽤场景：哈希冲突严重导致的性能下降
+迁移策略：重新分配溢出桶，减少哈希冲突
+扩容期间的操作处理
+G o 的 m ap 扩容采⽤ 渐进式扩容（incremental grow）
+扩容准备阶段：
+创建新的桶数组（增量扩容时⼤⼩为原来的2倍，等量扩容时⼤⼩不变）
+将oldbuckets指向旧桶数组
+设置nevacuate为0，开始迁移进度跟踪
+渐进迁移阶段：
+在每次插⼊、修改、删除操作时检查oldbuckets
+如果oldbuckets不为nil，每次迁移2个桶的数据
+对每个 key 计算 hash，判断 hash & oldMask 的某⼀位（即决定 low/high）
+若结果为 0 → 放到新 bucket i（low）
+若结果为 1 → 放到新 bucket i + oldCount（high）
+迁移过程中，新插⼊的key直接进⼊新桶
+查找key时需要同时查找新旧桶
+迁移完成阶段：
+当nevacuate >= 2^B时，表⽰所有桶都已迁移完成
+释放oldbuckets指向的旧桶数组
+
+--- PAGE 27 ---
+将oldbuckets设置为nil，完成扩容
+如何判断是否迁移
+nevacuate：记录当前已经迁移的旧桶索引
+新写⼊或访问旧桶时：
+如果旧桶索引 < nevacuate → 已迁移 → 直接访问新桶
+如果旧桶索引 >= nevacuate → 未迁移 → 触发迁移
+具体的读写操作是什么
+写操作
+计算 key 的 hash → bucket index
+判断桶是否迁移：
+已迁移 → 写⼊新桶
+未迁移 → 先搬迁旧桶中的所有元素到新桶，再写⼊新桶
+更新 evacuate 索引：
+每次写操作只迁移部分桶 → 渐进式扩容
+写⼊新桶：
+hash 重新计算 → 分配到新桶或新溢出桶
+维护溢出桶链：
+如果新桶 slot 满 → 创建新溢出桶
+读操作
+计算 key 的 hash → bucket index
+检查桶迁移状态：
+已迁移 → 直接访问新桶
+未迁移 → 先搬迁旧桶，再访问新桶
+返回值
+
+--- PAGE 28 ---
+读操作不会改变 m ap 结构，但会触发部分桶迁移
+扩容若⼀些kv对⼀直在旧map中是如何处理的
+因为迁移是按访问驱动的。G o 不会在扩容瞬间全部搬迁，⽽是：
+当你访问（读/写/删）⼀个 key 时， G o 先判断该 key 对应的桶是否还在旧桶中；
+如果在旧桶中，就先触发该桶的迁移；再去对应的新桶上执⾏操作。
+哈希定位和冲突处理
+map是如何进⾏哈希定位原理
+m ap 的哈希⽅法采⽤与运算：hash & (m-1)来定位哈希桶
+计算key的哈希值：使⽤G o语⾔内置的哈希函数计算key的哈希值，这个哈希值是⼀个64位的
+整数，⽤于后续的桶定位和快速⽐较
+1.
+⽤哈希值低B位确定桶位置：将哈希值的低B位作为桶数组的索引，B是m ap中桶数量的对数
+（桶数量 = 2^B）。这⼀步确定了key应该存储在哪个桶中  bucketIndex = hash & (2^B - 
+1) ，等价于 hash & mask
+2.
+⽤哈希值⾼8位（tophash）快速过滤确定槽位置：在桶内，每个槽位都存储了对应key哈希
+值的⾼8位。通过⽐较tophash可以快速过滤掉不匹配的槽位，避免对每个key进⾏完整的⽐
+较操作。（槽位之间的tophash可以相同）
+3.
+⽐较key的值：对于tophash匹配的槽位，需要遍历桶内的keys数组，进⾏完整的key⽐较。
+由于桶内最多只有8个key，这个⽐较过程很快
+4.
+如果发⽣冲突，通过overﬂow指针查找溢出桶：当桶内8个槽位都满了，或者发⽣哈希冲突
+时，m ap会创建溢出桶。通过overﬂow指针可以链接到下⼀个溢出桶，继续查找过程，直到
+找到匹配的key或确认key不存在
+5.
+为什么桶的个数为2的n次⽅个
+m ap通过 (length - 1) & hash 来计算元素存储的索引位置，这种位运算只有在数组容量是 
+2 的 n 次⽅时才能确保索引均匀分布。位与运算的效率⾼于取模运算（hash % length），提
+⾼了哈希计算的速度。
+
+--- PAGE 29 ---
+且当m ap扩容时，通过容量为 2 的 n 次⽅，扩容时只需通过简单的位运算判断是否需要迁
+移，这减少了重新计算哈希值的开销，提升了重新哈希的效率。
+map如何处理哈希冲突
+G o m ap 与 J ava HashM ap 类似，同样使⽤拉链法。新 K ey 需存的主桶已有元素时，先⽐较新 
+K ey 的哈希值⾼ 8 位与主桶 topHash 数组的值：
+若有相同值，再⽐较 K ey 实际内容，K ey 相同则覆盖 Value；K ey 不同，继续在主桶内找空位
+置。
+若主桶⽆空位置，通过 overﬂow 指针找溢出桶，在溢出桶重复上述查找与存储，直⾄找到空
+位置或确定 K ey 已存在。
+overﬂow指针的作⽤
+overﬂow 指针⽤于处理哈希冲突，当多个键值对被哈希到同⼀个 bucket（桶）时，如果⼀个 
+bucket 的槽位（最多可容纳 8 个键值对）已满，则会分配⼀个新的溢出 bucket，并通过 
+overﬂow 指针将其链接到原 bucket，形成⼀个单向链表。这样，m ap 就可以通过遍历这个链表
+来查找或插⼊数据，从⽽解决哈希冲突。
+sync.M ap
+sync.M ap的底层实现原理和状态管理机制是什么？
+sync.M ap的核⼼创新在于将传统的单⼀m ap拆分为两个独⽴的m ap，通过这种分离实现了读操作
+的⽆锁访问。这种设计巧妙地利⽤了G o语⾔原⼦操作的优势，让⼤部分读操作可以绕过锁机制，
+从⽽显著提升并发性能。
+双map架构详解
+read m ap - ⽆锁访问层：read m ap是sync.M ap的第⼀层，具有以下特点：
+⽆锁访问：所有读操作都可以直接访问，⽆需加锁
+原⼦操作：使⽤原⼦操作保证线程安全
+软删除⽀持：通过nil值标记删除状态
+⾼命中率：在读多写少的场景下，⼤部分操作都在这⾥完成
+
+--- PAGE 30 ---
+dirty m ap - 数据存储层：dirty m ap是sync.M ap的第⼆层，具有以下特点：
+加锁访问：所有写操作都需要获取锁
+实际数据存储：存储真正的key-value对
+写操作处理：处理所有的插⼊、更新、删除操作
+数据同步：与read m ap保持数据⼀致性
+m utex锁 - 保护机制：m utex锁专⻔保护dirty m ap的访问
+写操作控制：确保同⼀时间只有⼀个goroutine可以修改dirty m ap
+数据⼀致性：保证dirty m ap和read m ap之间的数据同步
+并发安全：防⽌数据竞争和内存损坏
+状态管理机制
+sync.M ap通过精妙的状态管理机制来优化删除操作的性能。传统的删除操作需要加锁并⽴即从内
+存中移除数据，⽽sync.M ap引⼊了两种特殊状态，让删除操作可以在⽆锁的情况下完成，⼤⼤提
+升了并发性能。
+nil状态 - 软删除
+nil状态⽤于实现⾼效的删除操作：
+⽆锁删除：在read m ap中直接将value设置为nil
+快速标记：不需要⽴即从内存中移除数据
+性能优化：避免了频繁的加锁操作
+状态恢复：如果后续重新写⼊，可以快速恢复
+expunged状态 - 硬删除
+expunged状态⽤于标识真正的删除：
+硬删除标记：表⽰key已经从dirty m ap中完全删除
+内存优化：避免重复的数据同步操作
+
+--- PAGE 31 ---
+状态区分：与nil状态区分，防⽌数据混乱
+同步控制：控制read m ap和dirty m ap之间的数据同步
+sync.M ap如何解决并发问题？
+type Map struct{1
+    mu Mutex                   // 保护  dirty 的互斥锁2
+    read atomic.Value          // ⽆锁读的  readOnly 结构3
+    dirty map[interface{}]*entry // 包含最新数据的  map4
+    misses int                 // 记录从  read 读取失败的次数5
+}6
+7
+type readOnly struct {8
+    m       map[interface{}]*entry9
+    amended bool // 标记  dirty 中是否存在  read 中没有的键10
+}11
+12
+type entry struct {13
+    p unsafe.Pointer // 指向  interface{} 类型的值14
+}15
+读操作
+优先查 read map（⽆锁、原⼦读），如果命中，直接返回。
+未命中时查 dirty map（需加锁）：
+如果 dirty m ap 命中，返回值。
+增加 misses 计数。
+当 misses 超过 dirty 的⼤⼩时，将 dirty 升级为新的 read m ap，减少未来 m iss 成
+本。
+写操作
+情况⼀：read m ap 中存在该 key（若存在且未被删除）：可直接原⼦更新值，⽆需加锁。
+情况⼆：read m ap 不存在该 key：加锁访问 dirty m ap。
+若 dirty 中存在该键，直接更新。
+Go
+
+--- PAGE 32 ---
+若 dirty m ap 没有此 key，则插⼊。
+若 dirty 为 nil（说明当前只存在 read），则将 read 拷⻉为 dirty，再写⼊。
+将新 entry 加⼊ dirty，并标记 amended=true 。
+dirty提升是什么
+⽤于将 dirty 哈希表中的数据同步到 read 视图，从⽽减少后续读操作的锁竞争。
+当满⾜以下条件时，dirty 会被提升为新的 read ：
+read 中找不到键：读操作（如 Load ）在 read 中未找到⽬标键，且 amended=true（表⽰ 
+dirty 包含新数据）。
+misses 计数器达到阈值：连续多次（次数等于 len(dirty) ）从 dirty 读取数据后，触发提
+升。
+func (m *Map) missLocked() {1
+    m.misses++2
+    if m.misses < len(m.dirty) {3
+        return4
+    }5
+    // 将  dirty 提升为  read6
+    m.read.Store(readOnly{m: m.dirty})7
+    m.dirty = nil8
+    m.misses = 09
+}10
+复制 dirty 到 read：将 dirty 的引⽤直接赋值给 read，并重置 amended 为 false 。
+清空 dirty：将 dirty 置为 nil，等待下次写操作时重建。
+重置 misses：计数器归零，准备下⼀轮统计。
+sync.M ap 的锁粒度是什么？锁的是整个 map 还是某个部分？
+sync.Map 的锁粒度不是“整个 m ap” ⽽是仅对写操作锁住 dirty map 读操作在 read map 上⽆
+锁完成。
+Go
+
+--- PAGE 33 ---
+sync.M ap 中的 readM ap / dirtyM ap 是如何切换的？"misses" 指标怎么⽤？
+misses 是⼀个动态的热度监控指标，表⽰“读不到 read ⽽去 dirty 读的次数”。当 m iss 太多时，
+说明 read 过期了，于是做⼀次提升，恢复快速读的性能。
+sync.M ap的适⽤场景和局限性是什么？
+sync.M ap适⽤于读多写少的场景，特别是不同goroutine访问不同key的情况，能提供极⾼的并发
+性能。但其局限性也很明显：写操作需要加锁导致写多场景性能下降，双m ap架构增加内存占
+⽤，数据同步过程可能产⽣性能抖动，且不⽀持并发写⼊。选择使⽤时需要根据具体业务场景权
+衡利弊。
+sync.M ap和加读写锁的map的区别
+sync.M ap 适合读多写少 + 键集合稳定的场景，性能优势明显；
+m ap+RW M utex 适合写多 or K ey 动态变化频繁的场景，可控性强，范围更⼴。
+sync.M ap 的性能优势主要来⾃于：绝⼤部分读操作在 read m ap 中“不加锁”直接进⾏。
+Context
+Context类型有哪些？Context的作⽤是什么？
+类型
+基础类型
+操作 map + RWM utex sync.M ap
+读 加 RLock ⼤部分情况不加锁（命中 
+read m ap）
+写 加 Lock 加 Lock，写⼊ dirty m ap
+类型 创建⽅式 特点 典型使⽤场景
+context.Backgrou
+nd()
+直接调⽤ 
+context.Backgrou
+nd()
+不可取消、⽆超
+时、⽆值
+程序⼊⼝、初始
+化、主函数、顶级
+请求
+
+--- PAGE 34 ---
+派⽣类型：派⽣类型都是通过基础 Context 创建的，属于 有控制能⼒的上下⽂。
+作⽤：Context 的核⼼作⽤是 在并发操作之间传递取消信号、超时控制和请求作⽤域数据。
+取消信号传递（Cancel Propagation）
+⽤于通知 goroutine 停⽌⼯作，防⽌资源泄漏。
+当上游任务取消时，所有⼦任务会同时被取消。
+超时控制（Timeout / Deadline）
+可设置超时或截⽌时间，超时⾃动取消。
+请求作⽤域数据传递（Request-scoped data）
+在多 goroutine 协作的请求中传递数据（如 trace id、user id 等）。
+防⽌ goroutine 泄漏
+在 HTTP 请求、RPC 调⽤、任务执⾏等场景中，任务取消时⾃动退出⼦ goroutine。
+context.TODO() 直接调⽤ 
+context.TODO()
+同样不可取消、⽆
+超时、⽆值
+代码未确定使⽤哪
+种 Context 时的占
+位符
+类型 创建⽅式 特点 说明
+context.WithCanc
+el(parent)
+⼿动调⽤ cancel() 
+可取消
+主动取消控制 常⽤于⼿动停⽌任
+务、协程退出
+context.WithTime
+out(parent, 
+timeout)
+超时⾃动取消 到期后会⾃动调⽤ 
+cancel()
+适合 RPC、
+HTTP、数据库等
+有超时要求的操作
+context.WithDead
+line(parent, 
+deadline)
+到指定时间点⾃动
+取消
+类似 
+WithTimeout，但
+明确指定时间点
+适合有精确截⽌时
+间的任务
+context.WithValu
+e(parent, key, 
+val)
+可携带键值对数据 不影响取消链 ⽤于传递请求范围
+内的数据（如 
+traceID、userID 
+等）
+
+--- PAGE 35 ---
+Context包提供了哪些核⼼接⼝和函数？如何正确使⽤？
+Context包提供了Context接⼝和四类核⼼创建函数。Context接⼝定义了Deadline、Done、
+Err、Value四个⽅法，⽤于获取截⽌时间、取消信号、错误信息和请求范围的值。
+四类核⼼创建函数包括：
+根Context创建函数：Background（创建根Context，⽤于主函数和测试）和TODO（创建根
+Context，⽤于不确定场景）
+1.
+可取消Context创建函
+数：WithCancel（创建可取消的Context，返回Context和cancel函数）
+2.
+超时控制函数：WithTimeout（创建带超时的Context）和WithDeadline（创建带截⽌时间的
+Context）
+3.
+值传递函数：WithValue（创建带值的Context，⽤于传递请求范围数据）4.
+四个关键⽅法
+Deadline⽅法：返回Context的截⽌时间，⽤于判断操作是否已经超时。当Context设置了超
+时或截⽌时间时，Deadline⽅法会返回具体的时间点；如果没有设置，则返回false。这个⽅
+法让程序可以提前判断操作是否会超时，从⽽做出相应的处理。
+Done⽅法：返回⼀个只读的channel，当Context被取消或超时时，该channel会被关闭。这
+是Context取消机制的核⼼，goroutine通过监听这个channel来响应取消信号。
+Err⽅法：返回Context被取消的原因，如果Context未被取消则返回nil
+Value⽅法：根据key返回对应的值，如果key不存在则返回nil。⽀持在Context树中向上查
+找，直到找到对应的值或到达根节点。⽤于传递请求范围的数据，如⽤⼾ID、请求ID、认证信
+息等。
+Context的值传递机制是什么？它有什么特点？
+Context的值传递机制通过WithValue函数实现，它可以在Context树中存储和传递请求范围的
+值。这些值具有不可变性特点，每次调⽤W ithValue都会创建新的Context节点，保持原有
+Context不变。
+值传递采⽤向上查找机制，当在当前Context中找不到指定key时，会⾃动向上查找⽗Context，
+直到找到对应的值或到达根节点。这种设计让数据能够在Context树中⾼效传播，同时保持了数据
+的层次结构。
+
+--- PAGE 36 ---
+值传递具有类型安全和请求范围的特点。通过⾃定义key类型避免类型冲突，数据只在特定请求范
+围内有效，不会污染全局状态。这种设计确保了数据的安全性和隔离性。
+底层原理
+Context的值传递基于不可变性设计和链式查找机制实现，这种设计既保证了数据安全，⼜提供了
+⾼效的数据访问能⼒，除此还具有类型安全和请求范围隔离的特点。
+不可变性设计：每次调⽤WithValue函数时，都会创建⼀个新的valueCtx节点，存储新的key-
+value对，同时保持原有Context不变。这种设计确保了并发安全，多个goroutine可以安全地
+访问同⼀个Context⽽不会产⽣数据竞争。由于Context节点不可修改，不需要使⽤锁来保护
+内部状态，提⾼了系统的性能。
+链式查找机制：实现了⾼效的数据访问。当调⽤Value(key)⽅法时，Context会⾸先检查当前
+节点是否包含指定的key，如果找到则返回对应的值，否则向上查找⽗Context。这种查找过
+程会⼀直持续到根节点，确保能够找到所有相关的数据。链式查找的优势在于⾃动传播，⼦
+Context可以访问⽗Context中的所有数据，实现了数据的层次化传递。
+类型安全机制：通过⾃定义key类型实现。Context的key可以是任意类型，但为了确保类型安
+全，通常使⽤空结构体作为key类型。这种设计避免了不同包之间的key冲突，确保了数据的
+唯⼀性和安全性。
+请求范围隔离：确保了数据只在特定的请求⽣命周期内有效，不会污染全局状态。每个HTTP
+请求都有⾃⼰独⽴的Context，其中包含的认证信息、⽤⼾数据、请求ID等都是该请求特有
+的。当请求结束时，相关的Context也会被垃圾回收，实现了数据的⾃动清理。
+Context如何实现cancel的？
+Context的取消机制基于通道 channel实现。每个cancelCtx节点都包含⼀个done通道，当
+Context被取消时，这个通道会被关闭。⼦Context通过监听⽗Context的done通道来响应取消信
+号。取消机制的核⼼是树形传播：当⽗Context被取消时，所有⼦Context也会⾃动取消。这种设
+计通过select语句实现⾮阻塞的取消检查，goroutine可以及时响应取消信号并优雅退出，避免
+资源泄漏。
+当调⽤ cancel() 时：
+会关闭当前 Context 的 done channel；
+所有监听 <-ctx.Done() 的 goroutine 都会⽴即返回；
+同时递归取消所有⼦ Context：如果当前 context 有派⽣的⼦ context，它们会被⼀起取消
+从⽗ context 中解除注册：避免内存泄漏。
+
+--- PAGE 37 ---
+Context的超时控制如何实现的
+在 Go 语⾔ 中，context 的超时控制是通过 context.WithTimeout 和 context.WithDeadline 来
+实现的。本质上，它是通过⼀个 定时器（timer） 来跟踪超时时间，并在超时后通知使⽤者停⽌
+操作。当超时时间到达时，Context会⾃动取消，Done通道被关闭。
+func WithTimeout(parent Context, timeout time.Duration) (Context, 
+CancelFunc) {
+1
+    return WithDeadline(parent, time.Now().Add(timeout))2
+}3
+4
+func WithDeadline(parent Context, d time.Time) (Context, CancelFunc) {5
+    c := &timerCtx{6
+        cancelCtx: cancelCtx{Context: parent},7
+        deadline:  d,8
+    }9
+    stop := time.AfterFunc(time.Until(d), func() { c.cancel(true, 
+DeadlineExceeded) })
+10
+    return c, func() { c.cancel(false, Canceled) }11
+}12
+13
+timerCtx 内部包含 deadline 和 cancelCtx。
+time.AfterFunc 启动⼀个 goroutine，在超时后⾃动调⽤ c.cancel()。
+Done() 返回⼀个 channel，⼀旦调⽤ cancel()，channel 会被关闭，其他 goroutine 可以通
+过 <-ctx.Done() 感知。
+timerCtx是超时机制的核⼼实现。tim erCtx继承⾃cancelCtx，增加了定时器功能。它包含⼀个
+tim er字段（*tim e.Tim er）和⼀个deadline字段（tim e.Tim e）。当创建tim erCtx时，会启动⼀个
+定时器，到达截⽌时间时⾃动调⽤cancel()函数。tim erCtx的Deadline()⽅法会返回设置的截⽌时
+间，Done()⽅法返回与⽗cancelCtx相同的通道。这种设计让超时控制变得简单⾼效，⽆需⼿动管
+理定时器。
+Go
+
+--- PAGE 38 ---
+内存管理
+内存分配
+Golang内存分配机制
+G o语⾔内置运⾏时（就是runtim e)，抛弃了传统的内存分配⽅式，改为⾃主管理。这样可以⾃主
+地实现更好的内存使⽤模式。
+内存分配算法采⽤G oogle的 TCM alloc算法，每个线程都会⾃⾏维护⼀个独⽴的内存池，进⾏内
+存分配时优先从该内存池中分配，当内存池不⾜时才会向加锁向全局内存池申请，减少系统调⽤
+并且避免不同线程对全局内存池的锁竞争，把内存切分的⾮常的细⼩，分为多级管理，以降低锁
+的粒度。回收对象内存时，并没有将其真正释放掉，只是放回预先分配的⼤块内存中，以便复
+⽤。只有内存闲置过多的时候，才会尝试归还部分内存给操作系统，降低整体开销
+内存分配体系
+mcache（线程缓存）：G oroutine 所在线程级别，每个 P（处理器）都有⼀个本地分配缓
+存，避免全局锁。m ache管理线程在本地缓存的m span，每个goroutine绑定的P都有⼀个
+m cache字段
+mcentral（中⼼缓存）：每种对象⼤⼩的集中池，管理相同⼤⼩对象的空闲 span，m central
+管理全局的m span供所有线程使⽤，全局m heap变量包含central字段，每个mcentral结构都
+维护在m heap结构内
+mheap（堆）：全局堆管理，负责向操作系统申请/释放⼤块内存。m heap管理G o的所有动态
+分配内存，可以认为是G o程序持有的整个堆空间，全局唯⼀
+mspan：m span是内存管理的基本单元，该结构体中包含next和 prev两个字段，它们分别指
+向了前⼀个和后⼀个m span，每个m span都管理npages个⼤⼩为8K B的⻚，⼀个span是由多
+个page组成的，这⾥的⻚不是操作系统中的内存⻚，它们是操作系统内存⻚的整数倍。
+堆和栈的区别
+⽤途：
+
+--- PAGE 39 ---
+栈⽤于存储局部变量、⽅法调⽤的参数，⽅法返回地址以及⼀些临时数据。每个线程在创
+建时会创建⼀个栈，这个栈随着⽅法执⾏增⻓和缩⼩。每当⼀个⽅法执⾏时会创建⼀个栈
+帧，⽤于存储该⽅法的信息，当⽅法执⾏完毕，栈帧就会从栈中弹出。
+堆⽤于存储对象实例（类的实例和数组）。使⽤new关键字创建的对象实例会在堆上分配
+空间。
+⽣命周期
+栈中的数据具有确定的⽣命周期，当⽅法调⽤结束时其对应的栈帧会被销毁，栈中的局部
+变量也会消失。当线程结束执⾏时，栈内存也会被⾃动回收。
+堆中的对象⽣命周期不确定，对象会在垃圾回收机制检测到对象不再被引⽤时进⾏回收。
+存取速度
+栈的存取速度快，因为栈遵循先进后出原则，操作简单快速。
+堆存取速度较慢，对象在堆上的分配和回收需要更多的时间，⽽且垃圾回收机制的运⾏也
+会影响性能。
+存储空间
+栈的空间相对较⼩且固定，由操作系统管理。栈溢出时可能是递归过深或者局部变量过
+⼤。
+堆的空间可以动态分配，具有可扩展性，可能会导致内存碎⽚化问题，分配和回收由J VM
+管理。堆溢出通常是创建了太多的⼤对象，或者未能及时回收不再使⽤的对象。
+可⻅性
+栈中数据对线程私有，每个线程有⾃⼰的栈空间，天⽣线程安全。
+堆的数据对线程共享，所有线程都可以访问堆上的对象。
+内存对⻬
+内存对⻬是什么
+在G o语⾔中，结构体的内存对⻬是为了提⾼访问速度和减少内存浪费。编译器会根据每个字段的
+类型⼤⼩以及架构的字⻓来调整字段在内存中的布局。通常情况下，结构体的每个字段都会按照
+其类型的⼤⼩进⾏对⻬，并且整个结构体的⼤⼩也会是最⼤字段对⻬值的倍数。
+字段对⻬：每个字段的起始地址必须是对⻬到其类型的⼤⼩上。例如，⼀个int32类型的字段
+需要4字节对⻬，意味着它的地址必须是4的倍数。
+
+--- PAGE 40 ---
+填充字节：如果某个字段不能满⾜对⻬要求，编译器会在前⼀个字段之后插⼊填充字节以确
+保当前字段的对⻬。
+结构体对⻬：整个结构体的⼤⼩也必须是对⻬到结构体中最⼤字段⼤⼩的倍数。例如，如果
+结构体中最⼤的字段是8字节，则整个结构体的⼤⼩必须是8的倍数。
+内存优化：通过调整字段的顺序可以减少填充字节的数量，从⽽降低结构体的总内存消耗。
+通常将⼤字段放在前⾯，⼩字段放在后⾯。
+为什么要内存对⻬
+硬件限制：许多处理器架构（如x86、ARM 等）要求数据类型必须存储在特定的内存地址上。
+例如，32位整数应存储在4字节对⻬的地址上，⽽64位双精度浮点数则应存储在8字节对⻬的
+地址上。如果违反这⼀规则，处理器可能需要额外的操作来拆分和重组数据，这会显著增加访
+问时间。
+性能优化：CPU 通过内存总线读取数据时，通常以“字”为单位（如32位系统为4字节）。现
+代CPU 通常以缓存⾏为单位访问内存，⼀个缓存⾏通常是64字节。当数据对⻬时，CPU 可以
+⼀次性读取整个数据，避免多次内存访问。如果⼀个4字节的int跨越两个内存字边界（例如从
+地址0x0001开始），则需要两次内存访问才能读取完整数据，显著降低效率
+跨平台兼容性：不同平台可能有不同的对⻬要求。为了确保代码在不同平台上都能正确运
+⾏，遵循严格的内存对⻬规则是⾮常重要的。
+内存对⻬是操作系统层⾯的东西，还是每个编程语⾔层⾯的东西？
+内存对⻬不是操作系统动态管理的机制（如虚拟内存⻚对⻬是OS负责的，但那是另⼀回事）。是
+编译器在编译期间根据⽬标平台的ABI规范⾃动插⼊填充字节（padding）来实现的。因此，它是
+编程语⾔实现（特别是编译器）与底层硬件架构协同⼯作的结果。
+内存逃逸
+Go的局部变量在堆上还是栈上
+在G o语⾔中，局部变量通常分配在栈上，但编译器会根据逃逸分析的结果决定是否将某些变量分
+配到堆上。如果编译器检测到某个局部变量的⽣命周期超出了当前函数的作⽤域，那么该变量会
+被分配到堆上。
+逃逸策略：如果对象可能被函数外部引⽤（只要有可能被引⽤），那么分配在堆上，否则分配在栈
+上。即使没有被函数外部引⽤，但是对象太⼤，那么也在分配到堆上。
+
+--- PAGE 41 ---
+逃逸分析
+逃逸分析是⼀种⽤于优化程序运⾏时内存管理的技术，主要应⽤于垃圾回收机制中。它的核⼼思
+想是通过分析对象的⽣命周期和作⽤域，判断⼀个对象是否会被⽅法外部访问。如果⼀个对象不
+会被外部访问，则可以将其分配在栈上⽽不是堆上，从⽽减少垃圾回收的压⼒并提⾼性能。
+指针逃逸
+返回局部变量的指针，因为局部变量在函数返回后仍被引⽤，因此必须分配到堆上。
+在 slice 或 m ap 中存储指针
+向 channel 发送指针数据
+动态类型参数逃逸：interface{}类型在编译器⽆法确定具体类型，传⼊接⼝时需要做动态类型
+装箱（boxing），可能导致值逃逸
+跨线程逃逸：当⼀个对象的引⽤被多个线程共享时，就发⽣了线程逃逸。这种情况可能会导
+致线程安全问题。
+切⽚扩容逃逸：如果底层数组在 append 时发⽣扩容，会在堆上分配
+变量⼤⼩过⼤：G o 编译器有阈值，⼤对象会直接分配到堆上。⼤对象（如数组）超过栈容量
+的限制时，逃逸到堆
+闭包引⽤逃逸：闭包引⽤外部变量，延⻓变量⽣命周期
+内存逃逸的影响
+变量从栈逃逸到堆上的主要影响是性能开销
+性能开销：堆分配⽐栈分配速度慢
+GC压⼒：栈分配函数执⾏结束后⾃动回收内存，速度快。堆分配函数执⾏结束后交给GC处
+理，速度慢，易产⽣内存碎⽚，增加G C负担
+缓存命中率下降：栈内存是连续的、局部性好，堆上对象较分散
+如何查看内存逃逸
+go build -gcﬂags=-m
+
+--- PAGE 42 ---
+内存泄漏
+什么是内存泄漏
+内存泄漏是指程序中某些对象虽然不再被使⽤，但仍然被引⽤（reachable），从⽽⽆法被 G C 回
+收，导致内存占⽤持续增⻓
+哪些情况会导致内存泄漏以及解决⽅法
+Goroutine 泄漏：goroutine 启动后⼀直阻塞在 channel、锁、⽹络 I/O 等处或者主协程退出
+前没有回收
+正确关闭 channel
+使⽤ context 控制 goroutine ⽣命周期；
+使⽤ select + default 防⽌永久阻塞
+Channel 未关闭 / 缓存堆积：channel ⼀直被写⼊但⽆⼈读取或缓存太⼤，造成堆积。
+限制 channel 缓冲；
+使⽤ select 检测是否有消费者；
+使⽤ context 取消。
+Slice泄漏：从⼀个⼤的切⽚（或底层数组）中截取⼀⼩部分使⽤，即使之后不再需要那个⼤
+数组，但只要⼩切⽚仍被引⽤，整个⼤数组就不会被 G C 回收
+M ap未清理：不断往 m ap 中写⼊数据，⽆淘汰策略或过期机制。
+外部资源未关闭：打开⽂件、数据库连接、HTTP 响应体未关闭，底层资源持续占⽤内存
+闭包引⽤外部变量导致对象⻓时间存活：闭包持有外部变量引⽤，即使变量本⾝不再需要，
+也⽆法释放。
+避免闭包持有⼤对象；
+在闭包外部⼿动清空引⽤。
+如何排查内存泄漏
+pprof 内存分析：使⽤pprof⼯具来查看内存占⽤情况，可以通过runtim e/pprof包来进⾏内存
+剖析，查看内存使⽤情况，分析内存泄漏的位置。
+检查是否有未关闭的goroutine导致内存泄漏，确保goroutine在不需要时被正确关闭
+
+--- PAGE 43 ---
+检查是否存在循环引⽤导致的内存泄漏，⽐如两个对象相互引⽤，但却不再被外部引⽤，导致
+⽆法被G C回收。
+使⽤G o的标准库提供的⼯具进⾏内存泄漏检测，⽐如使⽤go tool trace和go tool pprof等
+⼯具进⾏性能和内存分析。
+运⾏时监控
+runtim e.Num G oroutine()：检查协程数量是否异常增⻓
+G ODEBU G =gctrace=1：查看 G C ⽇志，分析回收频率和内存趋势。
+内存溢出
+如果出现了栈溢出的情况，程序会直接终⽌吗？
+当发⽣栈溢出时，程序不⼀定会⽴即终⽌，但通常会导致未定义⾏为或异常，最终可能导致程序
+崩溃。在⼤多数现代操作系统和编程环境中，栈溢出会触发⼀个硬件异常（如段错误或访问违
+规），操作系统会通过信号机制（如SIG SEG V）通知进程，若未处理该信号，程序将被强制终⽌。
+Goroutine
+Goroutine默认栈空间多少？goroutine为什么⽐c++线程轻量化？
+默认初始栈⼤⼩：
+ 在 G o 中，每个新创建的 goroutine 默认栈⼤⼩约为 2 KB（Go 1.4 之后）。
+动态增⻓：goroutine 的栈不是固定的，它会 按需⾃动扩容和收缩。
+当函数调⽤层级加深、局部变量增多时，G o 运⾏时会⾃动 将栈空间扩展到最⼤约 1 
+GB（具体取决于操作系统和内存限制）。
+当栈使⽤量减少时，也可能被 收缩回较⼩的尺⼨，避免浪费内存
+为什么轻量化
+栈空间机制不同：
+C++线程：栈⼤⼩固定（⼀般创建时就分配 1M B），操作系统内核管理
+G o routine：栈⼤⼩动态（可从 2K B 增⾄ 1G B）
+上下⽂切换
+C++线程：内核态完成（系统调⽤）
+
+--- PAGE 44 ---
+G o routine：⽤⼾态完成
+Go的协程怎么实现的？
+G o的协程（goroutine）是通过⽤⼾态轻量级线程实现的，由Go运⾏时（runtim e）调度器管
+理。它不是操作系统级别的线程，⽽是运⾏在少量OS线程之上的更轻量的执⾏单元。每个
+goroutine初始栈⼤⼩仅为2K B，可动态增⻓或缩⼩，且创建、切换开销远⼩于系统线程。
+Go协程什么时候会阻塞
+ 在 channel 上进⾏发送或接收操作时，如果 channel 满了或为空
+调⽤系统调⽤时（如 I/O 操作）
+在 sync.M utex 上等待锁
+调⽤ tim e.Sleep
+调⽤ runtim e.G osched() 主动让出
+调⽤⽹络 I/O 操作时
+什么时候加锁什么时候不加锁
+当多个线程可能同时访问和修改共享资源（如全局变量、静态变量、堆内存中的对象等）时，
+必须加锁以保证数据的⼀致性和线程安全
+当操作是原⼦的、访问的是线程私有数据（如局部变量）、或共享资源是只读的，则通常不需
+要加锁。
+GM P模型中goroutine的⽣命周期是如何管理的？
+G M P模型中goroutine的⽣命周期包括创建、运⾏、阻塞、唤醒、销毁五个阶段。创建时分配栈
+空间和初始化状态；运⾏时由P调度执⾏；阻塞时让出CPU 并进⼊等待队列；唤醒后重新参与调
+度；销毁时回收资源。
+
+--- PAGE 45 ---
+goroutine从⽆状态开始，经过创建过程进⼊可运⾏状态。创建过程包括分配栈空间、初始化
+状态信息、设置调度参数等步骤。创建完成后，goroutine会被放⼊P的本地队列或全局队
+列，等待调度器分配执⾏机会。这个转换过程是原⼦性的，确保goroutine能够正确初始化并
+进⼊调度系统。
+可运⾏的goroutine被P选中后，状态转换为运⾏状态。在运⾏状态下，goroutine占⽤CPU 时
+间⽚执⾏任务。运⾏状态可能因为以下原因发⽣转换：时间⽚⽤完（转换为可运⾏状态）、主
+动让出CPU （转换为可运⾏状态）、等待资源（转换为阻塞状态）、执⾏完成（转换为销毁状
+态）。运⾏阶段的转换是调度器的核⼼功能，需要平衡公平性和效率。
+当goroutine需要等待某个资源时，会从运⾏状态转换为阻塞状态。阻塞的原因包括等待
+channel数据、等待m utex锁、等待⽹络IO等。在阻塞状态下，goroutine让出CPU ，进⼊相
+应的等待队列。阻塞状态的goroutine不会参与调度，直到等待的资源就绪。这个转换过程需
+要保存goroutine的执⾏上下⽂，以便后续恢复。
+当阻塞的goroutine等待的资源就绪时，会从阻塞状态转换为可运⾏状态。唤醒过程包括恢复
+执⾏上下⽂、重新加⼊调度队列等步骤。唤醒后的goroutine需要重新竞争CPU 时间⽚，不能
+⽴即执⾏。这个转换过程确保了goroutine能够从等待状态平滑过渡到执⾏状态。
+当goroutine执⾏完成或发⽣异常时，会从运⾏状态转换为销毁状态。销毁过程包括回收栈空
+间、清理状态信息、将对象返回池中复⽤等步骤。销毁阶段的转换是goroutine⽣命周期的终
+点，需要确保资源正确回收，避免内存泄漏。这个转换过程是原⼦性的，确保goroutine能够
+安全退出系统。
+Goroutine出现panic会发⽣什么
+panic 只会终⽌当前 goroutine，但如果 panic 没被 recover，最终会导致整个进程退出。
+⼦ goroutine panic，没⼈ recover：panic 发⽣在⼦ goroutine,运⾏时打印该 goroutine 的
+堆栈,整个程序直接退出其它 goroutine（包括 m ain）不会继续执⾏
+⼦ goroutine panic，但内部 recover 了：panic 被 recover，该 goroutine 正常结束。程序继
+续运⾏
+
+--- PAGE 46 ---
+W aitG roup + panic：W aitG roup 只能等结束，不能处理 panic
+defer ⾥的 panic：defer 的 panic 会 覆盖原 panic，原 panic 丢失，最终看到的是 defer 的 
+panic
+Golang的栈增⻓机制?为什么Goroutine 初始栈是2KB，⽽线程栈通常是M B级?
+G o 的每个 goroutine 都有⾃⼰的栈，⽽且是可增⻓/可收缩的（不像传统线程固定⼤栈）。G o语
+⾔中每个goroutine初始栈⼤⼩为2K B（在G o 1.19+版本中，64位系统上默认为2K B，32位为
+1K B），采⽤动态栈增⻓机制⸺当栈空间不⾜时，运⾏时会⾃动分配⼀个更⼤的新栈（通常是原
+栈的2倍），并将旧栈上的所有活跃栈帧（stack fram es）通过指针重定位、数据复制的⽅式迁移
+到新栈。
+G o语⾔中每个goroutine初始栈⼤⼩为2K B（在G o 1.19+版本中，64位系统上默认为2K B，32位
+为1K B），⽽OS线程（如pthread）的栈通常默认为2M B（Linux x86_64）或1M B（W indows），
+由操作系统在创建线程时静态分配并受内存保护（guard page）约束，不可动态增⻓。⼆者设计
+差异源于调度模型与资源抽象层级的根本不同
+goroutine 数量通常远⼤于 OS 线程，由Go runtim e⾃主管理，追求⾼并发密度与低内存开销
+线程栈⼀般是“固定⼤栈”以避免扩栈成本/⻛险，需预留⾜够空间避免频繁缺⻚中断和内核
+态切换开销。
+Channel
+Channel的底层原理
+
+--- PAGE 47 ---
+type hchan struct {1
+    qcount   uint           // 当前队列中元素个数2
+    dataqsiz uint           // 缓冲区⼤⼩（ 0 表⽰⽆缓冲）3
+    buf      unsafe.Pointer // 循环队列（ ring buffer ）4
+5
+    elemsize uint16         // 每个元素⼤⼩6
+    closed   uint32         // 是否关闭7
+    elemtype *_type         // 元素类型（反射使⽤）8
+    sendx    uint           // 发送索引（环形队列下标）9
+    recvx    uint           // 接收索引10
+11
+    recvq    waitq          // 等待接收的  goroutine 队列12
+    sendq    waitq          // 等待发送的  goroutine 队列13
+14
+    lock     mutex          // 互斥锁15
+}16
+17
+Go
+
+--- PAGE 48 ---
+Channel 是在⽤⼾态还是内核态实现的？
+Channel 是纯粹的⽤⼾态实现，这是 G o 能够实现⾼并发性能的重要原因之⼀。它避免了频繁的
+内核态-⽤⼾态切换，通过 G o 调度器在⽤⼾空间⾼效地管理 G oroutine 的阻塞和唤醒，使得并发
+编程既安全⼜⾼效。
+Channel在什么情况下会panic？
+当向⼀个已经关闭的channel发送数据或者关闭⼀个已经关闭的channel时，channel会panic。
+Channel什么场景下会产⽣死锁？
+Channel产⽣死锁的典型场景是当所有goroutine都在等待channel操作完成，⽽没有任何
+goroutine执⾏对应的发送或接收操作来解除阻塞。最常⻅的例⼦是主goroutine尝试向⼀个⽆缓
+冲channel发送数据，但没有其他goroutine从该channel接收，导致主goroutine永远阻塞，运⾏
+时检测到这种情况会抛出“fatal error: all goroutines are asleep - deadlock!”。
+Channel的作⽤
+Channel（通道） 是 goroutine 之间进⾏通信和同步的核⼼机制。它让多个 goroutine 在不使⽤
+显式锁或共享内存的情况下安全地交换数据。Channel（通道） 是 goroutine 之间进⾏通信和同
+步的核⼼机制。它让多个 goroutine 在不使⽤显式锁或共享内存的情况下安全地交换数据。
+goroutine 之间的通信：G o 提倡的是 通过通信共享内存，⽽不是通过共享内存通信。
+Channel 不仅传输数据，还天然具备同步功能
+发送操作会在没有接收者时阻塞；
+接收操作会在没有发送者时阻塞；
+Channel的缓冲区在⽤⼾态还是内核态
+Channel 的缓冲区在⽤⼾态。G o 的 Channel 完全由 Go 运⾏时（runtime）在⽤⼾态实现，分
+配在⽤⼾态的 G o 堆内存中，不会涉及内核态的系统调⽤或内核缓冲区。不依赖操作系统内核，
+
+--- PAGE 49 ---
+不涉及系统调⽤。 因此 Channel 是⽤⼾态级别的通信机制，⽐内核级通信（如管道、socket）轻
+量得多
+Channel什么时候应该关闭
+只有当确定不会再往 channel 中发送数据时，才应该由发送⽅关闭 channel。Channel 应该在 发
+送⽅ 确定“不会再发送数据”时关闭。关闭的作⽤是通知接收⽅“数据发送完毕”，典型⽤于⽣
+产者-消费者模式、任务分发或退出信号。Channel 不需要为了 G C ⽽关闭，也不应由接收⽅关
+闭。关闭后再发送数据会导致 panic，但接收⽅依然可以安全地读取剩余数据或得到零值退出。
+Channel 的线程安全性的了解
+channel是线程安全的，是 多 goroutine 并发安全的通信机制。 它通过 互斥锁 保护缓冲区和等
+待队列，通过 等待队列 保存阻塞的 goroutine，通过 ⽤⼾态调度器 控制 goroutine 阻塞与唤
+醒。⽆缓冲 channel 直接在发送者和接收者之间拷⻉数据，带缓冲 channel 使⽤环形数组存储数
+据。
+type hchan struct {1
+    qcount   uint         // 当前元素数量2
+    dataqsiz uint         // 缓冲区容量3
+    buf      unsafe.Pointer // 环形缓冲区4
+    sendx    uint         // 写索引5
+    recvx    uint         // 读索引6
+    recvq    waitq        // 等待接收队列7
+    sendq    waitq        // 等待发送队列8
+    lock     mutex        // 互斥锁，保护字段9
+}10
+11
+写⼊
+尝试写⼊缓冲区：
+带缓冲 channel：如果缓冲区未满，直接写⼊ buf[sendx]
+⽆缓冲 channel：必须等待接收⽅准备好，直接传递数据
+缓冲区满或⽆接收者：
+写 goroutine 阻塞
+Go
+
+--- PAGE 50 ---
+加⼊ sendq 等待队列
+runtim e 通过 互斥锁 (lock) 保证队列操作的安全
+唤醒机制：
+当缓冲区空出或接收⽅到达
+runtim e 从队列中唤醒阻塞的写 goroutine
+数据被安全传递或写⼊缓冲区
+读取
+尝试从缓冲区取数据：
+带缓冲 channel：缓冲区⾮空 → 直接读取，更新 recvx
+⽆缓冲 channel：必须等待写⼊⽅到达
+缓冲区空或⽆写⼊者：
+读 goroutine 阻塞
+加⼊ recvq 等待队列
+runtim e 使⽤ 锁保护队列和索引
+唤醒机制：
+写 goroutine写⼊数据后
+runtim e 唤醒 recvq 中等待的 goroutine
+数据安全传递给接收者
+锁保护缓冲区和队列，防⽌多个写 goroutine 同时修改索引或缓冲区数据
+sendq 队列保证阻塞顺序和唤醒顺序安全
+ 
+Channel 的线程安全完全依赖于 hchan 结构体中的 lock（互斥锁），所有对 Channel 的核⼼操作
+（发送、接收、关闭）都会先加锁，操作完成后解锁，具体流程如下：
+发送操作（ch <- data）：进⼊发送逻辑前先调⽤ lock.Lock()，数据发送完成（或协程阻
+塞）后调⽤ lock.Unlock()。
+1.
+接收操作（data <- ch）：进⼊接收逻辑前先调⽤ lock.Lock()，数据接收完成（或协程阻
+塞）后调⽤ lock.Unlock()。
+2.
+
+--- PAGE 51 ---
+关闭操作（close(ch)）：关闭前先调⽤ lock.Lock()，修改 closed 状态并通知等待协程后，
+调⽤ lock.Unlock()。
+3.
+通过互斥锁，确保同⼀时间仅有⼀个协程能操作 Channel 的字段（如 qcount、recvq、sendq 
+等），避免并发安全问题（如数据竞争、队列错乱）。
+对已经关闭的的chan进⾏读写，会怎么样？为什么？
+读已经关闭的chan能⼀直读到东西，但是读到的内容根据通道内关闭前是否有元素⽽不同。
+如果chan关闭前，buffer内有元素还未读,会正确读到chan内的值，且返回的第⼆个 bool 
+值（是否读成功）为true。
+如果chan关闭前，buffer内有元素已经被读完，chan内⽆值，接下来所有接收的值都会
+⾮阻塞直接成功，返回 channel 元素的零值，但是第⼆个bool值⼀直为false。
+写已经关闭的chan会panic
+select 可以⽤于什么？
+select语句是G o语⾔中实现并发控制的核⼼机制，主要⽤于多路复⽤、⾮阻塞操作和超时控制。
+它可以同时监听多个channel的读写操作，随机选择就绪的channel进⾏处理，实现⾼效的并发通
+信和资源管理。
+随机性特性：select会随机选择就绪的case，不能依赖执⾏顺序
+避免饥饿：⻓时间运⾏的goroutine可能被其他case"饿死"
+
+--- PAGE 52 ---
+资源管理：及时关闭不需要的channel，避免goroutine泄漏
+错误处理：合理处理所有可能的case，包括超时和取消
+读写⽆缓冲channel时，⽣产者和消费者Goroutine会发⽣什么，它们的状态会发⽣什
+么样的转换？
+⽆缓冲 channel 必须同时有读者和写者才能完成⼀次发送。 没有配对⽅时，读写双⽅都会阻塞，
+并进⼊特定的 G oroutine 状态。
+⽆缓冲 channel 读写必须同步，⼀⽅未就绪则另⼀⽅阻塞。写阻塞进⼊ sendq，读阻塞进⼊ 
+recvq；配对成功后双⽅从 waiting 变为 runnable，数据直接从发送者复制到接收者。
+GM P模型
+定义概念
+Go 为什么⽀持⾼并发
+G oroutine 轻量级
+G oroutine 是 G o 的协程实现，相⽐系统线程⾮常轻量：
+默认 初始栈仅 2KB 左右（可动态增⻓，最⼤可达 G B 级），⽽普通 OS 线程通常要 
+1M B 栈。
+栈⼩、可伸缩，允许同时创建⼏⼗万甚⾄上百万个 goroutine。
+G oroutine 创建和销毁的开销⾮常低：
+栈扩展是按需进⾏的，不需要⼀次性分配⼤块内存。
+通过 runtim e 管理，不需要内核调度每个 goroutine。
+G M P模型实现了 ⽤⼾态调度
+M （线程）少：通常 ≈ G OM AXPROCS（CPU  核数），减少线程切换开销。
+G （goroutine）多：通过⽤⼾态调度（调度器在 runtim e 中调度），⼏百万 G  也能在少
+量 M  上执⾏。
+P 分配任务：减少全局锁竞争，每个 P 拥有本地队列，本地调度速度快。
+介绍⼀下GM P
+
+--- PAGE 53 ---
+G M P是⾼并发能⼒的核⼼⽀撑，它通过Goroutine（G ）、M achine（M ）和Processor（P）三
+个核⼼组件的协同⼯作，实现了⾼效的并发调度。G o 运⾏时（runtim e）实现 M :N 调度 的关键
+机制，M  个系统线程（内核线程）与 N 个⽤⼾级 goroutine 动态映射执⾏
+调度模型有⼏种，分别有什么问题
+N:1 模型：多个⽤⼾级线程（User Threads）映射到⼀个内核级线程（Kernel Thread）。 
+在该模型中，线程的创建、调度和切换完全由⽤⼾态线程库负责，内核并不感知线程的存在。
+线程库通常通过保存和恢复线程上下⽂（如寄存器、栈指针）来实现切换，⽽⽆需系统调⽤，
+因此切换速度⾮常快。然⽽，由于所有⽤⼾线程都运⾏在同⼀个内核线程中，⼀旦其中⼀个线
+程执⾏阻塞性系统调⽤，整个进程都会被阻塞，且⽆法利⽤多核并⾏。操作系统只看到⼀个执
+⾏单元，因此所有⽤⼾线程共享该单元的时间⽚，对外表现为单线程进程。
+优点：线程切换在⽤⼾态完成，创建和调度线程都⽆需内核的⼲预，不会对系统性能造成
+明显的影响
+缺点
+对于多处理器系统，⼀个进程的多个线程⽆法运⾏在不同的CPU 上，⽆法充分利⽤
+CPU 多核的算⼒。
+1个进程的所有协程都绑定在1个线程上，⼀旦某协程阻塞，造成线程阻塞，本进程的
+其他协程都⽆法执⾏了，⽆并发能⼒
+1:1 模型：即每个⽤⼾级线程对应⼀个内核级线程例如 Java Thread 。该模型完全由内核创建
+和调度线程，⽤⼾空间的线程库不需要进⾏进程管理。
+优点：充分利⽤CPU 的算⼒资源，⽀持多核
+缺点：开销⼤，线程切换要陷⼊内核导致线程上下⽂切换较慢，数量上限受内核限制
+N:M  模型：即前两种模型的结合，M 个⽤⼾线程对应N个内核级线程的双层调度模式。该模式
+内核调度M 个内核线程，线程库调度N个⽤⼾线程。G o语⾔采⽤这种模型
+优点：充分结合前两种模式的优点，不但不过分消耗内核资源，⽽且线程切换速度也⽐较
+快，充分利⽤多处理器的优势 
+缺点：该模型的调度算法复杂。
+GM P的核⼼优势是什么
+GM P 模型（Goroutine‒M achine‒Processor） 是 G o ⾼并发能⼒的核⼼，它的设计让 成千上
+万个 goroutine 可以⾼效地运⾏在少量线程上。
+
+--- PAGE 54 ---
+轻量级协程调度：G oroutine 是⽤⼾态的执⾏单元，⽐操作系统线程轻得多。线程切换需要保
+存和恢复寄存器状态，涉及内核态切换，开销较⼤。⽽goroutine切换只需要保存和恢复少量
+寄存器，开销很⼩。线程切换涉及完整的上下⽂切换，goroutine切换只需要部分上下⽂切
+换。⽤⼾态调度减少了系统调⽤的频率。
+⽤⼾态调度：多个 goroutine 动态映射到多个线程上执⾏。⽆需操作系统参与，⼤部分调度
+发⽣在⽤⼾态，切换 goroutine 不涉及内核态上下⽂切换，调度在⽤⼾态完成，避免频繁的
+系统调⽤。goroutine切换开销远⼩于线程切换，⽤⼾态调度更加灵活和⾼效。减少内核态和
+⽤⼾态之间的切换，⽤⼾态调度有更好的缓存命中率。
+多核并⾏能⼒（P 与 G OM AXPROCS）：每个 P 都可以让⼀个 goroutine 真正并⾏执⾏。
+在多核系统上充分利⽤ CPU ；
+⾼吞吐的并⾏执⾏模型；
+不依赖操作系统调度。
+GM P对CPU 密集型任务能提⾼并发么
+对 CPU  密集型任务，G M P 模型能充分利⽤多核 CPU ，但⾼并发 goroutine 并不会⽆限提⾼性
+能，最优并发数 ≈ CPU  核数；G M P 的优势主要在 I/O 阻塞和任务调度灵活性上。
+Go语⾔的协程（goroutine）和操作系统的线程调度有什么不⼀样？
+G o 的协程（goroutine）不是操作系统直接调度的， ⽽是由 G o ⾃⼰的调度器（runtim e 
+scheduler）管理的
+G o 的 goroutine 调度是⽤⼾态调度，由 G o 运⾏时的 G M P 模型⾃⾏管理；⽽操作系统线程调度
+是内核态调度，由内核统⼀管理。前者在⽤⼾态完成任务切换，开销⼩、切换快、可同时管理数
+⼗万协程；后者每次切换都需陷⼊内核，代价⾼、线程数受限。因此，G o 的调度更轻量、⾼效，
+适合⾼并发场景。
+组件概念
+GM P的三个组件是什么
+G M P = goroutine(G ) + m achine(M ) + processor(P)
+M(machine) ： OS线程抽象，对应⼀个内核级的操作系统线程，代表着真正执⾏计算的资
+源，由内核进⾏调度，M 需要和 P 进⾏结合，从⽽进⼊到G M P调度体系之中
+
+--- PAGE 55 ---
+P(processor) : G o定义的⼀个抽象概念，包含运⾏G o代码的必要资源，也有调度G oroutine
+的能⼒，可以理解为 M 的执⾏代理。对G 来说，P相当于CPU 核，G 只有绑定到 P (在P的local 
+runq中)才能被调度。对M 来说，P提供了相关的执⾏环境(context)，如内存分配状态
+(m cache)，任务队列(G )等，P的数量决定了系统内最⼤可并⾏的G的数量（前提：物理CPU
+核数 >= P的数量），P的数量由⽤⼾设置的 GOMAXPROCS 决定，但是不论 GOMAXPROCS 设置为多
+⼤，P的数量最⼤为256
+M 需要与 P 绑定后，才会进⼊到 G M P 调度模式当中；因此P的数量决定了G 最⼤并⾏数量
+P 是 G 的存储容器，其⾃带⼀个本地 G  队列（ local run queue ），承载着⼀系列等待被
+调度的G
+G(goroutine) :G o协程，轻量级的⽤⼾态线程，是并发执⾏的任务单元。协程有⾃⼰的运⾏
+栈、⽣命周期状态、以及执⾏的任务函数。G 并⾮执⾏体，每个G 需要绑定到P才能被调度执
+⾏。
+三个组件中保存了什么信息
+G ：作为并发执⾏的最⼩单位
+执⾏上下⽂
+栈指针、程序计数器（PC）
+运⾏状态（runnable、running、waiting...）
+调度上下⽂
+所属的 M
+调度信息（上次执⾏时间等）
+M ：作为OS线程的抽象对应⼀个操作系统的内核级线程
+线程级上下⽂
+线程id
+特殊协程g0⽤于执⾏调度逻辑
+当前线程的内存分配缓存m cache
+当前调度状态
+绑定的 P
+运⾏的 G
+
+--- PAGE 56 ---
+锁状态等
+P： G o定义的⼀个抽象概念，包含运⾏Go代码的必要资源
+调度资源
+本地G 队列
+计时器：与该 P 绑定的定时器列表
+内存分配上下⽂
+内存分配缓存m cache，与 G C 相关
+gc信息
+三个组件的状态转移过程
+G
+const (1
+    _Gidle = iota     // G 尚未使⽤（新创建但未初始化）2
+    _Grunnable        // 可运⾏，等待  M 调度执⾏3
+    _Grunning         // 正在某个  M 上运⾏4
+    _Gsyscall         // 执⾏系统调⽤中5
+    _Gwaiting         // 被阻塞（ channel 、 mutex 、 IO 等）6
+    _Gdead            // 已结束，等待复⽤7
+    _Gcopystack       // 栈正在被拷⻉（内部状态）8
+)9
+10
+Go
+
+--- PAGE 57 ---
+M
+状态 含义 说明
+_M spinning ⾃旋状态 M  正在尝试从其他 P 或全
+局队列中“偷取”任务
+_M running 正在执⾏ M  正常绑定 P，执⾏ G
+_M idle 空闲状态 M  ⽆任务执⾏，等待唤醒
+
+--- PAGE 58 ---
+_M syscall 系统调⽤中 M  陷⼊内核阻塞，暂时⽆
+法调度
+_M dead 已退出 M  被销毁或未被使⽤
+_M gcstop G C暂停 G C 阶段被 STW  暂停
+
+--- PAGE 59 ---
+
+
+--- PAGE 60 ---
+P
+状态 含义 说明
+_Pidle 空闲 未与任何 M  绑定
+_Prunning 正常运⾏ 已绑定 M ，调度 G  执⾏中
+_Psyscall M  陷⼊系统调⽤ 暂时失活（等待重新绑定）
+_Pgcstop G C 暂停 STW  阶段暂停调度
+_Pdead 被销毁 runtim e 退出或 P 数减少
+
+--- PAGE 61 ---
+GM 模型有什么问题，为什么需要P
+在 G o 1.1版本之前，其实⽤的就是G M 模型。
+G ：协程，通常在代码⾥⽤  go 关键字执⾏⼀个⽅法，那么就等于起了⼀个 G 。
+M ，内核线程，操作系统内核其实看不⻅ G 和 P ，只知道⾃⼰在执⾏⼀个线程。G 和 P 都是在
+⽤⼾层上的实现。
+除了 G 和 M 以外，还有⼀个全局协程队列，这个全局队列⾥放的是多个处于可运⾏状态的 G 。M 如
+果想要获取 G ，就需要访问⼀个全局队列。同时，内核线程M是可以同时存在多个的，因此访问时
+还需要考虑并发安全问题。因此这个全局队列有⼀把全局的⼤锁，每次访问都需要去获取这把⼤
+锁。并发量⼩的时候还好，当并发量⼤了，这把⼤锁，就成为了性能瓶颈。
+G 和P和M 的数量是如何定义的
+G 的数量：G 的数量由程序逻辑决定，理论上没有上限。每个goroutine初始栈空间只有2K B，
+可以创建数百万个goroutine。G 的数量主要受限于系统内存和程序逻辑，⽽不是运⾏时系统
+的限制。
+P的数量：默认值 = CPU 核⼼数。可以由启动时环境变量 $GOMAXPROCS 或者是由 runtime 的
+⽅法 GOMAXPROCS()决定。数量上限为1024，P 数量 = 
+ min(GOMAXPROCS,CPU核⼼数,1024)
+M 的数量
+G o语⾔本⾝的限制：G o程序启动时，会设置M 的最⼤数量，默认10000.但是内核很难⽀
+持这么多的线程数，所以这个限制可以忽略。
+runtime/debug 中的 SetMaxThreads 函数，设置M 的最⼤数量
+M  的数量 ≈ 活跃 P 数量（通常相近）+ 正在阻塞的系统调⽤线程。上限为 
+runtime.mlimit（默认 10000）
+G 0和M 0是什么，有什么作⽤
+M 0是启动程序后的编号为0的主线程，这个M对应的实例会在全局变量 runtime.m0 中，不需
+要在heap上分配，M 0负责运⾏ G o runtim e 的初始化操作和启动第⼀个G （m ain）， 在之后
+M 0就和其他的M ⼀样了。
+
+--- PAGE 62 ---
+G 0是每次启动⼀个M 都会第⼀个创建的goroutine，仅⽤于负责调度的G ，G 0不指向任何可执
+⾏的函数，⽤于执⾏ G o runtim e 的调度、栈切换、系统调⽤等底层逻辑。每个M 都会有⼀个
+⾃⼰的G 0。在调度或系统调⽤时会使⽤G 0的栈空间, 全局变量的G0是M 0的G 0
+P的作⽤以及为什么P的逻辑不加在M 上
+P的作⽤
+管理本地 Goroutine 队列：每个 P 维护⼀个本地运⾏队列（run queue），避免多个线程争抢
+同⼀队列，提⾼调度效率；
+绑定 M ：当 M  想要执⾏任务时，需要先获取⼀个 P，P 的数量限制了同时可运⾏ G  的数量
+（受 GOMAXPROCS 控制），这样可以控制 CPU  利⽤率，防⽌线程数量失控。
+减少锁竞争：本地队列多为⽆锁或轻量锁，只有在跨 P work stealing 时才需要竞争全局队
+列。
+负载均衡：当P的本地队列为空时，从全局队列获取⼀批G，从其他P的队列中"偷"⼀半的G
+主要还是因为M 其实是内核线程，内核只知道⾃⼰在跑线程，⽽G o的运⾏时（包括调度，垃圾回
+收等）其实都是⽤⼾空间⾥的逻辑。操作系统内核不知道，也不需要知道⽤⼾空间的golang应⽤
+的内部。
+M  的数量波动⼤：M  动态创建和销毁，如果 G  队列在 M  上，M  销毁时 G  会丢失或需要全局迁
+移，增加复杂度
+⽆法充分利⽤ CPU ：如果某个 M  阻塞（例如系统调⽤或 I/O），其 G  队列也会被阻塞，导致部
+分 CPU  空闲
+上下⽂切换成本⾼：M  线程本⾝受内核调度影响，队列直接绑定 M ，线程切换可能导致 G  调
+度延迟
+为什么有了本地队列，还要有全局队列？
+本地队列提⾼了并发执⾏的吞吐（减少锁冲突）
+全局队列保证公平性、避免某些 P starvation（饿死），并在某些场景下完成任务注⼊与负载
+均衡。
+⼯作流程
+GM P的⼯作流程是什么
+
+--- PAGE 63 ---
+ 
+正常情况
+初始化：G o 程序启动时，runtim e 会初始化：
+创建 M0：第⼀个系统线程，⽤来执⾏ runtim e 的初始化逻辑。
+创建 G0：每个 M  都有⼀个特殊的 G oroutine，专⻔负责调度任务（不运⾏⽤⼾代
+码）。
+创建固定数量的 P（数量由 GOMAXPROCS 环境变量或默认值决定）。
+创建G oroutine
+runtim e 会为空闲 P（P1-P3）创建 M 1、M 2、M 3，每个 M  都有⾃⼰的 G 0
+为每个 go 创建⼀个新的 G 对象，对象保存函数⼊⼝、栈信息等。
+判断当前P的本地队列是否已满
+
+--- PAGE 64 ---
+本地队列未满：将该 G  放⼊当前 P 的本地队列（runq）中等待执⾏。
+本地队列已满：放⼊全局队列
+M 调度执⾏G oroutine
+获取G oroutine：判断当前M 对应P本地队列是否为空
+若为空则从全局队列获取G
+否则从对应P的本地队列获取G
+执⾏G oroutine
+切换到 G  的栈上，执⾏ G  的函数
+G  执⾏完毕
+将 G  回收到空闲 G  队列（reuse pool）
+切换回 G 0 栈（调度器栈）
+协程窃取：每个协程中产⽣的新协程，会被优先调度到本地的运⾏队列中，因此可能会出
+现，部分处理器P本地队列很⼤，部分处理器本地队列很⼩甚⾄为空的情况，因此G o调度器实
+现了当处理器p本地队列为空时，窃取别的队列中的协程G 的策略。
+在调度获取G oroutine时：会查看全局队列中是否有协程需要调度，如果也没有，则会从
+别的正在运⾏的P中窃取⼀半的协程G
+系统调⽤：当线程执⾏系统调⽤的时候，可能会被阻塞
+P和M 解绑：当协程G 0发⽣系统调⽤，runtim e 会将 当前 P 解绑 M ，也就是说，P 从被阻
+塞的 M  上释放，可以分配给其他空闲M 使⽤。空闲的M 1将会获取P，继续执⾏P队列中剩
+下的待调度的协程G 。runtim e 会检查是否有其他空闲 M  可以绑定该 P。
+如果有空闲 M  → 绑定 P → 从 P.runq 继续执⾏其他 G ；
+如果没有 → runtim e 可能创建新的 M  来保持 P 的执⾏。
+M 陷⼊阻塞：M 进⼊系统调⽤执⾏阶段，此时M 不再参与调度。系统调⽤可能耗时较⻓，
+但不会影响其他M 的正常⼯作。M 会记录系统调⽤的相关信息，⽤于后续的重绑定。
+系统调⽤完成后，M 尝试重新获取P。如果当前有可⽤P，M 会⽴即绑定；如果没有可⽤
+P，M 会进⼊休眠状态，等待其他M 释放P时被唤醒。系统会根据当前负载情况调整重绑定
+策略。负载⾼时优先重绑定，负载低时可以延迟重绑定，节省资源。
+原来绑定的 P（P0）是否仍空闲。
+如果空闲 → M 0 重新绑定 P0
+
+--- PAGE 65 ---
+如果原来的P不为空闲，则判断是否有可执⾏的 G ：
+M 0 会尝试调度 P0.runq 中的 G  或全局队列中的 G ；
+如果没有可执⾏的 G  → M 0 进⼊空闲等待状态。
+hand oﬀ机制是什么
+设计背景：在 G M P 模型中 M （线程） 要绑定 P（处理器） 才能执⾏ G （goroutine）。但在某
+些情况下，M  ⽆法继续运⾏了。例如：当前 goroutine 调⽤了 阻塞系统调⽤（例如 
+syscall、阻塞 I/O）。当前 M  被阻塞住，⽆法再继续执⾏ P 上的其他 G 。这时候，如果不做
+处理会导致这个 M  被卡住，它绑定的 P 就会闲置，导致其他 G  不能被调度执⾏。所以为了避
+免浪费 CPU  核⼼资源，G o 调度器会触发 handoﬀ 机制。
+机制描述：当⼀个 G oroutine 准备就绪（Runnable），且绑定的 P 有空闲 M  可以⽴即执⾏
+时，直接将 G oroutine 交给空闲 M ，⽽不必放⼊ P.runq 或全局队列。原本持有 P 的 M （被阻
+塞）会失去 P（解除P和M 的调⽤关系）调度器会找⼀个新的或空闲的 M ，把 P 分配给它。新
+的 M  继续负责运⾏ P 队列⾥的 goroutine。
+出现场景
+G  在执⾏系统调⽤（如⽂件 I/O、⽹络读写、sleep 等），M  进⼊内核阻塞状态。
+M  执⾏ G  结束，进⼊调度循环发现 P 上⽆可运⾏ G
+G o scheduler 会周期性地发出抢占信号，防⽌某个 G  ⻓时间占⽤ CPU
+GM P 调度过程中存在哪些阻塞
+⽤⼾级阻塞：当 goroutine 因等待同步原语⽽⽆法继续执⾏时，不会触发handoﬀ
+影响：只影响G 不影响M 和P
+当前 G  被标记为阻塞状态（_Gwaiting），它会从 P 的运⾏队列中移除；由其他唤醒事
+件（如 channel send、Lock 解锁）重新进⼊可运⾏状态（_Grunnable）。
+M  与 P 不阻塞，M  继续从 P 的本地队列中调度下⼀个 G
+系统级阻塞：当 G  调⽤系统函数（通过 syscall 包或标准库 I/O）时，会进⼊内核态阻塞
+影响：同时影响G 和M 和P
+当前 G  阻塞
+当前 M  被内核挂起
+
+--- PAGE 66 ---
+绑定的 P 被hand oﬀ
+触发动作：绑定的P带着G 被hand oﬀ给其他M
+调度器阻塞：M  在运⾏调度循环时，可能因为资源或任务不⾜⽽被动“空转”，例如：P 的本
+地队列和全局队列都⽆可运⾏ G 或者没有 work stealing 成功；
+影响
+当前 M  没有任务执⾏
+runtim e 将该 M  进⼊ “sleep”
+P 被放回空闲 P 池
+当新的 G  出现时，再从空闲 M  池中唤醒
+遇到I/O阻塞，goruntine提供什么机制
+G o 的 goroutine 在遇到 I/O 阻塞时，runtim e 会⾃动检测系统调⽤的阻塞状态。 ⼀旦发现某个 M  
+被阻塞，会⽴即把绑定的 P 转移给其他可运⾏的 M ，从⽽让其他 goroutine 继续运⾏，避免 CPU  
+空转。
+work stealing机制是什么
+每个协程中产⽣的新协程，会被优先调度到本地的运⾏队列中，因此可能会出现，部分处理器P本
+地队列很⼤，部分处理器本地队列很⼩甚⾄为空的情况，因此G o调度器实现了当处理器p本地队
+列为空时，窃取别的队列中的协程G 的策略。如图所⽰，M 1对应的本地队列为空，此时它会查看
+全局队列中是否有协程需要调度，如果也没有，则会从别的正在运⾏的P中窃取⼀半的协程G ，窃
+取结果如图所⽰。
+
+
+--- PAGE 67 ---
+优先从当前P的本地队列中获取G
+再从全局队列中获取G
+最后采⽤协程窃取获取其他队列中协程G
+抢占式调⽤机制是什么
+抢占式调度：为避免某个协程⻓时间执⾏，⽽阻碍别的协程被调度，监控线程sysm ons会监控每
+个协程的运⾏时间，⼀旦运⾏时间过⻓（超过10m s）且有其他协程在等待时，会将运⾏中的协程
+暂停，转⽽调度等待的协程，达到类似于时间⽚轮转的效果。
+系统监控抢占是G M P模型的主要抢占机制，通过后台监控线程实现⾃动抢占。
+监控线程：系统启动⼀个专⻔的监控线程，定期检查所有goroutine的运⾏时间。监控线
+程以固定频率运⾏，通常为10m s间隔，确保及时发现⻓时间运⾏的goroutine。
+抢占检测：监控线程通过检查goroutine的运⾏时间判断是否需要抢占。当goroutine运⾏
+时间超过预设阈值（通常为10m s）时，触发抢占机制。
+抢占执⾏：检测到需要抢占的goroutine后，监控线程会向⽬标线程发送抢占信号。⽬标
+线程收到信号后，会在安全点中断当前goroutine的执⾏，将其放⼊队列尾部。
+信号量抢占是G M P模型的辅助抢占机制，通过操作系统信号实现快速抢占。
+信号机制：信号量抢占利⽤操作系统的信号机制，向⽬标线程发送特定信号实现抢占。信
+号处理程序会中断当前goroutine的执⾏，触发重新调度。
+抢占流程：当需要抢占时，系统向⽬标线程发送抢占信号。⽬标线程收到信号后，在信号
+处理程序中标记当前goroutine为可抢占状态，然后返回继续执⾏。在下⼀个安全点，
+goroutine会被抢占。
+
+--- PAGE 68 ---
+如果有100个IO密集型协程，10个计算密集型协程，那么这100个IO密集型协程会对这10个计算
+密集型协程产⽣影响吗？根据⾃⼰对GM P模型的理解进⾏分析并得出结论
+绝⼤多数情况下，100 个 IO 密集型协程不会显著影响 10 个计算密集型协程。原因是 G 阻塞时 M  
+会释放，不会占⽤ CPU 。唯⼀的影响是 调度开销，通常可忽略不计。如果系统负载极⾼，或者 
+IO 协程频繁触发唤醒，也可能带来微⼩抖动，但不影响整体 CPU  密集任务的吞吐。
+你提到了hand oﬀ，但是系统调⽤在⼀个程序中可能很常⻅，可能50%-80%都会发⽣系统调
+⽤，都handoﬀ不会影响性能吗？
+系统调⽤占⽐⾼也不会导致频繁 handoﬀ，因为 G o 只在 “可能阻塞 M  的系统调⽤” 才触发 
+handoﬀ。绝⼤多数 syscall 都不会触发 M /P ⼿动让渡。⼤部分 syscall 都是⾮阻塞的 fast path，
+所以不会频繁触发 handoﬀ，也不会影响性能。
+Select语句
+为什么 Select 在 2 个 Channel 场景下性能稳定，在 3 个 Channel 场景下会出现性能
+抖动？
+select具有以下核⼼机制
+随机重排与单 Case 执⾏：每次触发 Select 时，底层会对所有 Case（对应 Channel）进⾏随
+机重排，且仅从 “就绪状态” 的 Channel 中选择1 个 Case 执⾏；
+⾃动筛选就绪 Channel：重排前会排除未就绪（为空）的 Channel，仅在可⽤ Channel 中随
+机选 1 个。
+垃圾回收
+垃圾回收的触发条件
+主动触发（⼿动触发）：通过调⽤runtime.GC来触发GC，此调⽤阻塞式地等待当前GC运⾏完
+毕
+定时触发（后台 G C 定时器）：超过⼀定时间（默认 2 分钟）强制触发
+
+--- PAGE 69 ---
+⾃动触发（基于内存增⻓⽐率）：G o runtim e ⾃动判断当前堆⼤⼩是否超过阈值（即 GOGC 参
+数）当新分配的堆内存增⻓超过上次 G C 后存活堆⼤⼩的 G OG C% 时，触发下⼀次 G C
+内存压⼒触发：当系统内存不⾜时，操作系统可能会触发内存回收，G o运⾏时会响应这种压
+⼒并触发G C
+垃圾回收的过程
+Go V1.3之前的标记-清除+STW
+标记阶段
+暂停业务逻辑，找到不可达的对象和可达对象
+开始标记，程序找出它所有可达的对象，并做上标记
+清除标记
+标记完了之后，然后开始清除未标记的对象。
+停⽌暂停，让程序继续跑。然后循环重复这个过程，直到process程序⽣命周期结束
+Go V1.5之后并发 + 三⾊标记 + 写屏障
+G o 1.5 之后的 G C 实现了⼀种 “并发标记、并发清除” 的机制，让 ⽤⼾代码（M utator） 与 GC
+（Collector） 在⼤部分时间可以同时运⾏，不再⻓时间 STW 。
+标记开始（STW ）：暂停所有 goroutine并扫描所有 root 对象（全局变量、栈、寄存器），将
+这些对象放⼊灰⾊集合，启动后台并发标记协程，重新启动应⽤程序。
+并发标记阶段：G C 与应⽤程序并发执⾏，G C 不断从灰⾊集合取对象标记。将灰⾊对象引⽤
+的对象从⽩⾊集合放⼊到灰⾊集合，之后将此灰⾊对象放⼊到⿊⾊集合。⽤⼾写指针操作时触
+发 写屏障，确保不会遗漏新引⽤的对象。
+重新标记阶段（STW ）：再次暂停所有 goroutine，扫描堆栈、全局变量等，确保⽆遗漏，统
+计内存使⽤情况。标记阶段结束。处理写屏障期间记录的变更，修补遗漏。所有仍然可达的对
+象应为⿊⾊。
+并发清除阶段：清理未被标记的对象（⽩⾊对象），这⼀步在后台执⾏，不阻塞应⽤程序。已
+清除的内存重新进⼊ span 分配器。
+标记清除的缺点
+
+--- PAGE 70 ---
+STW (stop the world）：在标记和清除过程中，程序会暂停所有的正常执⾏操作，对于实时系
+统会出现短暂的应⽤卡顿
+标记需要扫描整个heap（堆，内存空间），查看每⼀个对象是否仍可被程序引⽤，在⼤型应⽤
+程序中，这个过程可能会耗费⼤量时间资源
+清除数据会产⽣heap碎⽚：在清除阶段，已标记为⽆需保留的对象会被去掉，留下的不连续
+的内存空间称为碎⽚。如果堆中碎⽚过多，可能造成内存分配效率低，尤其是下⼀次需要分配
+⼤块内存时。
+为什么不使⽤引⽤计数法⽽使⽤可达性计数法
+引⽤计数法：每个对象维护⼀个计数器，记录被引⽤次数，引⽤为 0 时⽴即回收
+引⽤计数需要⽤到原⼦操作，在多线程下，需要原⼦操作保证安全，这会带来巨⼤的 CPU 开
+销和 cache 争⽤。，标记回收不需要频繁原⼦操作。
+循环引⽤或者⾃引⽤时，⽆法清理。
+写屏障
+为什么需要屏障
+写屏障的存在，是为了在 G C 并发标记阶段，维持堆对象引⽤关系的正确性，防⽌出现对象“被
+错误回收”或“被漏标记”。在并发标记的过程中，在标记阶段，程序（m utator）还在运⾏，会
+修改对象引⽤关系。
+如果出现
+⽩⾊对象被⿊⾊对象引⽤：如果在标记期间，程序动态地创建了指向⽩⾊对象的新引⽤，⽽⽩
+⾊对象被⿊⾊对象引⽤，可能没有被标记为灰⾊，这个⽩⾊对象就不被视为可达对象，从⽽可
+能错误地被回收
+灰⾊对象对⽩⾊对象的引⽤丢失：⼀个仍然存在的对象但因引⽤关系错变⽽被错误地标记为⽩
+⾊，进⽽被回收的错误
+这两种情况同时满⾜，会出现对象丢失
+屏障的种类
+
+--- PAGE 71 ---
+插⼊写屏障（Insert Barrier）：当向对象插⼊新的引⽤时，保证新对象被正确标记，避免被 
+GC 漏标。只有堆上的对象触发插⼊屏障，栈上的对象不触发插⼊屏障。在准备回收⽩⾊前，
+重新遍历扫描⼀次栈空间。此时加STW 暂停保护栈，防⽌外界⼲扰。保证⿊对象引⽤⽩对象
+时，⽩对象能被标记为灰⾊。
+触发时机：当⿊⾊对象新增对⽩⾊对象的引⽤时
+逻辑操作：将被引⽤的⽩⾊对象从⽩⾊集合中取出，标记为灰⾊并放⼊灰⾊集合。
+作⽤：让新增引⽤的⽩⾊对象能被 G C 线程后续遍历，避免漏标。
+删除屏障（Delete Barrier）：当从对象删除或覆盖引⽤时，保证被删除的旧对象不会被漏
+标。在删除⼀个引⽤（⽐如设置为 nil）时，对被删除的旧对象执⾏操作。被删除的对象，如
+果⾃⾝为⽩⾊，那么被标记为灰⾊（满⾜弱三⾊不变式）。保证在标记开始时存在的引⽤不会
+被漏掉。
+触发时机：当灰⾊对象删除对⽩⾊对象的引⽤时。
+逻辑操作：将被删除引⽤的⽩⾊对象标记为灰⾊，放⼊灰⾊集合。
+作⽤：防⽌因引⽤删除导致⽩⾊对象 “断连” 漏标。
+混合写屏障是什么
+混合写屏障 = 插⼊屏障 + 删除屏障的结合。G o 在写引⽤时，同时处理 新写⼊的对象 和 被覆盖/删
+除的对象。
+如果当前对象为⿊⾊：新的指针为标记为灰⾊
+如果删除旧对象为⽩⾊：如果旧对象为⽩⾊，那么被标记为灰⾊
+三⾊标记法
+三⾊标记法的颜⾊状态
+颜⾊ 含义 说明
+⚫  ⿊⾊ 已标记、且所有引⽤已扫
+描完
+安全保留（不会被回收）
+⚪  ⽩⾊ 未标记、未扫描 垃圾候选对象（最终会被
+回收）
+
+--- PAGE 72 ---
+三⾊标记法的过程
+⾸先堆中的所有对象都会被标记为⽩⾊，并放⼊⽩⾊集合中，此时灰⾊集合和⿊⾊集合为空。
+标记根可达对象：根节点直接引⽤对象⼊灰⾊集合 ⾸先遍历 Root 集合（根节点，⽐如虚拟机
+栈中的引⽤、静态变量引⽤等），找到从根节点直接可达的对象（假设是对象 1 和对象 6）。将
+这些对象的颜⾊从⽩⾊改为灰⾊，并从⽩⾊集合中移除，放⼊灰⾊集合。
+遍历灰⾊集合中的对象，把灰⾊对象引⽤的⽩⾊集合的对象放⼊到灰⾊集合中，同时把遍历过
+的灰⾊集合中的对象放到⿊⾊的集合中
+循环步骤3，知道灰⾊集合中没有对象
+步骤4 结束后，⽩⾊集合中的对象就是不可达对象，也就是垃圾，进⾏回收
+三⾊标记法中灰⾊标记存在的意义是什么
+表⽰“已发现但未处理”：灰⾊对象是GC 已经发现，但其引⽤的对象还没扫描的对象
+延迟扫描⼦对象
+分阶段处理，⽀持增量垃圾回收（不会停顿整个程序）
+⽀持并发和增量 G C：灰⾊队列（⼯作队列）允许 G C 逐步扫描对象图，保证 G C 与程序并发
+执⾏时的正确性
+防⽌“悬空引⽤”丢失：在标记过程中，程序可能继续修改对象引⽤，如果直接将根对象标
+记为⿊⾊，可能导致它的⼦对象可能还没被扫描。新出现的引⽤可能导致对象被误回收。使⽤
+灰⾊
+保证所有可达对象都经过扫描后才变⿊
+避免标记错误
+什么是根对象？
+根对象（root object）是指那些能够从全局可达的地⽅访问到的对象。垃圾回收器会从根对象开
+始，通过遍历根对象的引⽤关系，逐步追踪并标记所有可达的对象。任何未被标记的对象都会被
+认为是垃圾，最终被回收释放。
+⚪  灰⾊ 已标记、但引⽤未完全扫
+描
+正在处理中（待扫描其指
+针字段）
+
+--- PAGE 73 ---
+全局变量：全局变量可以被程序中的任何位置引⽤到，因此是根对象。
+当前正在执⾏的函数的局部变量：当⼀个函数正在执⾏时，其局部变量可以被当前函数中的代
+码访问到，因此也是根对象。
+当前正在执⾏的 goroutine 的栈中的变量：goroutine 是 G o语⾔并发编程中的轻量级线程，
+每个 goroutine 都有⼀块独⽴的栈空间，其中的变量可以被当前 goroutine 访问到，也是根
+对象。
+其他和运⾏时系统相关的数据结构和变量。
+三⾊标记法的缺点
+暂停时间：在进⾏垃圾回收时，必须停⽌程序执⾏，这会导致应⽤程序暂停。引⼊写屏障保护
+可以减少暂停时间，但仍然可能导致性能下降。
+内存开销：三⾊标记法需要为每个对象维护额外的状态信息，以记录其标记状态。这会增加内
+存开销，并可能对内存资源造成负担。
+频繁的垃圾回收：三⾊标记法需要频繁地迭代标记和清除对象，如果要回收的垃圾对象很多，
+可能会导致回收过程变得⾮常耗时。
+碎⽚化：垃圾回收过程中，如果频繁进⾏对象的移动和重新分配内存，可能会导致内存碎⽚
+化，降低内存的利⽤率。
+三⾊标记法不采⽤STW 时可能出现的问题
+⽩⾊对象被⿊⾊对象引⽤：如果在标记期间，程序动态地创建了指向⽩⾊对象的新引⽤，⽽⽩
+⾊对象被⿊⾊对象引⽤，可能没有被标记为灰⾊，这个⽩⾊对象就不被视为可达对象，从⽽可
+能错误地被回收
+灰⾊对象对⽩⾊对象的引⽤丢失：⼀个仍然存在的对象但因引⽤关系错变⽽被错误地标记为⽩
+⾊，进⽽被回收的错误
+这两种情况同时满⾜，会出现对象丢失
+三⾊不变式是什么
+强三⾊不变式
+定义：⿊⾊对象不能直接引⽤⽩⾊对象，只能通过灰⾊对象间接引⽤⽩⾊对象
+
+--- PAGE 74 ---
+本质：保证了⿊⾊对象和⽩⾊对象之间必须有灰⾊对象作为“中间⼈”，从根本上杜绝漏
+标可能。因为⿊⾊对象已完全标记，若它引⽤⽩⾊对象，⽩⾊对象⽆法被 G C 线程遍历到
+（G C 线程只处理灰⾊对象），最终会被误回收。强三⾊不变式通过禁⽌这种引⽤关系，确
+保所有活跃对象都能被标记。
+弱三⾊不变式
+定义：允许⿊⾊对象引⽤⽩⾊对象，只要该⽩⾊对象也能被某个灰⾊对象间接引⽤到。
+本质：保证了从根对象出发，能够访问所有活跃的对象。相⽐强三⾊不变式更灵活。当⿊
+⾊对象引⽤⽩⾊对象时，只要⽩⾊对象有灰⾊上游，G C 线程后续遍历灰⾊对象时，仍能
+找到这个⽩⾊对象，将其标记为活跃对象，避免漏标。
+对栈区对象的处理
+栈区（虚拟机栈）的对象有两个特点：数量多、访问频率⾼。如果对栈区对象也使⽤写屏障，会
+给应⽤性能带来极⼤负担，因此栈区对象不使⽤写屏障。为避免栈区对象漏标，采⽤以下特殊处
+理⽅式：
+G C 标记开始时：栈区所有可达对象标⿊ 在 G C 标记阶段启动时，直接将栈区中所有从根节点
+可达的对象标记为⿊⾊，放⼊⿊⾊集合。这些对象被默认视为活跃对象，避免后续因⽆写屏障
+导致漏标。
+1.
+并发标记中新增栈对象：直接标⿊ 在 G C 并发标记过程中，应⽤线程若在栈区新增对象（⽐如
+对象 9），直接将该对象标记为⿊⾊。若不这样做，新增对象会是⽩⾊，标记结束后可能被漏
+标，此时需要触发 STW （Stop The W orld，暂停应⽤线程）重新扫描，影响性能。直接标⿊
+虽可能 “误判”（将部分不活跃对象标为活跃），但可避免 STW ，权衡性能后选择此⽅案（不
+活跃对象可在下⼀次 G C 中回收）。
+2.
+栈区对象引⽤修改：不改变颜⾊ 若栈区中的⿊⾊对象发⽣引⽤删除或修改，不会改变其⿊⾊
+属性。因为⿊⾊对象已被判定为活跃对象，即使引⽤变化，本次 G C 也不会回收它，后续 G C 
+会重新判断其状态。
+3.
+如何监控和分析GC性能？
+GC性能指标
+停顿时间（G C导致的程序暂停时间）：GC停顿时间（单次G C导致的程序暂停时间，通常
+<1m s）、平均停顿时间（多次G C停顿时间的平均值）、最⼤停顿时间（最⻓的单次G C停顿
+时间）和停顿时间分布（停顿时间的分布情况，⽤于识别异常值）。
+
+--- PAGE 75 ---
+GC频率（单位时间内G C触发次数）：GC触发频率（单位时间内G C触发的次数）、GC间隔
+时间（相邻两次G C之间的时间间隔）、GC持续时间（单次G C的执⾏时间）和GC并发度
+（G C与⽤⼾程序的并发程度）。
+内存使⽤率（堆内存使⽤情况）：堆内存使⽤量（当前堆内存的使⽤情况）、内存分配速率
+（单位时间内分配的内存⼤⼩）、内存释放速率（单位时间内释放的内存⼤⼩）和内存碎
+⽚率（内存碎⽚的⽐例）。
+GC吞吐量（G C占⽤的CPU 时间⽐例）
+内存分配速率（单位时间内分配的内存⼤⼩）。
+监控⼯具
+runtime包（提供内存统计信息）
+pprof⼯具（⽣成和分析性能proﬁle）
+go tool trace（分析G C事件和程序执⾏）
+GODEBUG 环境变量（输出详细的G C信息）
+第三⽅监控⼯具（如Prom etheus、G rafana等）。
+G C性能分析⽅法包括：实时监控（持续观察G C指标变化）、压⼒测试（在⾼负载下观察G C表
+现）、对⽐分析（⽐较不同参数设置的效果）和瓶颈定位（识别G C性能瓶颈的具体原因）。
+Golang的GC什么时候会出现卡顿，清理过程会出现STW 吗？
+Go 的 GC 会在 STW （Stop The World）阶段出现卡顿，主要发⽣在标记开始前和标记结束时；
+当堆很⼤、分配速率⾼、对象图复杂或写屏障压⼒⼤时，卡顿会明显放⼤。
+Go 的 GC 清理（Sweep）阶段本⾝不会出现 STW，它是并发进⾏的；真正的 STW 只发⽣在标记
+阶段的两个点：标记开始前和标记结束时。
+并发原语
+sync.Once
+sync.Once是如何实现的
+sync.Once 是 G o 语⾔标准库中提供的⼀个同步原语，⽤来确保某个函数只执⾏⼀次，即使被多
+个 goroutine 调⽤也不会重复执⾏。
+
+--- PAGE 76 ---
+type Once struct {1
+    m    Mutex2
+    done uint323
+}4
+m 是⼀个互斥锁（sync.Mutex），⽤于保证并发安全。
+done 是⼀个标记位，⽤ uint32 表⽰函数是否已经执⾏过。
+func (o *Once) Do(f func()) {1
+    if atomic.LoadUint32(&o.done) == 0 { // 快速判断2
+        o.doSlow(f)3
+    }4
+}5
+6
+func (o *Once) doSlow(f func()) {7
+    o.m.Lock()8
+    defer o.m.Unlock()9
+10
+    if o.done == 0 {11
+        defer atomic.StoreUint32(&o.done, 1)12
+        f()13
+    }14
+}15
+16
+第⼀次检查：使⽤原⼦操作检查done标识位，避免不必要的锁竞争1.
+获取锁：如果标识位为0，获取互斥锁2.
+第⼆次检查：在锁保护下再次检查标识位，防⽌重复执⾏3.
+执⾏函数：如果仍未执⾏，执⾏⽬标函数并设置标识位4.
+释放锁：释放互斥锁5.
+Go
+Go
+
+--- PAGE 77 ---
+快速路径：atomic.LoadUint32(&o.done) 先检查标记，如果已经执⾏过，则直接返回，不需要
+加锁。
+慢速路径：仅在 done == 0 时才进⼊锁保护，保证只执⾏⼀次。
+sync.Once的底层原理
+sync.Once通过⼀个原⼦性的标识位和互斥锁来保证代码段只执⾏⼀次。当标识位为0时，表⽰函
+数还未执⾏，此时会获取互斥锁并执⾏函数；当标识位为1时，表⽰函数已经执⾏过，直接返回。
+这种设计既保证了线程安全，⼜避免了重复执⾏。
+sync.M utex
+sync.M utex的实现原理在1.18前后版本差异
+sync.M utex 在 G o 1.18 之前采⽤普通互斥锁 + ⾃旋 + 信号量（futex）唤醒的混合机制，其核⼼
+是基于⼀个 32 位整数 state 字段（含 m utexLocked、m utexW oken、m utexStarving 三位标志
+位）和⼀个 sem a 信号量；G o 1.18 起引⼊了“饥饿模式”（starvation m ode）的正式⽀持并将
+
+--- PAGE 78 ---
+其默认启⽤（即 starvation 模式成为常态⾏为），关键变化在于：当 goroutine 等待时间超过 
+1m s（runtim e_m utexProﬁleFraction 默认阈值），锁会进⼊饥饿模式，此时新来的 goroutine 
+不再尝试⾃旋或抢锁，⽽是直接⼊队尾；且解锁时不再唤醒任意等待者，⽽是严格 FIFO 唤醒队
+⾸ goroutine，彻底避免“插队”和“饿死”。
+什么是悲观锁和乐观锁？M utex 属于悲观锁还是乐观锁？
+M utex是典型的悲观锁实现。悲观锁总是假设会发⽣冲突，在访问共享资源前先获取锁；乐观锁
+则假设冲突很少发⽣，直接操作资源，提交时检查冲突。
+悲观锁：总是假设会发⽣冲突，在访问共享资源前先获取锁，确保独占访问。就像银⾏柜员在办
+理业务前先把窗⼝锁起来，防⽌其他⼈⼲扰。
+悲观锁的特点：
+先加锁再操作：在访问共享资源前必须先获取锁
+独占访问：同⼀时刻只有⼀个线程能访问资源
+阻塞等待：获取锁失败时会阻塞等待
+适合场景：冲突频繁、写操作较多的场景
+乐观锁：假设冲突很少发⽣，直接操作资源，在提交时检查是否发⽣冲突。就像⽹上购物，先加
+⼊购物⻋，结算时才检查库存。
+乐观锁的特点：
+直接操作：不预先加锁，直接操作资源
+提交时检查：在提交时检查是否发⽣冲突
+重试机制：发⽣冲突时通常需要重试
+适合场景：冲突较少、读操作较多的场景
+sync.M utex的底层实现
+sync.M utex是G o语⾔中⽤于实现互斥锁的结构体，其底层实现是基于操作系统提供的原⼦操作指
+令来实现。
+
+--- PAGE 79 ---
+type Mutex struct {1
+    state int322
+    sema  uint323
+}4
+state：表⽰锁的状态和等待队列信息。
+sema：⽤于与 runtim e 的信号量机制（runtime_Semacquire/runtime_Semrelease）交
+互，实现阻塞/唤醒 goroutine。
+锁的状态：state 是⼀个 32 位整数，⾥⾯有⼏个标志位
+|  LOCKED  |  WOKEN  |  STARVING  |   waiters count |1
+Waiter（29位）：等待的goroutine数量，⽤于记录有多少goroutine在等待锁
+Starving（1位）：是否处于饥饿模式，防⽌某些goroutine⻓时间等待
+Woken（1位）：是否有goroutine被唤醒，⽤于优化唤醒机制
+Locked（1位）：是否已锁定，表⽰当前锁的状态
+加锁流程
+快速路径（⽆竞争）：尝试将 state 的 LOCK ED 位从 0 改为 1。成功则直接获得锁，⽆需进⼊
+内核阻塞。这是⽤⼾态原⼦ CAS，⾮常⾼效。
+慢速路径（有竞争）：如果 CAS 失败，说明锁已被占⽤
+判断锁是否 “已锁定且可⾃旋”：设置 “唤醒标志”，执⾏⾃旋等待，在CPU 上执⾏空循
+环进⾏⾃旋等待，在⾃旋期间不断重新尝试获取锁，如果⾃旋次数达到限制，则转⼊阻塞
+等待状态。（⾃旋次数不超过4次以避免过度消耗CPU ，只在多核处理器环境下⾃旋因为单
+核环境下⽆意义，锁不处于饥饿模式时才允许⾃旋，以及本地goroutine队列为空时才允
+许⾃旋。）
+判断是否进⼊饥饿模式：如果等待时间过⻓，或者等待者过多，则设置 STARVING  位。饥
+饿模式下，锁会优先公平唤醒等待者。
+Go
+Shell
+
+--- PAGE 80 ---
+加⼊等待队列：调⽤ runtim e 的 runtime_Semacquire(&m.sema) 将当前 goroutine 阻
+塞。内核不会参与调度，只让 runtim e 管理 goroutine。
+被唤醒：当持有锁的 goroutine 释放锁时，会调⽤ runtime_Semrelease(&m.sema) 唤醒
+⼀个等待的 goroutine。唤醒者会尝试抢占锁（CAS 操作），保证公平性。
+锁释放流程
+快路径：把 locked 位清掉，如果没有等待者等特殊状态就结束。
+慢路径
+正常模式：如果有 goroutine 在等待队列（waiter count > 0），调⽤ 
+runtime_Semrelease(&m.sema) 唤醒它。唤醒的 goroutine 会再次尝试获取锁。
+饥饿模式：会把锁 直接移交（handoﬀ）给等待队列头部 goroutine，减少“唤醒了但⼜
+抢不到”的情况。
+信号量和互斥锁的关系
+互斥锁是特殊的信号量⸺ 当信号量的 “资源计数器初始值为 1” 时，它的⾏为就等同于互斥
+锁：
+计数器 = 1：锁未被占⽤，允许⼀个 goroutine 获取；
+计数器 = 0：锁已被占⽤，其他 goroutine 阻塞等待。
+两者的区别在于灵活性：信号量可通过调整计数器初始值（如 5），允许多个 goroutine 同时访问
+资源；⽽互斥锁始终只允许⼀个 goroutine 持有锁。
+在M utex上⾃旋的goroutine会占⽤太多资源吗？
+M utex的⾃旋机制设计精巧，只在满⾜特定条件时允许⾃旋。
+⾃旋次数不超过4次
+⾮饥饿模式
+本地队列为空
+为什么要引⼊饥饿模式?
+正常模式下可能“⽼ goroutine 永远抢不到”，M utex 的默认（正常）模式，为了吞吐会允许
+新来的 goroutine 直接参与抢锁。但有个副作⽤：
+
+--- PAGE 81 ---
+等待队列⾥被唤醒的“⽼ goroutine”刚醒来，往往不在 CPU  上
+新来的 goroutine 正在 CPU  上跑、⽽且可能很多个
+结果：⽼ goroutine 反复被唤醒、反复抢不到、再睡回去 → ⻓时间饥饿
+超过阈值就切饥饿模式（更公平）：G o 在 1ms 等待阈值附近做模式切换（常⻅描述是：等待
+过久就更偏向公平）。
+新来的 goroutine 不许插队抢，只能乖乖排到队尾
+U nlock 时把锁 直接 handoﬀ 给队⾸等待者（⼏乎 FIFO）
+同时会禁⽤⾃旋，避免浪费 CPU 、也避免“新来的⾃旋抢占”继续饿死⽼等待者
+读写锁底层是怎么实现的？
+读写锁（RW M utex）的底层实现基于互斥锁（M utex），通过readerCount和readerW ait两个计数
+器来协调读写操作。当readerCount为负时表⽰有写锁，当readerW ait⼤于0时会阻塞写锁的获
+取。这种设计使得读操作可以并发进⾏，⽽写操作则需要独占锁。
+核⼼组件：
+互斥锁基础：复⽤M utex作为写锁的基础
+readerCount计数器：记录当前读锁数量，负值表⽰写锁占⽤
+readerWait计数器：记录等待写锁的读操作数量
+信号量机制：实现goroutine的阻塞和唤醒
+读锁获取：检查是否有写锁，⽆则增加readerCount
+写锁获取：等待所有读锁释放，设置readerCount为负值
+锁释放：读锁减少readerCount，写锁恢复readerCount为0
+
+--- PAGE 82 ---
+sync.WaitGroup
+WaitGroup原理是什么
+W aitG roup ⾥核⼼是⼀个 64 位状态（概念上）：请求计数器占⾼32bit，等待计数器占低32bit。
+counter（计数器）：还有多少个 goroutine 没完成
+waiters（等待者数量）：有多少 goroutine 正在 Wait() 上睡眠等待
+Add(delta) ：对 counter 做原⼦加法（delta 可正可负）。
+如果加完后 counter < 0：直接 panic（说明 Done() 多了）。
+如果加完后 counter == 0 且 waiters > 0：
+说明活都⼲完了，⽽且有⼈在等
+就会释放 sem aphore waiters 次，把所有 Wait() 的 goroutine 唤醒
+Wait()
+先原⼦读 counter：
+若 counter == 0：直接返回
+否则把 waiters +1，然后去 sem aphore 上睡眠阻塞
+
+--- PAGE 83 ---
+被唤醒后返回（此时 counter 已经归零）
+Waitgroup使⽤需要注意的地⽅
+循环闭包坑：捕获循环变量
+错误写法
+for i := 0; i < n; i++ {1
+    wg.Add(1)2
+    go func() {3
+        defer wg.Done()4
+        fmt.Println(i) // 很可能全打印  n5
+    }()6
+}7
+wg.Wait()8
+// 闭包⾥⽤到的是同⼀个  i 变量地址； goroutine 真正执⾏时， i 可能已经被循环改到末尾
+了。
+9
+10
+正确写法
+for i := 0; i < n; i++ {1
+    i := i // 关键：每轮创建新变量2
+    wg.Add(1)3
+    go func() {4
+        defer wg.Done()5
+        fmt.Println(i)6
+    }()7
+}8
+wg.Wait()9
+10
+for i := 0; i < n; i++ {11
+    wg.Add(1)12
+    go func(i int) {13
+        defer wg.Done()14
+        fmt.Println(i)15
+    }(i)16
+}17
+wg.Wait()18
+Go
+Go
+
+--- PAGE 84 ---
+19
+20
+21
+先 Add 再启动 goroutine：Wait() 可能先看到计数为 0 直接返回，导致“以为都完成了”，产
+⽣竞态；有些情况下还会触发 W aitG roup 的误⽤检测
+Done ⼀定要保证执⾏：⽤ defer
+sync.Atomic
+Go 如何实现原⼦操作？原⼦操作和锁有什么区别？
+原⼦操作是变量级别的互斥锁，同⼀时刻只能有⼀个CPU 对变量进⾏读或写。在Go语⾔中，通过
+sync/atom ic包提供原⼦操作，能够保证对变量的读取或修改期间不被其他协程影响。原⼦操作
+与锁的主要区别在于：原⼦操作直接由硬件⽀持，性能最优但功能有限，只能保证单个操作的原
+⼦性；⽽锁是软件实现，可以保护代码段，功能更强⼤但性能相对较低。
+原⼦操作在G o语⾔中的实现基于底层硬件的原⼦指令⽀持。CPU 提供了专⻔的原⼦指令，如CAS
+（Com pare-And-Swap）、LL/SC（Load-Linked/Store-Conditional）等，这些指令在硬件层⾯
+保证了操作的不可分割性。G o语⾔的sync/atom ic包对这些硬件指令进⾏了封装，提供了跨平台
+的原⼦操作接⼝。
+同⼀时刻，只能有⼀个 CPU  对变量进⾏读或写。当我们想要对某个变量做并发安全的修改，可以
+使⽤ sync/atom ic 包的原⼦操作，它能够保证对变量的读取或修改期间不被其他的协程所影响。
+泛型
+Go的泛型知道吗？与Java的泛型有什么不⼀样的点？底层实现有什么不⼀样？
+G o 在 1.18+ 引⼊泛型（G enerics），核⼼是 类型参数（type parameters）
+func Sum[T int | float64](a, b T) T {1
+    return a + b2
+}3
+4
+静态类型检查，编译期确定类型
+Go
+
+--- PAGE 85 ---
+编译期⽣成具体实例化代码（m onom orphization）
+底层实现对⽐
+G o 泛型采⽤“混合模型”：当泛型⽅法只依赖接⼝能⼒时进⾏类型擦除；当依赖具体类型⾏
+为时进⾏单态化，为不同类型⽣成专属代码（零开销）。因此 G o 泛型⽀持基础类型，性能更
+⾼：编译器根据使⽤的具体类型⽣成专⻔的函数或结构体代码，类型检查和操作都在编译期完
+成，运⾏时不需要类型信息或类型转换，性能接近⼿写具体类型，类型约束（接⼝ + 联合类
+型）在编译期验证，保证安全性
+优点：
+运⾏时不需要类型转换
+⾼性能
+缺点：
+编译后可执⾏⽂件可能⼤
+J ava 泛型是“类型擦除”，在运⾏时没有泛型。所有泛型编译后变成 Object，会导致性能损
+耗（装箱）和不⽀持基础类型。：
+编译器在⽣成字节码时将泛型类型替换为上界类型（默认 Object）
+泛型信息在运⾏时丢失（只保留签名）
+编译器⾃动插⼊类型转换（cast）和桥接⽅法
+设计模式
+Go如何实现⼀个单例模式？
+推荐做法：sync.Once结构体可以保证在程序执⾏过程中，某个函数只会被执⾏⼀次。我们可以
+利⽤这个特性来实现单例模式。具体实现时，可以定义⼀个全局变量来存储实例，然后使⽤
+sync.Once来确保实例只被创建⼀次。
+懒汉式：第⼀次调⽤时才创建实例
+package main1
+2
+import (3
+Go
+
+--- PAGE 86 ---
+"fmt"4
+"sync"5
+)6
+7
+type Singleton struct {8
+name string9
+}10
+11
+var instance *Singleton12
+var once sync.Once13
+14
+func GetInstance() *Singleton {15
+once.Do(func() {16
+instance = &Singleton{name: "Go 单例 "}17
+})18
+return instance19
+}20
+21
+func main() {22
+s1 := GetInstance()23
+s2 := GetInstance()24
+fmt.Println(s1 == s2) // true25
+}26
+27
+饿汉式：程序启动时创建
+package main1
+2
+import (3
+"fmt"4
+"sync"5
+)6
+7
+var (8
+eagerSingleton        = &EagerSingleton{9
+name: "EagerSingleton",10
+}11
+)12
+13
+type EagerSingleton struct {14
+name string15
+}16
+17
+Go
+
+--- PAGE 87 ---
+func getEagerSingleton() *EagerSingleton {18
+return eagerSingleton19
+}20
+21
+func main() {22
+s3 := getEagerSingleton()23
+s4 := getEagerSingleton()24
+fmt.Println(s3 == s4)25
+}26
+反射
+Golang的反射原理是什么？什么场景下应该使⽤反射？
+G o 的反射（reﬂection）机制是语⾔运⾏时提供的⼀种动态类型系统补充，可以在运⾏时检查变
+量的类型和值，并对其进⾏修改。
+G o 的反射机制基于三个核⼼类型：
+Type（来⾃ reflect.Type） → 表⽰变量的类型信息
+Value（来⾃ reflect.Value） → 表⽰变量的值信息
+Kind → 表⽰底层的具体类型类别（int、struct、slice、m ap等）
+反射依赖于 G o 的运⾏时（runtim e）为每个对象存储的类型元信息（type metadata）。这些信
+息是由编译器⽣成并在程序运⾏时加载的。
+如果让你编译⼀个golang的程序，在linux下执⾏包含哪些系统调⽤
+在 Linux 下执⾏⼀个 G o 程序，⾸先由 shell 调⽤ fork/clone，⼦进程通过 execve 加载 G o 的 
+ELF 可执⾏⽂件，内核在装载过程中使⽤ mmap/mprotect 映射内存。进⼊ G o runtim e 后，会通
+过 mmap 管理堆和 goroutine 栈，⽤ clone 创建 OS 线程，注册信号处理器，初始化调度器；程序
+运⾏中根据业务触发 read/write/open/socket/epoll/futex 等系统调⽤；程序结束时通过 
+exit_group 退出进程。

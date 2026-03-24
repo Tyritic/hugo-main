@@ -2157,6 +2157,69 @@ type _type struct {
 
 ---
 
+## 🧪 面试高频补充
+
+### 📦 空结构体 `struct{}`
+
+空结构体是 Go 里一个很有代表性的“小而重要”的类型：
+
+- **`struct{}{}`** 本身几乎不承载有效业务数据
+- 常用于实现 **set**
+- 常用于只传递“信号”而不传递“数据”的 **channel**
+
+```go
+set := map[string]struct{}{
+    "go":   {},
+    "java": {},
+}
+
+done := make(chan struct{})
+go func() {
+    // do work
+    close(done)
+}()
+<-done
+```
+
+它的核心价值是：表达语义非常明确，同时避免无意义的数据负载。
+
+### 🏷️ 结构体标签（Tag）
+
+结构体标签本质上是附着在字段上的元信息，常用于序列化、参数绑定和校验：
+
+```go
+type User struct {
+    ID    int    `json:"id" db:"user_id"`
+    Name  string `json:"name" form:"name"`
+    Email string `json:"email" binding:"required,email"`
+}
+```
+
+常见用途：
+
+- **`json`**：控制 JSON 编解码字段名
+- **`db`**：映射数据库字段
+- **`form`**：绑定表单或查询参数
+- **`binding`** / **`validate`**：声明校验规则
+
+### 🔍 `unsafe.Pointer` 和 `uintptr`
+
+二者经常一起出现，但语义完全不同：
+
+- **`unsafe.Pointer`**：通用指针，可以在不同指针类型之间桥接
+- **`uintptr`**：普通整数，用来保存地址数值，便于做地址运算
+
+最关键的区别是：
+
+- **`unsafe.Pointer`** 仍然会被 GC 当作“指针”看待
+- **`uintptr`** 只是数值，GC 不会把它当成引用
+
+所以实践里要记住一个原则：
+
+> 只有在非常明确地需要做底层内存操作时，才使用 `unsafe.Pointer` / `uintptr`，并且尽量缩小它们的作用范围。
+
+---
+
 ## 📚 总结
 
 | 特性 | 说明 |
