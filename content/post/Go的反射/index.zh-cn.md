@@ -75,7 +75,7 @@ func main() {
 
 运行结果：
 
-```
+```go
 int64
 main.Student
 ```
@@ -128,7 +128,7 @@ func main() {
 
 运行结果：
 
-```
+```go
 100
 <int64 Value>
 {zhangsan 18}
@@ -180,7 +180,7 @@ func main() {
 
 运行结果：
 
-```
+```go
 type of num1 is int
 type of num2 is main.WrapInt
 kind of num1 is int
@@ -245,7 +245,7 @@ func main() {
 
 运行结果：
 
-```
+```go
 the field num of Student is 3
 field1 type is string, value is zhangsan
 field2 type is int, value is 18
@@ -281,7 +281,7 @@ func main() {
 
 运行结果：
 
-```
+```go
 key type is int, key = 1; value type is uint32, value = 100
 key type is int, key = 2; value type is uint32, value = 200
 ```
@@ -319,7 +319,7 @@ func main() {
 
 运行结果：
 
-```
+```go
 1 2 3
 4 5 6
 ```
@@ -370,7 +370,7 @@ true
 - **`DeepEqual` 更偏通用，不一定最优**，在性能敏感场景下未必适合
 - **业务上的“相等”未必等于字段逐个完全相等**，有时更适合自己实现 `Equal` 方法，只比较真正关心的字段
 
-### 🔢 类型对象
+### 📊 类型对象
 
 reflect 包下跟类型相关的常用函数或方法：
 
@@ -420,7 +420,7 @@ func main() {
 
 运行结果：
 
-```
+```go
 Student
 struct
 3
@@ -465,7 +465,7 @@ func main() {
 
 运行结果：
 
-```
+```go
 ptr
 Student
 3
@@ -476,7 +476,7 @@ field3 name is Score, field2 type is float64
 
 可以看到，跟上面直接获取 `struct` 有一点点小小的区别，那就是 `fmt.Println(t.Kind())` 打印出的是一个 `ptr` 指针类型，而不再是 `struct` 类型，正是因为这里是一个 `ptr`，所以我们不能直接在这个 `ptr` 上调用 `.Name()` 以及其他的 `.NumField()` 之类的方法，要根据 `ptr` 的 `.Elem()` 获取到具体类型之后，才能用这些方法，否则程序就回报 `panic`，这点一定要注意。
 
-#### 📖 函数反射类型
+#### ⚙️ 函数反射类型
 
 ```go
 package main
@@ -513,17 +513,17 @@ func main() {
 
 运行结果：
 
-```
+```go
 input:
 int int 
 --------------------------------
 output:
-int error 
+int error
 ```
 
 `t := reflect.TypeOf(Add)` 获取到 Add 函数的 `type` 类型，然后通过 `NumIn()` 方法获得 Add 函数的参数个数，依次打印出参数的类型。通过 `NumOut()` 方法获得 Add 函数的返回值个数，依次打印出返回值的类型。
 
-#### 📖 反射获取 struct 方法
+#### �️ 反射获取 struct 方法
 
 ```go
 package main
@@ -580,7 +580,7 @@ func main() {
 
 运行结果：
 
-```
+```go
 {GetName func(*main.Student) string}
 {SetName func(*main.Student, string)}
 {GetAge func(*main.Student) int}
@@ -684,7 +684,7 @@ func main() {
 
 运行结果：
 
-```
+```go
 st === &{Name:zhangsan Age:18 Score:90.5}
 t get func by name:true
 st === &{Name:lisi Age:18 Score:90.5}
@@ -740,7 +740,7 @@ func main() {
 
 运行结果：
 
-```
+```go
 false
 ```
 
@@ -748,7 +748,7 @@ false
 
 经过前面学习指针反射类型的学习，我们知道了假设 `reflect.ValueOf()` 返回的是一个指针的 `reflect.Value` 对象，那么我们可以调用 `reflect.Value.Elem()` 方法得到具体的类型，而此时得到的这个反射具体类型就是可寻址的，我们可以知道他的地址，道理很简单，因为 `reflect.Value.Elem()` 获取到的值，记录了根据指针获取到值这个获取路径，显然我们可以根据值追溯到地址。
 
-### 📌 reflect.Value.Elem() 方法得到具体的类型可寻址
+### � reflect.Value.Elem() 方法得到具体的类型可寻址
 
 ```go
 package main
@@ -777,7 +777,7 @@ func main() {
 
 运行结果：
 
-```
+```go
 true
 ```
 
@@ -789,7 +789,7 @@ true
 
 在 Go 语言中，**类型断言**提供了两种方式来检查接口变量的具体类型：
 
-### 📖 直接断言
+### � 直接断言
 
 失败会 panic：
 
@@ -822,7 +822,7 @@ v, ok := x.(T)
   - 不加 `tag`，可以正常转为 `json` 里的字段，`json` 内字段名跟结构体内字段原名一致
   - 加了 `tag`，从 `struct` 转 `json` 的时候，`json` 的字段名就是 `tag` 里的字段名，原字段名已经没用
 
-### 📖 解析 JSON 数据时的默认类型
+### � 解析 JSON 数据时的默认类型
 
 使用 `encoding/json` 包解析到 `interface{}` 时：
 
@@ -851,7 +851,7 @@ v, ok := x.(T)
 
 反射绕过了编译时的类型检查，可能导致运行时错误。使用反射时需要格外小心，确保类型转换的正确性。
 
-### 🚨 代码可读性
+### � 代码可读性
 
 大量使用反射会降低代码的可读性和可维护性。应该在确实需要动态性的场景下使用反射，而不是滥用。
 

@@ -85,7 +85,7 @@ type Context interface {
 | --- | --- | --- | --- |
 | `context.WithCancel(parent)` | 手动调用 `cancel()` | 主动取消控制 | 手动停止任务、协程退出 |
 | `context.WithTimeout(parent, timeout)` | 超时后自动取消 | 有超时要求 | RPC、HTTP、数据库操作 |
-| `context.WithDeadline(parent, deadline)` | 到指定时间点自动取消 | 精确截止时间控制 | 有明确结束时刻的任务 |
+| `context.WithDeadline(parent, deadline)` | 在指定时间点自动取消 | 精确截止时间控制 | 有明确结束时刻的任务 |
 | `context.WithValue(parent, key, val)` | 绑定键值对 | 传递请求范围数据 | `traceID`、`userID`、认证信息 |
 
 ---
@@ -243,9 +243,11 @@ defer cancel()
 - 所有监听这个 `ctx` 的 `goroutine` 都会收到退出信号
 - 当前上下文的子上下文也会递归取消
 
-### 🧪 示例
+### 📗 示例
 
-```go
+以下示例展示了基本的取消监听模式：
+
+```gogo
 package main
 
 import (
@@ -314,7 +316,7 @@ defer cancel()
 
 它更适合日常开发，因为大部分场景下我们关心的是“最多执行多久”，而不是“精确截止到哪一刻”。
 
-### 🧪 超时控制示例
+### 📌 超时控制示例
 
 ```go
 func handle(ctx context.Context, resultCh <-chan string) error {
@@ -349,14 +351,14 @@ traceID := ctx.Value(traceIDKey{})
 fmt.Println(traceID)
 ```
 
-### ✅ 适合传什么
+### 💡 适合传什么
 
 - 链路 ID
 - 请求元数据
 - 认证信息
 - 日志上下文字段
 
-### ❌ 不适合传什么
+### 🚫 不适合传什么
 
 - 数据库连接
 - 大对象
@@ -420,7 +422,7 @@ PDF 中还强调了两个特点：
 3. 递归取消所有子 `Context`
 4. 从父 `Context` 中解除注册，避免内存泄漏
 
-### 🧪 一个典型的监听写法
+### ⚙️ 一个典型的监听写法
 
 ```go
 func worker(ctx context.Context) {
@@ -530,7 +532,7 @@ PDF 里专门强调了一点：`context` 的一个重要价值是**防止 gorout
 
 ## 🧠 工程实践建议
 
-### ✅ 把 Context 作为第一个参数传递
+### 📌 把 Context 作为第一个参数传递
 
 约定俗成的写法是：
 
@@ -540,11 +542,11 @@ func QueryUser(ctx context.Context, id int64) (*User, error)
 
 把 `ctx` 放在第一个参数位置，可以让函数职责更清晰，也更符合 Go 社区约定。
 
-### ✅ 不要把 Context 存进结构体
+### 📎 不要把 Context 存进结构体
 
 `context` 应该跟随一次请求流动，而不是被长期持有。把它塞进结构体字段里，容易造成生命周期混乱。
 
-### ✅ 用完 cancel 要及时调用
+### 🔔 用完 cancel 要及时调用
 
 无论是 `WithCancel`、`WithTimeout` 还是 `WithDeadline`，只要拿到了 `cancel`，通常都应该及时调用：
 
@@ -555,11 +557,11 @@ defer cancel()
 
 这不仅是语义完整，也有助于尽早释放关联资源。
 
-### ✅ 只传递请求级元数据
+### ✨ 只传递请求级元数据
 
 `WithValue` 很方便，但不能滥用。它适合做透传，不适合做参数黑洞。
 
-### ✅ 在阻塞点监听 `ctx.Done()`
+### ⏳ 在阻塞点监听 `ctx.Done()`
 
 尤其是在这些地方：
 
@@ -571,7 +573,7 @@ defer cancel()
 
 否则即使上游已经取消，当前任务也可能继续白白运行。
 
-### ✅ 用自定义 key 类型避免冲突
+### 🔒 用自定义 key 类型避免冲突
 
 推荐写法：
 
@@ -610,15 +612,15 @@ ctx = context.WithValue(ctx, "traceID", "xxx")
 
 ## ⚠️ 常见误区
 
-### ❌ 把 Context 当成万能参数容器
+### 🚫 把 Context 当成万能参数容器
 
 `context` 不是为了代替函数参数设计的。凡是和业务逻辑强相关、而且函数明确需要的值，都应该显式传参。
 
-### ❌ 忘记调用 cancel
+### ⏰ 忘记调用 cancel
 
 拿到了 `cancel` 却不调用，容易让内部定时器、子任务或资源延迟释放。
 
-### ❌ 在子函数里重新创建 Background
+### 🔄 在子函数里重新创建 Background
 
 错误示例：
 
@@ -631,11 +633,11 @@ func doQuery() {
 
 这样会切断上游传下来的取消链路。正确做法是继续使用外部传入的 `ctx`。
 
-### ❌ 忽略 `ctx.Err()`
+### 📊 忽略 `ctx.Err()`
 
-很多代码虽然监听了 `Done()`，但没有区分到底是“主动取消”还是“超时失败”。而这两种情况在日志、重试、告警策略上往往并不相同。
+很多代码虽然监听了 `Done()`，但没有区分到底是"主动取消"还是"超时失败"。而这两种情况在日志、重试、告警策略上往往并不相同。
 
-### ❌ 在 Context 里塞入大对象或核心依赖
+### 💾 在 Context 里塞入大对象或核心依赖
 
 例如数据库连接、缓存客户端、配置中心实例等，都不应该放进 `context`。这些东西应通过依赖注入或显式参数传递。
 

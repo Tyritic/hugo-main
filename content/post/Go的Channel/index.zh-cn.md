@@ -1,6 +1,6 @@
 ---
 date: '2026-03-19T10:00:00+08:00'
-draft: true
+draft: false
 title: 'Go的Channel'
 image: ""
 categories: ["Golang"]
@@ -32,7 +32,7 @@ Go 官方对 `Channel` 的定义是：
 - **可缓冲**：有缓冲 `Channel` 可以在一定程度上解耦发送方和接收方。
 - **并发安全**：多个 `goroutine` 可以同时操作同一个 `Channel`。
 
-### 🧩 Channel 与 CSP
+### 📖 Channel 与 CSP
 
 `Channel` 背后对应的是 Go 一直强调的 **CSP（Communicating Sequential Processes）** 思想，也就是“通过通信共享内存，而不是通过共享内存来通信”。
 
@@ -91,7 +91,7 @@ Go 官方对 `Channel` 的定义是：
 
 ## 🔍 Channel 底层原理
 
-### 🧱 底层数据结构
+### 🏗️ 底层数据结构
 
 `Channel` 在 Go 运行时中由 `runtime.hchan` 表示。调用 `make(chan T, size)` 时，运行时会在堆上分配一个 `hchan` 结构，并返回对它的引用，因此 `Channel` 本质上是**引用类型**。
 
@@ -133,7 +133,7 @@ type hchan struct {
 - **`sendq` / `recvq`**：保存阻塞发送者和阻塞接收者。
 - **`lock`**：保证并发操作安全。
 
-### 🧩 等待队列与 `sudog`
+### 🔎 等待队列与 `sudog`
 
 阻塞中的 `goroutine` 不会直接挂在 `Channel` 上，而是会被封装成 `sudog` 节点，再进入 `sendq` 或 `recvq` 等待队列。
 
@@ -218,7 +218,7 @@ ch2 := make(chan int, 3)
 - **`make(chan int)`**：创建无缓冲 `Channel`。
 - **`make(chan int, 3)`**：创建容量为 `3` 的有缓冲 `Channel`。
 
-### 📤 发送数据
+### 📨 发送数据
 
 ```go
 ch <- v
@@ -276,7 +276,7 @@ channel 数据已读完，v=0
 
 当 `ok` 为 `true` 时，表示本次确实读到了有效数据；当 `ok` 为 `false` 时，表示 `Channel` 已关闭且数据已经读空。
 
-### 🔁 `for range` 读取
+### 🔂 `for range` 读取
 
 如果我们不确定要读取多少次，而是希望“只要有数据就继续读，直到发送方关闭 `Channel`”，那么 `for range` 是最自然的写法：
 
@@ -311,7 +311,7 @@ v=1
 v=2
 ```
 
-### 🔒 关闭管道
+### 🚪 关闭管道
 
 ```go
 close(ch)
@@ -458,7 +458,7 @@ func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
 当发送方因为缓冲区满而阻塞时，运行时会创建一个 `sudog` 节点，把当前 `goroutine` 挂到 `sendq` 上：
 
 <div align="center">
-  <img src="boxcn9ULtLcD2jviAdDERfbrNNb.png" alt="发送方阻塞并进入等待队列的过程" width="82%">
+  <img src="boxcnd31UrNwnvthDJwEnkwotle.png" alt="发送方阻塞并进入等待队列的过程" width="82%">
 </div>
 
 等到其他 `goroutine` 消费数据后，运行时会把等待中的发送者重新唤醒：
@@ -487,7 +487,7 @@ func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
 | **发送** | **有缓冲但已满** | **阻塞** |
 | **发送** | **已关闭** | **panic** |
 
-### 📥 Channel 接收流程
+### 📬 Channel 接收流程
 
 接收操作最终会进入 `runtime.chanrecv`：
 
@@ -641,14 +641,14 @@ func closechan(c *hchan) {
 
 ---
 
-## 🔀 双向 Channel 和单向 Channel
+## 🎭 双向 Channel 和单向 Channel
 
 从类型角度看，`Channel` 又可以分成**双向 `Channel`** 与**单向 `Channel`**。
 
 - **双向 `Channel`**：既能发送，也能接收。
 - **单向 `Channel`**：只能发送，或者只能接收。
 
-### 📥 定义单向读 Channel
+### 📜 定义单向读 Channel
 
 ```go
 var ch = make(chan int)
@@ -656,7 +656,7 @@ type RChannel = <-chan int
 var rec RChannel = ch
 ```
 
-### 📤 定义单向写 Channel
+### 🖊️ 定义单向写 Channel
 
 ```go
 var ch = make(chan int)
@@ -743,7 +743,7 @@ receive: 100
 
 ## 🔐 Channel 与锁
 
-### 🧱 用 Channel 实现锁操作
+### 🛡️ 用 Channel 实现锁操作
 
 当缓冲区容量为 `1` 时，`Channel` 可以近似实现一个简化版互斥锁：
 
@@ -890,7 +890,7 @@ func main() {
 
 ---
 
-## 🔀 `select` 语句
+## 🎛️ `select` 语句
 
 `select` 是 Go 层面提供的**多路复用机制**，用于同时监听多个 `Channel` 的读写事件。
 
@@ -939,7 +939,7 @@ default:
 - **超时控制**：配合 `time.After` 可实现超时退出。
 - **取消传播**：配合 `context.Done()` 可实现协程停止控制。
 
-### 🎯 使用场景详解
+### 📋 使用场景详解
 
 #### 🚫 空 `select` 永久阻塞
 
@@ -957,7 +957,7 @@ func main() {
 fatal error: all goroutines are asleep - deadlock!
 ```
 
-#### ⚠️ 没有 `default` 且所有 `case` 都不可执行
+#### ❗ 没有 `default` 且所有 `case` 都不可执行
 
 ```go
 package main
@@ -1173,7 +1173,7 @@ func main() {
 }
 ```
 
-### 🔄 取消流程
+### 🔁 取消流程
 
 1. **关闭 `done` `Channel`**。
 2. **唤醒所有监听该 `Channel` 的协程**。
@@ -1196,7 +1196,7 @@ case result := <-ch:
 
 ---
 
-## ⚠️ 基本注意事项
+## 📌 基本注意事项
 
 - **关闭未初始化的 `Channel` 会 `panic`**。
 - **同一个 `Channel` 只能关闭一次**。
