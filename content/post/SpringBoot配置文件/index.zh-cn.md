@@ -5,7 +5,7 @@ draft : false
 title : 'SpringBoot配置文件'
 image : ""
 categories : ["Spring系列"]
-tags : ["后端开发"]
+tags : ["Web开发框架"]
 description : "SpringBoot的配置文件以及参数配置化"
 ---
 

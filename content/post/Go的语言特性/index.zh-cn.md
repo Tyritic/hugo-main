@@ -4,7 +4,7 @@ draft : false
 title : 'Go的语言特性'
 image : ""
 categories : ["Golang"]
-tags : ["后端开发"]
+tags : []
 description : "Golang的语言特性和与Java的比较"
 math : true
 ---

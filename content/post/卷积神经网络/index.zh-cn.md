@@ -4,7 +4,7 @@ draft : false
 title : '卷积神经网络'
 image : ""
 categories : ["神经网络"]
-tags : ["机器学习"]
+tags : ["深度学习"]
 description : "卷积神经网络概述"
 math : true
 ---

@@ -5,7 +5,7 @@ draft : false
 title : 'SpringBoot中的三大组件'
 image : ""
 categories : ["Spring系列"]
-tags : []
+tags : ["Web开发框架"]
 description : "SpringBoot框架中对JavaWeb三大组件的集成"
 ---
 

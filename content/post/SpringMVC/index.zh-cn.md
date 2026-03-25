@@ -5,7 +5,7 @@ draft : false
 title : 'SpringMVC模块'
 image : ""
 categories : ["Spring系列"]
-tags : ["后端开发"]
+tags : ["Web开发框架"]
 description : "Web开发中的SpringMVC的集成"
 ---
 

@@ -4,7 +4,7 @@ draft : false
 title : 'Go的函数和方法'
 image : ""
 categories : ["Golang"]
-tags : ["后端开发"]
+tags : []
 description : "Go中函数的用法"
 math : true
 ---

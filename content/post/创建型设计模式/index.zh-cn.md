@@ -4,7 +4,7 @@ draft : false
 title : '创建型设计模式'
 image : ""
 categories : ["设计模式"]
-tags : ["后端开发"]
+tags : []
 description : "创建型设计模式的常见实现和理解"
 math : true
 ---

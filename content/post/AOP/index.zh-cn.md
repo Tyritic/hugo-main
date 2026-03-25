@@ -4,7 +4,7 @@ draft : false
 title : '面向切面编程(AOP)'
 image : ""
 categories : ["Spring系列"]
-tags : ["后端开发"]
+tags : ["Web开发框架"]
 description : "面向切面编程的相关理解"
 math : true
 ---

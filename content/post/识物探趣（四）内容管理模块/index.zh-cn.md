@@ -4,7 +4,7 @@ draft : false
 title : '识物探趣（四）内容管理模块'
 image : ""
 categories : ["个人项目"]
-tags : ["后端开发"]
+tags : []
 description : "识物探趣项目中内容管理模块中的缓存问题"
 math : true
 ---

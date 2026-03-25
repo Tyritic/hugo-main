@@ -4,7 +4,7 @@ draft : false
 title : 'BO、VO、PO、DO、DTO的理解'
 image : ""
 categories : ["项目技术"]
-tags : [""]
+tags : ["Web开发框架"]
 description : "项目开发中对各种数据交换对象的理解"
 math : true
 ---

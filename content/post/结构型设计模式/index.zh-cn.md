@@ -4,7 +4,7 @@ draft : false
 title : '结构型设计模式'
 image : ""
 categories : ["设计模式"]
-tags : ["后端开发"]
+tags : []
 description : "结构型设计模式的基础"
 math : true
 ---

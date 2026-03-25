@@ -4,7 +4,7 @@ draft : false
 title : 'Spring框架的基础认识'
 image : ""
 categories : ["Spring系列"]
-tags : ["后端开发"]
+tags : ["Web开发框架"]
 description : "对Spring框架的基本认识"
 math : true
 ---

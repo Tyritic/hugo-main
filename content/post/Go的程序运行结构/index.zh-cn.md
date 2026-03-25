@@ -4,7 +4,7 @@ draft : false
 title : 'Go的程序运行结构'
 image : ""
 categories : ["Golang"]
-tags : ["后端开发"]
+tags : []
 description : "Go的程序运行结构"
 math : true
 ---

@@ -4,7 +4,7 @@ draft : false
 title : 'Go的内存管理和垃圾回收'
 image : ""
 categories : ["Golang"]
-tags : ["后端开发"]
+tags : []
 description : "从逃逸分析、内存分配到垃圾回收，系统理解 Go 的内存管理机制"
 math : true
 ---

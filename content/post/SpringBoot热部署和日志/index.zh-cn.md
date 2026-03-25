@@ -5,7 +5,7 @@ draft : false
 title : 'SpringBoot热部署和日志'
 image : ""
 categories : ["Spring系列"]
-tags : ["后端开发"]
+tags : ["Web开发框架"]
 description : "SpringBoot框架的热部署和日志结构"
 ---
 

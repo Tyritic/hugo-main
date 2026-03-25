@@ -4,7 +4,7 @@ draft : false
 title : '设计模式基础'
 image : ""
 categories : ["设计模式"]
-tags : ["后端开发"]
+tags : []
 description : "设计模式的基础内容"
 math : true
 ---

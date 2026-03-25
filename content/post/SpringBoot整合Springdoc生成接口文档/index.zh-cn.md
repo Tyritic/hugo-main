@@ -5,7 +5,7 @@ draft : false
 title : 'SpringBoot整合Springdoc-OpenApi'
 image : ""
 categories : ["Spring系列"]
-tags : ["后端开发"]
+tags : ["Web开发框架"]
 description : "在SpringBoot框架中使用Springdoc-OpenApi框架生成接口文档"
 ---
 

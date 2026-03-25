@@ -4,7 +4,7 @@ draft : false
 title : '行为型设计模式'
 image : ""
 categories : ["设计模式"]
-tags : ["后端开发"]
+tags : []
 description : "行为型设计模式的理解"
 math : true
 ---

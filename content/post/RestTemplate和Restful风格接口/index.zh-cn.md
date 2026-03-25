@@ -4,7 +4,7 @@ draft : false
 title : 'RestTemplate和Restful风格接口'
 image : ""
 categories : ["Spring系列"]
-tags : ["后端开发"]
+tags : []
 description : "RestTemplate在web开发中的使用以及REST服务"
 ---
 

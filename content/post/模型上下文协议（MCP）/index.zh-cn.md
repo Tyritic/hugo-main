@@ -4,7 +4,7 @@ draft : false
 title : '模型上下文协议（MCP）'
 image : ""
 categories : ["Agent"]
-tags : ["后端开发"]
+tags : ["MCP"]
 description : "对模型上下文协议（MCP）的一些个人理解和官方文档的阅读"
 math : true
 ---
@@ -23,6 +23,9 @@ math : true
 
 Function Call 于 **2023 年** 由 OpenAI 推出。在此之前，LLM 主要只能通过自然语言回答问题，无法直接触发 API 调用或插件交互。Function Call 的关键能力在于：**模型能够以结构化 JSON 的形式输出函数参数，再交由应用程序执行对应逻辑。**
 
+<div align="center">
+  <img src="Function Calling.png" alt="Function Call" width="78%">
+</div>
 一个典型流程如下：
 
 - **识别意图**：模型根据用户输入判断是否需要调用函数。

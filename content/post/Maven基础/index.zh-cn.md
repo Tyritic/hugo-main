@@ -5,7 +5,7 @@ draft : false
 title : 'Maven基础'
 image : ""
 categories : ["Spring系列"]
-tags : ["后端开发"]
+tags : []
 description : "一些Maven项目的基础知识"
 ---
 

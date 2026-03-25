@@ -4,7 +4,7 @@ draft : false
 title : 'Redis中的List'
 image : ""
 categories : ["Redis"]
-tags : ["后端开发"]
+tags : []
 description : ""
 math : true
 ---

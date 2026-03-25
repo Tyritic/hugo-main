@@ -4,7 +4,7 @@ draft : false
 title : 'Go的基本语法和项目结构'
 image : ""
 categories : ["Golang"]
-tags : ["后端开发"]
+tags : []
 description : "Go的语言特性和基本语法"
 math : true
 ---

@@ -4,7 +4,7 @@ draft : false
 title : 'Kitex框架的基本使用'
 image : ""
 categories : ["Kitex框架"]
-tags : ["后端开发"]
+tags : ["微服务框架"]
 description : "Kitex框架的初步使用"
 math : true
 ---

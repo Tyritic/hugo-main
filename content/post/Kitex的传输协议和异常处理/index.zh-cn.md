@@ -4,7 +4,7 @@ draft : false
 title : 'Kitex的传输协议和异常处理'
 image : ""
 categories : ["Kitex框架"]
-tags : ["后端开发"]
+tags : ["微服务框架"]
 description : "深入解析Kitex的传输协议（TTHeader、HTTP2）、连接池策略以及异常处理机制"
 math : true
 ---

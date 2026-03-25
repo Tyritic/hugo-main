@@ -4,7 +4,7 @@ draft: true
 title: 'Go的Channel'
 image: ""
 categories: ["Golang"]
-tags: ["后端开发"]
+tags: []
 description: "深入理解 Go 语言中的 Channel：Channel 的定义、初始化、操作、底层实现、select 机制，以及如何利用 Channel 实现并发安全"
 math: true
 ---

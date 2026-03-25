@@ -4,7 +4,7 @@ draft : false
 title : 'Go的并发操作'
 image : ""
 categories : ["Golang"]
-tags : ["后端开发"]
+tags : []
 description : "Go的多线程和并发操作"
 math : true
 ---

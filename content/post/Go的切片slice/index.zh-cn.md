@@ -4,7 +4,7 @@ draft : false
 title : 'Go的切片slice'
 image : ""
 categories : ["Golang"]
-tags : ["后端开发"]
+tags : []
 description : "Slice的底层原理"
 math : true
 ---

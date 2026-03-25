@@ -4,7 +4,7 @@ draft : false
 title : 'Go的GMP机制'
 image : ""
 categories : ["Golang"]
-tags : ["后端开发"]
+tags : []
 description : "深入理解Go的GMP并发调度模型"
 math : true
 ---

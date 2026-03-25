@@ -4,7 +4,7 @@ draft : false
 title : 'Redis中的Set'
 image : ""
 categories : ["Redis"]
-tags : ["后端开发"]
+tags : []
 description : "Redis的基本数据结构set"
 math : true
 ---

@@ -5,7 +5,7 @@ draft : false
 title : 'SpringCache'
 image : ""
 categories : ["Spring系列"]
-tags : ["后端开发"]
+tags : ["Web开发框架"]
 description : "SpringBoot的缓存框架"
 math : true
 ---

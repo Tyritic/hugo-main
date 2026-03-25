@@ -4,7 +4,7 @@ draft : false
 title : 'Kitex的基本特性'
 image : ""
 categories : ["Kitex框架"]
-tags : ["后端开发"]
+tags : ["微服务框架"]
 description : "Kitex的基本特性"
 math : true
 ---

@@ -5,7 +5,7 @@ draft : false
 title : 'SpringBoot整合Kafka'
 image : ""
 categories : ["Kafka","Spring系列"]
-tags : ["消息队列"]
+tags : ["消息队列","Web开发框架"]
 description : "SpringBoot中整合Kafka"
 math : true
 ---

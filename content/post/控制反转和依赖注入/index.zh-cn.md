@@ -4,7 +4,7 @@ draft : false
 title : '控制反转（IOC)和依赖注入（DI）'
 image : ""
 categories : ["Spring系列"]
-tags : ["后端开发"]
+tags : ["Web开发框架"]
 description : "Spring框架中的控制反转(IOC)"
 ---
 

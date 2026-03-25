@@ -4,7 +4,7 @@ draft : false
 title : 'Nginx服务器'
 image : ""
 categories : ["项目技术"]
-tags : ["后端开发"]
+tags : []
 description : "项目的常用部署"
 math : true
 ---

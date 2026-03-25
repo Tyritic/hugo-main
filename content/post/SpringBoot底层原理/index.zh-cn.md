@@ -5,7 +5,7 @@ draft : false
 title : 'SpringBoot底层原理'
 image : ""
 categories : ["Spring系列"]
-tags : ["后端开发","框架原理"]
+tags : ["Web开发框架"]
 description : "SpringBoot框架的底层原理"
 ---
 
