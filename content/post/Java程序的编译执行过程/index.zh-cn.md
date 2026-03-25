@@ -4,7 +4,7 @@ draft : false
 title : 'Java程序的编译执行过程'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : "手写笔记的转换"
 math : true
 ---

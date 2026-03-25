@@ -5,7 +5,7 @@ draft : false
 title : 'MyBatis缓存'
 image : ""
 categories : ["MyBatis"]
-tags : ["数据库","后端开发"]
+tags : ["关系型数据库","后端开发"]
 description : "MyBatis的缓存相关知识"
 ---
 

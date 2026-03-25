@@ -4,7 +4,7 @@ draft : false
 title : 'Java的注解原理'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : "Java中注解的实现原理"
 math : true
 ---

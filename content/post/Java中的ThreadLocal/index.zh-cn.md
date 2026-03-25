@@ -4,7 +4,7 @@ draft : false
 title : 'Java中的ThreadLocal'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java并发"]
 description : "ThreadLocal——线程的本地变量"
 math : true
 ---

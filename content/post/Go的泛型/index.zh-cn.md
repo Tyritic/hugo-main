@@ -4,7 +4,7 @@ draft : false
 title : 'Go的泛型'
 image : ""
 categories : ["Golang"]
-tags : ["后端开放"]
+tags : ["后端开发"]
 description : "深入理解 Go 语言的泛型特性，包括类型参数、类型约束、类型集和类型推断等核心概念"
 math : true
 ---

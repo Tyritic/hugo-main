@@ -4,7 +4,7 @@ draft : false
 title : 'Java中的synchronized关键字'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java并发"]
 description : "synchronized关键字的底层原理"
 math : true
 ---

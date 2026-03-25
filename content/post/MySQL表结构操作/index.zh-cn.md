@@ -4,7 +4,7 @@ draft : false
 title : 'MySQL表结构操作'
 image : ""
 categories : ["MySQL"]
-tags : ["数据库"]
+tags : ["关系型数据库"]
 description : "对数据库表结构的基本操作"
 ---
 

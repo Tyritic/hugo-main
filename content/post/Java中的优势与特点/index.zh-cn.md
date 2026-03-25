@@ -4,7 +4,7 @@ draft : false
 title : 'Java的优势与特点'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : "对Java这一编程语言的优劣势的认识"
 math : true
 ---

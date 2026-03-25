@@ -4,7 +4,7 @@ draft : false
 title : 'Redis的持久化策略'
 image : ""
 categories : ["Redis"]
-tags : ["数据库"]
+tags : ["非关系型数据库"]
 description : "Redis的持久化机制"
 math : true
 ---

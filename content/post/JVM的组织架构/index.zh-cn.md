@@ -4,7 +4,7 @@ draft : false
 title : 'JVM的组织架构'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["JVM"]
 description : "JVM的组织架构"
 math : true
 ---

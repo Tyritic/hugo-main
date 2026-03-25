@@ -4,7 +4,7 @@ draft : false
 title : 'Java中的List接口'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java集合"]
 description : "手写笔记转换"
 math : true
 ---

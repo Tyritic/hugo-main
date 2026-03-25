@@ -4,7 +4,7 @@ draft : false
 title : 'Java内存模型（JMM）'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java并发"]
 description : "Java内存模型的理解"
 math : true
 ---

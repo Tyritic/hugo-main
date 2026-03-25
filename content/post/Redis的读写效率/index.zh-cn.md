@@ -4,7 +4,7 @@ draft : false
 title : 'Redis的读写效率分析'
 image : ""
 categories : ["Redis"]
-tags : ["数据库"]
+tags : ["非关系型数据库"]
 description : "Redis为什么读写高效"
 math : true
 ---

@@ -4,7 +4,7 @@ draft : false
 title : 'Java中的抽象类和抽象方法'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : "手写笔记转换"
 math : true
 ---

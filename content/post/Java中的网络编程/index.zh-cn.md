@@ -4,7 +4,7 @@ draft : false
 title : 'Java的网络编程'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : "手写笔记转换"
 math : true
 ---

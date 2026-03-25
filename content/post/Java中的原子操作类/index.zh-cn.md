@@ -4,7 +4,7 @@ draft : false
 title : 'Java中的原子操作类'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java并发"]
 description : "Java中的原子操作类"
 math : true
 ---

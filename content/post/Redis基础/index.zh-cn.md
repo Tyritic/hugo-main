@@ -4,7 +4,7 @@ draft : false
 title : 'Redis基础'
 image : ""
 categories : ["Redis"]
-tags : ["数据库"]
+tags : ["非关系型数据库"]
 description : "对Redis的初步认识和配置"
 math : true
 ---

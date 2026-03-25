@@ -4,7 +4,7 @@ draft : false
 title : 'JDK工具包'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : "总结项目开发中使用的JDK提供的工具包"
 math : true
 ---

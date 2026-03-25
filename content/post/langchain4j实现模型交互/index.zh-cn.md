@@ -4,7 +4,7 @@ draft : false
 title : 'langchain4j实现模型交互'
 image : ""
 categories : ["LangChain4j"]
-tags : ["后端开发"]
+tags : ["大模型应用开发框架"]
 description : "LangChain4j中对语言和聊天能力的支持"
 math : true
 ---

@@ -4,7 +4,7 @@ draft : false
 title : 'MySQL表数据操作'
 image : ""
 categories : ["MySQL"]
-tags : ["数据库"]
+tags : ["关系型数据库"]
 description : "对MySQL表中元组的操作"
 ---
 ## 插入元组

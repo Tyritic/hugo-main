@@ -4,7 +4,7 @@ draft : false
 title : 'Redis的缓存设计'
 image : ""
 categories : ["Redis"]
-tags : ["数据库"]
+tags : ["非关系型数据库"]
 description : "Redis的缓存设计"
 math : true
 ---

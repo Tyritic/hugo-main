@@ -4,7 +4,7 @@ draft : false
 title : 'MySQL的慢查询和性能调优'
 image : ""
 categories : ["MySQL"]
-tags : ["数据库"]
+tags : ["关系型数据库"]
 description : "MySQL的慢查询和性能调优策略"
 math : true
 ---

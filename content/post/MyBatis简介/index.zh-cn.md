@@ -5,7 +5,7 @@ draft : false
 title : 'MyBatis简介'
 image : ""
 categories : ["MyBatis"]
-tags : ["数据库","后端开发"]
+tags : ["关系型数据库","后端开发"]
 description : "对MyBatis框架的基本理解"
 ---
 

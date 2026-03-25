@@ -5,7 +5,7 @@ draft : false
 title : 'Spring事务管理'
 image : ""
 categories : ["Spring系列"]
-tags : ["后端开发","数据库"]
+tags : ["后端开发","非关系型数据库"]
 description : "SpringBoot框架中实现数据库的事务管理"
 ---
 

@@ -4,7 +4,7 @@ draft : false
 title : 'Java的反射机制'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : "手写笔记转换"
 math : true
 ---

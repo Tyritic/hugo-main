@@ -4,7 +4,7 @@ draft : false
 title : 'MySQL库操作'
 image : ""
 categories : ["MySQL"]
-tags : ["数据库"]
+tags : ["关系型数据库"]
 description : "以库为基本单位的数据库操作"
 ---
 

@@ -4,7 +4,7 @@ draft : false
 title : 'langchain4j基础和架构设计'
 image : ""
 categories : ["langchain4j"]
-tags : ["AI","Java"]
+tags : ["大模型应用开发框架"]
 description : "langchain4j是一个旨在简化Java语言中AI应用开发的框架。"
 ---
 

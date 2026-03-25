@@ -4,7 +4,7 @@ draft : false
 title : 'JVM的类加载机制'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["JVM"]
 description : "JVM的类加载器"
 math : true
 ---

@@ -4,7 +4,7 @@ draft : false
 title : 'Java中的volatile关键字'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java并发"]
 description : "Java中volatile关键字"
 math : true
 ---

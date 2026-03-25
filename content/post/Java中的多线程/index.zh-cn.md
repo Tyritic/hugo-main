@@ -4,7 +4,7 @@ draft : false
 title : 'Java中的多线程'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java并发"]
 description : "Java中的多线程概念"
 math : true
 ---

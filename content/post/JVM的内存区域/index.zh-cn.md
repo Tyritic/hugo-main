@@ -4,7 +4,7 @@ draft : false
 title : 'Java内存区域'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["JVM"]
 description : "JVM内存区域的划分"
 math : true
 ---

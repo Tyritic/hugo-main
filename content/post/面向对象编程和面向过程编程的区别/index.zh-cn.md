@@ -4,7 +4,7 @@ draft : false
 title : '面向对象编程和面向过程编程的区别'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : "面向对象编程和面向过程编程的区别"
 math : true
 ---

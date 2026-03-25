@@ -4,7 +4,7 @@ draft : false
 title : 'Java的BIO,NIO,AIO'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java并发"]
 description : "Java中不同的IO模式"
 math : true
 ---

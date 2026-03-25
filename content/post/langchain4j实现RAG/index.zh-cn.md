@@ -4,7 +4,7 @@ draft : false
 title : 'LangChain4j实现RAG系统'
 image : ""
 categories : ["LangChain4j"]
-tags : ["后端开发"]
+tags : ["大模型应用开发框架"]
 description : "RAG基础以及基于langchain4j的实现方式"
 math : true
 ---

@@ -4,7 +4,7 @@ draft : false
 title : 'MySQL索引'
 image : ""
 categories : ["MySQL"]
-tags : ["数据库"]
+tags : ["关系型数据库"]
 description : "MySQL索引的使用"
 ---
 

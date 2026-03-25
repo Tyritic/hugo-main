@@ -4,7 +4,7 @@ draft : false
 title : 'Java中的Optional类'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : "JDK 8的新特性"
 math : true
 ---

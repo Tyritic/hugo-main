@@ -4,7 +4,7 @@ draft : false
 title : 'Java的线程池技术'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java并发"]
 description : "Java的线程池技术"
 math : true
 ---

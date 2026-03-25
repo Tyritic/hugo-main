@@ -4,7 +4,7 @@ draft : false
 title : 'Redis的Java客户端和与SpringBoot的集成'
 image : ""
 categories : ["Redis"]
-tags : ["数据库"]
+tags : ["非关系型数据库"]
 description : "Redis的Java客户端和与SpringBoot的集成"
 math : true
 ---

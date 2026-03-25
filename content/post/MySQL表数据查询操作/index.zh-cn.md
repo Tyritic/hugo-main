@@ -4,7 +4,7 @@ draft : false
 title : 'MySQL表数据查询操作'
 image : ""
 categories : ["MySQL"]
-tags : ["数据库"]
+tags : ["关系型数据库"]
 description : "从MySQL数据库中查询元组的操作"
 ---
 

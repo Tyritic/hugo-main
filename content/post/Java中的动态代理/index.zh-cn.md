@@ -4,7 +4,7 @@ draft : false
 title : 'Java的动态代理'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : ""
 math : true
 ---

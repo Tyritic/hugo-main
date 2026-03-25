@@ -4,7 +4,7 @@ draft : false
 title : 'Java中的异常处理'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : "手写笔记转换"
 math : true
 ---

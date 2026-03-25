@@ -4,7 +4,7 @@ draft : false
 title : 'Java中的标准输入操作'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : "手写笔记的转换"
 math : true
 ---

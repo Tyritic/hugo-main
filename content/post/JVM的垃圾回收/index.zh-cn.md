@@ -4,7 +4,7 @@ draft : false
 title : 'JVM的垃圾回收'
 image : ""
 categories : ["Java"]
-tags : ["Java基础"]
+tags : ["JVM"]
 description : "JVM的垃圾回收机制和垃圾收集器"
 math : true
 ---

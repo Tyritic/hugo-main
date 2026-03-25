@@ -4,7 +4,7 @@ draft : false
 title : 'Object类的作用和相关方法'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : "Java中Object类的作用"
 math : true
 ---

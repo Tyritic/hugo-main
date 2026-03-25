@@ -4,7 +4,7 @@ draft : false
 title : 'Java的阻塞队列'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java并发"]
 description : "线程池中常用的阻塞队列"
 math : true
 ---

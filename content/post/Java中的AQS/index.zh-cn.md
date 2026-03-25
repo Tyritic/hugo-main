@@ -4,7 +4,7 @@ draft : false
 title : 'Java中的AQS'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java并发"]
 description : "AQS-抽象队列同步器"
 math : true
 ---

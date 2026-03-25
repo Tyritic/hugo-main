@@ -4,7 +4,7 @@ draft : false
 title : 'Java的字面量和基本数据类型'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java基础"]
 description : "手写笔记的转换"
 math : true
 ---

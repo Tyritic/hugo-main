@@ -4,7 +4,7 @@ draft : false
 title : 'Java中的锁'
 image : ""
 categories : ["Java"]
-tags : ["JavaSE"]
+tags : ["Java并发"]
 description : "对Java锁机制的理解"
 math : true
 ---
