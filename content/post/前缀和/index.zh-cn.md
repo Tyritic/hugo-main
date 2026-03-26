@@ -24,7 +24,7 @@ math : true
 - 先做累加，即 p[i] 表示 下标 0 到 i 的 vec[i] 累加 之和。
 - 统计vec数组上 下标 i 到下标 j 之间的累加和时使用 **p[j]-p[i-1]** 即可
 
-```
+```java
 p[i] = vec[0] + vec[1] + ... vec[i];
 p[j] = vec[0] + vec[1] + vec[2] + vec[3] + vec[4] + vec[5] + ..vec[j];
 p[j] - p[i] = vec[i+1] + vec[i+2] + vec[i+3] + ... +vec[j];

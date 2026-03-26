@@ -8,7 +8,7 @@ tags : ["关系型数据库"]
 description : "MySQL事务的使用"
 ---
 
-## 概念
+## 🧠 概念
 
 事务是一组操作的集合，它是一个不可分割的工作单位。事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作 要么同时成功，要么同时失败。
 
@@ -78,7 +78,9 @@ Read View 有四个重要的字段：
 - **`max_trx_id`** ：这个并不是 **`m_ids`** 的最大值，而是 **创建 Read View 时当前数据库中应该给下一个事务的 id 值** ，也就是全局事务中最大的事务 id 值（**`m_ids`** 的最大值） + 1；
 - **`creator_trx_id`** ：指的是 **创建该 Read View 的事务的事务 id** 。
 
-![ReadView结构](ReadView.drawio.png)
+<div align="center">
+  <img src="ReadView.drawio.png" alt="ReadView结构" width="82%">
+</div>
 
 ### 可见性实现
 
@@ -108,7 +110,9 @@ MySQL 里除了普通查询是快照读，其他都是 **当前读**，比如 up
 
 示例：假设有 A 和 B 这两个事务同时在处理，事务 A 先开始从数据库中读取余额数据，然后再执行更新操作，如果此时事务 A 还没有提交事务，而此时正好事务 B 也从数据库中读取余额数据，那么事务 B 读取到的余额数据是刚才事务 A 更新后的数据，即使没有提交事务。
 
-![脏读](10b513008ea35ee880c592a88adcb12f.png)
+<div align="center">
+  <img src="10b513008ea35ee880c592a88adcb12f.png" alt="脏读" width="82%">
+</div>
 
 ### 不可重复读
 
@@ -116,13 +120,17 @@ MySQL 里除了普通查询是快照读，其他都是 **当前读**，比如 up
 
 示例：假设有 A 和 B 这两个事务同时在处理，事务 A 先开始从数据库中读取余额数据，然后继续执行代码逻辑处理，**在这过程中如果事务 B 更新了这条数据，并提交了事务，那么当事务 A 再次读取该数据时，就会发现前后两次读到的数据是不一致的，这种现象就被称为不可重复读。**
 
-![不可重复读](f5b4f8f0c0adcf044b34c1f300a95abf.png)
+<div align="center">
+  <img src="f5b4f8f0c0adcf044b34c1f300a95abf.png" alt="不可重复读" width="82%">
+</div>
 
 ### 幻读
 
 定义：**在一个事务内多次查询某个符合查询条件的记录数量，如果出现前后两次查询到的记录数量不一样的情况，就意味着发生了幻读现象。**
 
-![幻读](d19a1019dc35dfe8cfe7fbff8cd97e31.png)
+<div align="center">
+  <img src="d19a1019dc35dfe8cfe7fbff8cd97e31.png" alt="幻读" width="82%">
+</div>
 
 {{<notice tip>}}
 
@@ -296,7 +304,9 @@ redo log和binlog的区别
 
 主要是通过二进制日志（Binary Log，简称 binlog）实现数据的复制。主数据库在执行写操作时，会将这些操作记录到 binlog 中，然后推送给从数据库，从数据库重放对应的日志即可完成复制。
 
-![MySQL 主从复制过程](主从复制过程.drawio.png)
+<div align="center">
+  <img src="主从复制过程.drawio.png" alt="MySQL 主从复制过程" width="88%">
+</div>
 
 - **写入 Binlog**：主库写 **binlog** 日志，提交事务，并更新本地存储数据。
   - MySQL 主库在收到客户端提交事务的请求之后，会先写入 **binlog** ，再提交事务，更新存储引擎中的数据，事务提交完成后，返回给客户端“操作成功”的响应。

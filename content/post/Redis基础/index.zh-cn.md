@@ -9,7 +9,7 @@ description : "对Redis的初步认识和配置"
 math : true
 ---
 
-## NoSQL型数据库
+## 🧠 NoSQL型数据库
 
 NoSQL（Not Only SQL）是指一类不使用传统关系型数据库结构的数据库。NoSQL数据库通常用于大规模数据存储、处理和快速访问的场景。与关系型数据库不同，NoSQL数据库不要求数据必须存储为表格形式，也不需要固定的模式（schema）。它们通常具有更高的扩展性、灵活性和适应性。
 
@@ -44,7 +44,9 @@ NoSQL（Not Only SQL）是指一类不使用传统关系型数据库结构的数
 |  **拓展性**  |                         垂直                         |                            水平                            |
 | **使用场景** | 数据结构固定<br>相关业务对数据安全性，一致性要求较高 | 数据结构不固定<br/>对一致性、安全性要求不高<br/>对性能要求 |
 
-## Redis缓存中间件
+---
+
+## 🏗️ Redis缓存中间件
 
 Redis（Remote Dictionary Server）是一个开源的内存数据库，遵守 BSD 协议，它提供了一个高性能的键值（key-value）存储系统，常用于缓存、消息队列、会话存储等应用场景。
 
@@ -73,7 +75,9 @@ Redis（Remote Dictionary Server）是一个开源的内存数据库，遵守 BS
 - **计数器** ：
   - Redis 的原子性操作非常适合用作计数器。
 
-## Redis的服务端命令
+---
+
+## ⚙️ Redis的服务端命令
 
 进入redis的安装根目录的命令行可以启动redis服务
 
@@ -85,7 +89,7 @@ Redis（Remote Dictionary Server）是一个开源的内存数据库，遵守 BS
 
 可以在主机中配置多个端口的redis服务，参见[博客](https://blog.csdn.net/yqwang75457/article/details/83412614)
 
-## Redis的客户端命令
+## ⌨️ Redis的客户端命令
 
 **`redis`** 在安装后就自带命令行客户端 **`redis-cli`** ，客户端的通用命令格式为
 
@@ -101,7 +105,7 @@ redis-cli [option] [commands]
 
 commands是redis的操作命令
 
-## Redis的基本数据结构
+## 🗂️ Redis的基本数据结构
 
 Redis 提供了丰富的数据类型。
 
@@ -130,7 +134,7 @@ Redis 提供了丰富的数据类型。
 - **GEO** ：GEO 是 Redis 提供的一种用于存储地理位置信息的数据结构，可以存储经纬度信息并支持空间查询，例如计算距离和获取范围内的坐标。
 - **Stream** ：Stream 是 Redis 提供的一种日志数据结构，适合于存储时间序列数据或消息流。支持高效的消息生产和消费模式，具有持久性和序列化特性。
 
-## Redis的通用命令
+## 🔧 Redis的通用命令
 
 ### Keys命令
 
@@ -164,14 +168,14 @@ redis 127.0.0.1:6379> COMMAND KEY_NAME
     - 返回值：移动成功返回 1 ，失败则返回 0 。
   - 将键重新命名：**`RENAME OLD_KEY_NAME NEW_KEY_NAME`**
     - 返回值
-      - 改名成功时提示 OK 
+      - 改名成功时提示 OK
       - 失败时候返回一个错误。当 OLD_KEY_NAME 和 NEW_KEY_NAME 相同，或者 OLD_KEY_NAME 不存在时，返回一个错误。
 
 {{<notice tip>}}
 
 Key的层级结构
 
-在 **Redis** 中，**Key 的层级格式** 其实是**一种命名约定**，并没有真正的“层级”结构（不像关系型数据库中的表或目录结构）。
+在 **Redis** 中，**Key 的层级格式** 其实是**一种命名约定**，并没有真正的"层级"结构（不像关系型数据库中的表或目录结构）。
 
 通常使用 `:` 分隔层级
 
@@ -180,6 +184,8 @@ namespace:object_type:id:field
 ```
 
 {{</notice>}}
+
+---
 
 ### 数据库命令
 
