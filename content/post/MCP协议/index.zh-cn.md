@@ -1,12 +1,11 @@
 ---
 date : '2025-03-27T10:00:39+08:00'
 draft : false
-title : 'MCP的概念'
+title : 'MCP协议'
 image : ""
 categories : ["Agent"]
 tags : ["MCP"]
 description : "对模型上下文协议（MCP）的一些个人理解和官方文档的阅读"
-math : true
 ---
 
 ## 🤔 LLM 的典型局限
@@ -24,7 +23,7 @@ math : true
 Function Call 于 **2023 年** 由 OpenAI 推出。在此之前，LLM 主要只能通过自然语言回答问题，无法直接触发 API 调用或插件交互。Function Call 的关键能力在于：**模型能够以结构化 JSON 的形式输出函数参数，再交由应用程序执行对应逻辑。**
 
 <div align="center">
-  <img src="Function Calling.png" alt="Function Call" width="78%">
+  <img src="Function Calling.png" alt="Function Call" width="82%">
 </div>
 一个典型流程如下：
 
@@ -55,7 +54,7 @@ MCP 全称是 **Model Context Protocol（模型上下文协议）**，它由 Ant
 可以把 MCP 理解成 AI 应用的 **USB-C 接口**。就像 USB-C 让不同设备可以通过统一标准连接各种外设一样，MCP 也希望让不同模型、不同工具、不同数据源之间通过统一协议协作。模型上下文协议(MCP)，由Anthropic发起的一种开放标准，就是为了解决这个问题的。MCP承诺通过提供一个通用的、标准化的框架来无缝集成数据，重新定义AI与工具的交互方式。就像 TCP/IP标准化了网络通信或ODBC改变了数据库连接一样，MCP希望成为互联AI生态系统的基础。
 
 <div align="center">
-  <img src="MCP图示.png" alt="MCP 图示" width="78%" />
+  <img src="MCP图示.png" alt="MCP 图示" width="82%" />
 </div>
 
 从工程角度看，MCP 的价值在于：
@@ -93,18 +92,18 @@ MCP 的核心改进，可以从三个能力对象来理解：
 
 二者的核心区别就一句话：Function Call 是 LLM 的一项**单轮工具调用能力**，而 MCP 是一套**标准化 LLM 与外部世界交互的完整通信协议**——Function Call 只是 MCP 的能力子集，二者根本不是一个维度的东西。
 
-- LLM 的基础工具调用能力Function Call 的本质，是 LLM 提供的单轮、无状态、单向的工具调用机制，解决的核心问题是 “让 LLM 不要瞎编答案，而是通过调用外部工具获取准确数据”。Function Call 就像 HTTP 接口的单次调用，你发一次请求、传一次参数、拿一次结果，无状态、单向通信，每次调用都要重新认证、重新传参，只能你主动调用接口，接口不能主动给你推消息。
-- MCP 就是给二者建了一条稳定的、全双工的、持久化的通信管道。它不仅包含了 Function Call 的工具调用能力，还提供了 Function Call 完全不具备的核心能力。MCP 就像 TCP 长连接 + 完整的 RPC 协议，它不仅能实现单次调用，还能保持长连接、持久化会话状态、支持双向实时通信，有完整的资源管理、上下文同步、异常处理机制，能支撑复杂的、持久化的业务场景。
+- **LLM 的基础工具调用能力**：Function Call 的本质，是 LLM 提供的单轮、无状态、单向的工具调用机制，解决的核心问题是"让 LLM 不要瞎编答案，而是通过调用外部工具获取准确数据"。Function Call 就像 HTTP 接口的单次调用，你发一次请求、传一次参数、拿一次结果，无状态、单向通信，每次调用都要重新认证、重新传参，只能你主动调用接口，接口不能主动给你推消息。
+- **MCP 的完整协议设计**：MCP 就是给二者建了一条稳定的、全双工的、持久化的通信管道。它不仅包含了 Function Call 的工具调用能力，还提供了 Function Call 完全不具备的核心能力。MCP 就像 TCP 长连接 + 完整的 RPC 协议，它不仅能实现单次调用，还能保持长连接、持久化会话状态、支持双向实时通信，有完整的资源管理、上下文同步、异常处理机制，能支撑复杂的、持久化的业务场景。
 
 
 ## 🏗️ 核心架构与运行方式
 
-### 🏛️ 核心架构
+### 🗂️ 核心架构
 
 MCP 采用 **客户端 - 服务器架构**，通信层通常使用 [JSON-RPC 2.0](https://www.jsonrpc.org/) 来交换消息。
 
 <div align="center">
-  <img src="77afbba7a4543387ddb1f1827dac0b71.png" alt="MCP 核心架构" width="78%" />
+  <img src="77afbba7a4543387ddb1f1827dac0b71.png" alt="MCP 核心架构" width="82%" />
 </div>
 
 架构中的关键角色如下：
@@ -112,7 +111,7 @@ MCP 采用 **客户端 - 服务器架构**，通信层通常使用 [JSON-RPC 2.0
 - **主机（Host）**：发起连接的 LLM 应用程序，主要是人工智能应用程序(例如，Claude桌面、集成开发环境或Agent 框架)，负责管理MCP
 - **客户端（MCP Client）**：Host内部专门用于与MCP Server建立和维持一对一连接的模块。它负责按照MCP协议的规范发送请求、接收响应和处理数据。简单来说，MCP Client是Host内部处理RPC通信的“代理”，专注于与一个MCP Server进行标准化的数据、工具或prompt的交换
 <div align="center">
-  <img src="MCP Client.png" alt="MCP Client" width="78%" />
+  <img src="MCP Client.png" alt="MCP Client" width="82%" />
 </div>
 
 - **服务器（MCP Server）**：对接具体的数据源或工具，向客户端暴露能力。
@@ -121,7 +120,7 @@ MCP 采用 **客户端 - 服务器架构**，通信层通常使用 [JSON-RPC 2.0
   - **Prompts**：预定义的提示模板，帮助用户更高效地完成特定任务。指导 AI 响应或任务的模板消息或工作流，增强互动
 
 <div align="center">
-  <img src="MCP Server.png" alt="MCP Server" width="78%" />
+  <img src="MCP Server.png" alt="MCP Server" width="82%" />
 </div>
 
 - **资源来源**：既可以是本地资源，也可以是远程资源。
@@ -140,7 +139,7 @@ MCP 常见有两种运行模式：
 ## 🔄 MCP 的工作流程
 
 <div align="center">
-  <img src="image-20250327140914648.png" alt="MCP 工作流程" width="80%" />
+  <img src="image-20250327140914648.png" alt="MCP 工作流程" width="88%" />
 </div>
 
 一个典型的 MCP 请求大致会经过以下步骤：
@@ -157,12 +156,12 @@ MCP 常见有两种运行模式：
 
 ---
 
-{{<notice tip>}}
+{{< notice tip >}}
 MCP为什么需要设计一个功能交换的过程？
 - 在传统的 API 服务中，如果你的 API Server最初需要两个参数（例如， location 和 date 用于天气服务），用户需要将他们的应用程序集成以发送带有这些确切参数的请求。但假设你想要添加第三个必需参数（比如 unit ，用于温度单位，如摄氏度或华氏度），那么API 的请求协议就会发生变化。这就意味着所有使用你 API Server的用户都必须更新其代码以包含新参数。如果不更新，他们的请求可能会失败、返回错误或提供不完整的结果
 而MCP的这种设计就有效的避免了这种问题，MCP 引入了一种动态且灵活的方法，与传统的 API 形成了鲜明的对比。
 - 当客户端（例如，AI 应用程序如 Claude Desktop）连接到 MCP 服务器（例如，你的天气服务）时，它会发送一个初始请求以了解服务器的功能。服务器会响应其可用工具、资源、提示和参数的详细信息。比如，如果你的天气 API 最初支持 location 和 date ，服务器会将其作为功能的一部分进行通信。同样，假设后来你添加了一个 unit 参数，MCP 服务器可以在下一次交换中动态更新其能力描述。客户端不需要硬编码或预先定义这些参数，它只需查询服务器当前的能力并相应地进行调整。这样，客户端就可以根据需要实时调整其行为，使用更新的能力（例如，在其请求中包含单位）而无需重写或重新部署代码
-{{</notice>}}
+{{< /notice >}}
 
 ## 🔐 安全性设计
 
