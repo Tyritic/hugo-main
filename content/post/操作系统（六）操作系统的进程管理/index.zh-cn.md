@@ -1,12 +1,12 @@
 ---
-date : '2025-02-13T15:10:49+08:00'
-draft : false
-title : '操作系统(六)操作系统的进程管理和线程管理'
-image : ""
-categories : ["操作系统"]
-tags : ["计算机基础"]
-description : "课堂笔记转换"
-math : true
+date: "2025-02-13T15:10:49+08:00"
+draft: false
+title: "操作系统（六）操作系统的进程管理和线程管理"
+image: ""
+categories: ["操作系统"]
+tags: ["计算机基础"]
+description: "课堂笔记转换"
+math: true
 ---
 
 ## 🔄 并发和并行
@@ -367,7 +367,7 @@ TCB的主要内容
 
 {{</notice>}}
 
-### 🛠️ 线程的实现
+### 🛠️ 线程的类型
 
 #### 👤 用户线程
 
