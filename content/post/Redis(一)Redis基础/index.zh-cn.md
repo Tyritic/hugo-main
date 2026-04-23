@@ -1,7 +1,7 @@
 ---
 date : '2025-02-24T15:10:42+08:00'
 draft : false
-title : 'Redis基础'
+title : 'Redis(一)Redis基础'
 image : ""
 categories : ["Redis"]
 tags : ["非关系型数据库"]
@@ -13,7 +13,7 @@ math : true
 
 NoSQL（Not Only SQL）是指一类不使用传统关系型数据库结构的数据库。NoSQL数据库通常用于大规模数据存储、处理和快速访问的场景。与关系型数据库不同，NoSQL数据库不要求数据必须存储为表格形式，也不需要固定的模式（schema）。它们通常具有更高的扩展性、灵活性和适应性。
 
-### 四大分类
+### 📖 四大分类
 
 - **键值存储（Key-Value Stores）**：
   - 数据以键值对的形式存储。
@@ -32,7 +32,7 @@ NoSQL（Not Only SQL）是指一类不使用传统关系型数据库结构的数
   - 适合复杂的关系型数据查询。
   - 例如：Neo4j、ArangoDB。
 
-### 与SQL数据库的对比
+### ⚖️ 与SQL数据库的对比
 
 |              |                         SQL                          |                           NoSQL                            |
 | :----------: | :--------------------------------------------------: | :--------------------------------------------------------: |
@@ -50,7 +50,7 @@ NoSQL（Not Only SQL）是指一类不使用传统关系型数据库结构的数
 
 Redis（Remote Dictionary Server）是一个开源的内存数据库，遵守 BSD 协议，它提供了一个高性能的键值（key-value）存储系统，常用于缓存、消息队列、会话存储等应用场景。
 
-### 基本特点
+### 💡 基本特点
 
 - **性能极高：** Redis 以其极高的性能而著称，能够支持每秒数十万次的读写操作24。这使得Redis成为处理高并发请求的理想选择，尤其是在需要快速响应的场景中，如缓存、会话管理、排行榜等。
 - **丰富的数据类型：** Redis 不仅支持基本的键值存储，还提供了丰富的数据类型，包括字符串、列表、集合、哈希表、有序集合等。这些数据类型为开发者提供了灵活的数据操作能力，使得Redis可以适应各种不同的应用场景。
@@ -60,20 +60,15 @@ Redis（Remote Dictionary Server）是一个开源的内存数据库，遵守 BS
 - **单线程模型：** 尽管 Redis 是单线程的，但它通过高效的事件驱动模型来处理并发请求，确保了高性能和低延迟。单线程模型也简化了并发控制的复杂性。
 - **主从复制：** Redis 支持主从复制，可以通过从节点来备份数据或分担读请求，提高数据的可用性和系统的伸缩性。
 
-### 使用场景
+### 🎯 使用场景
 
 - **缓存** ：Redis 最常用的场景是作为缓存层，以减少数据库的负载，提高数据读取速度。
-  - 因为 Redis 是基于内存的，其读写速度比 MySQL 基于磁盘的方式要快很多，所以其作为热点数据的缓存是非常合适的。使用 Redis 缓存可以极大地提高应用的响应速度和吞吐量。
+因为 Redis 是基于内存的，其读写速度比 MySQL 基于磁盘的方式要快很多，所以其作为热点数据的缓存是非常合适的。使用 Redis 缓存可以极大地提高应用的响应速度和吞吐量。
 
-- **实时系统** ：
-  - Redis 支持快速的数据写入和读取，非常适合用于实时分析，如网站点击统计、实时排行榜等。
-
-- **消息队列** ：
-  - 利用 Redis 的 List 和 Pub/Sub 功能，可以实现轻量级的消息队列，适用于任务处理和异步消息传递。
-- **分布式锁**：
-  - Redis 可以用作分布式锁的实现，确保在分布式系统中资源的安全访问，避免竞态条件。
-- **计数器** ：
-  - Redis 的原子性操作非常适合用作计数器。
+- **实时系统** ：Redis 支持快速的数据写入和读取，非常适合用于实时分析，如网站点击统计、实时排行榜等。Redis的有序集合结构非常适合用于实现排行榜和排名系统，可以方便地进行数据排序和排名。
+- **消息队列** ：利用 Redis 的 List 和 Pub/Sub 功能，可以实现轻量级的消息队列，适用于任务处理和异步消息传递。
+- **分布式锁**：Redis 可以用作分布式锁的实现，确保在分布式系统中资源的安全访问，避免竞态条件，确保多个进程或服务之间的数据操作的原子性和一致性。
+- **计数器** ：Redis 的原子性操作非常适合用作计数器。
 
 ---
 
@@ -85,7 +80,7 @@ Redis（Remote Dictionary Server）是一个开源的内存数据库，遵守 BS
 - 注册redis服务：**`redis-server.exe --service-install redis.windows.conf --service-name redisserver1 --loglevel verbose`**
 - 启动服务：**`redis-server.exe  --service-start --service-name redisserver1`**
 - 停止服务：**`redis-server.exe  --service-stop --service-name redisserver1`**
-- 卸载服务：**`redis-server.exe  --service-uninstall--service-name redisserver1`**
+- 卸载服务：**`redis-server.exe --service-uninstall --service-name redisserver1`**
 
 可以在主机中配置多个端口的redis服务，参见[博客](https://blog.csdn.net/yqwang75457/article/details/83412614)
 
@@ -136,17 +131,17 @@ Redis 提供了丰富的数据类型。
 
 ## 🔧 Redis的通用命令
 
-### Keys命令
+### 🔍 Keys命令
 
 Redis 键命令用于管理 redis 的键。
 
-#### 基本格式
+#### 📋 基本格式
 
-```
+```redis
 redis 127.0.0.1:6379> COMMAND KEY_NAME
 ```
 
-#### 常见操作
+#### 🛠️ 常见操作
 
 - 删除键
   - 删除已存在的键：**`DEL KEY_NAME`**
@@ -171,23 +166,24 @@ redis 127.0.0.1:6379> COMMAND KEY_NAME
       - 改名成功时提示 OK
       - 失败时候返回一个错误。当 OLD_KEY_NAME 和 NEW_KEY_NAME 相同，或者 OLD_KEY_NAME 不存在时，返回一个错误。
 
-{{<notice tip>}}
+{{< notice tip >}}
 
-Key的层级结构
+Key 的层级结构
 
 在 **Redis** 中，**Key 的层级格式** 其实是**一种命名约定**，并没有真正的"层级"结构（不像关系型数据库中的表或目录结构）。
 
 通常使用 `:` 分隔层级
 
-```
+```redis
 namespace:object_type:id:field
+user:profile:123:username
 ```
 
-{{</notice>}}
+{{< /notice >}}
 
 ---
 
-### 数据库命令
+### 💾 数据库命令
 
 Redis默认有16个数据库，默认使用编号为0的数据库
 
