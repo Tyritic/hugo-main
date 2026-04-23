@@ -1,7 +1,7 @@
 ---
 date : '2025-02-26T16:28:56+08:00'
 draft : false
-title : 'Redis中的List'
+title : 'Redis(四)Redis中的List'
 image : ""
 categories : ["Redis"]
 tags : []

@@ -1,7 +1,7 @@
 ---
 date : '2025-02-26T19:53:16+08:00'
 draft : false
-title : 'Redis中的Zset'
+title : 'Redis(六)Redis中的Zset'
 image : ""
 categories : ["Redis"]
 tags : []
@@ -36,12 +36,11 @@ Redis的ZSet是一个可排序的set集合，与Java中的TreeSet有些类似，
 
 Redis 中的 **ZSet（有序集合，Sorted Set）** 是一种由 **跳表（Skip List）** 和 **哈希表（Hash Table）** 组成的数据结构。ZSet 结合了集合（Set）的特性和排序功能，能够存储具有唯一性的成员，并根据成员的分数（score）进行排序。
 
-ZSet 的实现由两个核心数据结构组成：
-
+ZSet 的实现由两个核心数据结构组成：数据量大时使用以下数据结构实现，插入 $O(logN)$ ，查找 $O(1)$ ，范围查询 $O(logN)$  
 - **跳表（Skip List）**：用于存储数据的排序和快速查找。
 - **哈希表（Hash Table）**：用于存储成员与其分数的映射，提供快速查找。
 
-当 Zset 元素数量较少时，Redis 会使用压缩列表（Zip List）来节省内存
+当 Zset 元素数量较少时，Redis 会使用压缩列表（Zip List）来节省内存，插入 $O(N)$ ，查找 $O(N)$ 。
 
 ### 🔍 跳表的实现原理
 

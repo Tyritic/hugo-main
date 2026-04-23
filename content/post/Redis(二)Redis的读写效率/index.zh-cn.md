@@ -1,7 +1,7 @@
 ---
 date : '2025-02-24T17:30:12+08:00'
 draft : false
-title : 'Redis的读写效率分析'
+title : 'Redis(二)Redis的读写效率分析'
 image : ""
 categories : ["Redis"]
 tags : ["非关系型数据库"]
