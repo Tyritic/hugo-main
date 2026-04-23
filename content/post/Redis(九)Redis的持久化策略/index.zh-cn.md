@@ -1,7 +1,7 @@
 ---
 date : '2025-03-01T16:36:44+08:00'
 draft : false
-title : 'Redis的持久化策略'
+title : 'Redis(九)Redis的持久化策略'
 image : ""
 categories : ["Redis"]
 tags : ["非关系型数据库"]

@@ -4,7 +4,7 @@ draft : false
 title : 'Agent的Skills'
 image : ""
 categories : ["Agent"]
-tags : ["Skill"]
+tags : ["智能体"]
 description : "深入理解Agent Skills的概念、原理，以及它与Prompt、MCP、Function Calling的本质区别"
 ---
 
