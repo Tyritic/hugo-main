@@ -41,6 +41,10 @@ Redis 单线程指的是「接收客户端请求->解析请求 ->进行数据读
 
 Redis 6.0 版本支持的 I/O 多线程特性，默认情况下 I/O 多线程只针对发送响应数据（write client socket），并不会以多线程的方式处理读请求（read client socket）。要想开启多线程处理客户端读请求，就需要把 Redis.conf 配置文件中的 io-threads-do-reads 配置项设为 yes。
 
+<div align="center">
+  <img src="微信图片_2026-05-09_162926_813.png" alt="Redis多线程模型" width="85%">
+</div>
+
 ### ⚡ Redis启动时的线程
 
 Redis 6.0 版本之后，Redis 在启动的时候，默认情况下会额外创建 6 个线程（这里的线程数不包括主线程）：
@@ -64,6 +68,10 @@ IO 多路复用机制是指一个线程处理多个 IO 流，就是 select/epoll
 - 一个 socket 客户端与服务端连接时，会生成对应一个套接字描述符(套接字描述符是文件描述符的一种)，每一个 socket 网络连接其实都对应一个文件描述符。
 - 多个客户端与服务端连接时，Redis 使用 I/O 多路复用程序 将客户端 socket 对应的 FD 注册到监听列表(一个队列)中。当客户端执行 read、write 等操作命令时，I/O 多路复用程序会将命令封装成一个事件，并绑定到对应的 FD 上。
 - 文件事件处理器使用 I/O 多路复用模块同时监控多个文件描述符（fd）的读写情况，当 accept、read、write 和 close 文件事件产生时，文件事件处理器就会回调 FD 绑定的事件处理器进行处理相关命令操作。
+
+<div align="center">
+  <img src="微信图片_2026-05-09_162827_720.png" alt="IO多路复用模型" width="85%">
+</div>
 
 {{<notice tip>}}
 

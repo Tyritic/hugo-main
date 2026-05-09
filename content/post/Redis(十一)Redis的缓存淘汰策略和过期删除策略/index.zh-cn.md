@@ -1,7 +1,7 @@
 ---
 date : '2025-03-01T17:51:38+08:00'
 draft : false
-title : 'Redis的缓存淘汰策略和过期删除策略'
+title : 'Redis(十一)Redis的缓存淘汰策略和过期删除策略'
 image : ""
 categories : ["Redis"]
 tags : ["非关系型数据库"]
