@@ -3,7 +3,7 @@ date : '2026-06-27T17:18:00+08:00'
 draft : false
 title : 'Claude Code 最佳实践'
 image : ""
-categories : ["Vibe Coding"]
+categories : ["AI Coding"]
 tags : []
 description : "整理Claude Code的实用技巧与最佳实践，覆盖安装配置、核心命令、CLAUDE.md记忆、Subagents、MCP扩展等高频使用场景"
 ---
