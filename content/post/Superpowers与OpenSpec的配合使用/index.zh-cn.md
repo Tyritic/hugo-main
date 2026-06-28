@@ -3,8 +3,8 @@ date : '2026-06-25T23:33:15+08:00'
 draft : false
 title : 'Superpowers与OpenSpec的配合使用'
 image : 
-categories : ["Vibe Coding"]
-tags : ["Vibe Coding","Superpowers","OpenSpec","AI编程","Claude Code"]
+categories : ["AI Coding"]
+tags : ["Vibe Coding","Superpowers"]
 description: "把 OpenSpec 的规范驱动与 Superpowers 的工程工作流结合起来，让 AI 编程从'自由发挥'走向'先立规矩、再干活'。"
 ---
 
@@ -205,7 +205,67 @@ sot init /path/to/your/project
 2. 完成实现与验证
 3. 再运行 `superpowers-learning`，把这次工作的稳定事实、当前状态、会话记录和可复用经验写回项目记忆
 
+#### openspec-superpowers 工作流
+openspec-superpowers-workflow 是完整功能交付的总入口。它把 Superpowers 的探索、设计确认、实现计划、TDD、验证纪律，与 OpenSpec 的 proposal、design、spec、tasks 产物组合在一起。适合用于“既要想清楚、又要留下正式规范记录、最后还要可靠实现”的功能开发。
 
+适用场景
+- 用户明确要求使用 OpenSpec + Superpowers。
+- 功能不是简单改动，需要澄清、方案、规范、任务、实现、测试和验证。  
+- 仓库或团队要求行为变更前先补齐 OpenSpec 产物。
+- 希望用一个入口统一协调从想法到验证完成的完整流程。
+
+工作流顺序
+- 先用 Superpowers 探索上下文、澄清需求、比较方案，并确认设计方向。
+- 再用 OpenSpec 创建或补齐 proposal.md、design.md、spec delta 和 tasks.md。
+- 让用户确认生成出来的 OpenSpec tasks.md。
+- 回到 Superpowers 编写实现计划，按 TDD 执行开发，并运行新的验证。
+- 如果项目流程需要，再进入后续审查或归档步骤。
+
+如果本次工作还需要沉淀项目记忆或可复用经验，可以在交付完成后继续使用 superpowers-learning-workflow。
+
+示例提示词
+```text
+请使用 $openspec-superpowers-workflow 处理这个功能。在 OpenSpec 的 tasks 生成后，先展示给我，并等待我确认后再进入实现。
+```
+#### superpowers-openspec-superpowers 工作流
+superpowers-openspec-superpowers-workflow 适合那些不想靠猜、不想抢跑、也不想把复杂功能做着做着做乱掉的团队。
+
+工作流顺序
+- 先用 Superpowers 探索上下文、澄清需求、比较方案，并确认设计方向
+- 再用 OpenSpec 生成 proposal.md、design.md、specs/.../spec.md、tasks.md
+- 展示并确认生成出来的 tasks.md
+- tasks.md 确认后，先暂停并询问是否继续执行开发
+- 回到 Superpowers，写实现计划，按 TDD 执行实现，并进行 fresh verification
+- 开发与验证完成后，再暂停并询问是否继续代码审查
+- 如果代码、测试和规格已经对齐，再归档 OpenSpec change
+
+如果这次工作还产生了值得长期保留的经验，建议在归档后继续使用 superpowers-learning-workflow 更新项目记忆。
+
+示例提示词
+```text
+请使用 $superpowers-openspec-superpowers-workflow 处理这个功能。在 OpenSpec 的 tasks 生成后，先展示给我，并等待我确认后再进入实现。
+```
+
+#### superpowers-feature 工作流
+superpowers-feature-workflow 覆盖 Superpowers 侧的功能交付流程：需求探索、设计确认、实现计划、worktree、TDD 和最终验证。
+
+它不会创建 OpenSpec 产物。适合只需要严谨实现流程，但不需要正式 OpenSpec change 记录的场景。
+
+#### openspec-feature 工作流
+openspec-feature-workflow 用于创建并补齐实现前需要的 OpenSpec change 产物：proposal、design、specs 和 tasks。
+它专注于“把变更正式化”。它本身不负责 TDD、worktree 或实现后的验证流程。
+
+#### superpowers-learning 工作流
+superpowers-learning-workflow 是一个在重要工作结束后使用的反思型 workflow，用来把当前会话真正值得保留下来的内容沉淀到仓库里。
+适合接在这些 workflow 后面使用：
+- superpowers-feature-workflow
+- superpowers-openspec-superpowers-workflow
+- openspec-superpowers-workflow
+它会帮助团队把最近的工作整理成四类内容：
+- 稳定的项目事实
+- 当前工作状态
+- 简短的会话记录
+- 未来可能沉淀成 workflow、skill 或 checklist 的可复用经验
 
 
 ## 🚀 标准 SOP：六阶段配合流程
