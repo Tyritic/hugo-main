@@ -21,7 +21,7 @@ description: "OpenSpec 是什么、双文件夹模型怎么运作、三个核心
 | 需求偏移    | 边聊边做，缺乏锚点，做着做着就变形了  | 频繁返工、疯狂 debug  |
 | 无法追溯    | 只有最终代码，不知道当初为什么这么设计 | 维护和交接都很困难      |
 
-（Spec-Driven Development，规范驱动开发）的核心思想很简单：先写规范，再写代码，用规范约束 AI 的行为边界。
+**Spec-Driven Development（规范驱动开发）** 的核心思想很简单：先写规范，再写代码，用规范约束 AI 的行为边界。
 
 更具体地说，两者的差异可以总结为下面这张表：
 
@@ -136,7 +136,11 @@ openspec/
 
 在 OpenSpec 工作流的语境中，Artifact（工件）是指在一个变更（Change）推进过程中，按步骤依次创建的结构化文档或文件。
 
-每个变更包含 四个核心工件，我把它们比作"合同的四个章节"：四个文件各司其职：
+每个变更包含 四个核心工件，我把它们比作"合同的四个章节"：四个文件各司其职：形成一条 Artifact 依赖链，每个 artifact 都是前一个的细化：
+```text
+proposal.md → design.md → specs/*.md → tasks.md → 代码实现 → 归档
+   (为什么做)    (怎么做)     (做成什么样)   (分几步做)   (动手做)    (存档)
+```
 
 | 工件 | 文件            | 回答的问题            | 谁来读        |
 | :- | ------------- | ---------------- | ---------- |
@@ -147,8 +151,59 @@ openspec/
 
 > 一个常见的反模式是把 `proposal.md` 写得很长、`spec.md` 写得很短。事实上 **`spec.md`** **才是 AI 实现时的"事实来源"**——它写得越具体，AI 跑偏的概率越低。
 
+#### 📄 proposal.md：提案
+proposal.md 主要分为：why、what changes、Capabilities（New Capabilities、Modified Capabilities）新增/改进的功能、Impact（新增文件、修改文件、依赖等）。这里记录了以下内容：
+
+- ai 对需求的理解，也就是为什么做这个需求。
+- 增加这个需求，该模块等于是增加了什么能力。
+- 需求的改动范围。
+
+#### 🎨 design.md：设计
+design.md 里面记录需求改动的上下文、目标和决策。这个文档能够体现在设计结构时 AI 采取的一些思路和理由，通常有一些学习价值。主要分为：
+
+- Context 上下文背景信息
+- Goals / Non-Goals 目标 / 非目标
+- Decisions 决策与理由
+- Risks / Trade-offs 风险与权衡取舍
+
+#### 📑 tasks.md：任务清单
+tasks.md 面向执行，将 design 拆解为有序的具体任务（checkbox 格式），按层次排列：例如 1. API 类型定义 → 2. API 函数 → 3. 路由 → 4. 子组件 → 5. 列表组件 → 6. 页面容器。AI 执行时按此顺序逐项完成，勾选进度。
+
+#### 📐 specs/*.md：行为规范
+spec.md 面向验收，用 `WHEN / THEN` 格式描述每个功能点的预期行为：
 
 ### ➕ 变更的"delta"思想
+传统规范系统的痛点在于：修改现有功能时，你需要阅读整个规范，然后搞清楚哪部分在变化。
+OpenSpec 引入了"增量规范"的概念：
+```markdown
+# Delta for Auth
+
+## ADDED Requirements
+
+### Requirement: Two-Factor Authentication
+The system MUST require a second factor during login.
+
+#### Scenario: OTP required
+- GIVEN a user with 2FA enabled
+- WHEN the user submits valid credentials
+- THEN an OTP challenge is presented
+
+## MODIFIED Requirements
+
+### Requirement: Session Timeout
+The system SHALL expire sessions after 30 minutes of inactivity.
+(Previously: 60 minutes)
+
+## REMOVED Requirements
+
+### Requirement: Remember Me
+(Deprecated in favor of 2FA)
+```
+这种格式的好处是：
+
+- 清晰：一眼就能看出什么在变化
+- 可合并：归档时自动合并到主规范
+- 可追溯：历史变更保存在 archive 中
 
 `specs/` 下的子目录是按"能力（capability）"组织的，例如 `auth/spec.md`、`billing/spec.md`。一次新变更只会产生"差异（delta）"——只描述\*\*新增（ADDED）、修改（MODIFIED）、删除（REMOVED）\*\*的能力，不重写整个文件。
 
@@ -161,12 +216,161 @@ openspec/changes/add-oauth-login/
 
 归档时 OpenSpec 会自动把这些 delta 合并到 `openspec/specs/auth/spec.md`，**形成活文档**。这样既保留了变更历史，又让 `specs/` 始终是当前系统的真实写照。
 
+---
 
-## 🔄 核心工作流：Propose → Apply → Archive
+## 💻 关键指令
 
-### ⌨️ 三个核心命令
+我按工作模式分为以下两类：
 
-OpenSpec 默认是 **Core 模式**，只有三个核心命令：
+- **Core 模式**
+  - `/opsx:explore` 开发前梳理思路、调研方案、明确需求，只分析不实现
+  - `/opsx:propose` 一步创建变更并生成所有规划制品
+  - `/opsx:apply` 执行变更任务，编写代码实现功能
+  - `/opsx:archive` 归档已完成的变更，留存审计痕迹
+- **Expanded 模式**
+  - `/opsx:new` 初始化新变更的基础脚手架
+  - `/opsx:continue` 按依赖关系逐步生成下一个制品
+  - `/opsx:ff` 一键式快速创建变更
+  - `/opsx:sync` 增量规范合并到主规范
+  - `/opsx:bulk-archive` 批量归档多个变更
+  - `/opsx:onboard` 新手引导，引导新手快速上手
+
+
+### 🔍 探索模式 /opsx:explore
+```bash
+/opsx:explore [topic]
+```
+/opsx:explore 是使用频率最高的指令。它的核心特点是：只思考、只分析，不产出任何代码或文件。无结构化的探索式对话，AI会调研代码库、对比多种实现方案、绘制可视化图表，帮你明确需求和技术方案，调研完成后可无缝过渡到/opsx:propose（默认）或/opsx:new（扩展工作流）。
+
+适用场景：
+- 需求还比较模糊，想让 AI 帮忙梳理
+- 技术方案不确定，想做可行性分析
+- 想了解现有代码结构再动手
+
+### 🗺️ 规划阶段
+
+规划阶段有以下几个命令选择，其中：
+
+- `/opsx:new` 初始化新变更的基础脚手架
+- `/opsx:ff` 一键式快速创建变更
+- `/opsx:continue` 按依赖关系逐步生成下一个制品
+- `/opsx:propose` 是 `/opsx:new` + `/opsx:ff` 的组合
+
+#### 🆕 /opsx:new 初始化新变更的基础脚手架
+```bash
+/opsx:new <change-name>
+```
+只做一件事：创建 openspec/changes/<change-name>/ 目录，不生成任何文件。输出类似：
+```text
+openspec/changes/<change-name>/
+```
+单独用 /opsx:new 的场景很少，通常它是 /opsx:continue 或 /opsx:ff 的前置步骤。
+
+#### ⚡ /opsx:ff 一键式快速创建变更
+```bash
+/opsx:ff <change-name>
+```
+快进，一次生成所有 artifact。Fast-forward 的缩写。一口气把 proposal、specs、design、tasks 四个文件全部生成，中间不停顿：
+适合的场景：需求已经想得很清楚，或者这是个改动范围小、风险低的功能，不需要在每个 artifact 之间停下来审查。
+
+#### ⏭️ /opsx:continue 按依赖关系逐步生成下一个制品
+按照proposal.md → design.md → specs/*.md → tasks.md的依赖关系，每次生成一个 artifact。每次调用只生成依赖链里下一个尚未创建的文件，然后停下来等你审查。第一次调用生成 proposal.md，你看完觉得没问题，再调用一次生成 specs/，依此类推：
+
+用 /opsx:continue 的情况主要有三种。
+- 需求本身还模糊，想边写 proposal 边理清思路，看完再决定 specs 怎么写
+- 改动涉及多个域或者架构层面，specs 写完之后需要认真确认行为约束没有遗漏，再让 AI 去写 design
+- 团队协作场景，proposal 由产品侧写，specs 由开发审查后再继续，每个阶段需要人工介入和确认
+
+#### 🎁 /opsx:propose 一键式创建变更
+```bash
+/opsx:propose <change-name-or-description>
+```
+核心功能：一步创建变更文件夹openspec/changes/<change-name>/，并生成实现前所需的所有规划制品（proposal.md、specs、design.md、tasks.md），生成完成后即可进入开发阶段。
+
+执行完成后，openspec/changes/<change-name>/ 目录里会出现：
+```text
+openspec/changes/<change-name>/
+├── proposal.md
+├── specs/
+│   └── <capability>/
+│       └── spec.md       ← Delta Spec
+├── design.md
+└── tasks.md
+
+```
+
+这是端到端开发最快的方式。它等价于
+- 依次执行 /opsx:new + /opsx:ff——先创建 change 文件夹，再快进生成全部 artifact
+- 也可以用 /opsx:new + /opsx:continue 逐步生成，每次只创建一个文件，方便在中途审查和调整
+
+### 🔨 实现阶段
+```bash
+/opsx:apply <change-name> #参数为非必填，上下文可推断时可省略。
+```
+/opsx:apply：执行变更任务，编写代码实现功能，读取变更文件夹中的tasks.md，识别未完成任务，逐个执行并编写代码、创建文件、运行测试，完成后会用[x]标记任务状态。
+
+### 🔬 验证阶段
+```bash
+/opsx:verify <change-name>
+```
+
+这个指令会从三个维度审计你的实现：
+- 完整性：tasks.md 中的任务是否全部完成、需求是否全部实现？
+- 正确性：实现是否符合 specs/ 中的规范 ？
+- 一致性：是否遵循 design 决策、代码风格是否统一？
+
+这个指令会生成包含 CRITICAL/WARNING/SUGGESTION 三级问题的验证报告。建议归档前必执行，可发现代码与制品的“漂移”问题，警告不影响归档但建议修复，避免技术债务。
+
+### 🏁 收尾阶段
+
+#### 🔃 /opsx:sync：规格合并
+语法：/opsx:sync [change-name]
+参数为非必填，上下文可推断时可省略。
+
+核心功能：读取变更文件夹中的增量规格，解析增/删/改/重命名内容，合并到主规格目录openspec/specs/，保留未提及的原有内容，合并后变更仍处于活跃状态（不归档）。
+
+技巧：此命令为可选，归档时会自动提示同步，仅在长周期变更、多并行变更需要最新主规格、需要单独预览合并效果时手动执行。
+
+#### 📦 /opsx:archive 归档变更
+当功能开发完成并通过验证后，使用这个指令归档：
+```bash
+/opsx:archive <change-name>
+```
+归档操作会做以下操作：
+- 检查制品和任务完成状态（任务未完成会警告但不阻塞），若增量规格未同步会提示同步
+- 在你确认后，将未合并的增量规范 specs/ 合并到主规格库 specs/
+- 将openspec/changes/<change-name>/ 整个目录移动到 openspec/changes/archive/YYYY-MM-DD-<name>/。
+
+#### 🏷️ /opsx:bulk-archive 批量归档变更
+```bash
+/opsx:bulk-archive <change-name-list>
+```
+列出所有已完成变更，验证每个变更的状态，检测跨变更的规格冲突（通过调研代码库解决），按创建时间顺序归档，解决冲突后会提示合并结果。通常团队协作、多并行变更时适用，冲突解决基于实际代码实现，归档前会主动提示确认，避免覆盖规格内容。
+
+## 🔄 常用工作流
+
+### 🎛️ 切换工作模式
+
+OpenSpec 提供两种工作模式：
+
+- **Core 模式**（默认）：3 个核心命令够用，适合大多数项目。
+- **Expanded 模式**：解锁更多细粒度命令（`/opsx:new`、`/opsx:continue`、`/opsx:ff`、`/opsx:verify`、`/opsx:bulk-archive`、`/opsx:onboard`）。
+
+切换方法：
+
+```bash
+# 查看当前配置
+openspec config profile
+# 选择 第一项："Delivery and workflows"，按回车
+# 勾选需要的命令（例如 new、continue、ff、verify、bulk-archive、onboard）
+# 然后让 AI 重新识别
+openspec update
+```
+
+**经验之谈**：除非项目特别复杂，否则 **Core 模式完全够用**。命令越多，记忆负担越大，反而拖慢节奏。
+
+### 🥇 Core 工作流
+OpenSpec 默认是 **Core 模式**，专为需求明确、范围可控的中小变更设计。它以“行动而非阶段”为核心理念，通过 5 个高频指令，实现从提案到归档的闭环操作。
 
 ```text
 /opsx:propose  →  /opsx:apply  →  /opsx:archive
@@ -176,22 +380,21 @@ OpenSpec 默认是 **Core 模式**，只有三个核心命令：
 - **`/opsx:apply`**：按 `tasks.md` 逐项实现，每完成一项打勾。
 - **`/opsx:archive <name>`**：把变更归档，delta 合并到 `specs/`，整个目录从 `changes/` 移除。
 
-三个命令的边界极其清楚：
+命令的边界极其清楚：
 
 - `propose` 阶段只动 Markdown，不动代码。
 - `apply` 阶段才真正写代码。
 - `archive` 阶段关闭变更，留下审计痕迹。
 
-### 🔍 探索模式 /opsx:explore
+### 🧭 探索性工作流
+在 Core 模式下，你可以选择探索性工作流：也就是在前面工作流的基础上，添加一个探索阶段。
 
-需求不清时还有 `/opsx:explore` 兜底。它和 `propose` 的区别是：
-
-- `propose` 会**生成正式文档**。
-- `explore` **不产生产物**，只和 AI 一起梳理思路，把模糊意图问清楚。
+```text
+/opsx:explore  →  /opsx:propose  →  /opsx:apply  →  /opsx:sync  →  /opsx:archive
+```
+**`/opsx:explore`**：只思考、只分析，不产出任何代码或文件。
 
 > 实操经验：拿到一个不清晰的需求时，先 `/opsx:explore` 把问题问透；等需求清晰、边界明确后，再 `/opsx:propose` 生成正式规范。**避免边探索边写规范，导致 spec 反复返工**。
-
-### 🪞 完整生命周期
 
 一个 OpenSpec 变更的完整生命周期是这样的：
 
@@ -220,57 +423,13 @@ OpenSpec 默认是 **Core 模式**，只有三个核心命令：
 
 ---
 
-## 💻 安装与初始化
+### 🌐 Expanded 模式
 
-### 📦 前置要求
+OpenSpec 的 Expanded Workflow（扩展工作流） 是专为复杂项目或需要精细控制的开发任务而设计的进阶模式（相比于默认的 Core 自动挡模式，它更像“手动挡”）。该工作流包含 6 个专属命令，让你能够分步审查制品、验证质量，并进行并行与批量管理。
 
-OpenSpec 的安装门槛非常低：
-
-- Node.js 18+
-- 任意一个支持的 AI 工具（Claude Code、Cursor、Codex、Copilot、Windsurf、Gemini CLI、Cline、Trae 等 25+ 工具）
-
-### ⚙️ 项目初始化
-
-在项目根目录运行：
-
-```bash
-# 全局安装
-npm install -g @fission-ai/openspec
-
-# 初始化（按提示选择 AI 工具）
-cd your-project
-openspec init
+```text
+/opsx:new(新建变更)  →  /opsx:continue(生成proposal.md)  →  完善/修正proposal.md  →  /opsx:continue(生成design.md)  →  完善/修正design.md  →  /opsx:continue(生成spec.md)  →  完善/修正spec.md  →  /opsx:continue(生成tasks.md)  →  完善/修正tasks.md  →  /opsx:apply(实现任务)  →  /opsx:verify(验证实现)  →  /opsx:sync(同步到主规格库)  →  /opsx:archive(归档变更)
 ```
-
-`openspec init` 会做三件事：
-
-1. 创建 `openspec/` 目录。
-2. 在所选 AI 工具的配置目录（如 `.claude/commands/opsx/`）写入斜杠命令定义。
-3. 生成一份默认的 `AGENTS.md` 提示词（告诉 AI 如何使用 OpenSpec）。
-
-> 提示：如果想用非交互式初始化，可以直接指定工具：`openspec init --tools claude`。
-
-### 🎛️ 切换工作模式
-
-OpenSpec 提供两种工作模式：
-
-- **Core 模式**（默认）：3 个核心命令够用，适合大多数项目。
-- **Expanded 模式**：解锁更多细粒度命令（`/opsx:new`、`/opsx:continue`、`/opsx:ff`、`/opsx:verify`、`/opsx:bulk-archive`、`/opsx:onboard`）。
-
-切换方法：
-
-```bash
-# 查看当前配置
-openspec config profile
-
-# 勾选需要的命令（例如 new、continue、ff、verify、bulk-archive、onboard）
-# 然后让 AI 重新识别
-openspec update
-```
-
-**经验之谈**：除非项目特别复杂，否则 **Core 模式完全够用**。命令越多，记忆负担越大，反而拖慢节奏。
-
----
 
 ## 🧪 基本使用：一个最小例子
 
@@ -399,17 +558,9 @@ OpenSpec 会自动：
 - **只有一两人的小项目**：维护 spec 的边际收益可能不够抵消写作成本。
 - **强实时性的项目**：spec 写完到代码合入有延迟，不适合需要快速响应的场景。
 
-### 💎 几条经验
-
-1. **propose 的输入质量决定产物质量**：需求描述越具体，生成的 spec 越准；模糊的输入会产生模糊的 spec。
-2. **apply 之前一定要 review spec**：设计阶段返工成本低，实现阶段返工成本高 10 倍。
-3. **archive 之前一定要 verify**：跑测试、对照 spec 逐条勾选验收条件，别让"看起来对"变成"实际对"。
-4. **保持 spec 文件的精简**：每个 Scenario 描述一个具体行为，**不要把 spec 写成"伪代码"**。
-5. **配合 TDD 纪律使用**：OpenSpec 管"做什么"，TDD 管"做得对不对"，两者缺一不可。
-
 ---
 
-### 📖 参考资料
+### 🔗 参考资料
 
 - OpenSpec 官方仓库：<https://github.com/Fission-AI/OpenSpec>
 - OpenSpec 官网：<https://openspec.dev/>
