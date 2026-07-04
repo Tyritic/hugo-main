@@ -1,5 +1,5 @@
 ---
-title: "leetcode算法题解"
+title: leetcode算法题解
 image: "OIP-C.jpg"
 style:
     background: "#2a9d8f"

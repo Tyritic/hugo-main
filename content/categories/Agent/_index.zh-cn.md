@@ -1,5 +1,5 @@
 ---
-title: "Agent"
+title: Agent
 image: "OIP.jpg"
 style:
     background: "#2a9d8f"

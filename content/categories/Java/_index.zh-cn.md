@@ -1,5 +1,5 @@
 ---
-title: "Java"
+title: Java
 image: "OIP-C.jpg"
 style:
     background: "#2a9d8f"
