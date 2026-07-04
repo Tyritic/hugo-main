@@ -1,0 +1,19 @@
+{{- partial "helper/external" (dict "Context" . "Namespace" "Vibrant") -}}
+
+{{- $opts := dict "minify" hugo.IsProduction "target" "es2018" -}}
+{{- $script := resources.Get "ts/main.ts" | js.Build $opts | fingerprint -}}
+
+{{/*
+  使用 defer 而不是默认的同步加载
+  defer 确保脚本在 HTML 解析完成后执行，但不会阻塞 DOMContentLoaded
+*/}}
+<script type="text/javascript" src="{{ $script.RelPermalink }}" defer></script>
+
+{{- with resources.Get "ts/custom.ts" -}}
+    {{/* Place your custom script in HUGO_SITE_FOLDER/assets/ts/custom.ts */}}
+    {{- $customScript := . | js.Build $opts | fingerprint -}}
+    <script type="text/javascript" src="{{ $customScript.RelPermalink }}" defer></script>
+{{- end -}}
+
+{{/* Preconnect to external domains for better performance */}}
+{{/* Already handled in layouts/partials/head/custom.html */}}

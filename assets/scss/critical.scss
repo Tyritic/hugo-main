@@ -1,0 +1,151 @@
+/*!
+ * Critical CSS for Above-the-Fold Content
+ * 首屏关键CSS - 最小化版本
+ */
+
+/* CSS变量定义 - 必需 */
+:root {
+    --body-background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    --accent-color: #00d4ff;
+    --accent-color-darker: #0099cc;
+    --body-text-color: rgba(255, 255, 255, 0.8);
+    --card-background: rgba(30, 27, 60, 0.9);
+    --card-text-color-main: #fff;
+    --scrollbar-thumb: rgba(0, 212, 255, 0.5);
+    --base-font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+    --main-top-padding: 35px;
+    --section-separation: 40px;
+}
+
+[data-scheme="dark"] {
+    --body-background: linear-gradient(135deg, #0a071a 0%, #1a153a 50%, #0f0c29 100%);
+    --accent-color: #00f0b5;
+    --accent-color-darker: #00c095;
+    --scrollbar-thumb: rgba(0, 240, 181, 0.5);
+}
+
+/* 基础样式 - 防止FOUC */
+html {
+    font-size: 62.5%;
+    overflow-y: scroll;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--body-background);
+    margin: 0;
+    font-family: var(--base-font-family);
+    font-size: 1.6rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+    min-height: 100vh;
+    color: var(--body-text-color);
+}
+
+/* 背景效果 - 科幻风格 */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 240, 181, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* 主容器布局 - 首屏可见 */
+#main-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header/Menu - 首屏关键 */
+header {
+    position: relative;
+    z-index: 1000;
+}
+
+.hamburger {
+    padding: 10px;
+    display: inline-block;
+    background-color: transparent;
+    border: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+/* 主要内容区域骨架 */
+main {
+    flex: 1;
+    padding-top: var(--main-top-padding);
+}
+
+/* 加载指示器 - 避免白屏 */
+.loading-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--accent-color);
+    transform-origin: left;
+    animation: loading 1s ease-in-out infinite;
+}
+
+@keyframes loading {
+    0% { transform: scaleX(0); }
+    50% { transform: scaleX(0.5); }
+    100% { transform: scaleX(1); }
+}
+
+/* 隐藏非首屏内容 */
+.below-fold {
+    content-visibility: auto;
+}
+
+/* 滚动条基础样式 */
+::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+/* 响应式 - 移动端优先 */
+@media (max-width: 768px) {
+    html {
+        font-size: 55%;
+    }
+
+    :root {
+        --main-top-padding: 20px;
+        --section-separation: 30px;
+    }
+}

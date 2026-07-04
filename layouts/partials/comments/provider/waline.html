@@ -1,0 +1,80 @@
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+        min-height: 200px;
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+    .waline-loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        color: var(--card-text-color-tertiary);
+    }
+</style>
+
+{{- with .Site.Params.comments.waline -}}
+{{- $config := dict "el" "#waline" "dark" `html[data-scheme="dark"]` -}}
+{{- $replaceKeys := dict "serverurl" "serverURL" "requiredmeta" "requiredMeta" "wordlimit" "wordLimit" "pagesize" "pageSize" "imageuploader" "imageUploader" "texrenderer" "texRenderer" -}}
+
+{{- range $key, $val := . -}}
+    {{- if ne $val nil -}}
+        {{- $replaceKey := index $replaceKeys $key -}}
+        {{- $k := default $key $replaceKey -}}
+
+        {{- $config = merge $config (dict $k $val) -}}
+    {{- end -}}
+{{- end -}}
+
+<script>
+(function() {
+    const walineContainer = document.getElementById('waline');
+    if (!walineContainer) return;
+
+    // 显示加载提示
+    walineContainer.innerHTML = '<div class="waline-loading">评论加载中...</div>';
+
+    // 懒加载函数
+    function loadWaline() {
+        // 加载CSS
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '//unpkg.com/@waline/client@v2/dist/waline.css';
+        document.head.appendChild(link);
+
+        // 加载JS
+        const script = document.createElement('script');
+        script.src = '//unpkg.com/@waline/client@v2/dist/waline.js';
+        script.onload = function() {
+            walineContainer.innerHTML = '';
+            /// Waline client configuration see: https://waline.js.org/en/reference/client.html
+            Waline.init({{ $config | jsonify | safeJS }});
+        };
+        document.body.appendChild(script);
+    }
+
+    // 使用Intersection Observer实现懒加载
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting) {
+                loadWaline();
+                observer.disconnect();
+            }
+        }, {
+            rootMargin: '200px' // 提前200px开始加载
+        });
+        observer.observe(walineContainer);
+    } else {
+        // 不支持IntersectionObserver则直接加载
+        loadWaline();
+    }
+})();
+</script>
+{{- end -}}

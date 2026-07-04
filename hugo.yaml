@@ -198,9 +198,20 @@ params:
 
   imageProcessing:
     cover:
-      enabled: false
+      enabled: true
     content:
-      enabled: false
+      enabled: true
+
+# 图片处理配置
+imaging:
+  resampleFilter: lanczos
+  quality: 80
+  anchor: smart
+  exif:
+    includeFields: ""
+    excludeFields: ""
+    disableDate: false
+    disableLatLong: true
 
 ### Custom menu
 ### See https://stack.jimmycai.com/config/menu
@@ -262,6 +273,23 @@ markup:
     lineNumbersInTable: true
     tabWidth: 4
 
+# 资源压缩优化
+minify:
+  disableCSS: false
+  disableHTML: false
+  disableJS: false
+  disableJSON: false
+  disableSVG: false
+  disableXML: false
+  minifyOutput: true
+  tdewolff:
+    html:
+      keepWhitespace: false
+    css:
+      keepCSS2: false
+    js:
+      keepVarNames: false
+
 # 更新时间：优先读取git时间 -> git时间不存在，就读取本地文件修改时间
 frontmatter:
   lastmod:
@@ -272,3 +300,28 @@ frontmatter:
 
 # 允许获取Git信息
 enableGitInfo: true
+
+# 构建性能优化
+build:
+  writeStats: true
+
+# 输出格式优化
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+  page:
+    - HTML
+  section:
+    - HTML
+    - RSS
+
+# 媒体类型
+mediaTypes:
+  application/manifest+json:
+    suffixes:
+      - webmanifest
+
+# 超时配置
+timeout: 30000

@@ -1,0 +1,81 @@
+{{- $image := .Page.Resources.GetMatch (printf "%s" (.Destination | safeURL)) -}}
+{{- $Permalink := .Destination | relURL | safeURL -}}
+{{- $alt := .PlainText | safeHTML -}}
+{{- $Width := 0 -}}
+{{- $Height := 0 -}}
+
+{{/* SVG and external images won't work with gallery layout */}}
+{{- $galleryImage := false -}}
+
+{{- if $image -}}
+	{{- $notSVG := ne (path.Ext .Destination) ".svg" -}}
+	{{- $Permalink = $image.RelPermalink -}}
+
+	{{- if $notSVG -}}
+		{{- $Width = $image.Width -}}
+		{{- $Height = $image.Height -}}
+		{{- $galleryImage = true -}}
+
+		{{- if (default true .Page.Site.Params.imageProcessing.content.enabled) -}}
+			{{/* 生成WebP和原格式的多尺寸图片 */}}
+			{{- $small := $image.Resize `480x webp q80` -}}
+			{{- $smallJpg := $image.Resize `480x q80` -}}
+			{{- $medium := $image.Resize `768x webp q80` -}}
+			{{- $mediumJpg := $image.Resize `768x q80` -}}
+			{{- $large := $image.Resize `1024x webp q80` -}}
+			{{- $largeJpg := $image.Resize `1024x q80` -}}
+			{{- $xlarge := $image.Resize `1440x webp q80` -}}
+			{{- $xlargeJpg := $image.Resize `1440x q80` -}}
+
+			{{/* 使用picture标签支持WebP */}}
+			<picture>
+				{{/* WebP格式 srcset */}}
+				<source type="image/webp"
+					srcset="{{ $small.RelPermalink }} 480w, {{ $medium.RelPermalink }} 768w, {{ $large.RelPermalink }} 1024w, {{ $xlarge.RelPermalink }} 1440w"
+					sizes="(max-width: 768px) 100vw, (max-width: 1024px) 768px, 1024px">
+
+				{{/* 原格式 fallback */}}
+				<source type="image/{{ $image.MediaType.SubType }}"
+					srcset="{{ $smallJpg.RelPermalink }} 480w, {{ $mediumJpg.RelPermalink }} 768w, {{ $largeJpg.RelPermalink }} 1024w, {{ $xlargeJpg.RelPermalink }} 1440w"
+					sizes="(max-width: 768px) 100vw, (max-width: 1024px) 768px, 1024px">
+
+				{{/* img标签作为最终fallback */}}
+				<img src="{{ $largeJpg.RelPermalink }}"
+					{{ with $Width }}width="{{ . }}"{{ end }}
+					{{ with $Height }}height="{{ . }}"{{ end }}
+					loading="lazy"
+					decoding="async"
+					{{ with $alt }}alt="{{ . }}"{{ end }}
+					{{ if $galleryImage }}
+						class="gallery-image"
+						data-flex-grow="{{ div (mul $image.Width 100) $image.Height }}"
+						data-flex-basis="{{ div (mul $image.Width 240) $image.Height }}px"
+					{{ end }}>
+			</picture>
+		{{- else -}}
+			{{/* 图片处理未启用时的fallback */}}
+			<img src="{{ $Permalink }}"
+				{{ with $Width }}width="{{ . }}"{{ end }}
+				{{ with $Height }}height="{{ . }}"{{ end }}
+				loading="lazy"
+				decoding="async"
+				{{ with $alt }}alt="{{ . }}"{{ end }}
+				{{ if $galleryImage }}
+					class="gallery-image"
+					data-flex-grow="{{ div (mul $image.Width 100) $image.Height }}"
+					data-flex-basis="{{ div (mul $image.Width 240) $image.Height }}px"
+				{{ end }}>
+		{{- end -}}
+	{{- else -}}
+		{{/* SVG图片 */}}
+		<img src="{{ $Permalink }}"
+			loading="lazy"
+			{{ with $alt }}alt="{{ . }}"{{ end }}>
+	{{- end -}}
+{{- else -}}
+	{{/* 外部图片或找不到的图片 */}}
+	<img src="{{ $Permalink }}"
+		loading="lazy"
+		decoding="async"
+		{{ with $alt }}alt="{{ . }}"{{ end }}>
+{{- end -}}
