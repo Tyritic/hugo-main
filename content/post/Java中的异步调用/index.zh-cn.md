@@ -5,7 +5,7 @@ title : 'Java中的异步调用'
 image : ""
 categories : ["Java"]
 tags : ["Java并发"]
-description : ""
+description : "深入理解Java异步调用的核心机制，包括Future、FutureTask和CompletableFuture三种异步编程工具的详细用法和最佳实践"
 math : true
 ---
 
@@ -35,9 +35,7 @@ public interface Future<V> {
     V get() throws InterruptedException, ExecutionException;
     // 指定时间内没有返回计算结果就抛出 TimeOutException 异常
     V get(long timeout, TimeUnit unit)
-
-        throws InterruptedException, ExecutionException, TimeoutExceptio
-
+        throws InterruptedException, ExecutionException, TimeoutException;
 }
 ```
 
@@ -49,7 +47,9 @@ public interface Future<V> {
 
 ---
 
-## 📦 **`CompletableFuture`** 类
+### 🧵 FutureTask 实现
+
+## 🧩 **`CompletableFuture`** 类
 
 **`CompletableFuture`** 是 Java 8 引入的一个强大的异步编程工具。允许非阻塞地处理异步任务，并且可以通过**链式调用组合**多个异步操作。
 
@@ -63,11 +63,11 @@ public interface Future<V> {
 
 ### 📌 创建操作
 
-#### 🔨 使用构造方法
+#### 🛠️ 使用构造方法
 
 - **`CompletableFuture<T> future = new CompletableFuture<>();`**
 
-#### 🔨 使用静态工厂方法
+#### ⚙️ 使用静态工厂方法
 
 - 创建异步任务并返回结果
   - **`static <U> CompletableFuture<U> supplyAsync(Supplier<U> supplier)`** ：// 使用自定义线程池(推荐)
@@ -76,7 +76,9 @@ public interface Future<V> {
   - **`static CompletableFuture<Void> runAsync(Runnable runnable)`** ：// 使用自定义线程池(推荐)
   - **`static CompletableFuture<Void> runAsync(Runnable runnable, Executor executor)`**
 
-### ⚡ 获取异步调用的结果
+---
+
+### 🔍 获取异步调用的结果
 
 - **`V get() throws InterruptedException, ExecutionException`** ：**阻塞** 调用，等待异步任务完成并返回结果。
   - **`get()`** 会抛出 **`InterruptedException`** 或 **`ExecutionException`**
@@ -85,13 +87,13 @@ public interface Future<V> {
 - **`public T join()`** ：**获取 `CompletableFuture` 计算的结果**，如果任务 **尚未完成**，它会 **阻塞** 直到结果可用。
   - 如果 **`CompletableFuture`** **执行失败**，**`join()`** **不会抛出 `CheckedException`**，而是抛出 **`CompletionException`**（**运行时异常**）。
 
+---
 
-### ⚡ 处理异步调用的结果
+### 🔧 处理异步调用的结果
 
 - **`<U> CompletableFuture<U> thenApply(Function<? super T,? extends U> fn)`** ：接受一个 **`Function`** 实例，用它来修改任务返回值，并返回新的 **`CompletableFuture<U>`** ，支持 **链式调用**
 
   - 适合需要 **基于前一个任务的结果进行计算或转换** 的场景。
-
 
   ```java
   import java.util.concurrent.CompletableFuture;
@@ -119,12 +121,11 @@ public interface Future<V> {
   }
   ```
 
-  
+  ---
 
 - **`CompletableFuture<Void> thenAccept(Consumer<? super T> action)`** ：接受一个 **`Comsumer`** 实例（该任务访问之前异步任务的结果），并基于结果做无返回值的操作，返回新的 **`CompletableFuture<Void>`** ，支持 **链式调用**  ，但不返回新结果
 
   - 适用于 **消费** 上一个异步操作的结果，但 **不需要修改结果**，例如打印日志、存储数据等。
-
 
   ```java
   import java.util.concurrent.CompletableFuture;
@@ -140,7 +141,7 @@ public interface Future<V> {
   }
   ```
 
-  
+  ---
 
 - **`CompletableFuture<Void> thenRun(Runnable action)`**  ：接受一个 **不接收参数** 且 **无返回值** 的 **`Runnable`** 任务（该任务不访问之前异步任务的结果），并返回新的 **`CompletableFuture<Void>`** ，支持 **链式调用**  ，不返回新结果
 
@@ -160,7 +161,7 @@ public interface Future<V> {
   }
   ```
 
-
+  ---
 
 - **`CompletableFuture<T> whenComplete(BiConsumer<? super T, ? super Throwable> action)`** ：不改变异步任务的结果，但是保存下异步任务的结果
 
@@ -195,9 +196,9 @@ public interface Future<V> {
   }
   ```
 
-  
+  ---
 
-### ⚠️ 异常处理
+### ❗ 异常处理
 
 - **`CompletableFuture<U> handle(BiFunction<? super T, Throwable, ? extends U> fn)`** ：
 
@@ -231,10 +232,7 @@ public interface Future<V> {
   }
   ```
 
-
-
-
-### 📌 组合处理
+  ---
 
 - **`public <U> CompletableFuture<U> thenCompose(Function<? super T, ? extends CompletionStage<U>> fn)`**
 
@@ -246,21 +244,21 @@ public interface Future<V> {
 
     ```java
     CompletableFuture<String> future1 = CompletableFuture.supplyAsync(new Supplier<String>() {
-                @Override
-                public String get() {
-                    return "Hello";
-                }
-            }).thenCompose((String s)-> {
-                    return CompletableFuture.supplyAsync(new Supplier<String>() {
-                        @Override
-                        public String get() {
-                            return s + " World";
-                        }
-                    });
-            });
+        @Override
+        public String get() {
+            return "Hello";
+        }
+    }).thenCompose((String s)-> {
+        return CompletableFuture.supplyAsync(new Supplier<String>() {
+            @Override
+            public String get() {
+                return s + " World";
+            }
+        });
+    });
     ```
 
-    
+    ---
 
 - **`public <U, V> CompletableFuture<V> thenCombine( CompletionStage<? extends U> other, BiFunction<? super T, ? super U, ? extends V> fn)`**
 
@@ -271,30 +269,31 @@ public interface Future<V> {
   - 示例代码
 
     ```java
-    CompletableFuture<Integer> future2=CompletableFuture.supplyAsync(new Supplier<Integer>() {
-                @Override
-                public Integer get() {
-                    return 100;
-                }
-            });
+    CompletableFuture<Integer> future2 = CompletableFuture.supplyAsync(new Supplier<Integer>() {
+        @Override
+        public Integer get() {
+            return 100;
+        }
+    });
     
-    CompletableFuture<Integer> future3=CompletableFuture.supplyAsync(new Supplier<Integer>() {
-                @Override
-                public Integer get() {
-                    return 200;
-                }
-            });
-    CompletableFuture<Integer> future4=future2.thenCombine(future3, new BiFunction<Integer, Integer, Integer>() {
-                @Override
-                public Integer apply(Integer integer, Integer integer2) {
-                    return integer+integer2;
-                }
-            });
+    CompletableFuture<Integer> future3 = CompletableFuture.supplyAsync(new Supplier<Integer>() {
+        @Override
+        public Integer get() {
+            return 200;
+        }
+    });
+    
+    CompletableFuture<Integer> future4 = future2.thenCombine(future3, new BiFunction<Integer, Integer, Integer>() {
+        @Override
+        public Integer apply(Integer integer, Integer integer2) {
+            return integer + integer2;
+        }
+    });
     ```
 
+    ---
 
-
-### 📌 并行处理
+### 🚀 并行处理
 
 - **`static CompletableFuture<Void> allOf(CompletableFuture<?>... cfs)`**
 
@@ -329,7 +328,7 @@ public interface Future<V> {
     }
     ```
 
-    
+    ---
 
 - **`static CompletableFuture<Object> anyOf(CompletableFuture<?>... cfs)`**
 

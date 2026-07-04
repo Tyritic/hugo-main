@@ -8,11 +8,11 @@ tags : []
 description : "RestTemplate在web开发中的使用以及REST服务"
 ---
 
-## Restful服务
+## 🏗️ Restful服务
 
 Restful是目前流行的互联网软件服务架构设计风格。REST（Representational State Transfer）是一种 **无状态** 的架构风格，它以 HTTP 协议为基础，通过 **定义资源** 和 **标准的操作方法** 来组织接口，使得客户端和服务器之间的交互更加简单、清晰和高效。
 
-### **服务特点**
+### 📋 服务特点
 
 - 每一个URL代表一种资源
 - 客户端使用GET、POST、PUT、DELETE四种表示操作方式的动词对服务端资源进行操作：GET用于获取资源，POST用于新建资源（也可以用于更新资源），PUT用于更新资源，DELETE用于删除资源。
@@ -20,7 +20,7 @@ Restful是目前流行的互联网软件服务架构设计风格。REST（Repres
 - 资源的表现形式是JSON或者HTML。
 - 客户端与服务端之间的交互在请求之间是无状态的，从客户端到服务端的每个请求都包含必需的信息。
 
-示例：
+### 💡 实现示例
 
 ```java
 @RestController
@@ -45,12 +45,11 @@ public class UserController{
        return "根据ID删除用户";
   }
 }
-
 ```
 
-### **最佳实现**
+### ⚙️ 最佳实现
 
-#### 接口设计
+#### 🔹 接口设计
 
 - URL的组成
   - 网络协议
@@ -58,18 +57,20 @@ public class UserController{
   - 接口名称
   - ？参数列表（GET方法）
 
-#### 响应设计
+#### 🔹 响应设计
 
 - Content-body用来存放数据
 - 用于描述数据的msg和code放入Content-header中
 
-## RestTemplate
+---
 
-### 简介
+## 💻 RestTemplate
+
+### 🧠 简介
 
 RestTemplate是Spring提供的用于访问Rest服务的，RestTemplate提供了多种便捷访问远程Http服务的方法，传统情况下在java代码里访问restfuI服务，一般使用Apache的HttpClient，不过此种方法使用起来太过繁琐。spring提供了一种简单便捷的模板类来进行操作，这就是RestTemplate.（常用于客户端和微服务）
 
-### 具体使用
+### 🛠️ 具体使用
 
 以微服务为例
 
@@ -111,9 +112,9 @@ RestTemplate是Spring提供的用于访问Rest服务的，RestTemplate提供了�
 
 3. 进行依赖注入并使用该Bean对象
 
-### 常见方法
+### 📌 常见方法
 
-#### GET请求
+#### 🔹 GET请求
 
 - getForObject：获取请求体
   - 不带参数：(uri, \<T \>.class) 代表 请求地址、HTTP响应转换被转换成的对象类型
@@ -121,20 +122,20 @@ RestTemplate是Spring提供的用于访问Rest服务的，RestTemplate提供了�
 
 - getForEntity：获取整个请求，除了包含响应体，还包含`HTTP`状态码、`contentType、contentLength、Header`等信息
 
-#### POST请求
+#### 🔹 POST请求
 
 - postForObject：获取请求体
 - postForEntity：获取整个请求，除了包含响应体，还包含`HTTP`状态码、`contentType、contentLength、Header`等信息
 
-#### PUT请求
+#### 🔹 PUT请求
 
 - put：
 
-#### Delete请求
+#### 🔹 Delete请求
 
 - delete：
 
-#### 通用请求
+#### 🔹 通用请求
 
 - exchange(String url, HttpMethod method,@Nullable HttpEntity<?> requestEntity, Class responseType, Map uriVariables) 
   - url: 请求地址；     

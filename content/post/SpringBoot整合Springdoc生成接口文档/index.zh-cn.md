@@ -22,13 +22,12 @@ Springdoc-OpenApi 的目标是对 REST API 定义一个标准且和语言无关�
 1. 引入具体依赖springfox
 
    ```xml
-   &lt;!-- 导入相关依赖 --&gt;
-   &lt;dependency&gt;
-       &lt;groupId&gt;org.springdoc&lt;/groupId&gt;
-       &lt;artifactId&gt;springdoc-openapi-starter-webmvc-ui&lt;/artifactId&gt;
-       &lt;version&gt;2.5.0&lt;/version&gt;
-   &lt;/dependency&gt;
-   
+   <!-- 导入相关依赖 -->
+   <dependency>
+       <groupId>org.springdoc</groupId>
+       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+       <version>2.5.0</version>
+   </dependency>
    ```
 
 2. 添加配置类用于Api文档的基本配置
@@ -80,32 +79,32 @@ Springdoc-OpenApi 的目标是对 REST API 定义一个标准且和语言无关�
 
 3. 修改application.yml配置文件
 
-   ```yml
+   ```yaml
    springdoc:
-   	api-docs:
-   		enable: true
-   	swagger-ui:
-   		enable: true
+     api-docs:
+       enable: true
+     swagger-ui:
+       enable: true
    ```
 
    其余属性参见官方文档 [SpringDoc-OpenApi官方文档](https://springdoc.org/#swagger-ui-properties)
 
-   {{&lt;notice tip&gt;}}
+   {{<notice tip>}}
 
-   ```yml
+   ```yaml
    springdoc:
-   	 group-configs: #进行文档分组每个组配置对应的请求路径以及区分所在包
-       	- group: 'user'
-        	  paths-to-match: '/api/users/**'
-             packages-to-scan: com.toher.springdoc.user
-       	- group: 'product'
-             paths-to-match: '/api/product/**'
-             packages-to-scan: com.toher.springdoc.product
+     group-configs: #进行文档分组每个组配置对应的请求路径以及区分所在包
+       - group: 'user'
+         paths-to-match: '/api/users/**'
+         packages-to-scan: com.toher.springdoc.user
+       - group: 'product'
+         paths-to-match: '/api/product/**'
+         packages-to-scan: com.toher.springdoc.product
    ```
 
    可以在微服务架构中进行分组
 
-   {{&lt;/notice&gt;}}
+   {{</notice>}}
 
 4. 查看接口文档
 
@@ -118,7 +117,7 @@ Springdoc-OpenApi 的目标是对 REST API 定义一个标准且和语言无关�
 
 ## 📝 常用注解
 
-### 🫘 对实体类的描述
+### 🧪 对实体类的描述
 
 - `@Schema`：用于描述类或字段的数据结构和属性，支持OpenAPI 3规范中的各种特性，如类型、格式、默认值等。
 
@@ -172,19 +171,19 @@ Springdoc-OpenApi 的目标是对 REST API 定义一个标准且和语言无关�
   - `content`：响应内容。
 
   ```java
-  	@RequestMapping(value="/{id}", method = RequestMethod.GET)
-      @Operation(summary = "findById方法", description = "根据id查询用户")
-      @Parameter(name = "id", description = "用户id", required = true, in = ParameterIn.PATH)
-      @ApiResponses(value = {
-              @ApiResponse(responseCode = "200", description = "查询成功",content={@Content(mediaType = "application/json",
-                      schema = @Schema(implementation = Result.class))}),
-              @ApiResponse(responseCode = "500", description = "查询失败",content={@Content(mediaType = "application/json",
-                      schema = @Schema(implementation = Result.class))})
-      })
-     
-      public Result&lt;User&gt; findById(@PathVariable Integer id) {
-          return Result.success("查询成功", new User(id, "张三", 20));
-      }
+  @RequestMapping(value="/{id}", method = RequestMethod.GET)
+  @Operation(summary = "findById方法", description = "根据id查询用户")
+  @Parameter(name = "id", description = "用户id", required = true, in = ParameterIn.PATH)
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "200", description = "查询成功",content={@Content(mediaType = "application/json",
+                  schema = @Schema(implementation = Result.class))}),
+          @ApiResponse(responseCode = "500", description = "查询失败",content={@Content(mediaType = "application/json",
+                  schema = @Schema(implementation = Result.class))})
+  })
+  
+  public Result<User> findById(@PathVariable Integer id) {
+      return Result.success("查询成功", new User(id, "张三", 20));
+  }
   ```
 
 - `@Parameters`是一个容器注解，用于收集多个@Parameter注解，描述方法的多个请求参数。
@@ -202,14 +201,14 @@ Springdoc-OpenApi 的目标是对 REST API 定义一个标准且和语言无关�
           @Parameter(name = "age", description = "年龄", in = ParameterIn.QUERY)
   })
   @GetMapping("/{name}")
-  public List&lt;Programmer&gt; getProgrammers(@PathVariable("name") String name, @RequestParam("age") Integer age) { 
+  public List<Programmer> getProgrammers(@PathVariable("name") String name, @RequestParam("age") Integer age) { 
       ...
   }
   ```
 
 ---
 
-### 🏷️ 对类的描述
+### 🔖 对类的描述
 
 @Tag：用于标记API控制器或方法属于哪一个功能分类或标签，有助于组织和分类API文档中的不同部分
 

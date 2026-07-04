@@ -36,23 +36,23 @@ description : "对MyBatis框架的基本理解"
 
       ```java
       @Mapper
-      public interface UserMapper{
+      public interface UserMapper {
           @Select("select * from user")
-          public List&lt;User&gt;list();
+          public List<User> list();
       }
       ```
 
    3. 或者在resource文件夹下创建和接口全名（包名.接口名）一致的xml，在xml文件中根据具体的接口函数编写对应的sql语句
    
       ```xml
-      &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
-      &lt;!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-              "http://mybatis.org/dtd/mybatis-3-mapper.dtd" &gt;
-      &lt;mapper namespace="org.example.operator.mapper.userMapper"&gt;
-          &lt;select id="list"&gt;
+      <?xml version="1.0" encoding="UTF-8" ?>
+      <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+              "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+      <mapper namespace="org.example.operator.mapper.userMapper">
+          <select id="list">
               select * from user
-          &lt;/select&gt;
-      &lt;/mapper&gt;
+          </select>
+      </mapper>
       ```
    
 
@@ -60,15 +60,15 @@ description : "对MyBatis框架的基本理解"
 
 ## 🔌 数据库连接池
 
-### 🧠 什么是数据连接池
+### 📖 什么是数据连接池
 
 - 数据库连接池是个容器，负责分配、管理数据库连接(Connection)
 - 它允许应用程序重复使用一个现有的数据库连接，而不是再重新建立一个
 - 释放空闲时间超过最大空闲时间的连接，来避免因为没有释放连接而引起的数据库连接遗漏
 
-&lt;div align="center"&gt;
-  &lt;img src="微信截图_20241106171551.png" alt="数据库连接池" width="82%"&gt;
-&lt;/div&gt;
+<div align="center">
+  <img src="微信截图_20241106171551.png" alt="数据库连接池" width="82%">
+</div>
 
 ---
 

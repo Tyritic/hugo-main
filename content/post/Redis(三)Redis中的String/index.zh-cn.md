@@ -67,4 +67,39 @@ Redis String 类型会根据字符串的长度和内容选择不同的编码方�
 
 - **int 编码**：如果一个字符串对象保存的是整数值，并且这个整数值可以用 **`long`** 类型来表示，那么字符串对象会将整数值保存在字符串对象结构的 **`ptr`** 属性里面（将 void 转换成 long），并将编码设置为 **`int`**
 - **embstr 编码**：如果字符串对象保存的是一个短字符串，那么字符串对象将使用 SDS 来保存这个字符串，并将编码设置为 **`embstr`**。 **`embstr`** 是专门用于保存短字符串的一种优化编码方式
-- **raw 编码**：如果字符串对象保存的是一个长字符串，那么字符串对象将使用 SDS 来保存这个字符串，并将编码设置为 **`raw`** 
+- **raw 编码**：如果字符串对象保存的是一个长字符串，那么字符串对象将使用 SDS 来保存这个字符串，并将编码设置为 **`raw`**
+
+---
+
+## 🧪 String编码的阈值
+
+Redis 对于 String 类型的编码选择有具体的阈值设置：
+
+- **int 编码阈值**：当字符串能被解析为整数且范围在 long 类型内时，使用 int 编码
+- **embstr 编码阈值**：当字符串长度 ≤ 44 字节时，使用 embstr 编码（Redis 6.0+ 的阈值）
+- **raw 编码阈值**：当字符串长度 > 44 字节时，使用 raw 编码
+
+### 💻 编码转换示例
+
+```redis
+SET mykey 100
+OBJECT ENCODING mykey  # 返回 "int"
+
+SET mykey "hello"
+OBJECT ENCODING mykey  # 返回 "embstr"
+
+SET mykey "hello world this is a very long string that exceeds the embstr threshold"
+OBJECT ENCODING mykey  # 返回 "raw"
+```
+
+---
+
+## 📝 总结
+
+Redis String 数据类型通过采用 SDS 结构和多种编码方式的组合，实现了高效、安全的字符串存储：
+
+- **SDS 结构**提供了二进制安全性和常数时间的长度查询
+- **多编码方式**根据字符串内容智能选择最优的存储形式
+- **自动扩容机制**确保了操作的安全性和便利性
+
+这些设计让 Redis String 成为既高效又可靠的基础数据类型。

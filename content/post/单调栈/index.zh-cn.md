@@ -67,9 +67,9 @@ class Solution {
 
 ## 📚 经典例题
 
-### 🧪 LeetCode 739. 每日温度
+### 🎯 LeetCode 739. 每日温度
 
-#### 📌 题目描述
+#### 📖 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/daily-temperatures/)
 
@@ -79,7 +79,7 @@ class Solution {
 
 提示：气温 列表长度的范围是 [1, 30000]。每个气温的值的均为华氏度，都是在 [30, 100] 范围内的整数。
 
-#### 💡 思路解析
+#### 🔍 思路解析
 
 本题抽象为查找右边第一个比自己大的元素
 
@@ -94,7 +94,7 @@ class Solution {
     - 计算栈顶元素和当前遍历元素之间的下标差值
   - 再将当前遍历元素入栈
 
-#### 💻 参考代码
+#### ⌨️ 参考代码
 
 ```java
 class Solution {
@@ -120,9 +120,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 496. 下一个更大元素
+### 🆚 LeetCode 496. 下一个更大元素
 
-#### 📌 题目描述
+#### 📖 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/next-greater-element-i/)
 
@@ -155,7 +155,7 @@ nums1 中数字 x 的下一个更大元素是指 x 在 nums2 中对应位置的�
 - nums1和nums2中所有整数 互不相同
 - nums1 中的所有整数同样出现在 nums2 中
 
-#### 💡 思路解析
+#### 🔍 思路解析
 
 本题抽象为在查找nums1元素在nums2对应位置查找nums2右边第一个比自己大的元素，然后将结果返回元素nums1的对应位置
 
@@ -171,7 +171,7 @@ nums1 中数字 x 的下一个更大元素是指 x 在 nums2 中对应位置的�
     - 将该下标的对应元素设置为当前遍历元素
   - 再将当前遍历元素入栈
 
-#### 💻 参考代码
+#### ⌨️ 参考代码
 
 ```java
 class Solution {
@@ -205,9 +205,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 503. 下一个更大元素II
+### ⏮️ LeetCode 503. 下一个更大元素II
 
-#### 📌 题目描述
+#### 📖 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/next-greater-element-ii/)
 
@@ -224,11 +224,11 @@ class Solution {
 - 1 <= nums.length <= 10^4
 - -10^9 <= nums[i] <= 10^9
 
-#### 💡 思路解析
+#### 🔍 思路解析
 
 本题与前面几题思路一致但是由于数组是循环的，需要在遍历的过程中模拟走了两边nums。然后用i % nums.size()代替i
 
-#### 💻 参考代码
+#### ⌨️ 参考代码
 
 ```java
 class Solution {
@@ -258,9 +258,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 42. 接雨水
+### 💧 LeetCode 42. 接雨水
 
-#### 📌 题目描述
+#### 📖 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/trapping-rain-water/)
 
@@ -269,7 +269,7 @@ class Solution {
 示例 1：
 
 <div align="center">
-  <img src="20210713205038.png" alt="img" width="82%">
+  <img src="20210713205038.png" alt="接雨水高度图示意" width="82%">
 </div>
 
 - 输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
@@ -281,7 +281,7 @@ class Solution {
 - 输入：height = [4,2,0,3,2,5]
 - 输出：9
 
-#### 💡 思路解析
+#### 🔍 思路解析
 
 本题需要寻找一个元素，右边最大元素以及左边最大元素，来计算雨水面积。
 
@@ -296,7 +296,7 @@ class Solution {
   - 水池的高度是min(凹槽左边高度, 凹槽右边高度) - 凹槽底部高度
   - 雨水的宽度是 凹槽右边的下标 - 凹槽左边的下标 - 1
 
-#### 💻 参考代码
+#### ⌨️ 参考代码
 
 ```java
 class Solution {
@@ -329,9 +329,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 84. 柱状图的最大矩形
+### 📊 LeetCode 84. 柱状图的最大矩形
 
-#### 📌 题目描述
+#### 📖 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/largest-rectangle-in-histogram/)
 
@@ -340,23 +340,23 @@ class Solution {
 求在该柱状图中，能够勾勒出来的矩形的最大面积。
 
 <div align="center">
-  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210803220437.png" alt="img" width="82%">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210803220437.png" alt="柱状图矩形面积示意1" width="82%">
 </div>
 
 <div align="center">
-  <img src="20210803220506.png" alt="img" width="82%">
+  <img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20210803220506.png" alt="柱状图矩形面积示意2" width="82%">
 </div>
 
 - 1 <= heights.length <=10^5
 - 0 <= heights[i] <= 10^4
 
-#### 💡 思路解析
+#### 🔍 思路解析
 
 上一题是找每个柱子左右两边第一个大于该柱子高度的柱子，而本题是找每个柱子左右两边第一个小于该柱子的柱子。
 
 将单调栈的顺序反转即可
 
-#### 💻 参考代码
+#### ⌨️ 参考代码
 
 ```java
 class Solution {

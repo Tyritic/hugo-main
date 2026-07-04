@@ -21,7 +21,7 @@ math: true
 
 ---
 
-## 📌 Context 是什么
+## 📖 Context 是什么
 
 `context` 是 Go 在 **1.7** 版本引入标准库的重要组件，它本质上是一个用于在调用链中传递控制信息的接口。官方定义如下：
 
@@ -247,7 +247,7 @@ defer cancel()
 
 以下示例展示了基本的取消监听模式：
 
-```gogo
+```go
 package main
 
 import (
@@ -289,7 +289,7 @@ func main() {
 
 ---
 
-## ⏰ context.WithDeadline 与 context.WithTimeout
+## ⏳ context.WithDeadline 与 context.WithTimeout
 
 ### ⌛ WithDeadline
 
@@ -358,7 +358,7 @@ fmt.Println(traceID)
 - 认证信息
 - 日志上下文字段
 
-### 🚫 不适合传什么
+### 🔴 不适合传什么
 
 - 数据库连接
 - 大对象
@@ -442,7 +442,7 @@ func worker(ctx context.Context) {
 
 ---
 
-## 🔗 Context 与 Channel 的关系
+## 🎓 Context 与 Channel 的关系
 
 很多人第一次学习 `context` 时，会觉得它像是一个“高级版控制器”。但从底层思想看，它和 **channel** 的关系非常紧密。
 
@@ -467,7 +467,7 @@ Done() <-chan struct{}
 
 ---
 
-## ⌛ Context 的超时实现原理
+## 🕐 Context 的超时实现原理
 
 这一部分也是 PDF 里比较有价值的补充。
 
@@ -508,7 +508,7 @@ func WithDeadline(parent Context, d time.Time) (Context, CancelFunc) {
 
 ---
 
-## 🛡️ 为什么 Context 能防止 goroutine 泄漏
+## 🚨 为什么 Context 能防止 goroutine 泄漏
 
 PDF 里专门强调了一点：`context` 的一个重要价值是**防止 goroutine 泄漏**。
 
@@ -532,7 +532,7 @@ PDF 里专门强调了一点：`context` 的一个重要价值是**防止 gorout
 
 ## 🧠 工程实践建议
 
-### 📌 把 Context 作为第一个参数传递
+### 💬 把 Context 作为第一个参数传递
 
 约定俗成的写法是：
 
@@ -612,11 +612,11 @@ ctx = context.WithValue(ctx, "traceID", "xxx")
 
 ## ⚠️ 常见误区
 
-### 🚫 把 Context 当成万能参数容器
+### ❌ 把 Context 当成万能参数容器
 
 `context` 不是为了代替函数参数设计的。凡是和业务逻辑强相关、而且函数明确需要的值，都应该显式传参。
 
-### ⏰ 忘记调用 cancel
+### 🕰️ 忘记调用 cancel
 
 拿到了 `cancel` 却不调用，容易让内部定时器、子任务或资源延迟释放。
 

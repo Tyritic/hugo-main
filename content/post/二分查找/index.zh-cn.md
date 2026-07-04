@@ -30,7 +30,7 @@ description : "二分查找的算法模板和题解思路"
 - while (left <= right) 要使用 <= ，因为left == right是有意义的，所以使用 <=
 - if (nums[middle] > target) right 要赋值为 middle - 1，因为当前这个nums[middle]一定不是target，那么接下来要查找的左区间结束下标位置就是 middle - 1
 
-#### 💻 代码模板
+#### ⌨️ 代码模板
 
 ```java
 class solution{
@@ -54,7 +54,7 @@ class solution{
 }
 ```
 
-#### 📌 结果分析
+#### ✅ 结果分析
 
 若数组中找不到元素此时满足条件
 
@@ -70,7 +70,7 @@ class solution{
 - while (left < right) 要使用 < ，因为left == right是没有意义的
 - if (nums[middle] > target) right 要赋值为 middle ，因为当前这个nums[middle]一定不是target，那么接下来要查找的左区间结束下标位置就是 middle，下一个查询区间不会去比较nums[middle]
 
-#### 💻 代码模板
+#### 🧮 代码模板
 
 ```java
 class solution{
@@ -94,7 +94,7 @@ class solution{
 }
 ```
 
-#### 📌 结果分析
+#### 🔍 结果分析
 
 若数组中找不到元素此时满足条件
 
@@ -107,7 +107,7 @@ class solution{
 
 ### 🧪 LeetCode 704. 二分查找
 
-#### 📌 题目描述
+#### 📋 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/binary-search/)
 
@@ -115,7 +115,7 @@ class solution{
 
 示例 1:
 
-```text
+```
 输入: nums = [-1,0,3,5,9,12], target = 9     
 输出: 4       
 解释: 9 出现在 nums 中并且下标为 4     
@@ -123,7 +123,7 @@ class solution{
 
 示例 2:
 
-```text
+```
 输入: nums = [-1,0,3,5,9,12], target = 2     
 输出: -1        
 解释: 2 不存在 nums 中因此返回 -1        
@@ -185,7 +185,7 @@ class Solution {
 
 ### 🧪 LeetCode 35. 搜索插入位置
 
-#### 📌 题目描述
+#### 🏷️ 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/search-insert-position/)
 
@@ -258,7 +258,7 @@ class Solution {
 
 ### 🧪 LeetCode 34. 在排序数组中查找元素的第一个和最后一个位置
 
-#### 📌 题目描述
+#### 🏤 题目描述
 
 [力扣链接(opens new window)](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -342,7 +342,7 @@ class Solution {
 
 ### 🧪 LeetCode 69. x的平方根
 
-#### 📌 题目描述
+#### 📑 题目描述
 
 [力扣题目链接](https://leetcode.cn/problems/sqrtx/description/)
 
@@ -404,7 +404,7 @@ class Solution {
 
 ### 🧪 LeetCode 367. 有效的完全平方数
 
-#### 📌 题目描述
+#### 📃 题目描述
 
 [力扣题目链接](https://leetcode.cn/problems/valid-perfect-square/description/)
 

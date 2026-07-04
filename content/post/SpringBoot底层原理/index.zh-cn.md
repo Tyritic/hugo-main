@@ -17,11 +17,11 @@ description : "SpringBoot框架的底层原理"
 
 ## 🚀 SpringBoot的启动流程
 
-### 🧩 `@SpringBootApplication` 注解
+### 🏗️ `@SpringBootApplication` 注解
 
 这是SpringBoot启动的核心注解
 
-#### 🔧 组成部分
+#### 🔍 组成部分
 
 - **`@SpringBootConfiguration`**：
 
@@ -41,7 +41,7 @@ description : "SpringBoot框架的底层原理"
 
   - 它会扫描 `@SpringBootApplication` 所在类的当前包及其子包，自动将符合条件的组件加载到 Spring 容器中。
 
-#### ✨ 作用
+#### ✅ 作用
 
 - **简化配置** ：通过这个组合注解，Spring Boot 项目可以不用手动配置 `@Configuration`、`@EnableAutoConfiguration`、`@ComponentScan`，使应用更易于启动和管理。
 - **自动配置** ：借助自动配置机制，开发者无需手动配置许多 Spring 组件，Spring Boot 会根据项目依赖来自动注入所需的 Bean。
@@ -49,7 +49,7 @@ description : "SpringBoot框架的底层原理"
 
 ---
 
-### 📋 总体流程
+### 📊 总体流程
 
 - **启动 main() 方法**
 
@@ -81,19 +81,19 @@ description : "SpringBoot框架的底层原理"
 
 ## ⚙️ 自动配置
 
-### 🧠 概念
+### 📖 概念
 
 当spring容器启动后，一些配置类、bean对象就自动存入到了IOC容器中，不需要手动去声明，从而简化了开发，省去了繁琐的配置操作。
 
 ---
 
-### 🔧 实现方案
+### 💻 实现方案
 
 #### 方案一：`@ComponentScan` 组件扫描依赖
 
 ```java
 @SpringBootApplication
-@ComponentScan({"com.alibaba","com.google","org.springframework","org.mybatis",...}
+@ComponentScan({"com.alibaba","com.google","org.springframework","org.mybatis",...})
 public class springbootWebconfig2Application{
 }
 ```
@@ -119,7 +119,7 @@ public class springbootWebconfig2Application{
 
 ---
 
-### 📖 源码分析
+### 🔍 源码分析
 
 1. 查看启动类的注解 **`@SpringBootApplication`** 的源码
 
@@ -144,7 +144,7 @@ public class springbootWebconfig2Application{
    )
    ```
 
-   {{&lt;notice tip&gt;}}
+   {{<notice tip>}}
 
    为什么在启动类中可以声明第三方Bean对象？
 
@@ -154,7 +154,7 @@ public class springbootWebconfig2Application{
 
    **`@SpringBootApplication`** 中封装了 **`@ComponentScan`** 的注解。
 
-   {{&lt;/notice&gt;}}
+   {{</notice>}}
 
 2. 由 **`@SpringBootApplication`** 的注解源码可知自动配置由注解 **`@EnableAutoConfiguration`** 提供，查看 **`@EnableAutoConfiguration`** 的注解
 
@@ -248,7 +248,7 @@ public class springbootWebconfig2Application{
 
 ---
 
-### 🎯 条件配置
+### 📌 条件配置
 
 **`@Conditional`**
 

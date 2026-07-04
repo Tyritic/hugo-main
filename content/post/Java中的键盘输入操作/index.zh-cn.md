@@ -43,9 +43,9 @@ java.utils包中用于获取输入的类，用于解析基本类型和字符串�
 
 ---
 
-## 📚 基本用法
+## 🔍 基本用法
 
-### 📦 读取基本类型
+### 🔢 读取基本类型
 
 - `nextInt()`：读取int类型
 - `nextShort()`：读取short类型
@@ -53,7 +53,7 @@ java.utils包中用于获取输入的类，用于解析基本类型和字符串�
 - `nextFloat()`：读取float类型
 - `nextDouble()`：读取double类型
 
-### 📌 读取字符串
+### 💻 读取字符串
 
 - **`next()`** ：读取下一个字符串，遇到空白符（如空格、制表符、换行符等）停止
 - **`nextLine()`**：读取下一行文本，遇到回车停止
@@ -82,14 +82,14 @@ java.utils包中用于获取输入的类，用于解析基本类型和字符串�
 
 {{</notice>}}
 
-### 📌 检验输入
+### ✅ 检验输入
 
 - `hasNext()`方法会检查输入中是否还有下一个单词，即是否存在非空白字符。这意味着，只要输入中还有非空白字符，无论是在当前行还是在下一行，`hasNext()`都会返回true。通常配合 **`next()`** 使用
 - `hasNextLine()`方法则会检查输入中是否还有下一行。如果输入中存在换行符，或者如果输入中至少还有一个字符（即使这个字符是空白字符），`hasNextLine()`都会返回true。但是如果输入已经到达结尾，或者输入中的下一个字符是输入流的结尾，`hasNextLine()`就会返回阻塞。
 
 ---
 
-## 📚 设置分隔符
+## 🎯 设置分隔符
 
 `Scanner`类默认使用空白字符（空格、制表符、换行符等）作为分隔符，但可以自定义分隔符。
 
@@ -97,7 +97,7 @@ java.utils包中用于获取输入的类，用于解析基本类型和字符串�
 
 `useDelimiter()`方法用于修改分隔符
 
-### 📌 示例代码
+### 🔧 示例代码
 
 ```java
 Scanner scanner = new Scanner(System.in);
@@ -113,8 +113,55 @@ while (scanner.hasNext()) {
 
 ---
 
-## 📚 关闭扫描器
+## 🛑 关闭扫描器
 
 使用完Scanner后，一定要记得将它关闭！因为使用Scanner本质上是打开了一个IO流，如果不关闭的话，它将会一直占用系统资源。
 
-`close()`方法
+### 💾 close()方法
+
+```java
+scanner.close();
+```
+
+---
+
+## 📝 实战示例
+
+### 🎮 完整的输入程序
+
+```java
+import java.util.Scanner;
+
+public class ScannerDemo {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        try {
+            System.out.print("请输入你的名字: ");
+            String name = scanner.nextLine();
+            
+            System.out.print("请输入你的年龄: ");
+            int age = scanner.nextInt();
+            
+            System.out.print("请输入你的身高(单位:cm): ");
+            double height = scanner.nextDouble();
+            
+            System.out.println("\n输入信息:");
+            System.out.println("姓名: " + name);
+            System.out.println("年龄: " + age);
+            System.out.println("身高: " + height + "cm");
+        } finally {
+            scanner.close();
+        }
+    }
+}
+```
+
+---
+
+## ⚠️ 注意事项
+
+- 始终在 `finally` 块中调用 `close()` 或使用 try-with-resources 语句
+- 避免混合使用 `next()` 和 `nextLine()`，容易遇到缓冲问题
+- 检查输入是否可用时使用 `hasNext()` 或 `hasNextLine()`
+- 处理 `InputMismatchException` 异常，当输入类型不匹配时会抛出

@@ -19,14 +19,14 @@ BigInteger类和BigDecimal都是不可变类，一旦创建其值无法更改，
 
 ---
 
-## 🔨 BigInteger创建方法
+## 🛠️ BigInteger创建方法
 
 ### 📌 通过有参构造器
 
 - `BigInteger(String val)`
 - `BigInteger(byte[] val)`
 
-### 🔨 通过valueOf()静态方法
+### 💡 通过valueOf()静态方法
 
 `BigInteger.valueOf(long val)`
 
@@ -46,7 +46,7 @@ public class BigIntegerExample {
 
 ---
 
-## 🔨 BigDecimal创建方法
+## ⌨️ BigDecimal创建方法
 
 ### 📌 通过有参构造器
 
@@ -58,7 +58,7 @@ public class BigIntegerExample {
 |                  | `new BigDecimal(int val)`    | `new BigDecimal(123)`          | 使用 `int` 值创建。                |
 |                  | `new BigDecimal(byte[] val)` | `new BigDecimal(byteArray)`    | 用字节数组创建。                   |
 
-### 🔨 通过静态方法valueOf()
+### 🧪 通过静态方法valueOf()
 
 ```java
 import java.math.BigDecimal;
@@ -77,7 +77,7 @@ public class BigDecimalExample {
 
 ---
 
-## 🔨 计算方法
+## 🧮 计算方法
 
 | 操作       | `BigInteger` 方法 | `BigDecimal` 方法 |
 | ---------- | ----------------- | ----------------- |
@@ -100,7 +100,9 @@ BigDecimal 内部使用两个字段存储数字，一个是整数部分 `intVal`
 
 计算时通过整数计算，再结合小数点位置和设置的精度与舍入行为，控制结果精度，避免了由默认浮点数舍入导致的误差。
 
-源码展示
+---
+
+### 💻 源码展示
 
 ```java
 public class BigDecimal extends Number implements Comparable<BigDecimal> {

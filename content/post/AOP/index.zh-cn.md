@@ -9,34 +9,36 @@ description : "面向切面编程的相关理解"
 math : true
 ---
 
-## 概述
+## 🧠 概述
 
-AOP全称是 **`Aspect Oriented Programming`** (面向切面编程)，是一种编程范式，用于将跨领域的关注点（如日志记录、安全检查、事务管理等）与业务逻辑分离开来。它允许开发者通过“切面”（Aspect）将这些通用功能模块化，并将其应用到应用程序中的多个地方，从而避免代码重复。
+AOP全称是 **`Aspect Oriented Programming`** (面向切面编程)，是一种编程范式，用于将跨领域的关注点（如日志记录、安全检查、事务管理等）与业务逻辑分离开来。它允许开发者通过”切面”（Aspect）将这些通用功能模块化，并将其应用到应用程序中的多个地方，从而避免代码重复。
 
 - **核心思想**：AOP 的核心思想是将与业务逻辑无关的横切关注点抽取出来，通过声明的方式动态地应用到业务方法上，而不是将这些代码直接嵌入业务逻辑中。
 
 - **底层实现** ：动态代理是面向切面编程最主流的实现。主要通过底层的动态代理机制，对特定的方法进行编程。
 
-应用场景
+### 📌 应用场景
 
 - 记录操作日志
 - 权限控制
 - 事务管理
 
-## 具体实现
+---
+
+## 💡 具体实现
 
 - 导入相关依赖
 
 - 创建一个服务类（目标方法）
 
-   ```
+   ```java
    @Service
    public class MyService {
-   
+
        public void performTask() {
            System.out.println("Task performed");
        }
-   
+
        public String sayHello(String name) {
            return "Hello, " + name;
        }
@@ -51,23 +53,23 @@ AOP全称是 **`Aspect Oriented Programming`** (面向切面编程)，是一种�
    @Aspect
    @Component
    public class LoggingAspect {
-   
+
        // 切入点：匹配 MyService 类中所有方法
        @Pointcut("execution(* com.example.service.MyService.*(..))")
        public void serviceMethods() {}
-   
+
        // 前置通知：在目标方法执行之前执行
        @Before("serviceMethods()")
        public void logBefore(JoinPoint joinPoint) {
            System.out.println("Before executing method: " + joinPoint.getSignature());
        }
-   
+
        // 后置通知：在目标方法执行之后执行
        @After("serviceMethods()")
        public void logAfter(JoinPoint joinPoint) {
            System.out.println("After executing method: " + joinPoint.getSignature());
        }
-   
+
        // 环绕通知：在目标方法执行前后都能执行
        @Around("serviceMethods()")
        public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -79,9 +81,9 @@ AOP全称是 **`Aspect Oriented Programming`** (面向切面编程)，是一种�
    }
    ```
 
-   
+---
 
-## AOP的底层原理
+## 🏗️ AOP的底层原理
 
 Spring AOP的实现依赖于**动态代理技术**。动态代理是在运行时动态生成代理对象，而不是在编译时。它允许开发者在运行时指定要代理的接口和行为，从而实现在不修改源码的情况下增强方法的功能。
 
@@ -94,7 +96,9 @@ Spring AOP支持两种动态代理：
   - 在客户端创建代理类，当通过代理对象调用一个方法时，这个方法的调用会被转发为由 **`InvocationHandler`** 接口的 **`invoke()`** 方法来进行调用。
 - **基于CGLIB的动态代理**：当被代理的类没有实现接口时，Spring会使用CGLIB库生成一个被代理类的子类作为代理。CGLIB（Code Generation Library）是一个第三方代码生成库，通过继承方式实现代理。基于类继承，通过字节码技术生成目标类的子类，来实现对目标方法的代理
 
-## AOP核心概念
+---
+
+## 🧩 AOP核心概念
 
 - **连接点（JoinPoint）** ：可以被AOP控制的方法(暗含方法执行时的相关信息)，目标对象的所属类中，定义的所有方法
 - **通知（Advice）** ：指重复的逻辑，也就是共性功能，增强的逻辑或代码，也即拦截到目标对象的连接点之后要做的事情
@@ -124,16 +128,14 @@ Spring AOP支持两种动态代理：
     }
   }
   ```
-  
-  
-  
+
 - **目标对象（Target）** ：通知所应用的对象，也就是原本的业务类。
 
 - **代理（Proxy）** ：向目标对象应用通知之后创建的代理对象，代理对象包含目标对象的原始方法和增强逻辑。
 
 - **织入（Weaving）** ：将通知应用到目标对象，进而生成代理对象的过程动作
 
-示例代码
+### 🔧 示例代码
 
 ```java
 @Aspect
@@ -179,19 +181,23 @@ public class LoggingAspect {
 }
 ```
 
+---
 
-
-## AOP执行流程
+## 🔄 AOP执行流程
 
 - 底层为目标对象生成代理对象
 - 在代理对象中使用通知对目标对象的连接点做功能增强
 - 在依赖注入时注入代理对象
 
-![AOP执行流程](微信截图_20241108095453.png)
+<div align="center">
+  <img src="微信截图_20241108095453.png" alt="AOP执行流程示意图" width="82%">
+</div>
 
-## AOP通知
+---
 
-### 通知类型
+## ⚙️ AOP通知
+
+### 📋 通知类型
 
 - **`@Around`** ：环绕通知，此注解标注的通知方法在目标方法前、后都被执行
 - **`@Before`** ：前置通知，此注解标注的通知方法在目标方法前披执行
@@ -208,13 +214,13 @@ public class LoggingAspect {
 
 {{</notice>}}
 
+---
 
-
-### 通知顺序
+### 📊 通知顺序
 
 当有多个切面的切入点都匹配到了目标方法，目标方法运行时，多个通知方法都会被执行
 
-#### 不同切面类的通知顺序
+#### 🆚 不同切面类的通知顺序
 
 - 目标方法前的通知方法：字母排名靠前的先执行
   目标方法后的通知方法：字母排名靠前的后执行
@@ -222,7 +228,7 @@ public class LoggingAspect {
   - 目标方法前的通知方法:数字小的先执行
   - 目标方法后的通知方法:数字小的后执行
 
-#### 同一个切面类的通知顺序
+#### ✅ 同一个切面类的通知顺序
 
 - 正常情况 
   - 环绕之前通知 
@@ -238,12 +244,14 @@ public class LoggingAspect {
   - AfterThrowing异常通知 
   - After最终通知
 
-## 切入点表达式
+---
+
+## 📐 切入点表达式
 
 切入点表达式：描述切入点方法的一种表达式
 作用：主要用来决定项目中的哪些方法需要加入通知
 
-### execution(….)根据方法的签名来匹配
+### 🔍 execution(….)根据方法的签名来匹配
 
 execution 主要根据方法的返回值、包名、类名、方法名、方法参数等信息来匹配
 
@@ -255,7 +263,7 @@ execution 主要根据方法的返回值、包名、类名、方法名、方法�
 - 包名.类名: 可省略
 - throws 异常:可省略(注意是方法上声明抛出的异常，不是实际抛出的异常)
 
-通配符
+#### 🎯 通配符
 
 - **`*`** ：单个独立的任意符号，可以通配任意返回值、包名、类名、方法名、任意类型的一个参数，也可以通配包、类、方法名的一部分
 
@@ -269,9 +277,9 @@ execution 主要根据方法的返回值、包名、类名、方法名、方法�
   execution(* com.itheima..Deptservice.*(..))
   ```
 
-  
+---
 
-### @annotation(.):根据注解匹配
+### 🎓 @annotation(.):根据注解匹配
 
 **`@annotation`** 切入点表达式，用于匹配标识有特定注解的方法
 
@@ -298,16 +306,16 @@ public Object recordrime(ProceedingjoinPoint joinPoint) throws Throwable {
 }
 ```
 
-注意事项
+#### 📍 注意事项
 
 - private：仅能在当前切面类中引用该表达式
 - public：其他外部的切面类中也可以引用该表达式
 
 {{</notice>}}
 
+---
 
-
-## 连接点
+## ⌨️ 连接点
 
 在Spring中用**JoinPoint**抽象了连接点，用它可以获得方法执行时的相关信息，如目标类名、方法名、方法参数等。
 
@@ -315,7 +323,7 @@ public Object recordrime(ProceedingjoinPoint joinPoint) throws Throwable {
 
 对于其他四种通知，获取连接点信息只能使用 **`JoinPoint`** ，它是 **`ProceedingJoinPoint`** 的父类型
 
-相关方法
+### 🔨 相关方法
 
 ```java
 @Around("execution()")
@@ -341,7 +349,9 @@ public void befored(JoinPoint joinPoint)
 
 ```
 
-## SpringAOP 框架 和 AspectJ 框架
+---
+
+## ⚖️ SpringAOP 框架 和 AspectJ 框架
 
 **Spring AOP**：是 Spring 框架提供的一种 AOP 实现，主要用于**运行时**的代理机制。
 

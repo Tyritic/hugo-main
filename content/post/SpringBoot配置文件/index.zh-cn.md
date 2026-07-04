@@ -13,7 +13,7 @@ description : "SpringBoot的配置文件以及参数配置化"
 
 ### 📄 通过配置文件配置
 
-#### 📋 配置文件的种类
+#### 🗂️ 配置文件的种类
 
 SpringBoot 提供了多种属性配置方式：
 
@@ -40,7 +40,7 @@ SpringBoot 提供了多种属性配置方式：
   	address: 127.0.0.1
   ```
 
-#### 🏆 配置文件优先级
+#### 📈 配置文件优先级
 
 优先级从高到低：**properties &gt; yml &gt; yaml**
 
@@ -54,7 +54,7 @@ SpringBoot 提供了多种属性配置方式：
 
 ---
 
-#### 🔄 多配置文件的加载
+#### 🔁 多配置文件的加载
 
 Profile 意思是配置，不同环境可能需要不同的配置需要。
 
@@ -80,7 +80,7 @@ spring:
 - 执行 java 指令，运行 jar 包，在执行 java 命令时添加参数。
 - 参数格式：
 
-  ```
+  ```bash
   -Dxxx=xxx
   ```
 
@@ -90,7 +90,7 @@ spring:
 - 执行 java 指令，运行 jar 包，在执行 java 命令时添加参数。
 - 参数格式：
 
-  ```
+  ```bash
   --xxx=xxx
   ```
 
@@ -120,7 +120,7 @@ spring:
 
 ---
 
-### 📊 数据格式
+### 📈 数据格式
 
 - **对象/Map 集合**：
 
@@ -154,25 +154,25 @@ spring:
 
 ```properties
 aliyun.oss.endpoint=https://oss-cn-hangzhou.aliyuncs.com
-aliyun.oss.accessKeyId=LTAI4GCHlvX6DKqJWxdбnEuW
+aliyun.oss.accessKeyId=LTAI4GCHlvX6DKqJWxdnEuW
 aliyun.oss.accessKeySecret=yBshYweHOpqDuhCArrVHwIiBKPYqSL
 aliyun.oss.bucketName=web-tlias
 ```
 
 ```java
 @Component
-pubiic class AliossUti1s{
+public class AliossUtils {
  @Value("${aliyun.oss.endpoint}")
- private string endpoint;
+ private String endpoint;
 	
  @Value("${aliyun.oss.accessKeyId}")
- private string accesskeyId;
+ private String accessKeyId;
 	
  @Value("${aliyun.oss.accessKeySecret}")
  private String accessKeySecret;
 	
- @Value ("${aliyun.oss.bucketName } ")
- private String bucketName
+ @Value("${aliyun.oss.bucketName}")
+ private String bucketName;
 }
 ```
 
@@ -199,7 +199,7 @@ public class AliyunOSSProperties {
 
 **`@ConfigurationProperties`** 支持 jsr-300 数据校验使用 **@Validate**。
 
-{{&lt;notice tip&gt;}}
+{{<notice tip>}}
 
 jsr-300 数据校验：
 
@@ -216,5 +216,5 @@ jsr-300 数据校验：
 - **@Past**：被注释的元素必须是一个过去的日期
 - **@Future**：被注释的元素必须是一个未来的日期
 
-{{&lt;/notice&gt;}}
+{{</notice>}}
 

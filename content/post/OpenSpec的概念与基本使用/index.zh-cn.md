@@ -38,7 +38,7 @@ description: "OpenSpec 是什么、双文件夹模型怎么运作、三个核心
 
 ## 🏗️ OpenSpec 的核心定位与设计哲学
 
-### 📖 OpenSpec是什么
+### 📚 OpenSpec是什么
 
 [OpenSpec](https://github.com/Fission-AI/OpenSpec) 是由 [Fission-AI](https://openspec.dev/) 开源的一套 **Spec-Driven Development 框架 + CLI 工具**。它形态非常轻量，它通过一套结构化的文件组织方式和指令系统，让 AI 编程助手（如 Codex、CodeBuddy、Claude）能够在明确的"合同"约束下工作。
 

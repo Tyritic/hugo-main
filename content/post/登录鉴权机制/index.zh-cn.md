@@ -8,13 +8,13 @@ tags : []
 description : "项目开发中登录鉴权机制的实现"
 ---
 
-## 🔐 登录功能实现的基本思路
+## 🔓 登录功能实现的基本思路
 
 <div align="center">
   <img src="微信截图_20241107132152.png" alt="登录功能实现的基本思路" width="82%">
 </div>
 
-### 🏷️ 登录标记
+### 🍪 登录标记
 
 用户登录成功之后，每一次请求中，都可以获取到该标记，
 
@@ -23,7 +23,7 @@ description : "项目开发中登录鉴权机制的实现"
 - **会话技术**
 - **JWT令牌**
 
-### ✅ 登录校验
+### 🛡️ 登录校验
 
 对接收到的请求进行统一拦截
 
@@ -36,7 +36,7 @@ description : "项目开发中登录鉴权机制的实现"
 
 ## 🏷️ 登录标记
 
-### 🍪 会话技术
+### 💻 会话技术
 
 用户打开浏览器，访问 **web** 服务器的资源，会话建立，直到有一方断开连接，会话结束。在一次会话中可以包含多次请求和响应。
 
@@ -49,7 +49,7 @@ description : "项目开发中登录鉴权机制的实现"
 - 客户端会话跟踪技术：**Cookie**
 - 服务端会话跟踪技术：**Session**
 
-#### 🍪 Cookie
+#### 🎁 Cookie
 
 <div align="center">
   <img src="微信截图_20241107134132.png" alt="Cookie" width="82%">
@@ -88,7 +88,7 @@ description : "项目开发中登录鉴权机制的实现"
 
 {{</notice>}}
 
-#### 📦 Session
+#### 💾 Session
 
 <div align="center">
   <img src="微信截图_20241107135533.png" alt="Session" width="82%">
@@ -116,7 +116,7 @@ description : "项目开发中登录鉴权机制的实现"
 - 服务器集群中无法直接使用 **Session** 技术
 - **Session** 技术基于**Cookie** 技术，继承了 **Cookie** 的全部缺点
 
-#### 🔑 令牌技术
+#### 📌 令牌技术
 
 <div align="center">
   <img src="微信截图_20241107140535.png" alt="令牌技术" width="82%">
@@ -260,7 +260,7 @@ public String createJwt(Map<String, Object>claims)
 
 ---
 
-## 🛡️ JWT身份认证方案
+## 🔐 JWT身份认证方案
 
 在基于 **JWT** 进行身份验证的的应用程序中，服务器通过 **Payload、Header** 和 **Secret**（密钥）创建 **JWT** 并将 **JWT** 发送给客户端。客户端接收到 **JWT** 之后，会将其保存在 **Cookie** 或者 **localStorage** 里面，以后客户端发出的所有请求都会携带这个令牌。
 
@@ -278,7 +278,7 @@ public String createJwt(Map<String, Object>claims)
 
 ---
 
-## ✅ 登录校验
+## 📝 登录校验
 
 ### 🔒 过滤器（Filter）
 

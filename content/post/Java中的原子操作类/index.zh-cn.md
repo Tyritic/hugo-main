@@ -17,7 +17,7 @@ math : true
 
 ---
 
-## 📦 原子类的基本特性
+## ⚙️ 原子类的基本特性
 
 - **非阻塞（无锁）**：基于 **CAS（Compare-And-Swap）** 实现，不使用 `synchronized`。
 - **高效并发**：比 `synchronized` 或 `Lock` 更快，适合高并发环境。
@@ -25,7 +25,7 @@ math : true
 
 ---
 
-## 📊 原子操作基本数据类型
+## 🧮 原子操作基本数据类型
 
 - **`AtomicBoolean`**：以原子更新的方式更新 **`boolean`**
 - **`AtomicInteger`** ：以原子更新的方式更新 **`Integer`**
@@ -45,7 +45,7 @@ public final void lazySet(int newValue)//最终设置为newValue, lazySet 提供
 
 ---
 
-## 📦 原子操作数组类型
+## 🗂️ 原子操作数组类型
 
 - **`AtomicIntegerArray`**：原子更新 **`int`** 整数数组的方法。
 - **`AtomicLongArray`** ：原子更新 **`long`** 型证书数组的方法。
@@ -65,7 +65,7 @@ public final void lazySet(int i, int newValue)//最终 将index=i 位置的元�
 
 ---
 
-## 📦 原子操作引用类型
+## 🔗 原子操作引用类型
 
 - **`AtomicReference`** ：原子更新引用类型；
 - **`AtomicStampedReference`** ：原子更新带有版本号的引用类型。该类将整数值与引用关联起来，可用于解决原子的更新数据和数据的版本号，可以解决使用 **`CAS`** 进行原子更新时可能出现的 ABA 问题。

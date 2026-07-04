@@ -8,29 +8,35 @@ tags : ["关系型数据库"]
 description : "关于MySQL数据库的基本介绍与使用"
 ---
 
+## 🧠 MySQL简介
+
+MySQL是一个流行的开源关系型数据库管理系统（RDBMS），广泛应用于Web应用开发。
+
+---
+
 ## 🛠️ MySQL配置使用
 
 启动服务：
 
-```mysql
+```bash
 net start mysql
 ```
 
 停止服务：
 
-```mysql
+```bash
 net stop mysql
 ```
 
 登录MySQL：
 
-```mysql
+```bash
 mysql -u[用户名] -p[密码] [-h 数据库服务器IP -p 端口号]
 ```
 
 退出MySQL：
 
-```mysql
+```bash
 exit
 ```
 
@@ -55,7 +61,7 @@ exit
 
 **SQL**：一门操作关系型数据库的编程语言，定义操作所有关系型数据库的统一标准。
 
-### ⚙️ 通用语法
+### 💡 通用语法
 
 - SQL语句可以单行或多行书写，以分号结尾。
 - SQL语句可以使用空格/缩进来增强语句的可读性。

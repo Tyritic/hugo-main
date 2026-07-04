@@ -12,7 +12,7 @@ description : "langchain4j是一个旨在简化Java语言中AI应用开发的框
 
 langchain4j 是一个旨在简化 Java 语言中 **AI** 应用开发的框架。它提供了一套统一的接口来与各种 **LLM**（大型语言模型）、**embedding**（嵌入）模型、向量数据库和其他工具交互，让开发者可以快速构建和集成 AI 功能，而不必担心底层实现细节。
 
-### 🎯 主要功能与特色
+### 💡 主要功能与特色
 
 - **模型集成**：支持 **OpenAI**、**Azure OpenAI**、**Google Vertex AI**、**HuggingFace** 等多种主流 LLM；
 - **链式调用与组合**：提供了类似 LangChain 的链式构造，方便构建复杂的提示、流程与记忆；

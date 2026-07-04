@@ -17,7 +17,7 @@ Java在Math类中封装了相关的数学函数，位于Java.lang包中
 
 ---
 
-## 📚 静态常量
+## 🔢 静态常量
 
 自然对数$e$：`Math.E`（double数据类型）
 
@@ -25,7 +25,7 @@ Java在Math类中封装了相关的数学函数，位于Java.lang包中
 
 ---
 
-## 📚 三角函数
+## 🔺 三角函数
 
 - `Math.toRadians()`：角度 --> 弧度
 - `Math.toDegrees()`：弧度 --> 弧度
@@ -79,14 +79,14 @@ System.out.println("反正弦值2: " + Math.atan2(m, n)); // atan2() 坐标系�
 
 ---
 
-## 📚 指数函数
+## 📈 指数函数
 
 - `Math.exp()`：自然对数e的幂函数
 - `Math.pow()`：幂函数
 - `Math.sqrt()`：平方根
 - `Math.cbrt()`：立方根
 - `Math.log()`：ln函数
-- `Math.log 10()`：log_10函数
+- `Math.log10()`：log_10函数
 
 示例代码
 
@@ -116,7 +116,7 @@ System.out.println("log10(8): " + Math.log10(p)); // log10(8)
 
 ---
 
-## 📚 取整函数
+## 🧮 取整函数
 
 - `Math.ceil()`：上取整
 - `Math.floor()`：下取整
@@ -125,7 +125,7 @@ System.out.println("log10(8): " + Math.log10(p)); // log10(8)
 
 示例代码
 
-```
+```java
 /* 取整 */
 double d = 100.675;
 double e = 100.500;
@@ -147,7 +147,7 @@ System.out.println("round(100.500): " + Math.round(e));
 
 ---
 
-## 📚 比较函数
+## ⚖️ 比较函数
 
 - `Math.min()`：最小值
 - `Math.max()`：最大值
@@ -169,7 +169,7 @@ System.out.println("abs(): " + Math.abs(-5));
 
 ---
 
-## 📚 随机数生成
+## 🎲 随机数生成
 
 - `Math.random()`：随机产生一个数 random()，随机数范围为 0.0 =< Math.random < 1.0
 

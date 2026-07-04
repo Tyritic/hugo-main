@@ -8,7 +8,7 @@ tags : ["Spec Coding", "Superpowers"]
 description: "Superpowers 是什么？它为什么强调纪律先于速度？八个核心 Skills 如何组成一条完整工程链？一份给新手的 Superpowers 入门笔记。"
 ---
 
-## 🧠 写在前面：AI 编程为什么需要"流程纪律"
+## 📖 写在前面：AI 编程为什么需要"流程纪律"
 
 这两年 AI 编码助手的能力突飞猛进——几百行代码随手就能写出来。但只要真正把 Claude Code、Cursor、Codex 之类工具放进真实项目里，你大概率会撞上这几面墙：
 
@@ -21,9 +21,7 @@ description: "Superpowers 是什么？它为什么强调纪律先于速度？八
 
 社区给出的答案之一，就是 [Superpowers](https://github.com/obra/superpowers)——一个**专门给 AI 编码助手装上"工程化大脑"** 的 Skills 框架。本文聚焦 Superpowers 本身：它是什么、它如何重塑 AI 的工作流、如何独立使用它，以及和同类工具的差异。**和 OpenSpec 的配合使用** 会在另一篇专门讲。
 
-***
-
-## 📖 Superpowers 是什么
+## 🧠 Superpowers 是什么
 
 [Superpowers](https://github.com/obra/superpowers) 是由 [Jesse Vincent](https://blog.fsck.com) 在 [Prime Radiant](https://primeradiant.com) 开源的一个 **AI 编码助手 Skills 框架 + 软件开发方法论**。它的官方定义是：
 
@@ -35,9 +33,7 @@ description: "Superpowers 是什么？它为什么强调纪律先于速度？八
 
 一句话总结：**它不做"加什么功能"，它专门管"AI 应该在什么时候、用什么方式写代码"**。
 
-***
-
-## 🧭 设计哲学：纪律先于速度
+## ⚖️ 设计哲学：纪律先于速度
 
 Superpowers 反复强调的设计哲学，可以浓缩为一句话：
 
@@ -64,11 +60,9 @@ Superpowers 反复强调的设计哲学，可以浓缩为一句话：
 
 **写代码不再是一蹴而就的事情，而是一连串必须走完的关卡**。
 
-***
-
 ## 🏗️ 核心机制：可组合的 Skills
 
-### 🪜 核心Skill
+### 🧩 核心Skill
 
 下面这张表汇总了 Superpowers 的 所有Skills，及其触发方式与典型适用场景。
 
@@ -95,11 +89,11 @@ Superpowers 反复强调的设计哲学，可以浓缩为一句话：
 - 方法2：通过上下文自动触发
   - Superpowers 会**根据上下文自动调用**对应 Skill。你不需要每次都手动敲命令，agent 会自己判断。
 
-### 🧩 架构设计
+### 🧪 架构设计
 
 所有的 skill 可以分为以下几类：
 
-#### 🏛️ 工作流骨架 Skills
+#### 🔧 工作流骨架 Skills
 
 - **using-superpowers**：这是整个系统的引导层，它在每次会话开始时激活，建立 skill 发现和调用机制，要求 agent 在任何回应（包括澄清性问题）之前都先检查是否有适用的 skill。
 - **brainstorming**：在写任何代码之前激活。通过提问逐步提炼粗糙的想法，探索替代方案，将设计以短小可读的段落呈现供用户验证，最终保存设计文档。最新版本还增加了可视化伴侣（在浏览器侧窗口展示 mockup 和图表），以及对超大型项目的拆分评估机制。
@@ -108,13 +102,13 @@ Superpowers 反复强调的设计哲学，可以浓缩为一句话：
 - **subagent-driven-development / executing-plans**：有了计划之后激活。为每个任务派发独立的子 agent，进行两阶段代码审查（先检查是否符合规格，再检查代码质量）；或以批次执行并设置人工检查点。
 - **finishing-a-development-branch**：所有任务完成时激活。验证测试，向用户提供选项（merge/PR/保留/丢弃），清理 worktree。
 
-#### 🧪 测试与实现 Skills
+#### 🔬 测试与实现 Skills
 
 - **test-driven-development**：在实现阶段激活，强制执行 RED-GREEN-REFACTOR 循环：先写会失败的测试，看着它失败，再写最少的代码让它通过，提交。框架中还内置了一份 anti-patterns 参考，防止 agent 走捷径。
 - **async-testing-patterns**：当测试中存在竞态条件、时序依赖，或测试结果不稳定时触发。专门处理异步代码的测试问题，替代用 setTimeout/sleep 敷衍了事的做法。
 - **verification-before-completion**：在声称工作完成之前强制触发，确认修复或实现真正生效，防止"看起来好了"的假完成。
 
-#### 🔍 调试 Skills
+#### 🎯 调试 Skills
 
 - **systematic-debugging**：核心原则：在尝试任何修复之前，必须找到根本原因。症状修复即失败。强制完成 Phase 1（证据收集、错误分析、数据流追踪）后才能提出修复方案。如果连续三次修复失败，必须停下来质疑架构设计。该 skill 内置三个子技术：
   - **root-cause-tracing**：沿调用栈向后追踪 bug，定位触发问题的源头。
@@ -128,11 +122,9 @@ Superpowers 反复强调的设计哲学，可以浓缩为一句话：
 - **remembering-conversations**：将对话内容向量化存入 SQLite 数据库，使用 Claude Haiku 生成摘要，并提供命令行搜索工具。为避免无效搜索污染上下文，该 skill 使用子 agent 做搜索。
 - **requesting-code-review**：提供代码审查前的预检清单，并以严重程度分级的方式报告问题。
 
-***
+## 🌀 常见工作流
 
-## 🔄 常见工作流
-
-### 🎯 基础工作流：八步闭环
+### 🔄 基础工作流：八步闭环
 
 Superpowers 的核心工作流可以浓缩为八步。下面用一张图展示全貌：
 
@@ -164,8 +156,6 @@ Superpowers 的核心工作流可以浓缩为八步。下面用一张图展示�
         │  产出：测试全绿 + merge/PR/keep/discard 决策
 ```
 
-***
-
 ### 🐛 Bug 修复工作流
 
 ```text
@@ -188,9 +178,7 @@ Superpowers 的核心工作流可以浓缩为八步。下面用一张图展示�
         │  产出：测试全绿 + merge/PR/keep/discard 决策
 ```
 
-***
-
-### 🔧 重构工作流
+### 🛠️ 重构工作流
 
 ```text
 [1]  🔍 发现代码问题
@@ -212,8 +200,6 @@ Superpowers 的核心工作流可以浓缩为八步。下面用一张图展示�
         │  产出：测试全绿 + merge/PR/keep/discard 决策
 ```
 
-***
-
 ## ⚠️ 适用场景与局限
 
 ### 👍 适合用 Superpowers 的场景
@@ -230,7 +216,7 @@ Superpowers 的核心工作流可以浓缩为八步。下面用一张图展示�
 - **不支持多 agent 的平台**：`subagent-driven-development` 在某些平台上不可用，需要回退到 `executing-plans` 的人工检查点模式。
 - **追求"零摩擦"的小项目**：Skills 的纪律反而是负担。
 
-### ❗ 常见误区
+### 📚 常见误区
 
 | 误区                       | 真相                                                          |
 | :----------------------- | :---------------------------------------------------------- |
@@ -238,8 +224,6 @@ Superpowers 的核心工作流可以浓缩为八步。下面用一张图展示�
 | "Skills 越多越好"            | Skills 越多，agent 切换上下文越频繁，反而拖慢节奏。**只装用得到的**。                 |
 | "TDD 是浪费时间"              | TDD 在需求清晰时极快，在需求模糊时确实慢。先 `brainstorming` 把需求问透，TDD 就不慢。     |
 | "自动触发就是全自动"              | 关键决策点（设计批准、Critical 修复）**仍然需要人在环路**。                        |
-
-***
 
 ## 📝 总结
 
@@ -255,8 +239,6 @@ Superpowers 不是一个"AI 增强插件"，它是一种 **"AI 工程化方法�
 如果和 OpenSpec 配合使用（详见[《Superpowers与OpenSpec的配合使用》](../Superpowers与OpenSpec的配合使用/index.zh-cn.md)），还可以叠加一层"规范可追溯"的能力——**Superpowers 管纪律，OpenSpec 管契约**。
 
 > 一句话记忆：**OpenSpec 让 AI 先签合同再干活，Superpowers 让 AI 按工艺把活干完**。
-
-***
 
 ### 🔗 参考资料
 

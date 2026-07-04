@@ -46,21 +46,21 @@ math : true
 
 ## 🔨 Set接口的常用方法
 
-### 📌 添加元素
+### ⬆️ 添加元素
 
 - **`boolean add(E e)`**：向集合中添加一个元素，如果已存在该元素，则返回 **`false`**。
 - **`boolean addAll(Collection<? extends E> c)`**：将指定集合中的所有元素添加到当前集合
 
-### 📌 删除元素
+### ⬇️ 删除元素
 
 - **`void clear()`**：清空集合中的所有元素
 - **`boolean remove(Object o)`**：从集合中移除指定的元素
 
-### 📌 查询元素
+### 🔎 查询元素
 
 - **`boolean contains(Object o)`**：判断集合中是否包含指定的元素
 
-### 📌 获取大小
+### 📊 获取大小
 
 - **`int size()`**：返回集合中的元素个数
 - **`boolean isEmpty()`**：判空

@@ -9,7 +9,7 @@ description : "Go的多线程和并发操作"
 math : true
 ---
 
-## 📝 基本概念
+## 📖 基本概念
 
 - 进程：程序是指编译过的、可执行的二进制代码。进程指正在运行的程序。进程包括二进制镜像，加载到内存中，还涉及很多其他方面：虚拟内存实例、内核资源如打开的文件、安全上下文如关联的用户，以及一个或多个线程。
 - 线程：线程是进程内的活动单元，每个线程包含自己的虚拟存储器，包括栈、进程状态如寄存器，以及指令指针。在单线程进程中，进程即线程，一个进程只有一个虚拟内存实例，一个虚拟处理器。在多线程的进程中，一个进程有多个线程，由于虚拟内存是和进程关联的，所有线程会共享相同的内存地址空间
@@ -41,7 +41,7 @@ goroutine 不是“Go 版线程”，它更接近“由 Go runtime 托管的轻�
 
 ---
 
-## 🔄 并发与并行
+## ⚡ 并发与并行
 
 很多开发者对于**并发**和**并行**的概念还比较模糊，其实只需要根据一点来判断即可：**能不能同时运行**。
 
@@ -83,7 +83,7 @@ mu.Unlock()
 - goroutine 被加锁后需要及时解锁否则其他 goroutine 无法拿到锁
 - 如果要保证两个协程同一个锁，那么应该传递指针，不要拷贝 mutex
 
-#### ⚙️ Mutex 底层实现
+#### 🏗️ Mutex 底层实现
 
 Go 里的 `sync.Mutex` 并不是只有“一把锁”这么简单，它底层实际上是 **原子操作 + 信号量** 的组合：
 
@@ -111,12 +111,12 @@ type Mutex struct {
 
 从实现思路上看可以概括成一句话：**先用 CAS 抢锁，抢不到再决定是短暂自旋，还是进入信号量等待队列休眠。**
 
-#### 🗂️ 从版本演进看 Mutex
+#### 📊 从版本演进看 Mutex
 
-如果按 runtime 的演进去理解，`sync.Mutex` 可以粗略看成“原子抢锁 + 自旋 + 信号量阻塞/唤醒”的混合模型一直在持续优化。
+如果按 runtime 的演进去理解，`sync.Mutex` 可以粗略看成”原子抢锁 + 自旋 + 信号量阻塞/唤醒”的混合模型一直在持续优化。
 
 - 常见资料会把 **Go 1.18 前后**作为一个比较明显的分界点来看：后续版本对饥饿模式和公平性交接的行为描述更明确。
-- 一个很关键的阈值是**等待时间接近 `1ms`** 时，运行时会更倾向于从“优先吞吐”切到“优先公平”的处理方式。
+- 一个很关键的阈值是**等待时间接近 `1ms`** 时，运行时会更倾向于从”优先吞吐”切到”优先公平”的处理方式。
 - 一旦进入更强公平性的路径，新来的 goroutine 就不再适合继续插队竞争，而是更倾向于排队等待，由解锁方把锁尽快交到等待最久的 goroutine 手里。
 
 不用死记某个小版本的实现细节，真正该记住的是：**Go 的 Mutex 不是单一策略，而是在吞吐、自旋成本和公平性之间动态折中。**
@@ -142,9 +142,9 @@ type Mutex struct {
 
 这两种模式会动态切换。你可以把它理解成：**平时优先性能，等有人等太久了再优先公平。**
 
-#### 📌 自旋与公平性
+#### 💫 自旋与公平性
 
-在正常模式下，抢锁失败的 goroutine 不一定立刻睡眠，它可能会先自旋几次。这样做不是浪费 CPU，而是在赌“锁马上就释放”，用一次很短的忙等，换掉一次昂贵的挂起与唤醒。
+在正常模式下，抢锁失败的 goroutine 不一定立刻睡眠，它可能会先自旋几次。这样做不是浪费 CPU，而是在赌”锁马上就释放”，用一次很短的忙等，换掉一次昂贵的挂起与唤醒。
 
 不过自旋并不是无限制发生的，运行时会结合 CPU 核数、当前是否繁忙、是否值得继续争抢等条件来决定。也正因为有这套机制：
 
@@ -155,7 +155,7 @@ type Mutex struct {
 
 提到锁，就有一个绕不开的话题：**死锁**。死锁就是一种状态，当两个或以上的 **goroutine** 在执行过程中，因争夺共享资源处在互相等待的状态，如果没有外部干涉将会一直处于这种阻塞状态。
 
-#### 🚨 死锁场景一：Lock/Unlock 不成对
+#### ⚠️ 死锁场景一：Lock/Unlock 不成对
 
 最常见的场景就是对锁进行拷贝使用：
 
@@ -182,7 +182,7 @@ func copyMutex(mu sync.Mutex) {
 ```
 
 运行结果：
-```
+```text
 fatal error: all goroutines are asleep - deadlock!
 ```
 
@@ -228,7 +228,7 @@ func main() {
 ```
 
 运行结果：
-```
+```text
 fatal error: all goroutines are asleep - deadlock!
 ```
 
@@ -243,7 +243,7 @@ mu.Lock()
 defer mu.Unlock()
 ```
 
-### 📖 读写锁sync.RWMutex
+### 🧭 读写锁sync.RWMutex
 
 读写锁指读操作和写操作分开，可以分别对读操作和写操作进行加锁，一般用在**大量读操作、少量写操作**的情况。
 
@@ -264,7 +264,7 @@ rw.Unlock()  // 写操作
 
 通俗理解就是可以多个 **goroutine** 同时读，但是只有一个 **goroutine** 能写，共享资源要么在被一个或多个 **goroutine** 读取，要么在被一个 **goroutine** 写入，读写不能同时进行。
 
-#### 🏆 RWMutex 底层思路
+#### 🧠 RWMutex 底层思路
 
 `RWMutex` 的底层并不是两套完全独立的锁，而是建立在互斥锁基础上的扩展协调机制。常见理解方式是：
 
@@ -280,7 +280,7 @@ rw.Unlock()  // 写操作
 
 这也是为什么 `RWMutex` 适合“读多写少”的根本原因：它不是让读写都更快，而是让“多个读操作能同时成立”。
 
-### 🧭 除了 Mutex 还能怎么安全读写共享变量
+### 🔑 除了 Mutex 还能怎么安全读写共享变量
 
 锁不是唯一方案。实际工程里，常见选择还有这些：
 
@@ -336,7 +336,7 @@ func main() {
 ```
 
 运行结果：
-```
+```text
 myGoroutine!
 myGoroutine!
 myGoroutine!
@@ -352,9 +352,9 @@ end!!!
 
 **注意**：`sync.WaitGroup` 的计数器不能为负数，否则会 **panic**。
 
-### 🧱 WaitGroup 底层结构
+### ⚙️ WaitGroup 底层结构
 
-`WaitGroup` 的核心并不是“轮询等待”，而是 **原子计数器 + 信号量唤醒**：
+`WaitGroup` 的核心并不是”轮询等待”，而是 **原子计数器 + 信号量唤醒**：
 
 ```go
 type WaitGroup struct {
@@ -375,7 +375,7 @@ type WaitGroup struct {
 3. `Wait()` 发现计数还没归零，就进入等待。
 4. 最后一个 `Done()` 把计数减到零时，负责唤醒所有正在 `Wait()` 的 goroutine。
 
-### ⚠️ WaitGroup 使用陷阱
+### ❗ WaitGroup 使用陷阱
 
 除了“计数器不能减成负数”之外，`WaitGroup` 还有两个特别常见的坑：
 
@@ -429,7 +429,7 @@ func (o *Once) Do(f func())
 - 不能在 `Do` 的函数里再次调用同一个 **`once.Do`**（会死锁）
 - 不能直接复制 **`sync.Once`**，应始终用指针或包级变量
 
-### 🔍 sync.Once 底层原理
+### 🔎 sync.Once 底层原理
 
 `sync.Once` 的核心结构非常简单，本质上是一个“是否执行过”的标志位配合一把锁：
 
@@ -450,7 +450,7 @@ type Once struct {
 
 这也是为什么 `sync.Once` 同时兼顾了正确性和性能：已经初始化完成后的大多数调用，成本非常低。
 
-### 🔀 sync.Once 与 init() 的区别
+### 🚀 sync.Once 与 init() 的区别
 
 有时候我们使用 **`init()`** 方法进行初始化。**`init()`** 方法是在其所在的 package 首次加载时执行的，而 **sync.Once** 可以在代码的任意位置初始化和调用，是在第一次用到它的时候才会初始化。
 
@@ -467,7 +467,7 @@ type Once struct {
 > 当某个条件不满足时，goroutine 可以等待；
 > 当另一个 goroutine 改变了条件并发出信号，等待的 goroutine 才会继续执行。
 
-### 🔧 创建条件变量
+### 🔨 创建条件变量
 
 ```go
 cond := sync.NewCond(&sync.Mutex{})
@@ -479,7 +479,7 @@ cond := sync.NewCond(&sync.Mutex{})
 | **`cond.Signal()`** | 唤醒**一个**正在等待的 goroutine |
 | **`cond.Broadcast()`** | 唤醒**所有**正在等待的 goroutine |
 
-### 📋 生产者-消费者示例
+### 📝 生产者-消费者示例
 
 ```go
 package main
@@ -533,18 +533,18 @@ func main() {
 
 ---
 
-## ⚡ 原子操作sync/atomic
+## 🛠️ 原子操作sync/atomic
 
 所谓**原子操作**就是这一系列的操作在 CPU 上执行是一个不可分割的整体，显然要么全部执行，要么全部不执行，不会受到其他操作的影响，也就不会存在并发问题。
 
 - 提供无锁的原子操作，比如原子加减、交换、比较并交换（CAS）
 - 适合需要高性能并发计数、标志位控制的场景
 
-从底层看，Go 的 `sync/atomic` 并不是靠“大锁”来模拟原子性，而是依赖 CPU 硬件提供的原子指令。也就是说，像 `atomic.AddInt64` 这类操作，在不同平台上最终会被编译成对应的原子机器指令，由硬件来保证“这一步不可分割”。
+从底层看，Go 的 `sync/atomic` 并不是靠”大锁”来模拟原子性，而是依赖 CPU 硬件提供的原子指令。也就是说，像 `atomic.AddInt64` 这类操作，在不同平台上最终会被编译成对应的原子机器指令，由硬件来保证”这一步不可分割”。
 
 更具体一点说，底层常见依赖的是 **CAS（Compare-And-Swap）**、**LL/SC（Load-Linked/Store-Conditional）** 这类硬件原子指令。`sync/atomic` 只是把这些平台相关细节封装成了统一 API，让我们在 Go 层面直接使用。
 
-### 🏗️ atomic 与 mutex 的区别
+### 🏛️ atomic 与 mutex 的区别
 
 1. **使用方式**：通常 **mutex** 用于保护一段执行逻辑，而 **atomic** 主要是对变量进行操作
 2. **底层实现**：**mutex** 由操作系统调度器实现，而 **atomic** 操作由底层硬件指令支持，保证在 CPU 上执行不中断。所以 **atomic** 的性能也能随 CPU 的个数增加线性提升
@@ -561,7 +561,7 @@ func CompareAndSwapT(addr *T, old, new T) // 比较 *addr 是否等于 old，如
 
 T 的类型是 **`int32`**、**`int64`**、**`uint32`**、**`uint64`** 和 **`uintptr`** 中的任意一种。
 
-### 💻 示例
+### 💻 代码示例
 
 ```go
 package main
@@ -590,7 +590,7 @@ func main() {
 
 100 个 goroutine，每个 goroutine 都对 sum +1，最后结果为 100。
 
-### 🎯 atomic.Value
+### 🎪 atomic.Value
 
 上面展示的 **`AddT`**、**`StoreT`** 等方法都是针对基本数据类型做的操作。如果想对多个变量进行同步保护，例如对一个 **struct** 这样的复合类型用原子操作，Go 语言里的 **`atomic.Value`** 支持任意接口类型进行原子操作。
 
@@ -637,7 +637,7 @@ func main() {
 ```
 
 运行结果：
-```
+```text
 {zhangsan 18}
 after swap: v={lisi 19}, old={zhangsan 18}
 compare st1 and v: false, {lisi 19}
@@ -687,7 +687,7 @@ func main() {
 ```
 
 运行结果：
-```
+```text
 fatal error: concurrent map writes
 ```
 
@@ -764,7 +764,7 @@ func main() {
 ```
 
 运行结果：
-```
+```text
 18
 key=name, val=zhangsan
 key=age, val=18
@@ -785,17 +785,17 @@ zhangsan
 - **空间换时间**：内部维护 `read` 和 `dirty` 两张表，用更多空间换更少锁竞争。
 - **自动提升**：当 `read` 连续未命中到一定程度后，`dirty` 会提升成新的 `read`。
 
-### 🎪 sync.Map 适用场景
+### 🎲 sync.Map 适用场景
 
 `sync.Map` 不是通用替代品，它更适合以下场景：
 
 - **读多写少**：大部分请求都能直接命中 `read`，这样无锁读的优势才能发挥出来。
 - **key 集合相对稳定**：如果 key 频繁新增、删除、重建，`dirty` 和 `read` 之间的同步成本会变高。
-- **更看重并发读性能**：如果写操作很多，`sync.Map` 往往会越来越接近“互斥锁 + map”的效果，优势就不明显了。
+- **更看重并发读性能**：如果写操作很多，`sync.Map` 往往会越来越接近”互斥锁 + map”的效果，优势就不明显了。
 
 ### 🔬 sync.Map 核心原理
 
-#### 📊 数据结构
+#### 🗂️ 数据结构
 
 ```go
 type Map struct {
@@ -827,7 +827,9 @@ type entry struct {
 
 sync.Map 的整体结构如下：
 
-![](sync-map-struct.png)
+<div align="center">
+  <img src="sync-map-struct.png" alt="sync.Map 的整体结构示意图" width="85%">
+</div>
 
 有一个很关键的点：`read.m` 和 `dirty` 这两张表里，相同 key 对应的 value 往往不是两份数据，而是同一个 `entry` 指针。因此改了 `entry.p`，两边看到的是同一份结果。
 
@@ -855,7 +857,7 @@ func (m *Map) missLocked() {
 - 原来的 `dirty` 被置为 `nil`
 - `misses` 清零，等待下一轮统计
 
-#### 📥 读取流程
+#### 💬 读取流程
 
 ```go
 func (m *Map) Load(key interface{}) (value interface{}, ok bool) {
@@ -886,9 +888,11 @@ func (m *Map) Load(key interface{}) (value interface{}, ok bool) {
 
 读取流程图：
 
-![](sync-map-load-flow.png)
+<div align="center">
+  <img src="sync-map-load-flow.png" alt="sync.Map 读取流程示意图" width="85%">
+</div>
 
-#### 💾 存储流程
+#### 🎛️ 存储流程
 
 ```go
 func (m *Map) Store(key, value interface{}) {
@@ -925,11 +929,15 @@ func (m *Map) Store(key, value interface{}) {
 
 `p == expunged` 时的结构可以用下面这张图理解：
 
-![](sync-map-store-expunged.png)
+<div align="center">
+  <img src="sync-map-store-expunged.png" alt="sync.Map store expunged 状态示意图" width="85%">
+</div>
 
 存储流程图：
 
-![](sync-map-store-flow.png)
+<div align="center">
+  <img src="sync-map-store-flow.png" alt="sync.Map 存储流程示意图" width="85%">
+</div>
 
 #### 🗑️ 删除流程
 
@@ -963,7 +971,9 @@ func (m *Map) Delete(key interface{}) {
 
 删除流程图：
 
-![](sync-map-delete-flow.png)
+<div align="center">
+  <img src="sync-map-delete-flow.png" alt="sync.Map 删除流程示意图" width="85%">
+</div>
 
 #### 🔂 Range 流程
 
@@ -1003,9 +1013,11 @@ func (m *Map) Range(f func(key, value interface{}) bool) {
 
 Range 流程图：
 
-![](sync-map-range-flow.png)
+<div align="center">
+  <img src="sync-map-range-flow.png" alt="sync.Map Range 流程示意图" width="85%">
+</div>
 
-#### 📑 p 的状态变化
+#### 📌 p 的状态变化
 
 `sync.Map` 里最容易讲清楚底层行为的地方，就是 `entry.p` 在 `正常值 -> nil -> expunged -> 恢复` 之间如何切换。
 
@@ -1013,23 +1025,33 @@ Range 流程图：
 
 1. 一开始向空的 `sync.Map` 写入 `key1/value1` 和 `key2/value2`，新数据先进入 `dirty`。
 
-![](sync-map-pstate-1.png)
+<div align="center">
+  <img src="sync-map-pstate-1.png" alt="sync.Map p 状态变化 - 初始写入" width="82%">
+</div>
 
 2. 连续读取这些 key，`read` 多次未命中，`misses` 达到阈值后，`dirty` 提升为 `read`，`dirty=nil`。
 
-![](sync-map-pstate-2.png)
+<div align="center">
+  <img src="sync-map-pstate-2.png" alt="sync.Map p 状态变化 - dirty 提升" width="82%">
+</div>
 
 3. 删除 `key1` 后，因为它存在于 `read` 中，所以只是把 `key1` 对应的 `p` 标成 `nil`，属于逻辑删除。
 
-![](sync-map-pstate-3.png)
+<div align="center">
+  <img src="sync-map-pstate-3.png" alt="sync.Map p 状态变化 - 逻辑删除" width="82%">
+</div>
 
 4. 这时如果再插入 `key3`，由于 `dirty` 为空，运行时会基于 `read` 重建 `dirty`。重建过程中，原来 `p=nil` 的 `key1` 会被进一步标为 `expunged`，表示这个 key 只留在 `read` 中，不再进 dirty。
 
-![](sync-map-pstate-4.png)
+<div align="center">
+  <img src="sync-map-pstate-4.png" alt="sync.Map p 状态变化 - dirty 重建" width="82%">
+</div>
 
 5. 如果之后又重新 `Store(key1, value0)`，发现它在 `read` 中但状态是 `expunged`，就不能只操作 `read`，而必须先把状态从 `expunged` 恢复，再重新加入 `dirty`，最后更新值。
 
-![](sync-map-pstate-5.png)
+<div align="center">
+  <img src="sync-map-pstate-5.png" alt="sync.Map p 状态变化 - 状态恢复" width="82%">
+</div>
 
 这套状态设计的核心目的，是把“是否需要加锁同步 dirty”区分得更细：
 
@@ -1056,7 +1078,7 @@ Range 流程图：
 
 另外，**`sync.Pool`** 本身是**并发安全**的，支持多个 **goroutine** 并发地往 **sync.Pool** 存取数据。
 
-### 📚 基本使用方法
+### 🎓 基本使用方法
 
 关于 **`sync.Pool`** 的使用，一般是通过三个方法来完成的：
 

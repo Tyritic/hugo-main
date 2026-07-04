@@ -19,55 +19,67 @@ math : true
 
 ## ⚙️ 具体实现
 
-1. **定义Filter类**：实现 **`Filter`** 接口，并重写其所有方法。
+### 🏗️ 定义Filter类
 
-   ```java
-   @WebFilter(urlPatterns = "/*")
-   public class DemoFilter implements Filter {
-       // 初始化方法,Web服务器启动,创建Filter时调用，只调用一次
-       public void init(FilterConfig filterConfig) throws ServletException {
-           Filter.super.init(filterConfig);
-       }
-       // 拦截到请求时,调用该方法,可调用多次
-       public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
-           System.out.println("拦截方法执行，拦截到了请求...");
-           System.out.println("执行放行前的逻辑...");
-           chain.doFilter(request, response); // 放行请求
-           System.out.println("执行放行后的逻辑...");
-       }
-       // 销毁方法，服务器关闭时调用，只调用一次
-       public void destroy() {
-           Filter.super.destroy();
-       }
-   }
-   ```
+实现 **`Filter`** 接口，并重写其所有方法。
 
-2. **配置Filter**：使用 **`@WebFilter`** 注解，配置拦截资源的路径。
+```java
+@WebFilter(urlPatterns = "/*")
+public class DemoFilter implements Filter {
+    // 初始化方法,Web服务器启动,创建Filter时调用，只调用一次
+    public void init(FilterConfig filterConfig) throws ServletException {
+        Filter.super.init(filterConfig);
+    }
+    // 拦截到请求时,调用该方法,可调用多次
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
+        System.out.println("拦截方法执行，拦截到了请求...");
+        System.out.println("执行放行前的逻辑...");
+        chain.doFilter(request, response); // 放行请求
+        System.out.println("执行放行后的逻辑...");
+    }
+    // 销毁方法，服务器关闭时调用，只调用一次
+    public void destroy() {
+        Filter.super.destroy();
+    }
+}
+```
 
-3. **引导类上加 `@ServletComponentScan`** 开启 **Servlet** 组件支持。
+### 🔧 配置Filter
 
-   ```java
-   @ServletComponentScan
-   @SpringBootApplication
-   public class TliasWebManagementApplication {
-       public static void main(String[] args) {
-           SpringApplication.run(TliasWebManagementApplication.class, args);
-       }
-   }
-   ```
+使用 **`@WebFilter`** 注解，配置拦截资源的路径。
+
+### 📌 启用Servlet组件扫描
+
+在引导类上加 **`@ServletComponentScan`** 开启 **Servlet** 组件支持。
+
+```java
+@ServletComponentScan
+@SpringBootApplication
+public class TliasWebManagementApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(TliasWebManagementApplication.class, args);
+    }
+}
+```
 
 ---
 
 ## 🔄 执行流程
 
+### 📈 流程图
+
 <div align="center">
-  <img src="微信截图_20241107153011.png" alt="执行流程" width="82%">
+  <img src="微信截图_20241107153011.png" alt="Filter执行流程示意图" width="85%">
 </div>
+
+### 🧩 流程步骤
 
 - 过滤器拦截到请求
 - 过滤器执行 **`doFilter()`** 之前的部分作为放行前的逻辑
 - 过滤器执行 **`doFilter()`** 放行请求
 - 过滤器执行 **`doFilter()`** 之后的部分作为放行后的逻辑
+
+### ⚠️ 关键点
 
 {{<notice tip>}}
 
@@ -82,6 +94,8 @@ math : true
 
 **Filter** 可以根据需求，配置不同的拦截资源路径：
 
+### 📊 路径配置表
+
 |   拦截路径   | urlPattern |            含义             |
 | :----------: | :--------: | :-------------------------: |
 | 拦截具体路径 |   /login   |   只有访问/login才被拦截    |
@@ -92,6 +106,10 @@ math : true
 
 ## 🔗 过滤器链
 
+### 💡 链的概念
+
 一个 **web** 应用中，可以配置多个过滤器，这多个过滤器就形成了一个过滤器链。
 
-**顺序**：注解配置的 **Filter**，优先级是按照过滤器类名（字符串）的自然排序。
+### ✅ 执行顺序
+
+注解配置的 **Filter**，优先级是按照过滤器类名（字符串）的自然排序。

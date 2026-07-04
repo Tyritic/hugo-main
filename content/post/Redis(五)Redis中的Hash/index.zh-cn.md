@@ -21,12 +21,12 @@ Hash 是一个键值对（key-value）集合，其中 value 的形式如：**`va
 
 ## ⚖️ 常用命令
 
-### ➕ 设置键值对
+### 💻 设置键值对
 
 - **`HSET KEY_NAME FIELD VALUE`**：为哈希表中的字段赋值。如果字段是哈希表中的一个新建字段，并且值设置成功，返回 1；如果哈希表中字段已经存在且旧值已被新值覆盖，返回 0
 - **`HMSET KEY_NAME FIELD1 VALUE1 ...FIELDN VALUEN`**：同时将多个 field-value（字段-值）对设置到哈希表中。命令执行成功时返回 OK
 
-### 🔍 查看
+### 📌 查看
 
 - **`HGET KEY_NAME FIELD_NAME`**：返回哈希表中指定字段的值。如果给定的字段或 key 不存在时，返回 nil
 - **`HKEYS key`**：获取哈希表中的所有域（field）
@@ -34,7 +34,7 @@ Hash 是一个键值对（key-value）集合，其中 value 的形式如：**`va
 - **`HGETALL KEY_NAME`**：返回哈希表中所有的字段和值
 - **`HEXISTS KEY_NAME FIELD_NAME`**：查看哈希表的指定字段是否存在
 
-### 🗑️ 删除
+### ✅ 删除
 
 - **`HDEL KEY_NAME FIELD1.. FIELDN`**：删除哈希表 key 中的一个或多个指定字段，不存在的字段将被忽略
 

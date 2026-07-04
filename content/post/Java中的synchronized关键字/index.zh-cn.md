@@ -15,7 +15,7 @@ math : true
 
 ---
 
-## 🔒 **synchronized** 的作用
+## ⚙️ **synchronized** 的作用
 
 - **保证原子性**：同步代码块在执行时不会被其他线程打断，保证操作的完整性。
 - **保证可见性**：线程进入 **`synchronized`** 代码块前，必须先从主内存中读取变量最新的值，退出时必须将变量的修改刷新到主内存。
@@ -23,7 +23,7 @@ math : true
 
 ---
 
-## 💡 **synchronized** 使用方式
+## 🛠️ **synchronized** 使用方式
 
 - **同步实例方法** ：为 **当前对象** 加锁，进入同步代码前要获得当前对象的锁；
 - **同步静态方法** ：为 **当前类（Class对象）** 加锁，进入同步代码前要获得当前类的锁；
@@ -47,12 +47,12 @@ synchronized void method() {
 }
 ```
 
-注意事项
+#### 📝 注意事项
 
 - 修饰实例方法是给当前对象上锁
 - 不同实例的 **`synchronized`** 方法不会相互影响（每个对象都有一个对象锁，不同的对象，他们的锁不会互相影响）
 
-### 🔨 **synchronized** 修饰静态方法
+### 🔩 **synchronized** 修饰静态方法
 
 给 **当前类** 加锁，会作用于类的所有对象实例 ，进入同步代码前要获得 **当前 class 的锁**。
 
@@ -64,7 +64,7 @@ synchronized static void method() {
 }
 ```
 
-注意事项
+#### ⚠️ 注意事项
 
 - 锁的是 **当前类的 Class 对象**，不属于某个对象。
 - 当前类的 Class 对象锁被获取，不影响实例对象锁的获取，两者互不影响
@@ -85,13 +85,13 @@ synchronized(this) {
 
 ---
 
-## 🔒 **synchronized** 属于可重入锁
+## 🔄 **synchronized** 属于可重入锁
 
 **可重入锁** 是指同一个线程在获取了锁之后，可以再次重复获取该锁而不会造成死锁或其他问题。当一个线程持有锁时，如果再次尝试获取该锁，就会成功获取而不会被阻塞。
 
 因此一个线程调用 **`synchronized`** 方法的同时，在其方法体内部调用该对象另一个 **`synchronized`** 方法是允许的
 
-### 📌 **示例**
+### 💡 **示例**
 
 ```java
 public class AccountingSync implements Runnable{
@@ -144,20 +144,22 @@ public class AccountingSync implements Runnable{
   - 执行 **`monitorexit`** 指令时则会把计数器-1，当计数器值为0时，则锁释放，处于等待队列中的线程再继续竞争锁。
 
 
-从源码的角度上
+### 🗂️ Monitor 对象结构
 
-- 当多个线程进入同步代码块时，首先进入entryList
-- 有一个线程获取到monitor锁后，就赋值给当前线程，并且计数器+1
-- 如果线程调用wait方法，将释放锁，当前线程置为null，计数器-1，同时进入waitSet等待被唤醒，调用notify或者notifyAll之后又会进入entryList竞争锁
-- 如果线程执行完毕，同样释放锁，计数器-1，当前线程置为null
+从源码的角度上：
 
-### 📌 原子性的保证
+- 当多个线程进入同步代码块时，首先进入 entryList
+- 有一个线程获取到 monitor 锁后，就赋值给当前线程，并且计数器+1
+- 如果线程调用 wait 方法，将释放锁，当前线程置为 null，计数器-1，同时进入 waitSet 等待被唤醒，调用 notify 或者 notifyAll 之后又会进入 entryList 竞争锁
+- 如果线程执行完毕，同样释放锁，计数器-1，当前线程置为 null
+
+### 🧠 原子性的保证
 
 - 线程加锁前，将清空工作内存中共享变量的值，从而使用共享变量时需要从主内存中重新读取最新的值。
 - 线程加锁后，其它线程无法获取主内存中的共享变量。
 - 线程解锁前，必须把共享变量的最新值刷新到主内存中。
 
-### 📌 有序性的保证
+### 🔐 有序性的保证
 
 **`synchronized`** 同步的代码块，具有排他性，一次只能被一个线程拥有，所以 **`synchronized`** 保证同一时刻，代码是单线程执行的。
 
@@ -166,7 +168,7 @@ public class AccountingSync implements Runnable{
 - **`monitorenter`** ：获取锁，进入同步代码块 
 - **`monitorexit`** ：释放锁，退出同步代码块
 
-### ✅ 可重入锁的实现
+### 📖 可重入锁的实现
 
 可重入意味着同一个线程可以多次获得同一个锁，而不会被阻塞。
 
@@ -184,6 +186,6 @@ public class AccountingSync implements Runnable{
 
 ---
 
-## 🔒 **synchronized** 的锁升级过程
+## 📊 **synchronized** 的锁升级过程
 
 参见[下期博客](https://tyritic.github.io/p/java%E4%B8%AD%E7%9A%84%E9%94%81/)

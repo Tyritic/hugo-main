@@ -20,7 +20,7 @@ math : true
 **Nginx** 可以被用作正向代理服务器。
 
 <div align="center">
-  <img src="watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0p1c3RpblFpbg==,size_16,color_FFFFFF,t_70.png" alt="正向代理" width="82%">
+  <img src="forward-proxy.png" alt="正向代理示意图：客户端通过代理服务器向目标服务器请求资源" width="75%">
 </div>
 
 **Nginx** 位于 **客户端（用户）和目标服务器** 之间，代表客户端向外部服务器请求资源。简而言之，正向代理就是代理客户端，代理客户端向服务端发送请求
@@ -47,30 +47,31 @@ math : true
 
 主文件格式
 
-```java
-//主配置文件格式
+```nginx
+# 主配置文件格式
 
-main block：主配置段，即全局配置段，对http,mail都有效
+# main block：主配置段，即全局配置段，对http,mail都有效
 
-//配置Nginx服务器的事件模块相关参数
+# 配置Nginx服务器的事件模块相关参数
 events {
  ...
 }   
-//http/https 协议相关配置段
+
+# http/https 协议相关配置段
 http {
  ...
 } 
 
-//默认配置文件不包括下面两个模块
-//mail 协议相关配置段
+# 默认配置文件不包括下面两个模块
+# mail 协议相关配置段
 mail {
  ...
 }    
-//stream 服务器相关配置段
+
+# stream 服务器相关配置段
 stream {
  ...
 }
-
 ```
 
 子配置文件（一般在主配置文件的http部分）

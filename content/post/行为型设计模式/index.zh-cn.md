@@ -101,7 +101,7 @@ public class Main {
 - ConcreteSubject（具体主题）：实现具体的主题对象，保存需要被观察的状态。
 - ConcreteObserver（具体观察者）：实现具体的观察者对象，更新自己以与主题的状态同步。
 
-### 💻 具体实现
+### 📋 具体实现
 
 ```java
 import java.util.ArrayList;

@@ -36,22 +36,22 @@ MyBatis-Plus（简称 MP）是一个 MyBatis 的增强工具，在 MyBatis 的�
 
 ### 🔗 框架结构
 
-&lt;div align="center"&gt;
-  &lt;img src="WechatIMG9017.jpg" alt="框架结构" width="82%"&gt;
-&lt;/div&gt;
+<div align="center">
+  <img src="WechatIMG9017.jpg" alt="框架结构" width="82%">
+</div>
 
 ---
 
-### 🔧 快速开始
+### ⚙️ 快速开始
 
 1. 在pom.xml中引入MyBatis-Plus的依赖
 
    ```xml
-   &lt;dependency&gt;
-       &lt;groupId&gt;com.baomidou&lt;/groupId&gt;
-       &lt;artifactId&gt;mybatis-plus-boot-starter&lt;/artifactId&gt;
-       &lt;version&gt;3.4.3&lt;/version&gt;
-   &lt;/dependency&gt;
+   <dependency>
+       <groupId>com.baomidou</groupId>
+       <artifactId>mybatis-plus-boot-starter</artifactId>
+       <version>3.4.3</version>
+   </dependency>
    ```
 
 2. 在application.yml中配置数据库相关信息
@@ -70,7 +70,7 @@ MyBatis-Plus（简称 MP）是一个 MyBatis 的增强工具，在 MyBatis 的�
 
    ```java
    @Mapper
-   public interface UserMapper extends BaseMapper&lt;User&gt; {
+   public interface UserMapper extends BaseMapper<User> {
    }
    ```
 
@@ -108,7 +108,7 @@ MyBatis-Plus（简称 MP）是一个 MyBatis 的增强工具，在 MyBatis 的�
        private UserMapper userMapper;
        @Test
        void testGetAll() {
-           List&lt;User&gt; users = userMapper.selectList(null);
+           List<User> users = userMapper.selectList(null);
            System.out.println(users);
        }
    }
@@ -140,22 +140,22 @@ MyBatis-Plus（简称 MP）是一个 MyBatis 的增强工具，在 MyBatis 的�
 - IdType.ASSIGN_ID：使用雪花算法生成主键（可以用于数值类型和String）
 - IdType.ASSIGN_UUID：使用UUID生成主键（只能用于String）
 
-{{&lt;notice tip&gt;}}
+{{< notice tip >}}
 
 可以在配置文件中通过mybatis-plus.global-config.db-config.id-type设置默认主键生成策略
 
-{{&lt;/notice&gt;}}
+{{< /notice >}}
 
 ---
 
-## 🔗 条件查询器
+## 🧩 条件查询器
 
 ### 🧠 基本条件查询
 
 1. 创建条件查询对象的格式
 
    ```java
-   QueryWrapper&lt;实体类&gt; 变量名 = new QueryWrapper&lt;&gt;();
+   QueryWrapper<实体类> 变量名 = new QueryWrapper<>();
    ```
 
 2. 具体查询条件
@@ -180,37 +180,37 @@ MyBatis-Plus（简称 MP）是一个 MyBatis 的增强工具，在 MyBatis 的�
    示例
 
    ```java
-   QueryWrapper&lt;User&gt; qw1 = new QueryWrapper&lt;&gt;();
+   QueryWrapper<User> qw1 = new QueryWrapper<>();
    //查询年龄大于等于18岁的人
    qw1.ge("age",18);
-   List&lt;User&gt; users = userMapper.selectList(qw1);
+   List<User> users = userMapper.selectList(qw1);
    System.out.println(users);
    ```
 
 3. select：设置查询的字段，参数为字段名
 
    ```java
-   QueryWrapper&lt;User&gt; qw2 = new QueryWrapper&lt;&gt;();
+   QueryWrapper<User> qw2 = new QueryWrapper<>();
    qw2.select("name","age");
-   List&lt;User&gt; users2 = userMapper.selectList(qw2);
+   List<User> users2 = userMapper.selectList(qw2);
    System.out.println(users2);
    ```
 
 4. orderBy：设置排序，参数为是否升序（false为降序），和字段名
 
    ```java
-   QueryWrapper&lt;User&gt; qw3 = new QueryWrapper&lt;&gt;();
+   QueryWrapper<User> qw3 = new QueryWrapper<>();
    qw3.orderBy(true,true,"age");
-   List&lt;User&gt; users3 = userMapper.selectList(qw3);
+   List<User> users3 = userMapper.selectList(qw3);
    System.out.println(users3);
    ```
 
 5. or：设置多条件查询用or连接（默认and连接）
 
    ```java
-   QueryWrapper&lt;User&gt; qw4 = new QueryWrapper&lt;&gt;();
+   QueryWrapper<User> qw4 = new QueryWrapper<>();
    qw4.eq("age",18).or().eq("age",19);
-   List&lt;User&gt; users4 = userMapper.selectList(qw4);
+   List<User> users4 = userMapper.selectList(qw4);
    System.out.println(users4);
    ```
 
@@ -221,40 +221,40 @@ MyBatis-Plus（简称 MP）是一个 MyBatis 的增强工具，在 MyBatis 的�
 条件查询器支持链式写法
 
 ```java
-QueryWrapper&lt;User&gt; qw1 = new QueryWrapper&lt;&gt;();
+QueryWrapper<User> qw1 = new QueryWrapper<>();
 qw1.ge("age",18).le("age",30);
-List&lt;User&gt; users = userMapper.selectList(qw1);
+List<User> users = userMapper.selectList(qw1);
 System.out.println(users);
 ```
 
 ---
 
-### 🔍 lambda条件查询器
+### 🔎 lambda条件查询器
 
 创建lambda条件查询器的格式
 
 ```java
-LambdaQueryWrapper&lt;实体类&gt; 变量名 = new LambdaQueryWrapper&lt;&gt;();
+LambdaQueryWrapper<实体类> 变量名 = new LambdaQueryWrapper<>();
 ```
 
-{{&lt;notice tip&gt;}}
+{{< notice tip >}}
 
 lambda条件查询器的方法参数中，字段名以实体类的getter方法的形式出现
 
-{{&lt;/notice&gt;}}
+{{< /notice >}}
 
 示例
 
 ```java
-LambdaQueryWrapper&lt;User&gt; lqw = new LambdaQueryWrapper&lt;&gt;();
+LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
 lqw.ge(User::getAge,18);
-List&lt;User&gt; users = userMapper.selectList(lqw);
+List<User> users = userMapper.selectList(lqw);
 System.out.println(users);
 ```
 
 ---
 
-### 🔒 条件判断
+### ✅ 条件判断
 
 在lambda条件查询器中所有条件查询方法都可以添加一个条件判断参数，只有条件判断参数为true时才会执行该条件查询方法
 
@@ -264,21 +264,21 @@ System.out.println(users);
 //模拟前端传来的数据
 Integer age1 = 10;
 Integer age2 = 30;
-LambdaQueryWrapper&lt;User&gt; lqw = new LambdaQueryWrapper&lt;&gt;();
+LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
 lqw.ge(age1 != null,User::getAge,age1);
 lqw.le(age2 != null,User::getAge,age2);
-List&lt;User&gt; users = userMapper.selectList(lqw);
+List<User> users = userMapper.selectList(lqw);
 System.out.println(users);
 ```
 
 ---
 
-### 📝 条件更新和条件删除
+### 🔁 条件更新和条件删除
 
 - 使用条件查询器进行条件删除，在delete方法中传入条件查询对象
 
   ```java
-  LambdaQueryWrapper&lt;User&gt; lqw = new LambdaQueryWrapper&lt;&gt;();
+  LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
   lqw.eq(User::getName,"Tom");
   userMapper.delete(lqw);
   ```
@@ -286,7 +286,7 @@ System.out.println(users);
 - 使用条件查询器进行条件更新，在update方法中传入条件查询对象
 
   ```java
-  LambdaQueryWrapper&lt;User&gt; lqw = new LambdaQueryWrapper&lt;&gt;();
+  LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
   lqw.eq(User::getName,"Tom");
   User user = new User();
   user.setAge(30);
@@ -302,14 +302,14 @@ System.out.println(users);
 创建条件查询接口的格式
 
 ```java
-QueryWrapper&lt;实体类&gt; 变量名 = new QueryWrapper&lt;&gt;();
+QueryWrapper<实体类> 变量名 = new QueryWrapper<>();
 ```
 
-{{&lt;notice tip&gt;}}
+{{< notice tip >}}
 
 selectOne方法只能查询出一条数据，查询多条数据会报错，selectCount方法会查询出符合条件的数据的数量
 
-{{&lt;/notice&gt;}}
+{{< /notice >}}
 
 ---
 
@@ -319,12 +319,12 @@ MyBatis-Plus在Service层提供了一个Service层的接口IService和一个Serv
 
 ---
 
-### 🔧 快速使用
+### 🛠️ 快速使用
 
 1. 编写Service接口继承于IService
 
    ```java
-   public interface UserService extends IService&lt;User&gt; {
+   public interface UserService extends IService<User> {
    }
    ```
 
@@ -332,7 +332,7 @@ MyBatis-Plus在Service层提供了一个Service层的接口IService和一个Serv
 
    ```java
    @Service
-   public class UserServiceImpl extends ServiceImpl&lt;UserMapper, User&gt; implements UserService {
+   public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
    }
    ```
 
@@ -345,7 +345,7 @@ MyBatis-Plus在Service层提供了一个Service层的接口IService和一个Serv
        private UserService userService;
        @Test
        void testGetAll() {
-           List&lt;User&gt; users = userService.list();
+           List<User> users = userService.list();
            System.out.println(users);
        }
    }
@@ -353,7 +353,7 @@ MyBatis-Plus在Service层提供了一个Service层的接口IService和一个Serv
 
 ---
 
-### 📌 常用方法
+### 📖 常用方法
 
 - list：查询所有数据
 - getById：根据id查询数据
@@ -391,7 +391,7 @@ MyBatis-Plus在Service层提供了一个Service层的接口IService和一个Serv
        private UserMapper userMapper;
        @Test
        void testGetPage() {
-           Page&lt;User&gt; page = new Page&lt;&gt;(1, 3);
+           Page<User> page = new Page<>(1, 3);
            userMapper.selectPage(page, null);
            System.out.println(page.getCurrent());//当前页码
            System.out.println(page.getSize());//每页显示的条数
@@ -404,7 +404,7 @@ MyBatis-Plus在Service层提供了一个Service层的接口IService和一个Serv
 
 ---
 
-## 📝 MyBatis-Plus映射数据库字段和实体类属性
+## 🗂️ MyBatis-Plus映射数据库字段和实体类属性
 
 在配置文件中通过mybatis-plus.global-config.db-config.table-prefix设置实体类对应表的前缀名，避免每一个实体类都要设置@TableName注解
 
@@ -417,7 +417,7 @@ mybatis-plus:
 
 ---
 
-## 🔒 MyBatis-Plus乐观锁
+## 🔐 MyBatis-Plus乐观锁
 
 1. 在数据库表中添加version字段，设置初始值为1
 
@@ -472,7 +472,7 @@ mybatis-plus:
 
 ---
 
-## 🔐 MyBatis-Plus逻辑删除
+## 🗑️ MyBatis-Plus逻辑删除
 
 1. 在数据库表中添加deleted字段，设置初始值为0
 
@@ -520,7 +520,7 @@ mybatis-plus:
 
 ---
 
-## 🔧 MyBatis-Plus性能分析
+## 🔍 MyBatis-Plus性能分析
 
 1. 在配置文件中设置日志输出，mybatis-plus.configuration.log-impl设置日志输出
 

@@ -11,7 +11,7 @@ math : true
 
 ## 🤖 模型交互核心抽象
 
-### 1️⃣ `ChatLanguageModel` / `StreamingChatLanguageModel`
+### 🔌 `ChatLanguageModel` / `StreamingChatLanguageModel`
 
 `ChatLanguageModel` 是 langchain4j 中最核心的接口之一，定义了与对话类模型（如 **gpt-3.5-turbo**、**gpt-4** 等）交互的统一方法。
 
@@ -44,7 +44,7 @@ model.generate("讲一个长一点的科幻故事", new StreamingResponseHandler
 
 ---
 
-### 2️⃣ 消息类型（`ChatMessage` 体系）
+### 💬 消息类型（`ChatMessage` 体系）
 
 在 langchain4j 中，对话消息被抽象成了不同类型的 `ChatMessage`，常见的有：
 
@@ -71,7 +71,7 @@ System.out.println(aiMessage.text());
 
 为了实现多轮对话，langchain4j 提供了 `ChatMemory` 接口以及若干开箱即用的实现，用于保存和管理历史消息。
 
-### 1️⃣ `MessageWindowChatMemory`
+### 🪟 `MessageWindowChatMemory`
 
 基于**消息数量**的滑动窗口记忆：
 
@@ -84,7 +84,7 @@ ChatMemory chatMemory = MessageWindowChatMemory.withMaxMessages(10);
 
 ---
 
-### 2️⃣ `TokenWindowChatMemory`
+### 📊 `TokenWindowChatMemory`
 
 基于 **Token 数量**的滑动窗口记忆：
 
@@ -101,7 +101,7 @@ ChatMemory chatMemory = TokenWindowChatMemory.builder()
 
 ---
 
-### 3️⃣ 在交互中使用 ChatMemory
+### 🔄 在交互中使用 ChatMemory
 
 你可以手动将消息添加到 `ChatMemory`，或结合 `ConversationalChain` / `AiServices` 自动管理：
 
@@ -131,7 +131,7 @@ Response<ChatResponse> response2 = model.generate(chatMemory.messages());
 
 很多时候我们需要复用一套提示结构，只替换部分变量（如用户问题、上下文片段等）。langchain4j 提供了 `PromptTemplate`、`ChatPromptTemplate` 来满足这种需求。
 
-### 1️⃣ 简单文本提示模板
+### 📝 简单文本提示模板
 
 ```java
 PromptTemplate promptTemplate = PromptTemplate.from(
@@ -150,7 +150,7 @@ String response = chatLanguageModel.generate(userMessage);
 
 ---
 
-### 2️⃣ 对话提示模板（ChatPromptTemplate）
+### 🎯 对话提示模板（ChatPromptTemplate）
 
 如果你需要按角色（System/User/Assistant）组织提示，可以使用 `ChatPromptTemplate`：
 
@@ -176,7 +176,7 @@ Response<ChatResponse> response = chatLanguageModel.generate(messages);
 
 langchain4j 提供了 `Chain` 接口以及多个开箱即用的实现，帮你把"记忆 + 提示 + 模型 + 输出解析"等步骤封装成一条可以复用的链。
 
-### 1️⃣ `ConversationalChain`
+### ⛓️ `ConversationalChain`
 
 适用于带记忆的多轮对话：
 
@@ -200,7 +200,7 @@ System.out.println("AI: " + answer2);
 
 ---
 
-### 2️⃣ `RetrievalChain` / `DefaultRetrievalChain`
+### 🔍 `RetrievalChain` / `DefaultRetrievalChain`
 
 用于结合向量检索做 **RAG**（检索增强生成），我们会在后面专门介绍。
 
@@ -210,7 +210,7 @@ System.out.println("AI: " + answer2);
 
 如果你希望以"调用 Java 接口方法"的方式和 **LLM** 交互，而不手动组织消息和记忆，可以使用 `AiServices`。
 
-### 1️⃣ 定义接口
+### 📖 定义接口
 
 ```java
 interface CustomerService {
@@ -220,7 +220,7 @@ interface CustomerService {
 
 ---
 
-### 2️⃣ 通过 `AiServices` 生成代理并使用
+### 🚀 通过 `AiServices` 生成代理并使用
 
 ```java
 ChatLanguageModel model = OpenAiChatModel.builder().apiKey(apiKey).build();
@@ -244,7 +244,7 @@ String reply2 = service.chat("算了，帮我转人工吧。");
 
 很多模型（如 **gpt-3.5-turbo**、**gpt-4**）支持 function calling / tool use。langchain4j 提供了多种方式让你把 Java 方法暴露给模型调用。
 
-### 1️⃣ 使用 `@Tool` 注解
+### 🌦️ 使用 `@Tool` 注解
 
 ```java
 class WeatherTools {
@@ -263,9 +263,9 @@ class WeatherTools {
 
 ---
 
-### 2️⃣ 在交互中让模型选择并执行工具
+### ⚙️ 在交互中让模型选择并执行工具
 
-#### 方式一：使用 `ChatLanguageModel` + `ToolSpecification`
+#### 🔗 方式一：使用 `ChatLanguageModel` + `ToolSpecification`
 
 ```java
 ChatLanguageModel model = OpenAiChatModel.builder().apiKey(apiKey).build();
@@ -296,7 +296,7 @@ if (aiMessage.hasToolExecutionRequests()) {
 
 ---
 
-#### 方式二：使用 `AiServices` + `@Tool`，自动处理
+#### 💡 方式二：使用 `AiServices` + `@Tool`，自动处理
 
 ```java
 interface WeatherAssistant {

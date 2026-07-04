@@ -1,11 +1,11 @@
 ---
-date : '2026-06-27T17:18:00+08:00'
-draft : false
-title : 'Claude Code 最佳实践'
-image : ""
-categories : ["AI Coding"]
-tags : []
-description : "整理Claude Code的实用技巧与最佳实践，覆盖安装配置、核心命令、CLAUDE.md记忆、Subagents、MCP扩展等高频使用场景"
+date: '2026-06-27T17:18:00+08:00'
+draft: false
+title: 'Claude Code 最佳实践'
+image: ""
+categories: ["AI Coding"]
+tags: []
+description: "整理Claude Code的实用技巧与最佳实践，覆盖安装配置、核心命令、CLAUDE.md记忆、Subagents、MCP扩展等高频使用场景"
 ---
 
 ## 🧠 什么是 Claude Code
@@ -18,9 +18,9 @@ Claude Code 是 Anthropic 推出的**终端优先（Terminal-First）的 AI 编�
 
 - **Agent 而非补全**：模型不只生成代码片段，而是会主动规划、调用工具、执行命令、回看结果。
 - **终端即界面**：所有交互都发生在命令行中，没有额外的 IDE 锁定，跨编辑器、跨语言、跨项目通用。
-- **上下文即工程**：通过 `CLAUDE.md`、Subagents、Skills、MCP 等机制，把项目的“隐性知识”显性化喂给模型。
+- **上下文即工程**：通过 `CLAUDE.md`、Subagents、Skills、MCP 等机制，把项目的”隐性知识”显性化喂给模型。
 
-### ⚖️ 与传统 AI 编程助手的区别
+### 📊 与传统 AI 编程助手的区别
 
 | 维度 | 传统 Copilot | Claude Code |
 |------|--------------|-------------|
@@ -50,6 +50,8 @@ claude
 
 启动后会引导你完成 OAuth 登录，登录成功后即可在当前目录下使用。
 
+---
+
 ### 🎛️ 基础配置
 
 Claude Code 的配置主要围绕三件事：
@@ -75,7 +77,7 @@ claude config set model claude-opus-4
 
 ## ⌨️ 核心命令与快捷键
 
-### 🔄 常用斜杠命令
+### 🎮 常用斜杠命令
 
 Claude Code 内置了一组以 `/` 开头的命令，覆盖日常高频操作：
 
@@ -108,15 +110,18 @@ claude --plan "重构用户模块的权限校验逻辑"
 
 ## 📁 CLAUDE.md 项目记忆
 
-`CLAUDE.md` 是 Claude Code 的**项目级记忆文件**，相当于给模型的一份“新员工入职手册”。每次会话开始时，它的内容会自动注入到上下文。
+---
+
+`CLAUDE.md` 是 Claude Code 的**项目级记忆文件**，相当于给模型的一份”新员工入职手册”。每次会话开始时，它的内容会自动注入到上下文。
 
 ### 🗂️ 分层记忆
+
 记忆文件分三层：
 - 根目录的 `CLAUDE.md`：项目级通用规则
 - 子目录的 `CLAUDE.md`：模块级特殊约定（模型就近加载）
 - 全局的 `~/.claude/CLAUDE.md`：个人偏好（跨项目生效）
 
-```text
+```bash
 my-project/
 ├── CLAUDE.md              # 项目级
 ├── pkg/
@@ -125,9 +130,11 @@ my-project/
 │   └── service/
 │       └── CLAUDE.md      # 业务层特殊规范
 ```
-### 🧩 记忆文件的最佳实践
 
-#### 💰 复利工程
+### 🧩 最佳实践
+
+#### 📈 复利工程
+
 几乎每个教程都会提到，`CLAUDE.md` ，但多数人把它写成了一篇又臭又长的说明文档，塞满了废话
 Anthropic 内部团队分享过，他们认为 `CLAUDE.md` 最佳实践是：每次Claude犯了一个错误，都要记录在 `CLAUDE.md` 中。不是人工维护，而是模型自己记录。每次纠正错误，最后加一句
 ```text
@@ -135,21 +142,27 @@ Anthropic 内部团队分享过，他们认为 `CLAUDE.md` 最佳实践是：每
 ```
 Claude 写给自己看的建议，它自己最明白如果遵守。
 
-#### 🧹 定期更新瘦身
-Claude.md要定期瘦身。写了三个月，其中可能有很多过时的规则，可以隔几周让Claude帮你review一篇，删除掉不再使用的规则。保持精简。这个文件每个会话都会加载，越短越好。
+#### 🔍 定期更新瘦身
 
-- **保持简洁**：只写“必须知道”的东西，过长的 `CLAUDE.md` 会挤占 Token
-- **分模块组织**：用清晰的二级标题区分“构建命令”、“代码规范”、“禁止事项”
+Claude.md 要定期瘦身。写了三个月，其中可能有很多过时的规则，可以隔几周让Claude帮你review一遍，删除掉不再使用的规则。保持精简。这个文件每个会话都会加载，越短越好。
+
+- **保持简洁**：只写”必须知道”的东西，过长的 `CLAUDE.md` 会挤占 Token
+- **分模块组织**：用清晰的二级标题区分”构建命令”、”代码规范”、”禁止事项”
 - **定期更新**：项目演进时同步更新，否则模型会按过时规则办事
 - **避免敏感信息**：不要把密钥、Token、内部域名写进去
 
+---
+
 ## ⚙️ Hook 的最佳实践
+
+---
+
 CLAUDE.md本质上只是建议，Claude大多数时候遵守，但是他不是强制的。Hooks是强制的。
 hook真正的价值在于控制Claude的行为，这是传统工具无法做到的。
 
 hooks最优价值的用法有以下几点
 
-### 🎯 使用 SessionStart 动态加载 skill
+### 🎪 动态加载 Skill
 
 Claude Code 的 skill 系统有一个字符预算，默认是上下文窗口的 2%（大约 16,000 字符）。所有 skill 的描述信息需要塞进这个预算里，Claude 才知道有哪些 skill 可以用。当你装的 skill 越来越多，超出预算的 skill 就会被静默丢弃——你以为装了，其实 Claude 根本看不见。跑 /context 可以看到被排除的 skill 有哪些。
 
@@ -160,7 +173,10 @@ Claude Code 的 skill 系统有一个字符预算，默认是上下文窗口的 
 ---
 
 ## 🌀 并行工作
+
 先说一个反直觉的情况：Anthropic 内部团队分享过，他们认为Claude Code 最大的生产力提升来自同时开3-5个会话并行干活
+
+### 🔄 使用 Worktree 隔离工作
 
 具体操作是用git worktree。你可以直接在命令行输入
 ```bash
@@ -182,11 +198,15 @@ Desktop 版本内置了一个浏览器，能自动启动和测试 Web 服务器�
 
 还有个 /simplify 命令，在改完代码之后跑一下，它会启动多个并行 agent，从代码复用、质量、效率、规范合规几个维度同时审查你刚改的代码。一个命令完成一轮 code review。
 
-更高阶的验证方式：让 Claude 自己质疑自己。做完研究或分析之后，告诉它：
+更高阶的验证方式：让 Claude 自己质疑自己。做完研究或分析之后，告诉它："用对立的观点重新评估一遍结果，找出可能的漏洞"。Claude 会启动批判性思维，自己推翻自己的结论，最后给出更稳健的答案。这比你手动 review 一遍快得多，而且能抓到隐藏的假设。
+
+---
 
 ## 🤖 Subagents 分工协作
 
 当一个任务涉及多个领域（前端 + 后端 + 数据库 + 测试）时，可以让 Claude Code 启动**多个 Subagent** 并行处理：Subagent 的本质是上下文隔离。主 agent 处理核心逻辑，子 agent 负责具体的子任务，做完把结果交回来。主 agent 的上下文窗口保持干净，不会被大量细节信息污染。
+
+### 🚀 基本用法
 
 最直接的用法：在你的 prompt 后面加一句 "use subagents"，Claude 就会自动把任务拆分成多个子任务并行处理。
 
@@ -197,7 +217,11 @@ claude "为这个新功能补全前后端实现、数据库迁移脚本和单测
 ```
 你也可以精细控制。在 .claude/agents/ 目录下创建 .md 文件来定义专属 agent：每个 agent 可以配置独立的名称、颜色、可用工具、权限模式、甚至使用不同的模型。跑 /agents 就能看到管理界面。
 
+### 💼 实战场景
+
 一个实战场景：PR 提交后，自动触发一组 agent，分别检查逻辑错误、安全漏洞、性能回退，然后各自贴出 inline 评论。Anthropic 内部就是这么搞的——代码产出上去了，review 反而成了瓶颈，于是他们把 review 也自动化了。
+
+### 🏗️ Worktree 隔离 Agent
 
 还有一种玩法叫 worktree agent。在 agent 的 frontmatter 里加上 isolation: worktree：
 
@@ -218,9 +242,12 @@ isolation: worktree
 10 个 agent 同时在 10 个隔离目录里干活，互不干扰。大规模重构从噩梦变成了一杯咖啡的事。
 
 ---
+
 ## 🔌 MCP 与扩展能力
 
 **MCP（Model Context Protocol）** 是 Claude Code 连接外部工具和数据源的标准协议。通过 MCP，模型可以读写数据库、查询 GitHub、调用内部 API、操作 Figma 等。
+
+### 📦 常见服务器
 
 常见的高频 MCP 服务器：
 
@@ -229,6 +256,8 @@ isolation: worktree
 - **PostgreSQL / MySQL**：直接查询开发库
 - **Figma**：读取设计稿
 - **Slack / Notion**：读取团队知识库
+
+### 🔑 基本操作
 
 ```bash
 # 添加一个 MCP 服务器
@@ -250,12 +279,14 @@ claude "查一下 users 表里最近 7 天注册量最高的 10 个城市"
 
 | 陷阱 | 表现 | 建议 |
 |------|------|------|
-| **上下文过载** | 模型开始“失忆”，理解错需求 | 用 `/compact` 压缩，定期 `/clear` 开启新对话 |
+| **上下文过载** | 模型开始”失忆”，理解错需求 | 用 `/compact` 压缩，定期 `/clear` 开启新对话 |
 | **指令过宽** | 模型改了不该改的文件 | 任务要具体，限定文件范围；先 Plan 再执行 |
 | **盲目信任** | 模型生成了看起来对、实际有 bug 的代码 | **必须 review**，跑测试；不要跳过这一步 |
 | **忽视 Git** | 改动后无法回滚 | 重要操作前先 `git commit` 留个回滚点 |
 | **MCP 误用** | 模型意外删了生产数据 | MCP 服务器只连开发环境，生产操作走人工 |
-| **忽略 CLAUDE.md** | 模型每次都“重新学”规范 | 团队约定写进 `CLAUDE.md`，让规则自动生效 |
+| **忽略 CLAUDE.md** | 模型每次都”重新学”规范 | 团队约定写进 `CLAUDE.md`，让规则自动生效 |
+
+### 📌 黄金法则
 
 三条黄金法则：
 
@@ -282,6 +313,5 @@ Claude Code 的核心价值，是把 AI 从“代码生成器”升级为“能�
 **参考资料：**
 
 - [Claude Code 官方文档](https://code.claude.com/docs)
-- [Claude Code 官方文档](https://code.claude.com/docs/zh-CN/overview)
 - [Model Context Protocol 官方仓库](https://modelcontextprotocol.io/)
 - [Anthropic 工程博客：Building effective agents](https://www.anthropic.com/engineering/building-effective-agents)

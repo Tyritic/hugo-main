@@ -9,26 +9,26 @@ description : "手写笔记的转换"
 math : true
 ---
 
-## 📊 一维数组的声明与创建
+## 📚 一维数组的声明与创建
 
-### 📊 声明数组
+### 🔍 声明数组
 
 ```java
 ElementType[] array_name; // 一维数组
 ElementType[][] array_name; // 二维数组
 ```
 
-### 📊 创建数组
+### 🛠️ 创建数组
 
- 除非数组被创建否则不能分配任何元素
+除非数组被创建否则不能分配任何元素
 
 ```java
 Array_name=new ElementType[size];
 ```
 
-### 📊 初始化数组
+### 📖 初始化数组
 
-#### 💡 静态初始化
+#### 🧪 静态初始化
 
 指定数组内的元素而不指定数组的长度
 
@@ -48,7 +48,7 @@ ElementType[]array_name=new ElementType[size];
 
 ---
 
-## 📊 获取一维数组长度
+## 📏 获取一维数组长度
 
 ```java
 int length=array_name.length;
@@ -56,7 +56,7 @@ int length=array_name.length;
 
 ---
 
-## 📊 访问一维数组元素
+## 🎯 访问一维数组元素
 
 通过数组下标访问，数组下标从0开始
 
@@ -73,9 +73,9 @@ int length=array_name.length;
 
 ---
 
-## 📊 一维数组的处理
+## 🏗️ 一维数组的处理
 
-### 📊 遍历数组
+### 🔄 遍历数组
 
 不通过数组下标可以完成数组的遍历
 
@@ -86,7 +86,7 @@ for(数据类型 引用名:数组名)
 }
 ```
 
-### 📊 复制数组
+### 💾 复制数组
 
 - 使用`for`循环/`for-each`循环逐一复制元素
 
@@ -99,8 +99,6 @@ for(数据类型 引用名:数组名)
   // length：决定复制数组的元素个数
   ```
 
-  
-
   {{<notice tip>}}
 
   数组的复制不能简单使用赋值号，赋值号只是将引用的地址值赋值，此时两个变量指向同一个数组
@@ -109,33 +107,28 @@ for(数据类型 引用名:数组名)
 
 ---
 
-## 📚 可变长参数列表
+## 📝 可变长参数列表
 
 可以将类型相同但是数目可变的参数作为方法的形参
 
-### 📌 语法形式
+### 🔧 语法形式
 
 ```java
 TypeName... parameterName
 ```
 
-
-
-### 📌 示例代码
+### 🧪 示例代码
 
 ```java
 // 定义一个带有可变参数的方法
-    public static void printAll(String... strings) {
-        for (String s : strings) {
-            System.out.println(s);
-        }
+public static void printAll(String... strings) {
+    for (String s : strings) {
+        System.out.println(s);
     }
-
+}
 ```
 
-
-
-### 📌 注意事项
+### ⚠️ 注意事项
 
 - 可变参数必须是方法参数列表中的最后一个参数。
 - 一个方法只能有一个可变参数。
@@ -144,17 +137,15 @@ TypeName... parameterName
 
 ---
 
-## 📊 二维数组的声明和创建
+## 🧩 二维数组的声明和创建
 
-### 📊 初始化二维数组
-
-#### 💡 静态初始化
+### 🔨 静态初始化
 
 ```java
 ElementType[][]array_name=new ElementType[][]{{var1,var2,..varN},{var1,var2,..varN}};
 ```
 
-#### 💡 动态初始化
+### 🔄 动态初始化
 
 ```java
 ElementType[][]array_name=new ElementType[m][n];
@@ -165,7 +156,7 @@ ElementType[][]array_name=new ElementType[m][n];
 
 ---
 
-## 📊 二维数组的存储方式
+## 📈 二维数组的存储方式
 
 二维数组本质上是一个一维数组，这个一维数组的存储元素是其他一维数组的地址值
 
@@ -185,7 +176,7 @@ int[][]arr={{11,22},{33,44}};
 
 ---
 
-## 📊 访问二维数组元素
+## 🖥️ 访问二维数组元素
 
 ```java
 array_name[m][n];
@@ -196,7 +187,7 @@ array_name[m][n];
 
 ---
 
-## 📊 获取二维数组的长度
+## 📏 获取二维数组的长度
 
 对应二维数组`array_name[m][n]`
 

@@ -9,7 +9,7 @@ tags : ["Web开发框架"]
 description : "SpringBoot框架中对JavaWeb三大组件的集成"
 ---
 
-## ☕ JavaWeb的三大组件
+## 🧠 JavaWeb的三大组件
 
 ### 🚀 Servlet
 
@@ -19,7 +19,7 @@ Servlet是Java Servlet的简称，称为小服务程序或服务连接器，用J
 
 ---
 
-#### 📋 作用：
+#### 📖 作用
 
 - 接收请求数据
 - 处理请求
@@ -27,7 +27,7 @@ Servlet是Java Servlet的简称，称为小服务程序或服务连接器，用J
 
 ---
 
-#### 💻 使用方法
+#### 💡 使用方法
 
 - 实现javax.servlet.Servlet接口；
 - 继承javax.servlet.GenericServlet类；
@@ -35,7 +35,7 @@ Servlet是Java Servlet的简称，称为小服务程序或服务连接器，用J
 
 ---
 
-#### ⚙️ 工作原理
+#### 🧩 工作原理
 
 Servlet接口定义了Servlet与servlet容器之间的契约。这个契约是：Servlet容器将Servlet类载入内存，并产生Servlet实例和调用它具体的方法。但是要注意的是，在一个应用程序中，每种Servlet类型只能有一个实例。
 
@@ -47,14 +47,14 @@ ServletRequest中封装了当前的Http请求，因此，开发人员不必解�
 
 ---
 
-#### 🔄 生命周期
+#### ⚙️ 生命周期
 
 - init( ),当Servlet第一次被请求时，Servlet容器就会开始调用这个方法来初始化一个Servlet对象出来，但是这个方法在后续请求中不会在被Servlet容器调用，就像人只能"出生"一次一样。我们可以利用init（ ）方法来执行相应的初始化工作。调用这个方法时，Servlet容器会传入一个ServletConfig对象进来从而对Servlet对象进行初始化。
 - service( )方法，每当请求Servlet时，Servlet容器就会调用这个方法。就像人一样，需要不停的接受老板的指令并且"工作"。第一次请求时，Servlet容器会先调用init( )方法初始化一个Servlet对象出来，然后会调用它的service( )方法进行工作，但在后续的请求中，Servlet容器只会调用service方法了。
 - destory,当要销毁Servlet时，Servlet容器就会调用这个方法，就如人一样，到时期了就得死亡。在卸载应用程序或者关闭Servlet容器时，就会发生这种情况，一般在这个方法中会写一些清除代码。
 
 ```java
-public class MyFirstServlrt implements Servlet {
+public class MyFirstServlet implements Servlet {
  
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
@@ -82,12 +82,12 @@ public class MyFirstServlrt implements Servlet {
     public void destroy() {
         System.out.println("Servlet正在销毁");
     }
-}      
+}
 ```
 
 ---
 
-#### 📥 ServletRequest接口
+#### 🔍 ServletRequest接口
 
 Servlet容器对于接受到的每一个Http请求，都会创建一个ServletRequest对象，并把这个对象传递给Servlet的Sevice( )方法。其中，ServletRequest对象内封装了关于这个请求的许多详细信息。
 
@@ -233,7 +233,7 @@ ServletOutputStream getOutputStream();//获得字节流，通过该字节流的w
 
 ---
 
-### 🛡️ Filter
+### 🔧 Filter
 
 参见先前博客 [Filter](https://tyritic.github.io/p/filter/)
 
@@ -241,7 +241,7 @@ ServletOutputStream getOutputStream();//获得字节流，通过该字节流的w
 
 ### 👂 Listener
 
-#### 📋 概述
+#### 🔍 概述
 
 监听器就是监听某个对象的状态变化的组件，监听web应用中某些对象、信息的创建、销毁、增加，修改，删除等动作的发生，然后作出相应的响应处理
 
@@ -255,7 +255,7 @@ ServletOutputStream getOutputStream();//获得字节流，通过该字节流的w
    public class MyListener implements ServletContextListener {
        @Override
        public void contextInitialized(ServletContextEvent sce){
-           System.out.println("Servlet上下文---&gt;当前web项目启动");
+           System.out.println("Servlet上下文---当前web项目启动");
        }
        @Override
        public void contextDestroyed(ServletContextEvent sce){
@@ -268,23 +268,22 @@ ServletOutputStream getOutputStream();//获得字节流，通过该字节流的w
 
 ---
 
-## 🚀 SpringBoot对三大组件的集成
+## 🏗️ SpringBoot对三大组件的集成
 
 SpringBoot中内嵌的Servlet容器是Tomcat服务器
 
 ---
 
-### ⚙️ 嵌入式Servlet容器配置修改
+### 🔧 嵌入式Servlet容器配置修改
 
 - 方法一：通过全局配置文件Application.yml修改
 
   - 可以通过server.xxx 来进行web服务配置， 没有带服务器名称的则是通用配置,通过带了具体的服务器名称则是单独对该服务器进行设置，比如server.tomcat.xxx 就是专门针对tomcat的配置,具体配置参见[SpringBoot官方文档](https://springdoc.cn/spring-boot/application-properties.html#appendix.application-properties.server)
 
-    ```yml
+    ```yaml
     server:
-    	port: 8080
-    	tomcat:
-    		
+      port: 8080
+      tomcat:
     ```
 
 - 方法二：通过注册一个实现 `WebServerFactoryCustomizer` 接口的Spring Bean
@@ -293,15 +292,15 @@ SpringBoot中内嵌的Servlet容器是Tomcat服务器
   import org.springframework.boot.web.server.WebServerFactoryCustomizer;
   import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
   import org.springframework.stereotype.Component;
-  
+
   @Component
-  public class MyWebServerFactoryCustomizer implements WebServerFactoryCustomizer&lt;ConfigurableServletWebServerFactory&gt; {
-  
+  public class MyWebServerFactoryCustomizer implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
+
       @Override
       public void customize(ConfigurableServletWebServerFactory server) {
           server.setPort(9000);
       }
-  
+
   }
   ```
 
@@ -319,11 +318,11 @@ SpringBoot中内嵌的Servlet容器是Tomcat服务器
     ```java
     @WebServlet(name="HelloServlet",urlPatterns = "/HelloServlet")
     public class HelloServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	PrintWriter writer = resp.getWriter();
-    	writer.println("hello servlet!");
-     	}
+        @Override
+        protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+            PrintWriter writer = resp.getWriter();
+            writer.println("hello servlet!");
+        }
     }
     ```
 
@@ -337,42 +336,42 @@ SpringBoot中内嵌的Servlet容器是Tomcat服务器
     @SpringBootApplication
     @ServletComponentScan
     public class Application {
-         public static void main(String[] args) {
-         	SpringApplication.run(Application.class, args);
-         }
-    }	
+        public static void main(String[] args) {
+            SpringApplication.run(Application.class, args);
+        }
+    }
     ```
 
 - 方法二：SpringBoot提供的注册方法
 
   ```java
   package com.hzl.boot.config.filter;
-  
+
   import org.springframework.boot.web.servlet.FilterRegistrationBean;
   import org.springframework.context.annotation.Bean;
   import org.springframework.context.annotation.Configuration;
-  
+
   import javax.servlet.Filter;
-  
+
   /**
    * @description
    * @create: 2024-09-23 22:25
    **/
   @Configuration
   public class FilterRegistrationDemo {
-  
-  	@Bean
-  	public FilterRegistrationBean filterRegistrationBean(){
-  		FilterRegistrationBean&lt;Filter&gt; registrationBean = new FilterRegistrationBean&lt;&gt;();
-  		// 设置自己的过滤器
-  		registrationBean.setFilter(new MyFilter());
-  		// 设置自定义的拦截规则
-  		registrationBean.addUrlPatterns("/*");
-  		// 设置拦截器的顺序
-  		registrationBean.setOrder(1);
 
-  		return registrationBean;
-  	}
+      @Bean
+      public FilterRegistrationBean filterRegistrationBean(){
+          FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
+          // 设置自己的过滤器
+          registrationBean.setFilter(new MyFilter());
+          // 设置自定义的拦截规则
+          registrationBean.addUrlPatterns("/*");
+          // 设置拦截器的顺序
+          registrationBean.setOrder(1);
+
+          return registrationBean;
+      }
   }
   ```
 
@@ -382,7 +381,7 @@ SpringBoot中内嵌的Servlet容器是Tomcat服务器
 
 ---
 
-### 🔄 切换内嵌Servlet容器
+### ⚙️ 切换内嵌Servlet容器
 
 SpringBoot包含了对Tomcat,Jetty（Socket)等服务器的支持
 
@@ -391,32 +390,32 @@ SpringBoot包含了对Tomcat,Jetty（Socket)等服务器的支持
 1. 排除原有的tomcat依赖
 
    ```xml
-   &lt;dependency&gt;
-   	 &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-   	 &lt;artifactId&gt;spring‐boot‐starter‐web&lt;/artifactId&gt;
-   	 &lt;!‐‐1.排除tomcat‐‐&gt;
-   	 &lt;exclusions&gt;
-   		 &lt;exclusion&gt;
-   		 &lt;artifactId&gt;spring‐boot‐starter‐tomcat&lt;/artifactId&gt;
-   		 &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-   	 	 &lt;/exclusion&gt;
-   	 &lt;/exclusions&gt;
-   &lt;/dependency&gt;
+   <dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-web</artifactId>
+       <!-- 1.排除tomcat -->
+       <exclusions>
+           <exclusion>
+               <artifactId>spring-boot-starter-tomcat</artifactId>
+               <groupId>org.springframework.boot</groupId>
+           </exclusion>
+       </exclusions>
+   </dependency>
    ```
 
 2. 引入相关依赖
 
    ```xml
-   &lt;!‐‐2.依赖jetty --&gt;
-   &lt;dependency&gt;
-   	&lt;artifactId&gt;spring‐boot‐starter‐jetty&lt;/artifactId&gt;
-   	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-   &lt;/dependency&gt;
-   
-   &lt;!‐‐3.依赖undertow ‐‐&gt;
-   &lt;dependency&gt;
-   	&lt;artifactId&gt;spring‐boot‐starter‐undertow&lt;/artifactId&gt;
-   	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-   &lt;/dependency&gt;
+   <!-- 2.依赖jetty -->
+   <dependency>
+       <artifactId>spring-boot-starter-jetty</artifactId>
+       <groupId>org.springframework.boot</groupId>
+   </dependency>
+
+   <!-- 3.依赖undertow -->
+   <dependency>
+       <artifactId>spring-boot-starter-undertow</artifactId>
+       <groupId>org.springframework.boot</groupId>
+   </dependency>
    ```
 

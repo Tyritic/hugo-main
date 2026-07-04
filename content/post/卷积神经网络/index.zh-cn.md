@@ -31,7 +31,7 @@ math : true
   <img src="1686919918947.jpeg" alt="网络结构" width="82%">
 </div>
 
-一个卷积神经网络主要:以下 5 层组成：
+一个卷积神经网络主要由以下 5 层组成：
 
 - 数据输入层 / Input layer
 - 卷积计算层 / CONV layer

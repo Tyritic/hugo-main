@@ -46,7 +46,7 @@ class Solution {
 
 ### 📌 LeetCode 509. 斐波那契数
 
-#### 📖 题目描述
+#### 📋 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/fibonacci-number/)
 
@@ -84,7 +84,7 @@ $$
 
 - 0 <= n <= 30
 
-#### 💡 思路解析
+#### 🔍 思路解析
 
 - **确定dp数组（dp table）以及下标的含义**
 
@@ -130,9 +130,9 @@ class Solution {
 }
 ```
 
-### 📌 LeetCode 70. 爬楼梯
+### 🧗 LeetCode 70. 爬楼梯
 
-#### 📖 题目描述
+#### 📄 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/climbing-stairs/)
 
@@ -159,7 +159,7 @@ class Solution {
   - 1 阶 + 2 阶
   - 2 阶 + 1 阶
 
-#### 💡 思路解析
+#### 🧭 思路解析
 
 - **确定dp数组以及下标的含义**
 
@@ -204,9 +204,9 @@ class Solution {
 }
 ```
 
-### 📌 LeetCode 746. 使用最小花费爬楼梯
+### 💰 LeetCode 746. 使用最小花费爬楼梯
 
-#### 📖 题目描述
+#### 📑 题目描述
 
 [力扣题目链接](https://leetcode.cn/problems/min-cost-climbing-stairs/)
 
@@ -217,12 +217,10 @@ class Solution {
 请你计算并返回达到楼梯顶部的最低花费。
 
 <div align="center">
-<div align="center">
   <img src="20221031170131.png" alt="使用最小花费爬楼梯示例图" width="82%">
 </div>
-</div>
 
-#### 💡 思路解析
+#### 🎯 思路解析
 
 - **确定dp数组以及下标的含义**
 
@@ -272,9 +270,9 @@ class Solution {
 }
 ```
 
-### 📌 LeetCode 343. 整数拆分
+### ✂️ LeetCode 343. 整数拆分
 
-#### 📖 题目描述
+#### 📃 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/integer-break/)
 
@@ -293,7 +291,7 @@ class Solution {
 - 解释: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36。
 - 说明: 你可以假设 n 不小于 2 且不大于 58。
 
-#### 💡 思路解析
+#### ⚙️ 思路解析
 
 - **确定dp数组（dp table）以及下标的含义**
 
@@ -342,9 +340,9 @@ class Solution {
 }
 ```
 
-### 📌 LeetCode 96. 不同的二叉搜索树
+### 🌳 LeetCode 96. 不同的二叉搜索树
 
-#### 📖 题目描述
+#### 📝 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/unique-binary-search-trees/)
 
@@ -353,12 +351,10 @@ class Solution {
 示例:
 
 <div align="center">
-<div align="center">
   <img src="20210113161941835.png" alt="不同的二叉搜索树示例图" width="82%">
 </div>
-</div>
 
-#### 💡 思路解析
+#### 🔎 思路解析
 
 - **确定dp数组（dp table）以及下标的含义**
 
@@ -414,9 +410,9 @@ class Solution {
 
 ## 📐 二维动态规划
 
-### 📌 LeetCode 62. 不同路径
+### 🛤️ LeetCode 62. 不同路径
 
-#### 📖 题目描述
+#### 📘 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/unique-paths/)
 
@@ -429,9 +425,7 @@ class Solution {
 示例 1：
 
 <div align="center">
-<div align="center">
   <img src="20210110174033215.png" alt="不同路径示例图" width="82%">
-</div>
 </div>
 
 - 输入：m = 3, n = 7
@@ -463,7 +457,7 @@ class Solution {
 - 1 <= m, n <= 100
 - 题目数据保证答案小于等于 2 * 10^9
 
-#### 💡 思路解析
+#### 🧮 思路解析
 
 - **确定dp数组（dp table）以及下标的含义**
 
@@ -512,9 +506,9 @@ class Solution {
 }
 ```
 
-### 📌 LeetCode 63. 不同路径II
+### 🚧 LeetCode 63. 不同路径II
 
-#### 📖 题目描述
+#### 📙 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/unique-paths-ii/)
 
@@ -525,9 +519,7 @@ class Solution {
 现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？
 
 <div align="center">
-<div align="center">
   <img src="20210111204901338.png" alt="不同路径II示例图" width="82%">
-</div>
 </div>
 
 网格中的障碍物和空位置分别用 1 和 0 来表示。
@@ -535,9 +527,7 @@ class Solution {
 示例 1：
 
 <div align="center">
-<div align="center">
   <img src="20210111204939971.png" alt="不同路径II示例图2" width="82%">
-</div>
 </div>
 
 - 输入：obstacleGrid = [[0,0,0],[0,1,0],[0,0,0]]
@@ -550,9 +540,7 @@ class Solution {
 示例 2：
 
 <div align="center">
-<div align="center">
   <img src="20210111205857918.png" alt="不同路径II示例图3" width="82%">
-</div>
 </div>
 
 - 输入：obstacleGrid = [[0,1],[0,0]]
@@ -565,7 +553,7 @@ class Solution {
 - 1 <= m, n <= 100
 - obstacleGrid[i][j] 为 0 或 1
 
-#### 💡 思路解析
+#### 🔬 思路解析
 
 与上一题的大体思路相同，只是在初始化和遍历过程略有不同。
 
@@ -614,7 +602,7 @@ class Solution {
 
 ## 🎒 0-1背包问题
 
-### 📖 题目描述
+### 📕 题目描述
 
 有n件物品和一个最多能背重量为w 的背包。第i件物品的重量是weight[i]，得到的价值是value[i] 。**每件物品只能用一次**，求解将哪些物品装入背包里物品价值总和最大。
 
@@ -767,9 +755,9 @@ public class Main{
 
 板子题：https://kamacoder.com/problempage.php?pid=1046
 
-#### 📌 LeetCode 416. 分割等和子集
+#### 🎯 LeetCode 416. 分割等和子集
 
-**📖 题目描述**
+**📊 题目描述**
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/partition-equal-subset-sum/)
 
@@ -841,9 +829,9 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 494. 目标和
+#### 🎪 LeetCode 494. 目标和
 
-**📖 题目描述**
+**📈 题目描述**
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/target-sum/)
 
@@ -919,9 +907,9 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 474. 一和零
+#### 🔢 LeetCode 474. 一和零
 
-**📖 题目描述**
+**📋 题目描述**
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/ones-and-zeroes/)
 
@@ -998,7 +986,7 @@ class Solution {
 
 ## 🎁 完全背包问题
 
-### 📖 题目描述
+### 📗 题目描述
 
 有n件物品和一个最多能背重量为w 的背包。第i件物品的重量是weight[i]，得到的价值是value[i] 。**每件物品可以使用无数次**，求解将哪些物品装入背包里物品价值总和最大。
 
@@ -1126,9 +1114,9 @@ public class Main{
 
 ### 📚 经典例题
 
-#### 📌 LeetCode 518. 零钱兑换II
+#### 🪙 LeetCode 518. 零钱兑换II
 
-**📖 题目描述**
+**📄 题目描述**
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/coin-change-ii/)
 
@@ -1204,9 +1192,9 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 377. 组合总和IV
+#### 🧩 LeetCode 377. 组合总和IV
 
-**📖 题目描述**
+**📃 题目描述**
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/combination-sum-iv/)
 
@@ -1265,9 +1253,9 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 322. 零钱兑换
+#### 💵 LeetCode 322. 零钱兑换
 
-**📖 题目描述**
+**📑 题目描述**
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/coin-change/)
 
@@ -1347,9 +1335,9 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 279. 完全平方数
+#### ⬛ LeetCode 279. 完全平方数
 
-**📖 题目描述**
+**📚 题目描述**
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/perfect-squares/)
 
@@ -1413,7 +1401,7 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 139. 单词拆分
+#### 📚 LeetCode 139. 单词拆分
 
 **📖 题目描述**
 
@@ -1494,7 +1482,7 @@ class Solution {
 
 ## 🏠 打劫问题
 
-### 📌 LeetCode 198. 打家劫舍
+### 🏠 LeetCode 198. 打家劫舍
 
 #### 📖 题目描述
 
@@ -1519,7 +1507,7 @@ class Solution {
 - 0 <= nums.length <= 100
 - 0 <= nums[i] <= 400
 
-#### 💡 **思路解析**
+#### 📍 **思路解析**
 
 - 确定dp数组（dp table）以及下标的含义
   - **dp[i]：考虑下标[0-i]以内的房屋，最多可以偷窃的金额为dp[i]**。
@@ -1558,7 +1546,7 @@ class Solution {
 }
 ```
 
-### 📌 LeetCode 213. 打家劫舍II
+### 🏘️ LeetCode 213. 打家劫舍II
 
 #### 📖 题目描述
 
@@ -1586,7 +1574,7 @@ class Solution {
 - 1 <= nums.length <= 100
 - 0 <= nums[i] <= 1000
 
-#### 💡 思路解析
+#### 🗺️ 思路解析
 
 对于一个数组，成环的话主要有如下三种情况：
 
@@ -1627,7 +1615,7 @@ class Solution {
 
 ## 📈 股票问题
 
-### 📌 LeetCode 121. 买卖股票的最佳时机
+### 📈 LeetCode 121. 买卖股票的最佳时机
 
 #### 📖 题目描述
 
@@ -1648,7 +1636,7 @@ class Solution {
 - 输出：0
   解释：在这种情况下, 没有交易完成, 所以最大利润为 0。
 
-#### 💡 思路解析
+#### 🎓 思路解析
 
 - 确定dp数组以及下标的含义
   - dp[i][0] 表示第i天持有股票所得最多现金 
@@ -1695,7 +1683,7 @@ class Solution {
 }
 ```
 
-### 📌 LeetCode 122. 买卖股票的最佳时机II
+### 📊 LeetCode 122. 买卖股票的最佳时机II
 
 #### 📖 题目描述
 
@@ -1725,7 +1713,7 @@ class Solution {
 - 1 <= prices.length <= 3 * 10 ^ 4
 - 0 <= prices[i] <= 10 ^ 4
 
-#### 💡 思路解析
+#### 📗 思路解析
 
 与上一题只有递推公式不一样
 
@@ -1754,7 +1742,7 @@ class Solution {
 }
 ```
 
-### 📌 LeetCode 123. 买卖股票的最佳时机III
+### 💹 LeetCode 123. 买卖股票的最佳时机III
 
 #### 📖 题目描述
 
@@ -1783,7 +1771,7 @@ class Solution {
 - 1 <= prices.length <= 10^5
 - 0 <= prices[i] <= 10^5
 
-#### 💡 思路解析
+#### 🔑 思路解析
 
 关键在于至多买卖两次，这意味着可以买卖一次，可以买卖两次，也可以不买卖。
 
@@ -1863,7 +1851,7 @@ class Solution {
 }
 ```
 
-### 📌 LeetCode 188. 买卖股票的最佳时机IV
+### 🔄 LeetCode 188. 买卖股票的最佳时机IV
 
 #### 📖 题目描述
 
@@ -1888,7 +1876,7 @@ class Solution {
 - 0 <= prices.length <= 1000
 - 0 <= prices[i] <= 1000
 
-#### 💡 思路解析
+#### 🧠 思路解析
 
 - 确定dp数组以及下标的含义
   - 0 表示不操作
@@ -2010,7 +1998,7 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 673. 最长上升子序列的个数
+#### 🎲 LeetCode 673. 最长上升子序列的个数
 
 **📖 题目描述**
 
@@ -2090,7 +2078,7 @@ class Solution {
 
 ### 📏 最长连续上升子序列
 
-#### 📌 LeetCode 674. 最长上升连续序列
+#### 🔗 LeetCode 674. 最长上升连续序列
 
 **📖 题目描述**
 
@@ -2152,7 +2140,7 @@ class Solution {
 
 ### 📏 最长重复子数组
 
-#### 📌 LeetCode 718. 最长重复子数组
+#### 🔀 LeetCode 718. 最长重复子数组
 
 **📖 题目描述**
 
@@ -2214,7 +2202,7 @@ class Solution {
 
 ### 📏 最长公共子序列
 
-#### 📌 LeetCode 1143. 最长公共子序列
+#### 🤝 LeetCode 1143. 最长公共子序列
 
 **📖 题目描述**
 
@@ -2285,7 +2273,7 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 1035. 不相交的线
+#### 🖇️ LeetCode 1035. 不相交的线
 
 **📖 题目描述**
 
@@ -2303,9 +2291,7 @@ class Solution {
 以这种方法绘制线条，并返回可以绘制的最大连线数。
 
 <div align="center">
-<div align="center">
   <img src="2021032116363533.png" alt="不相交的线示例图" width="82%">
-</div>
 </div>
 
 **思路解析**
@@ -2340,7 +2326,7 @@ class Solution {
 
 ### 📚 最大子序和
 
-#### 📌 LeetCode 53. 最大子序和
+#### 🌊 LeetCode 53. 最大子序和
 
 **📖 题目描述**
 
@@ -2401,7 +2387,7 @@ class Solution {
 
 ### 📚 编辑距离问题
 
-#### 📌 LeetCode 392. 判断子序列
+#### 🎞️ LeetCode 392. 判断子序列
 
 **📖 题目描述**
 
@@ -2473,7 +2459,7 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 115. 不同的子序列
+#### 🎬 LeetCode 115. 不同的子序列
 
 **📖 题目描述**
 
@@ -2486,9 +2472,7 @@ class Solution {
 题目数据保证答案符合 32 位带符号整数范围。
 
 <div align="center">
-<div align="center">
   <img src="115.不同的子序列示例.jpg" alt="不同的子序列示例图" width="82%">
-</div>
 </div>
 
 提示：
@@ -2549,7 +2533,7 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 583. 两个字符串的删除操作
+#### ✏️ LeetCode 583. 两个字符串的删除操作
 
 **📖 题目描述**
 
@@ -2614,7 +2598,7 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 72. 编辑距离
+#### 🔧 LeetCode 72. 编辑距离
 
 **📖 题目描述**
 
@@ -2698,7 +2682,7 @@ class Solution {
 
 ### 🔤 回文子串问题
 
-#### 📌 LeetCode 647. 回文子串
+#### 🔤 LeetCode 647. 回文子串
 
 **📖 题目描述**
 
@@ -2768,7 +2752,7 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 5. 最长回文子串
+#### 💬 LeetCode 5. 最长回文子串
 
 **📖 题目描述**
 
@@ -2842,7 +2826,7 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 516. 最长回文子序列的长度
+#### 🎺 LeetCode 516. 最长回文子序列的长度
 
 **📖 题目描述**
 
@@ -2905,7 +2889,7 @@ class Solution {
 }
 ```
 
-#### 📌 LeetCode 132. 分割回文串II
+#### 🎪 LeetCode 132. 分割回文串II
 
 **📖 题目描述**
 

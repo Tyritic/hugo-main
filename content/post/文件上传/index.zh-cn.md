@@ -34,12 +34,12 @@ description : "项目中文件上传的实现"
 
 常见方法
 
-```java
+```
 - String getOriginalFilename(); //获取原始文件名
-- void transferTo(File dest); //将接牧的文件转存到磁盘文件中
+- void transferTo(File dest); //将接收的文件转存到磁盘文件中
 - long getSize(); //获取文件的大小，单位:字节
 - byte[] getBytes();//获取文件内容的字节数组
-- InputStream getinputStream(); //获取接收到的文件内容的输入流
+- InputStream getInputStream(); //获取接收到的文件内容的输入流
 ```
 
 具体实现
@@ -48,14 +48,15 @@ description : "项目中文件上传的实现"
 @RestController
 public class UploadController {
     @PostMapping("/upload")
-    public Result upload(MultipartFile image) throws IOException
+    public Result upload(MultipartFile image) throws IOException {
         //获取原始文件名
-		String originalFilename =image.getOriginalFilename():
-    	//构建新的文件名
-		String newfileName = UUID.,randomUUID.toString()+originalFilename.substring(originalFilename.lastindexOf("."));
-    //将文件保存在服务器端 E:/images目景下
-		image.transferTo(new File("E:/images/"+newFileName)):
-		return Result,success();
+        String originalFilename = image.getOriginalFilename();
+        //构建新的文件名
+        String newFileName = UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."));
+        //将文件保存在服务器端 E:/images目录下
+        image.transferTo(new File("E:/images/" + newFileName));
+        return Result.success();
+    }
 }
 ```
 
@@ -63,11 +64,11 @@ public class UploadController {
 
 在 **SpringBoot** 中，文件上传，默认单个文件允许最大大小为 **1M**。如果需要上传大文件，可以进行在 **application.yml** 如下配置:
 
-```yml
+```yaml
 spring:
-	servlet:
-		multipart.max-file-size=10MB #配置单个文件最大上传大小
-		max-request-size=100MB #配置单个请求最大上传大小(一次请求可以上传多个文件)
+  servlet:
+    multipart.max-file-size: 10MB #配置单个文件最大上传大小
+    max-request-size: 100MB #配置单个请求最大上传大小(一次请求可以上传多个文件)
 ```
 
 {{</notice>}}

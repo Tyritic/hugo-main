@@ -32,9 +32,9 @@ Go 官方对 `Channel` 的定义是：
 - **可缓冲**：有缓冲 `Channel` 可以在一定程度上解耦发送方和接收方。
 - **并发安全**：多个 `goroutine` 可以同时操作同一个 `Channel`。
 
-### 📖 Channel 与 CSP
+### 🔍 Channel 与 CSP
 
-`Channel` 背后对应的是 Go 一直强调的 **CSP（Communicating Sequential Processes）** 思想，也就是“通过通信共享内存，而不是通过共享内存来通信”。
+`Channel` 背后对应的是 Go 一直强调的 **CSP（Communicating Sequential Processes）** 思想，也就是”通过通信共享内存，而不是通过共享内存来通信”。
 
 从这个角度看，`goroutine` 更像独立执行的顺序进程，而 `Channel` 则是它们之间传递消息和同步状态的通信通道。这样设计有几个很直接的好处：
 
@@ -89,7 +89,7 @@ Go 官方对 `Channel` 的定义是：
 
 ---
 
-## 🔍 Channel 底层原理
+## 🔎 Channel 底层原理
 
 ### 🏗️ 底层数据结构
 
@@ -133,7 +133,7 @@ type hchan struct {
 - **`sendq` / `recvq`**：保存阻塞发送者和阻塞接收者。
 - **`lock`**：保证并发操作安全。
 
-### 🔎 等待队列与 `sudog`
+### 🎛 等待队列与 `sudog`
 
 阻塞中的 `goroutine` 不会直接挂在 `Channel` 上，而是会被封装成 `sudog` 节点，再进入 `sendq` 或 `recvq` 等待队列。
 
@@ -232,7 +232,7 @@ ch <- v
 v := <-ch
 ```
 
-### 🔍 判定读取
+### 🔮 判定读取
 
 当我们需要区分“读到的是零值”还是“`Channel` 已关闭”时，可以使用 `ok` 判断：
 
@@ -355,7 +355,7 @@ v=0
 
 ---
 
-## 🏗️ Channel 操作的底层原理
+## 🏛️ Channel 操作的底层原理
 
 ### 🧱 运行时初始化
 
@@ -569,7 +569,7 @@ func chanrecv(c *hchan, ep unsafe.Pointer, block bool) (selected, received bool)
 | **接收** | **打开但没有数据** | **阻塞** |
 | **接收** | **已关闭且数据已读空** | **读取到零值** |
 
-### 🔒 Channel 关闭流程
+### 🔓 Channel 关闭流程
 
 关闭 `Channel` 的语法很简单：
 
@@ -741,9 +741,9 @@ receive: 100
 
 ---
 
-## 🔐 Channel 与锁
+## 🎚️ Channel 与锁
 
-### 🛡️ 用 Channel 实现锁操作
+### 🛠️ 用 Channel 实现锁操作
 
 当缓冲区容量为 `1` 时，`Channel` 可以近似实现一个简化版互斥锁：
 
@@ -804,7 +804,7 @@ func main() {
 fatal error: all goroutines are asleep - deadlock!
 ```
 
-### 📋 常见死锁场景
+### 📑 常见死锁场景
 
 1. **无缓冲 `Channel` 单向阻塞**：
    - 主 `goroutine` 发送数据，但没有接收者。
@@ -837,7 +837,7 @@ func main() {
 - **使用超时控制**：通过 `select` 和 `time.After` 兜底。
 - **正确关闭 `Channel`**：让接收方有机会退出等待。
 
-### 🧠 Channel 为什么会引出内存泄漏
+### 💭 Channel 为什么会引出内存泄漏
 
 `Channel` 本身通常不是“泄漏对象”，更常见的问题是它把某个 `goroutine` 永久卡住，进而导致 **goroutine 泄漏**，最后表现成内存迟迟不释放。
 
@@ -901,23 +901,23 @@ func main() {
 - **存在 `default`**：执行 `default`。
 - **不存在 `default`**：当前 `goroutine` 阻塞。
 
-### 🔁 `select` 与 I/O 多路复用
+### 🔀 `select` 与 I/O 多路复用
 
 `select` 的思想与 Linux 中的 `select`、`poll`、`epoll` 类似，都是“一个执行流同时等待多个事件”。
 
-#### 🔄 传统阻塞 I/O
+#### 🌊 传统阻塞 I/O
 
 - **优点**：逻辑直观。
 - **缺点**：每个连接都需要独立线程，开销较大。
 
-#### ⚡ I/O 多路复用
+#### 💥 I/O 多路复用
 
 - **优点**：可以复用一个线程处理多个事件，资源利用率更高。
 - **缺点**：连接数少时，收益未必明显。
 
 Go 的 `select` 并不直接等同于内核 I/O 多路复用，但在思维模型上非常相似。
 
-### 📝 基本语法
+### ✏️ 基本语法
 
 ```go
 select {
@@ -939,7 +939,7 @@ default:
 - **超时控制**：配合 `time.After` 可实现超时退出。
 - **取消传播**：配合 `context.Done()` 可实现协程停止控制。
 
-### 📋 使用场景详解
+### 📍 使用场景详解
 
 #### 🚫 空 `select` 永久阻塞
 
@@ -957,7 +957,7 @@ func main() {
 fatal error: all goroutines are asleep - deadlock!
 ```
 
-#### ❗ 没有 `default` 且所有 `case` 都不可执行
+#### 🚨 没有 `default` 且所有 `case` 都不可执行
 
 ```go
 package main
@@ -1007,7 +1007,7 @@ func main() {
 default!!!
 ```
 
-#### 🎯 多个 `case` 加 `default`
+#### 🎪 多个 `case` 加 `default`
 
 ```go
 package main
@@ -1088,7 +1088,7 @@ case <-time.After(2 * time.Second):
 }
 ```
 
-### 🚀 非阻塞操作
+### ⚡ 非阻塞操作
 
 ```go
 select {
@@ -1099,13 +1099,13 @@ default:
 }
 ```
 
-### 📊 性能特点
+### 📈 性能特点
 
 - **随机重排**：运行时会对多个 `case` 做随机化处理，降低饥饿风险。
 - **只执行一个分支**：一次 `select` 最多执行一个就绪 `case`。
 - **天然适合并发控制**：特别适合超时、取消、优先级选择等场景。
 
-### ⚙️ `select` 的运行时实现
+### 🎬 `select` 的运行时实现
 
 在 runtime 层面，`select` 最终会落到 `selectgo`。编译器会先把每个 `case` 转成内部结构，再把这些结构交给运行时统一处理。
 
@@ -1135,7 +1135,7 @@ type scase struct {
 
 `Context` 常被用来传递取消信号、超时信息和请求范围数据，而它的取消机制底层就离不开 `Channel`。
 
-### 📋 `Done` 方法
+### 📚 `Done` 方法
 
 ```go
 type Context interface {
@@ -1148,7 +1148,7 @@ type Context interface {
 
 `Done()` 返回的是一个只读 `Channel`。当 `Context` 被取消或超时时，这个 `Channel` 会被关闭，所有监听 `<-ctx.Done()` 的 `goroutine` 都能立刻感知到。
 
-### 🛠️ 取消机制实现
+### ⚙️ 取消机制实现
 
 ```go
 func worker(ctx context.Context) {
@@ -1173,7 +1173,7 @@ func main() {
 }
 ```
 
-### 🔁 取消流程
+### ↩️ 取消流程
 
 1. **关闭 `done` `Channel`**。
 2. **唤醒所有监听该 `Channel` 的协程**。
@@ -1196,7 +1196,7 @@ case result := <-ch:
 
 ---
 
-## 📌 基本注意事项
+## 🎯 基本注意事项
 
 - **关闭未初始化的 `Channel` 会 `panic`**。
 - **同一个 `Channel` 只能关闭一次**。
@@ -1207,7 +1207,7 @@ case result := <-ch:
 
 ---
 
-## 📝 小结
+## 🖋️ 小结
 
 `Channel` 不只是一个“管道”，它其实是 Go 并发模型中最核心的抽象之一。理解 `Channel`，需要同时掌握三层内容：
 

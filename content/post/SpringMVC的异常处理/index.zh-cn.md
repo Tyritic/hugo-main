@@ -10,8 +10,6 @@ description : "项目中对于异常的处理办法"
 
 项目开发过程中会遇到异常问题。
 
----
-
 ## ⚙️ 全局异常处理器
 
 <div align="center">
@@ -62,9 +60,11 @@ public String handleUserNotFound(UserNotFoundException ex, Model model) {
 
 ## 🚨 全局异常
 
-在common包下定义基本异常BaseException，其余的异常为这个类的子类
+### 📖 定义基础异常类
 
-示例代码
+在 common 包下定义基本异常 BaseException，其余的异常为这个类的子类
+
+**示例代码**：
 
 ```java
 public class BaseException extends RuntimeException {

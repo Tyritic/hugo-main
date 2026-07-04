@@ -28,6 +28,8 @@ public @interface MyAnnotation {
 
 ## 🎯 注解的目标对象
 
+### 📋 ElementType 枚举值
+
 - **`ElementType.TYPE`**：类、接口（包括注解类型）或枚举。
 - **`ElementType.FIELD`**：字段（包括枚举常量）。
 - **`ElementType.METHOD`**：方法。
@@ -37,21 +39,29 @@ public @interface MyAnnotation {
 - **`ElementType.ANNOTATION_TYPE`**：注解类型。
 - **`ElementType.PACKAGE`**：包。
 
-定义在 `ElementType` 枚举中，使用元注解`@Target`指定目标对象
+### 🔍 元注解指定
+
+使用元注解 `@Target` 指定注解的目标对象，定义在 `ElementType` 枚举中
 
 ---
 
-## 🏷️ 注解的生命周期
+## ⏱️ 注解的生命周期
+
+### 🔄 RetentionPolicy 枚举值
 
 - **`RetentionPolicy.SOURCE`**：注解仅在源码中存在，编译时被丢弃。
 - **`RetentionPolicy.CLASS`**：注解存在于编译后的 `.class` 文件中，但运行时不可用。
 - **`RetentionPolicy.RUNTIME`**：注解在运行时可用，可以通过反射机制访问。
 
-定义在 `RetentionPolicy` 枚举中，使用元注解`@Retention`指定生命周期
+### 🛠️ 元注解指定
+
+使用元注解 `@Retention` 指定注解的生命周期，定义在 `RetentionPolicy` 枚举中
 
 ---
 
 ## 📌 示例
+
+### 💻 完整注解定义
 
 ```java
 @Retention(RetentionPolicy.RUNTIME)
@@ -60,6 +70,8 @@ public @interface JsonField {
     public String value() default "";
 }
 ```
+
+### ✅ 要点解析
 
 - JsonField 注解的生命周期是 RUNTIME，也就是运行时有效。
 - JsonField 注解装饰的目标是 FIELD，也就是针对字段的。

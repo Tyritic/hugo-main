@@ -13,9 +13,9 @@ math : true
 
 数组就是简单的哈希表，但是数组的大小是受限的。通常用于在字母计数问题中
 
-### 📚 经典例题
+### 📖 经典例题
 
-#### 🧪 LeetCode 242. 有效的字母异位词
+#### 💡 LeetCode 242. 有效的字母异位词
 
 题目描述
 
@@ -62,7 +62,7 @@ class Solution {
 }
 ```
 
-#### 🧪 LeetCode 383. 赎金信
+#### 🎯 LeetCode 383. 赎金信
 
 **题目描述**
 
@@ -113,7 +113,7 @@ class Solution {
 
 ### 📚 经典例题
 
-#### 🧪 LeetCode 349. 两个数组的交集
+#### 🔧 LeetCode 349. 两个数组的交集
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/intersection-of-two-arrays/)
 
@@ -159,7 +159,7 @@ class Solution {
 }
 ```
 
-#### 🧪 LeetCode 202. 快乐数
+#### ⚙️ LeetCode 202. 快乐数
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/happy-number/)
 
@@ -218,9 +218,9 @@ class Solution {
 
 ## 🔍 Map做哈希表
 
-### 📚 经典例题
+### 🧠 经典例题
 
-#### 🧪 LeetCode 49. 字母异位词分组
+#### 📐 LeetCode 49. 字母异位词分组
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/group-anagrams/description/)
 
@@ -292,7 +292,7 @@ class Solution {
 }
 ```
 
-#### 🧪 LeetCode 350. 两个数组的交集II
+#### 📊 LeetCode 350. 两个数组的交集II
 
 **题目描述**
 
@@ -369,7 +369,7 @@ class Solution {
 }
 ```
 
-#### 🧪 LeetCode 1. 两数之和
+#### 💻 LeetCode 1. 两数之和
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/two-sum/)
 
@@ -417,7 +417,7 @@ class Solution {
 }
 ```
 
-#### 🧪 LeetCode 454. 四数相加
+#### 🧮 LeetCode 454. 四数相加
 
 **题目描述**
 

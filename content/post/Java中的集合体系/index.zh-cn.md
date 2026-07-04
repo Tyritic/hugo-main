@@ -49,7 +49,7 @@ math : true
 - **`boolean addAll(Collection<? extends E> c)`** ：将指定集合中的所有元素添加到当前集合中
   - 如果当前集合因为某些原因没有改变（例如集合为空或元素没有添加成功），则返回 **`false`**，否则返回  **`true`**。
 
-### 📌 删除元素
+### 🗑️ 删除元素
 
 - **`void clear()`** ：移除集合中的所有元素，使集合为空。
 - **`boolean remove(Object o)`** ：从集合中移除指定的元素。
@@ -59,7 +59,7 @@ math : true
 - **`boolean retainAll(Collection<?> c)`** ：只保留集合中与指定集合相同的元素，移除其他元素。
   - 如果集合发生变化（即移除了某些元素），则返回 **`true`**；如果没有元素被移除，则返回 **`false`**。
 
-### 📌 判断元素
+### ❓ 判断元素
 
 - **`boolean contains(Object o)`** ：判断集合是否包含指定元素
   - 如果集合中包含该元素，返回 **`true`**；否则返回 **`false`**。
@@ -71,7 +71,7 @@ math : true
 
 ## 🔨 遍历方法
 
-### 📌 迭代器
+### 🔁 迭代器
 
 **`Iterator`** 是 Java 集合框架中用于遍历集合元素的接口，**允许开发者依次访问集合中的每一个元素，而不需要关心集合的具体实现**。它提供了一种统一的方式来遍历 **`List`**、**`Set`**  等集合类型，通常与 **`Collection`** 类接口一起使用。**`Iterator`** 只能单向遍历集合，不能向前遍历。
 
@@ -90,7 +90,7 @@ math : true
   - 原理：迭代器在遍历时直接访问集合中的内容，并且在遍历过程中使用一个 **`modCount`** 变量。集合在被遍历期间如果内容发生变化，就会改变 **`modCount`** 的值。每当迭代器使用 **`hashNext()/next()`** 遍历下一个元素之前，都会检测 **`modCount`** 变量是否为 expectedmodCount 值，是的话就返回遍历；否则抛出异常，终止遍历。
 
 
-#### 📌 示例
+#### 💻 示例
 
 ```java
 import java.util.ArrayList;
@@ -141,7 +141,7 @@ public class IteratorExample {
 - **`add(E e)`**：向当前遍历的位置插入元素。
 - **`set(E e)`**：修改当前元素。
 
-### 📌 for-each循环
+### 🔀 for-each循环
 
 #### 💡 语法格式
 
@@ -161,13 +161,13 @@ for (Type item : collection) {
 
 实际上是通过 **`Iterator`** 实现的。Java 编译器会将 **`for-each`** 循环转换为一个使用 **`Iterator`** 或索引的标准迭代过程。
 
-### 🔨 Lambda表达式遍历（forEach方法）
+### 🐍 Lambda表达式遍历（forEach方法）
 
 集合类（如 **`List`**、**`Set`**）实现了 **`Iterable`** 接口，**`Iterable`** 接口提供了一个默认的 **`forEach`** 方法，可以直接与 Lambda 表达式结合，进行遍历。
 
-#### 💡 语法格式
+#### ⚡ 语法格式
 
-```
+```java
 foreach(new Consumer<? super T> action)
 {
 	@Override
@@ -177,4 +177,87 @@ foreach(new Consumer<? super T> action)
 	}
 }
 ```
+
+#### 🧪 示例
+
+```java
+List<String> list = new ArrayList<>();
+list.add("Apple");
+list.add("Banana");
+list.add("Cherry");
+
+// 使用 Lambda 表达式遍历
+list.forEach(item -> System.out.println(item));
+
+// 输出：
+// Apple
+// Banana
+// Cherry
+```
+
+---
+
+## ⚙️ 集合选择指南
+
+选择合适的集合类型取决于使用场景：
+
+### 📊 性能对比
+
+| 集合类型 | 查询 | 插入/删除 | 有序 | 线程安全 | 允许null |
+|---------|------|---------|------|--------|---------|
+| ArrayList | 快 | 慢 | 是 | 否 | 是 |
+| LinkedList | 慢 | 快 | 是 | 否 | 是 |
+| HashSet | - | - | 否 | 否 | 是 |
+| TreeSet | - | - | 是 | 否 | 否 |
+| HashMap | 快 | 快 | 否 | 否 | 是 |
+| TreeMap | 慢 | 快 | 是 | 否 | 否 |
+| ConcurrentHashMap | 快 | 快 | 否 | 是 | 否 |
+
+### 🎯 选择建议
+
+- **需要频繁查询**: 使用 `ArrayList` 或 `HashMap`
+- **需要频繁插入/删除**: 使用 `LinkedList`
+- **需要有序且不重复**: 使用 `TreeSet` 或 `TreeMap`
+- **需要保持插入顺序**: 使用 `LinkedHashSet` 或 `LinkedHashMap`
+- **多线程环境**: 使用 `ConcurrentHashMap` 或其他并发集合
+
+---
+
+## 📝 常见操作示例
+
+### 🔎 遍历对比
+
+```java
+// 1. 使用迭代器
+Iterator<String> it = list.iterator();
+while (it.hasNext()) {
+    System.out.println(it.next());
+}
+
+// 2. 使用 for-each
+for (String item : list) {
+    System.out.println(item);
+}
+
+// 3. 使用 Lambda
+list.forEach(item -> System.out.println(item));
+
+// 4. 使用传统 for 循环（仅限 List）
+for (int i = 0; i < list.size(); i++) {
+    System.out.println(list.get(i));
+}
+```
+
+---
+
+## 🎓 总结
+
+Java 集合框架提供了多种数据结构来满足不同的需求：
+
+- **Collection**: 单列集合的根接口，包括 List、Set、Queue
+- **Map**: 双列集合，用于键值对存储
+- **遍历方式**: 迭代器、for-each、Lambda、传统 for 循环
+- **选择原则**: 根据需要频繁执行的操作选择合适的集合类型
+
+理解这些概念和选择合适的集合类型是 Java 开发中的基础但重要的技能。
 

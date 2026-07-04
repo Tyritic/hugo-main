@@ -281,19 +281,19 @@ kitex -module go_module_name -service P.S.M -use example_shop/kitex_gen ../../id
 
 KiteX 框架由 Kite 框架改进而来，本文仅做基本的使用介绍
 
-### 🔧 环境准备
+### 📦 环境准备
 
-#### 安装代码生成工具
+#### 📥 安装代码生成工具
 
 ```bash
 go install github.com/kite/kitool/v3@latest
 ```
 
-#### 安装thrift0.0.2
+#### 🔧 安装thrift0.0.2
 
 参考网上教程
 
-### 📝 编写idl文件
+### 💾 编写idl文件
 
 同 kitex
 

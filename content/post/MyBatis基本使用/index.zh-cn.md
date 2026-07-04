@@ -19,8 +19,6 @@ description : "MyBatis框架的基本使用"
 
 如果mapper接口中的方法参数名和mapper.xml中sql语句中的字段名一致，spring会自动进行封装
 
----
-
 ### 🔗 设置mappper接口方法参数名和mapper.xml中的sql语句中的字段一致
 
 如果mapper接口中的方法参数名和mapper.xml中sql语句中的字段名不一致，需要通过注解@Param来指定对应关系
@@ -41,17 +39,15 @@ User selectUser(@param("name")String personName);
 &lt;/select&gt;
 ```
 
----
-
 ### 🗑️ 删除操作
 
-#### sql语句
+#### 📋 sql语句
 
 ```sql
 delete from emp where id=#{id}
 ```
 
-#### 接口方法
+#### 💻 接口方法
 
 ```java
 @Mapper
@@ -61,18 +57,16 @@ public interface EmpMapper
 public void delete(Integer id):
 ```
 
----
-
 ### ➕ 添加操作
 
-#### sql语句
+#### 📑 sql语句
 
 ```sql
 insert into emp(username, name, gender, image, job, entrydate, dept_id, create_time, update_time) 
 values(#{username), #{name}, #{gender}, #{image}, #{job}, #{entrydate}, #{deptld}, #{createTime}, #{updateTime}
 ```
 
-#### 接口方法
+#### 🛠️ 接口方法
 
 ```java
 @Mapper
@@ -82,23 +76,21 @@ public interface EmpMapper
 public void insert(Emp emp);
 ```
 
-#### 主键返回
+#### 🔑 主键返回
 
 描述：在数据添加成功后，需要获取插入数据库数据的主键。
 
 实现：在@Insert上添加注解 **@Options(keyProperty = "id", useGeneratedKeys = true)** 会自动将生成的主键值赋给id属性
 
----
-
 ### 🔄 更新操作
 
-#### sql语句
+#### 🗒️ sql语句
 
 ```sql
 update emp set username=#{username),name=#{name}, gender=#{gender}, image=#{image}, job=#{job}, entrydate=#{entrydate}, dept_Id=#{deptld}, create_time=#{createTime}, update_time=#{updateTime} where id=#{id}
 ```
 
-#### 接口方法
+#### ⚒️ 接口方法
 
 ```java
 @Mapper
@@ -131,11 +123,9 @@ public void update(Emp emp);
 
 {{&lt;/notice&gt;}}
 
----
-
 ### 🔍 查询操作
 
-#### sql语句
+#### 📊 sql语句
 
 ```sql
 select *
@@ -143,7 +133,7 @@ from emp
 where name like '%李%'
 ```
 
-### 接口方法
+#### 🖥️ 接口方法
 
 ```java
 @Mapper
@@ -172,7 +162,7 @@ public List&lt;User&gt; list(String name)
 
 - XML映射文件中sql语句的id与Mapper 接口中的方法名一致，并保持返回类型一致。
 
-- 编写sql语句的格式
+- 📌 编写sql语句的格式
 
   ```xml
   &lt;操作名 id="函数名" resultType="单条记录的实体类全类名"&gt;
@@ -186,11 +176,9 @@ public List&lt;User&gt; list(String name)
 
   {{&lt;/notice&gt;}}
 
----
+### ⚡ 动态SQL语句
 
-### 🔄 动态SQL语句
-
-#### 🔥 &lt; if &gt;标签
+#### ❓ &lt; if &gt;标签
 
 描述：用于判断条件是否成立。使用test属性进行条件判断，如果条件为true，则拼接SQL
 
@@ -207,9 +195,7 @@ public List&lt;User&gt; list(String name)
 &lt;/select&gt;
 ```
 
----
-
-#### 🔥 &lt;where&gt;标签
+#### ⚙️ &lt;where&gt;标签
 
 描述：动态生成where子句，若子标签的条件都不满足则不会生成where子句，同时会删除子句开头的条件运算符
 
@@ -227,9 +213,7 @@ public List&lt;User&gt; list(String name)
 &lt;/select&gt;
 ```
 
----
-
-#### 🔥 &lt;set&gt;标签
+#### 🔧 &lt;set&gt;标签
 
 描述：动态生成set子句
 
@@ -247,9 +231,7 @@ public List&lt;User&gt; list(String name)
 &lt;/update&gt;
 ```
 
----
-
-#### 🔥 &lt;foreach&gt;标签
+#### 🔁 &lt;foreach&gt;标签
 
 描述：用于遍历元素
 
@@ -272,9 +254,7 @@ public List&lt;User&gt; list(String name)
 &lt;/delete&gt;
 ```
 
----
-
-#### 🔥 &lt;sql&gt;标签和&lt;include&gt;标签
+#### 🔀 &lt;sql&gt;标签和&lt;include&gt;标签
 
 - &lt;sql&gt;:定义可重用的 SQL片段。
 - &lt;include&gt;:通过属性refid，指定包含的sql片段。
@@ -294,18 +274,14 @@ from emp
 &lt;/select&gt;
 ```
 
----
-
-#### 🔥 &lt; trim &gt;标签
+#### 🎛️ &lt; trim &gt;标签
 
 - prefix：将trim标签中内容前面添加指定内容
 - suffix：将trim标签中内容前面添加指定内容
 - prefixOverride：将trim标签中内容前面去除指定内容
 - suffixOverride：将trim标签中内容后面去除指定内容
 
----
-
-#### 🔥 &lt;choose&gt;,&lt;when&gt;,&lt;otherwise&gt;
+#### 🎚️ &lt;choose&gt;,&lt;when&gt;,&lt;otherwise&gt;
 
 相当于switch，if，else
 
@@ -318,19 +294,15 @@ from emp
 &lt;/choose&gt;
 ```
 
----
-
 ## 🗺️ 字段名和属性名的映射关系
 
 通常情况下当数据表中的字段名和实体类的属性名对应相等时，MyBatis会将查询出的字段数据自动赋值给实体类
 
----
+### ⚖️ 当字段名和属性名不一致时
 
-### 当字段名和属性名不一致时
+- 📌 在sql语句中给字段名起别名使得字段名与属性名相同
 
-- 在sql语句中给字段名起别名使得字段名与属性名相同
-
-- 通过resultMap解决，其他的sql语句设置resultMap属性来确定映射关系
+- 🗂️ 通过resultMap解决，其他的sql语句设置resultMap属性来确定映射关系
 
   ```xml
   &lt;resultMap id="resultMap_name",type="实体类"&gt;
@@ -339,13 +311,11 @@ from emp
   &lt;/resultMap&gt;
   ```
 
----
-
 ### 👥 多对一的映射关系
 
 示例：查询员工及其对应部门信息时，将员工的did和dname合并为一个dept对象，作为emp对象的成员变量
 
-- 通过resultMap中的级联属性解决，其他的sql语句设置resultMap属性来确定映射关系
+- 🔗 通过resultMap中的级联属性解决，其他的sql语句设置resultMap属性来确定映射关系
 
   - resultMap使用级联属性对应成员对象名
 
@@ -361,7 +331,7 @@ from emp
     &lt;/resultMap&gt;
     ```
 
-- 通过resultMap中的association标签解决，其他的sql语句设置resultMap属性来确定映射关系
+- 🔌 通过resultMap中的association标签解决，其他的sql语句设置resultMap属性来确定映射关系
 
   - association具有两个属性，property对应实体类中的成员对象名，javaType对应该成员对象的java类型
 
@@ -381,11 +351,11 @@ from emp
 
 ---
 
-### 👥 一对多的映射方式
+### 🔐 一对多的映射方式
 
 示例：查询部门及其下属员工时，一个部门作为实体类具有一个员工对象的集合作为成员变量
 
-- 通过resultMap的collection标签解决，其他的sql语句设置resultMap属性来确定映射关系
+- 📦 通过resultMap的collection标签解决，其他的sql语句设置resultMap属性来确定映射关系
 
   - collection具有两个属性，property对应实体类中的成员对象名，ofType对应该成员对象的java类型
 

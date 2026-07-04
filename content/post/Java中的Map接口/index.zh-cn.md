@@ -53,9 +53,9 @@ math : true
 
 ---
 
-## 🔨 Map 接口常用方法
+## ⚙️ Map 接口常用方法
 
-### 📌 添加键值对
+### ➕ 添加键值对
 
 ```java
 V put(K key, V value)
@@ -69,7 +69,7 @@ default V putIfAbsent(K key, V value)
 
 - 如果键不存在，添加键值对。
 
-### 📌 获取值
+### 🔍 获取值
 
 ```java
 V get(Object key)
@@ -83,7 +83,7 @@ default V getOrDefault(Object key, V defaultValue)
 
 - 如果键存在，返回对应的值；否则返回 `defaultValue`。
 
-### 📌 删除键值对
+### ❌ 删除键值对
 
 ```java
 V remove(Object key)
@@ -103,7 +103,7 @@ default boolean remove(Object key, Object value)
 
 - 如果键存在且值匹配，则移除该键值对。
 
-### 📌 检查键值对
+### 🔎 检查键值对
 
 ```java
 boolean containsKey(Object key)
@@ -117,7 +117,7 @@ boolean containsValue(Object value)
 
 - 检查是否包含指定的值。
 
-### 📌 替换键值对
+### 🔄 替换键值对
 
 ```java
 default boolean replace(K key, V oldValue, V newValue)
@@ -131,7 +131,7 @@ default V replace(K key, V value)
 
 - 替换键对应的值（如果键存在）。
 
-### 📦 集合视图
+### 📂 集合视图
 
 ```java
 Set<Map.Entry<K, V>> entrySet()

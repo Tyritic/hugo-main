@@ -15,16 +15,16 @@ math : true
 
 ---
 
-## 📚 常见操作
+## 📖 常见操作
 
 由于 BlockingQueue 继承了 Queue 接口，因此，BlockingQueue 也具有 Queue 接口的基本操作，如下所示：
 
-### 📌 插入元素
+### 🔍 插入元素
 
 - **`boolean add(E e)`**  ：将元素添加到队列尾部，如果队列满了，则抛出异常 **`IllegalStateException`** 。
 - **`boolean offer(E e)`** ：将元素添加到队列尾部，如果队列满了，则返回 **`false`**。
 
-### 📌 删除元素
+### ➖ 删除元素
 
 - **`boolean remove(Object o)`** ：从队列中删除元素，成功返回 **`true`**，失败返回 **`false`**
 - **`E poll()`** ：检索并删除此队列的头部，如果此队列为空，则返回 **`null`**。
@@ -34,7 +34,7 @@ math : true
 - **`E element()`** ：检索但不删除此队列的头部，如果队列为空时则抛出 **`NoSuchElementException`** 异常；
 - **`peek()`** ：检索但不删除此队列的头部，如果此队列为空，则返回  **`null`** .
 
-### 🔨 特定方法
+### 💻 特定方法
 
 - **`void put(E e)`** ：将元素添加到队列尾部，如果队列满了，则线程将阻塞直到有空间。
 - **`offer(E e, long timeout, TimeUnit unit)`** ：将指定的元素插入此队列中，如果队列满了，则等待指定的时间，直到队列可用。
@@ -43,11 +43,11 @@ math : true
 
 ---
 
-## 📚 ArrayBlockingQueue
+## 🏗️ ArrayBlockingQueue
 
 **`ArrayBlockingQueue`** 它是一个基于数组的有界阻塞队列
 
-### ✨ 特点
+### 💡 特点
 
 - 有界：**`ArrayBlockingQueue`** 的大小是在构造时就确定了，并且在之后不能更改。这个界限提供了流量控制，有助于资源的合理使用。
 - FIFO：队列操作符合先进先出的原则。
@@ -61,23 +61,23 @@ math : true
 
 ---
 
-## 📚 LinkedBlockingQueue
+## 🧩 LinkedBlockingQueue
 
 **`LinkedBlockingQueue`** 是一个底层基于**单向链表**实现的阻塞队列，可以当做无界队列也可以当做有界队列来使用，同样满足 FIFO 的特性。
 
-### ✨ 特点
+### ✅ 特点
 
 - 可以在队列头部和尾部进行高效的插入和删除操作。
 - 当队列为空时，取操作会被阻塞，直到队列中有新的元素可用。当队列已满时，插入操作会被阻塞，直到队列有可用空间。
 - 可以在构造时指定最大容量。如果不指定，默认为 **`Integer.MAX_VALUE`**，这意味着队列的大小受限于可用内存。
 
-### 🔧 实现原理
+### 🔄 实现原理
 
 **`LinkedBlockingQueue`** 使用两个锁（putLock 和 takeLock），一个用于放入操作，另一个用于取出操作。锁分离
 
 ---
 
-## 📚 PriorityBlockingQueue
+## 📊 PriorityBlockingQueue
 
 **`PriorityBlockingQueue`** 是一个支持优先级的无界阻塞队列。默认情况下元素采用自然顺序进行排序，也可以通过自定义类实现 **`compareTo()`** 方法来指定元素排序规则，或者初始化时通过构造器参数 **`Comparator`** 来指定排序规则。
 
@@ -85,7 +85,7 @@ math : true
 
 ---
 
-## 📋 其他阻塞队列
+## ⚖️ 其他阻塞队列
 
-- **`SynchronousQ ueue`**：每个插入操作必须等待另一个线程的移除操作，同样，任何一个移除操作都必须等待另一个线程的插入操作。
+- **`SynchronousQueue`**：每个插入操作必须等待另一个线程的移除操作，同样，任何一个移除操作都必须等待另一个线程的插入操作。
 - **`DelayQueue`** ：类似于 PriorityBlockingQueue，由二叉堆实现的无界优先级阻塞队列。

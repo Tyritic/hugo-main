@@ -47,7 +47,7 @@ math : true
 
     - 主线程可以执行 **`FutureTask.get()`** 方法来获得任务执行完成的结果。
 
-#### 💻 示例代码
+#### 🎯 示例代码
 
 ```java
 // 提交Runnable任务
@@ -103,9 +103,9 @@ public class CallableExample {
 
 ## 🛠️ 创建线程池的方法
 
-### 📌 使用 ThreadPoolExecutor 直接创建线程池
+### 🏗️ 使用 ThreadPoolExecutor 直接创建线程池
 
-#### 🔧 常见构造函数
+#### ⚙️ 常见构造函数
 
 ```java
 public ThreadPoolExecutor(int corePoolSize,
@@ -116,6 +116,7 @@ public ThreadPoolExecutor(int corePoolSize,
                           ThreadFactory threadFactory,
                           RejectedExecutionHandler handler)
 ```
+
 
 - **`corePoolSize`**：核心线程数，线程池会始终保持这个数量的线程，即使它们处于空闲状态。
 
@@ -144,7 +145,7 @@ public ThreadPoolExecutor(int corePoolSize,
 
 ---
 
-### 📌 使用 Executors 工厂类
+### 🏭 使用 Executors 工厂类
 
 **通过 `Executor` 框架的工具类 `Executors` 来创建内置线程池。**
 
@@ -156,6 +157,7 @@ ExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(2); // �
 ExecutorService pool = Executors.newWorkStealingPool(); // 任务窃取线程池
 ```
 
+
 - **`FixedThreadPool`**：固定线程数量的线程池。该线程池中的线程数量始终不变。当有一个新的任务提交时，线程池中若有空闲线程，则立即执行。若没有，则新的任务会被暂存在一个任务队列中，待有线程空闲时，便处理在任务队列中的任务。**适合负载稳定的场景，任务数量确定且不需要动态调整线程数。**
 - **`SingleThreadExecutor`**： 只有一个线程的线程池。若多余一个任务被提交到该线程池，任务会被保存在一个任务队列中，待线程空闲，按先入先出的顺序执行队列中的任务。**适用于需要保证任务按顺序执行的场景，或者不需要并发处理任务的情况。**
 - **`CachedThreadPool`**： 可根据实际情况调整线程数量的线程池。线程池的线程数量不确定，但若有空闲线程可以复用，则会优先使用可复用的线程。若所有线程均在工作，又有新的任务提交，则会创建新的线程处理任务。所有线程在当前任务执行完毕后，将返回线程池进行复用。**适合短期大量并发任务的场景，任务执行时间短且线程数需求变化较大。**
@@ -164,7 +166,7 @@ ExecutorService pool = Executors.newWorkStealingPool(); // 任务窃取线程池
 
 ---
 
-## ⚙️ 线程池的核心参数
+## 🔩 线程池的核心参数
 
 - **`corePoolSize`**：线程池中用来工作的核心线程数量。
 - **`maximumPoolSize`**：最大线程数，线程池允许创建的最大线程数。
@@ -191,7 +193,7 @@ ExecutorService pool = Executors.newWorkStealingPool(); // 任务窃取线程池
 
 ---
 
-## ❌ 线程池的拒绝策略
+## 🚫 线程池的拒绝策略
 
 Java 中提供了四种拒绝策略用于任务被拒绝时执行该策略同时支持自定义拒绝策略
 
@@ -214,6 +216,7 @@ public class CustomRejectedExecutionHandler implements RejectedExecutionHandler 
 }
 ```
 
+
 {{<notice warning>}}
 
 **`ThreadPoolExecutor.CallerRunsPolicy`** 策略具有一定风险
@@ -229,7 +232,7 @@ public class CustomRejectedExecutionHandler implements RejectedExecutionHandler 
 
 ---
 
-## 📦 线程池常用的阻塞队列
+## 🔗 线程池常用的阻塞队列
 
 - **ArrayBlockingQueue**：一个有界队列，底层基于数组实现。需要在初始化时指定队列的大小，队列满时，生产者会被阻塞，队列空时，消费者会被阻塞。
 - **LinkedBlockingQueue**：基于链表的阻塞队列，允许可选的界限（有界或无界）。无界模式下可以不断添加元素，直到耗尽系统资源。有界模式则类似于 `ArrayBlockingQueue`，但吞吐量通常较高。
@@ -241,13 +244,13 @@ public class CustomRejectedExecutionHandler implements RejectedExecutionHandler 
 
 ---
 
-## 🎯 核心线程的执行策略
+## 🎪 核心线程的执行策略
 
-### 📌 核心线程数量可以为0
+### 🔵 核心线程数量可以为0
 
 当核心线程数为 0 的时候，会创建一个非核心线程进行执行。
 
-### 📌 核心线程回收问题
+### ♻️ 核心线程回收问题
 
 **`ThreadPoolExecutor`** 默认不会回收核心线程，即使它们已经空闲了。这是为了减少创建线程的开销，因为核心线程通常是要长期保持活跃的。
 
@@ -255,7 +258,7 @@ public class CustomRejectedExecutionHandler implements RejectedExecutionHandler 
 
 **`allowCoreThreadTimeOut(true)`** 可以允许核心线程在空闲时被回收，从而释放系统资源。
 
-### 📌 核心线程数在运行过程可以动态修改
+### 🔧 核心线程数在运行过程可以动态修改
 
 使用 **`ThreadPoolExecutor.setCorePoolSize(int corePoolSize)`** 方法可以动态修改核心线程数。
 
@@ -300,15 +303,15 @@ public class CustomRejectedExecutionHandler implements RejectedExecutionHandler 
 
 ## 📤 线程池的任务提交
 
-### 📌 提交不需要返回值的任务
+### 🔹 提交不需要返回值的任务
 
 **`execute()`** 用于提交不需要返回值的任务
 
-#### 📝 方法签名
+#### 📌 方法签名
 
 **`void execute(Runnable command)`**
 
-#### 💻 代码示例
+#### 🖥️ 代码示例
 
 ```java
 threadsPool.execute(new Runnable() {
@@ -317,22 +320,23 @@ threadsPool.execute(new Runnable() {
     });
 ```
 
-#### ⚠️ 异常处理
+
+#### 🔺 异常处理
 
 当任务通过 **`execute()`** 提交到线程池并在执行过程中抛出异常时，如果这个异常没有在任务内被捕获，那么该异常会导致当前线程终止，并且异常会被打印到控制台或日志文件中。线程池会检测到这种线程终止，并创建一个新线程来替换它，从而保持配置的线程数不变。
 
 ---
 
-### 📌 提交需要返回值的任务
+### 🗃️ 提交需要返回值的任务
 
 **`submit()`** 方法用于提交需要返回值的任务。线程池会返回一个 **`future`** 类型的对象，通过这个 **`future`** 对象可以判断任务是否执行成功，并且可以通过 **`future`** 的 **`get()`** 方法来获取返回值。
 
-#### 📝 方法签名
+#### 📄 方法签名
 
 - **`<T> Future<T> submit(Runnable task, T result)`**：**无返回值的任务**（可以传默认值）
 - **`<T> Future<T> submit(Callable<T> task)`**：有返回值的任务
 
-#### 💻 代码示例
+#### 📱 代码示例
 
 ```java
 import java.util.concurrent.*;
@@ -376,7 +380,8 @@ public class SubmitCallableExample {
 }
 ```
 
-#### ⚠️ 异常处理
+
+#### 🛡️ 异常处理
 
 对于通过 **`submit()`** 提交的任务，如果在任务执行中发生异常，这个异常不会直接打印出来。相反，异常会被封装在由  **`submit()`** 返回的 **`Future`** 对象中。当调用 **`Future.get()`** 方法时，可以捕获到一个 **`ExecutionException`**。在这种情况下，线程不会因为异常而终止，它会继续存在于线程池中，准备执行后续的任务。
 
@@ -387,7 +392,7 @@ public class SubmitCallableExample {
 - **`shutdown()`**：关闭线程池，线程池的状态变为 `SHUTDOWN`。线程池不再接受新任务了，但是队列里的任务得执行完毕。
 - **`shutdownNow()`**：关闭线程池，线程池的状态变为 `STOP`。线程池会终止当前正在运行的任务，并停止处理排队的任务并返回正在等待执行的 List。
 
-### 📌 shutdown() 方法
+### 🔒 shutdown() 方法
 
 ```java
 /**
@@ -411,13 +416,14 @@ public void shutdown() {
 }
 ```
 
+
 启动线程池的**平滑关闭**。它不再接受新的任务，但会继续执行已经提交的任务（包括在队列中的任务）。
 
 线程池会进入 `SHUTDOWN` 状态，所有已执行和正在执行的任务都会继续完成，只有所有任务完成后，线程池才会完全终止。
 
 ---
 
-### 📌 shutdownNow()
+### 🛑 shutdownNow()
 
 ```java
 /**
@@ -446,13 +452,14 @@ public List<Runnable> shutdownNow() {
 }
 ```
 
+
 启动线程池的**强制关闭**。它会尝试停止所有正在执行的任务，并返回等待执行的任务列表。它会尽力中断正在执行的任务，**但不能保证所有任务都能被立即停止**。
 
 线程池进入 `STOP` 状态，除了尝试中断正在执行的任务外，还会清空任务队列，返回未执行的任务列表。
 
 ---
 
-## ✅ 线程池的最佳实践和调优
+## 🎓 线程池的最佳实践和调优
 
 - 线程池声明时 **必须** 使用 **`ThreadPoolExecutor`** 构造函数的方式，不允许使用 **`Executors`** 去创建
   - **`FixedThreadPool`** 和 **`SingleThreadExecutor`** 使用的是有界阻塞队列是 `LinkedBlockingQueue`，其任务队列的最大长度为 **`Integer.MAX_VALUE`**，可能堆积大量的请求，从而导致 OOM。

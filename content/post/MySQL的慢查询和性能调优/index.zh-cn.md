@@ -18,17 +18,19 @@ math : true
 - 修改配置文件中慢SQL日志的开关和慢SQL日志的时间
 - **`show processlist`** ：查看当前正在执行的 SQL 语句，找出执行时间较长的 SQL
 
-## 📊 count(*)，count(1)，count(主键)，count(列)的执行效率比较
+---
 
-结果：count(*)=count(1)>count(主键)>count(列)
+## 📊 count(*)、count(1)、count(主键)、count(列)的执行效率
 
-count函数的执行过程
+结果：count(*) = count(1) > count(主键) > count(列)
+
+### 🧠 count 函数的执行原理
 
 在通过 count 函数统计有多少个记录时，MySQL 的 server 层会维护一个名叫 count 的变量。
 
 server 层会循环向 InnoDB 读取一条记录，如果 count 函数指定的参数不为 NULL，那么就会将变量 count 加 1，直到符合查询的全部记录被读完，就退出循环。最后将 count 变量的值发送给客户端。
 
-执行过程
+### 📌 不同 count 的执行过程
 
 - count(主键)
   - 如果表里只有主键索引，没有二级索引时，那么，InnoDB 循环遍历聚簇索引，将读取到的记录返回给 server 层，然后读取记录中的 id 值，就会 id 值判断是否为 NULL，如果不为 NULL，就将 count 变量加 1。
@@ -38,11 +40,13 @@ server 层会循环向 InnoDB 读取一条记录，如果 count 函数指定的�
   - 但是，如果表里有二级索引时，InnoDB 循环遍历的对象就二级索引了。
 - count(*)与count(1)基本一致
 
+---
+
 ## ⚡ SQL的性能调优策略
 
 ### 🔍 查询优化
 
-#### 💡 避免使用不必要的列
+#### 📌 避免使用不必要的列
 
 尽量避免使用 **`select *`**，只查询需要的列，减少数据传输量
 
@@ -76,6 +80,8 @@ SELECT * FROM A WHERE id = 1
 UNION
 SELECT * FROM B WHERE id = 1;
 ```
+
+---
 
 ### 🚀 索引优化
 

@@ -2,7 +2,7 @@
 date : '2024-11-20T10:04:34+08:00'
 draft : false
 title : 'Java的网络编程'
-image : ""
+image : "network-base-20230330190328.png"
 categories : ["Java"]
 tags : ["Java基础"]
 description : "手写笔记转换"
@@ -11,7 +11,7 @@ math : true
 
 ## 🏗️ 网络编程基础
 
-### 📌 IP地址
+### 🔍 IP地址
 
 在互联网中，一个 IP 地址用于唯一标识一个网络设备。一台联入互联网的计算机肯定有一个 IP 地址，但也可能有多个 IP 地址。
 
@@ -25,7 +25,7 @@ IP 地址又分为公网 IP 地址和内网 IP 地址。公网 IP 地址可以�
 
 网络号是 IP 地址与子网掩码过滤后得到的。（子网掩码转换成二进制和IP地址转换成二进制后按位进行与操作）
 
-```
+```text
 IP = 101.202.99.2
 Mask = 255.255.255.0
 Network = IP & Mask = 101.202.99.0
@@ -41,7 +41,7 @@ Network = IP & Mask = 101.202.99.0
 - 子网掩码，例如：`255.255.255.0`
 - 网关的 IP 地址，例如：`10.0.2.2`
 
-### 📌 域名
+### 📖 域名
 
 直接记忆 IP 地址非常困难，所以通常使用域名访问某个特定的服务。
 
@@ -51,15 +51,15 @@ Network = IP & Mask = 101.202.99.0
 
 用于标识计算机上的具体应用程序或进程。端口号与 IP 地址结合，共同用于标识一个主机上的具体服务或应用。
 
-### 📌 协议
+### 🔐 协议
 
 网络通信的规则
 
 <div align="center">
-  <img src="network-base-20230330190328.png" alt="img" width="82%">
+  <img src="network-base-20230330190328.png" alt="网络通信协议层级图" width="82%">
 </div>
 
-### 🌐 网络套接字Socket
+### 🌍 网络套接字Socket
 
 Socket（套接字）：网络通信的基本单位，通过 IP 地址和端口号标识。
 
@@ -85,7 +85,7 @@ Socket（套接字）：网络通信的基本单位，通过 IP 地址和端口�
 
 UDP 协议通过 `DatagramSocket` 和 `DatagramPacket` 类来实现。
 
-### 📌 服务端
+### 🛠️ 服务端
 
 - 创建一个 `DatagramSocket` 来监听端口。
 - 等待并创建 `DatagramPacket` 用于接收客户端发送的数据包。
@@ -139,7 +139,7 @@ public class UDPServer {
 }
 ```
 
-### 📌 客户端
+### 💻 客户端
 
 - 创建一个 `DatagramSocket` 用于发送数据。
 - 创建一个 `DatagramPacket`，通过该包发送数据到服务器。
@@ -247,7 +247,7 @@ public class UDPClient {
 
 ## 📚 TCP协议传输
 
-### 📌 服务端
+### ⚒️ 服务端
 
 - 创建一个 `ServerSocket` 来监听端口。
 - 调用`ServerSocket`的`accept()`返回一个`Socket`对象监听客户端的套接字请求
@@ -299,9 +299,7 @@ public class TCPServer {
 }
 ```
 
-
-
-### 📌 客户端
+### ⌨️ 客户端
 
 - 创建客户端的`Socket`对象
   - 创建`Socket`对象时同时连接服务端
@@ -353,7 +351,7 @@ public class TCPClient {
 }
 ```
 
-### 💎 核心类
+### 💼 核心类
 
 #### 💡 `ServerSocket`服务端套接字
 
@@ -376,7 +374,7 @@ public class TCPClient {
 - `public boolean isBound()` ：检查 `ServerSocket` 是否已经绑定到一个本地地址和端口。
 - `public boolean isClosed()`：检查 `ServerSocket` 是否已关闭
 
-#### 💡 `Socket`客户端套接字
+#### 🔌 `Socket`客户端套接字
 
 `Socket` 类是 Java 中用于实现 TCP 客户端通信的类，它提供了与服务器建立连接、发送和接收数据的功能。
 

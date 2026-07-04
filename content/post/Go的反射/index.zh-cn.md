@@ -95,7 +95,7 @@ main.Student
 
 `reflect.TypeOf()` 方法获取的就是这个 `interface{}` 中的类型部分。
 
-### 📌 reflect.ValueOf()
+### 📝 reflect.ValueOf()
 
 同理，`reflect.ValueOf()` 方法自然就是获取接口中的值部分，`reflect.ValueOf()` 的返回值其实就是一个 `reflect.Value` 结构。
 
@@ -212,7 +212,7 @@ kind of num2 is int
 | `reflect.Value.Index(i)` | 返回切片或数组第 i 个元素的 `reflect.Value` 值 |
 | `reflect.Int()/reflect.Uint()/reflect.String()/reflect.Bool()` | 从反射的值对象中取出对应值，注意 `reflect.Int()/reflect.Uint()` 方法对种类做了合并处理，它们只返回相应的最大范围的类型，`Int()` 返回 `Int64` 类型，`Uint()` 返回 `Uint64` 类型 |
 
-#### 📖 获取 struct 反射值
+#### 🎓 获取 struct 反射值
 
 ```go
 package main
@@ -256,7 +256,7 @@ field2 type is float64, value is 95.500000
 
 > **注意**：`NumField()` 和 `Field()` 方法只有原对象是结构体时才能调用，否则会 panic
 
-#### 📖 获取 map 反射值
+#### 🗺️ 获取 map 反射值
 
 ```go
 package main
@@ -288,7 +288,7 @@ key type is int, key = 2; value type is uint32, value = 200
 
 `v := reflect.ValueOf(m)` 对 map 类型的对象 m 进行反射，通过 `v.MapKeys()` 得到 m 中所有 key 的 `reflect.Value` 对象 k，然后通过 `v.MapIndex(k)` 得到对应 key 反射值对象的 value 反射值对象，然后通过 `reflect.Value` 的 `Type().Name()` 方法获取 map 中 key、value 的类型，然后打印出对应值。
 
-#### 📖 获取 slice 反射值
+#### 📦 获取 slice 反射值
 
 ```go
 package main
@@ -328,7 +328,7 @@ func main() {
 
 > **注意**：`Len()` 和 `Index(i)` 方法只能在原对象是切片、数组或字符串时才能调用，其他类型会 panic
 
-#### 📖 比较两个对象是否完全相同
+#### 🔍 比较两个对象是否完全相同
 
 如果只是基本类型，直接用 `==` 就足够了；但对于结构体、切片、map 这类复合类型，常见做法是使用：
 
@@ -370,7 +370,7 @@ true
 - **`DeepEqual` 更偏通用，不一定最优**，在性能敏感场景下未必适合
 - **业务上的“相等”未必等于字段逐个完全相等**，有时更适合自己实现 `Equal` 方法，只比较真正关心的字段
 
-### 📊 类型对象
+### 📈 类型对象
 
 reflect 包下跟类型相关的常用函数或方法：
 
@@ -386,7 +386,7 @@ reflect 包下跟类型相关的常用函数或方法：
 | `reflect.Value.NumMethod()` | 获取 struct 上绑定的方法个数 |
 | `reflect.Value.Method(i)` | 获取 struct 上绑定的第 i 个方法 |
 
-#### 📖 struct 反射类型
+#### 📋 struct 反射类型
 
 ```go
 package main
@@ -429,7 +429,7 @@ field1 name is Name, field1 type is string
 
 通过 `reflect.Type` 的 `Name()` 方法可以获取对应的 `Type` 类型，`Kind()` 方法获取底层的数据种类，即 `kind`，跟 `reflect.Value` 一样，`reflect.Type` 也提供了 `NumField()` 方法用于获取结构体对象中的字段个数，通过 `t.Field(i).Name` 可以获取对应字段的名字。同样，`Field(i)` 和 `NumField()` 也只能对结构体反射使用。
 
-#### 📖 指针反射类型
+#### 💡 指针反射类型
 
 ```go
 package main
@@ -523,7 +523,7 @@ int error
 
 `t := reflect.TypeOf(Add)` 获取到 Add 函数的 `type` 类型，然后通过 `NumIn()` 方法获得 Add 函数的参数个数，依次打印出参数的类型。通过 `NumOut()` 方法获得 Add 函数的返回值个数，依次打印出返回值的类型。
 
-#### �️ 反射获取 struct 方法
+#### 🔧 反射获取 struct 方法
 
 ```go
 package main
@@ -608,7 +608,7 @@ type Method struct {
 
 ---
 
-## ⚙️ 通过反射调用方法
+## 🎯 通过反射调用方法
 
 在上一小节我们知道了 `reflect.Type.Method(i)` 可以获取到 `struct` 所绑定的具体的方法对象 `reflect.Method`，通过这个对象，我们不仅可以获取方法的详细信息，还可以动态的调用方法。
 
@@ -709,7 +709,7 @@ m2.Call(argsV2)
 
 ---
 
-## 🔧 通过反射设置值
+## 📍 通过反射设置值
 
 在介绍通过反射设置或者说是修改值的方法之前，首先介绍一个概念：**反射寻址**。简单的说，可寻址就是可以根据地址找到值，在反射里面，`reflect.Value` 由 `reflect.ValueOf()` 方法得到，根据命名就可以知道 `reflect.ValueOf()` 是得到一个值对象，显然他不能得到这个值的地址。所以通过 `reflect.ValueOf()` 方法得到的 `reflect.Value` 都是不可寻址的。在 `reflect` 包下有一个 `CanAddr()` 方法可以用于验证一个对象是否可寻址。
 
@@ -748,7 +748,7 @@ false
 
 经过前面学习指针反射类型的学习，我们知道了假设 `reflect.ValueOf()` 返回的是一个指针的 `reflect.Value` 对象，那么我们可以调用 `reflect.Value.Elem()` 方法得到具体的类型，而此时得到的这个反射具体类型就是可寻址的，我们可以知道他的地址，道理很简单，因为 `reflect.Value.Elem()` 获取到的值，记录了根据指针获取到值这个获取路径，显然我们可以根据值追溯到地址。
 
-### � reflect.Value.Elem() 方法得到具体的类型可寻址
+### 🔓 reflect.Value.Elem() 方法得到具体的类型可寻址
 
 ```go
 package main
@@ -785,11 +785,11 @@ true
 
 ---
 
-## 🔍 类型断言
+## 🎪 类型断言
 
 在 Go 语言中，**类型断言**提供了两种方式来检查接口变量的具体类型：
 
-### � 直接断言
+### 💬 直接断言
 
 失败会 panic：
 
@@ -797,7 +797,7 @@ true
 v := x.(T)
 ```
 
-### 📖 comma-ok 断言
+### 📚 comma-ok 断言
 
 失败不 panic：
 
@@ -822,7 +822,7 @@ v, ok := x.(T)
   - 不加 `tag`，可以正常转为 `json` 里的字段，`json` 内字段名跟结构体内字段原名一致
   - 加了 `tag`，从 `struct` 转 `json` 的时候，`json` 的字段名就是 `tag` 里的字段名，原字段名已经没用
 
-### � 解析 JSON 数据时的默认类型
+### 🔎 解析 JSON 数据时的默认类型
 
 使用 `encoding/json` 包解析到 `interface{}` 时：
 
@@ -843,15 +843,15 @@ v, ok := x.(T)
 
 虽然反射提供了强大的灵活性，但在使用时需要注意以下几点：
 
-### 🚨 性能影响
+### ⚡ 性能影响
 
 反射过程中会有大量的内存开辟和 GC 过程，导致程序的性能降低。在性能敏感的场景下，应谨慎使用反射。
 
-### 🚨 类型安全
+### 🔐 类型安全
 
 反射绕过了编译时的类型检查，可能导致运行时错误。使用反射时需要格外小心，确保类型转换的正确性。
 
-### � 代码可读性
+### ❓ 代码可读性
 
 大量使用反射会降低代码的可读性和可维护性。应该在确实需要动态性的场景下使用反射，而不是滥用。
 
@@ -860,7 +860,7 @@ v, ok := x.(T)
 - **如果编译期就能确定类型，用普通代码或接口更好**
 - **如果运行时才知道结构，反射才真正有必要**
 
-### 💡 最佳实践
+### 🎓 最佳实践
 
 - **优先使用接口**：如果可以通过接口解决问题，优先使用接口而不是反射
 - **缓存反射结果**：对于重复的反射操作，可以缓存结果以提高性能
@@ -869,7 +869,7 @@ v, ok := x.(T)
 
 ---
 
-## 📚 总结
+## 🎯 总结
 
 Go 语言的反射机制是一个强大的工具，它允许程序在运行时检查和修改自身的结构和行为。通过 `reflect` 包，我们可以：
 

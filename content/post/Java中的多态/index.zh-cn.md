@@ -35,7 +35,7 @@ father_className father=new son_className ()
 
 ## ⚡ 多态的运行特点
 
-### 📌 调用成员变量
+### 🔍 调用成员变量
 
 遵守规则：编译看声明类型（左边），运行看声明类型（左边）
 
@@ -65,7 +65,7 @@ public class Test {
 
 
 
-### 🔨 调用成员方法
+### 🎯 调用成员方法
 
 遵守规则：编译看声明类型（左边），运行看实际类型（右边）
 
@@ -101,9 +101,9 @@ public class Test {
 
 ---
 
-## 🔧 多态的实现原理
+## 🏗️ 多态的实现原理
 
-### 📌 动态绑定
+### ⚙️ 动态绑定
 
 多态通过动态绑定实现，Java 使用虚方法表存储方法指针，方法调用时根据对象实际类型从虚方法表查找具体实现。<div align="center">
   <img src="javase-20241126104207.png" alt="虚拟方法表" width="82%">
@@ -118,7 +118,7 @@ public class Test {
 - **编译时多态**：通过方法重载实现，在编译时确定方法的调用。
 - **运行时多态**：通过方法重写实现，在运行时确定方法的调用。
 
-### 🔨 编译时多态（Compile-time Polymorphism）
+### 💻 编译时多态（Compile-time Polymorphism）
 
 **编译时多态**，也称为**静态多态**，是在编译阶段确定方法的调用。编译时多态主要通过 **方法重载（Method Overloading）** 实现。
 
@@ -130,7 +130,7 @@ public class Test {
 
 - **重载通常用于提供同一操作的不同实现，例如构造函数的重载、不同类型输入的处理等**。
 
-### ⚡ 运行时多态（Runtime Polymorphism）
+### 🔄 运行时多态（Runtime Polymorphism）
 
 **运行时多态**，也称为**动态多态**，是在运行时确定方法的调用。运行时多态通过 **方法重写（Method Overriding）** 实现。
 
@@ -146,7 +146,7 @@ public class Test {
 
 - **重写通常用于在子类中提供父类方法的具体实现，以实现多态性。例如，子类对父类方法进行扩展或修改以适应特定需求** 。
 
-### 🔨 方法重载和方法重写的比较
+### ⚖️ 方法重载和方法重写的比较
 
 - 方法重载（Overloading） ：在同一个类中，允许有多个同名方法，只要它们的参数列表不同（**参数个数、类型或顺序**）。主要关注方法的签名变化，适用于在同一类中定义不同场景下的行为，实现编译时多态性。
 
@@ -169,7 +169,7 @@ public class Test {
 
 ## 📚 向上转型和向下转型
 
-### 📌 向上转型（儿子变父亲）
+### 🎪 向上转型（儿子变父亲）
 
 向上转型是使用父类类型的引用指向子类对象，通过子类对象(小范围)实例化父类对象(大范围)<div align="center">
   <img src="extends-bigsai-0cd258c9-b897-4be3-bdb2-2ddd9c073609.png" alt="示意图" width="82%">
@@ -185,7 +185,7 @@ father_className father=new son_className ()
 // 实际类型：son_className
 ```
 
-### 📌 向下转型（父亲变儿子）
+### 💡 向下转型（父亲变儿子）
 
 向下转型是将父类引用转回其子类类型，通过父类对象(大范围)实例化子类对象(小范围)，但在执行前需要确认父类引用变量实际引用必须是子类对象才能成功转型以避免 **`ClassCastException`**
 
@@ -193,13 +193,13 @@ father_className father=new son_className ()
   <img src="extends-bigsai-ef0d4716-8b4f-4adf-845e-dd293871b7a7.png" alt="示意图" width="82%">
 </div>
 
-#### 💡 语法格式
+#### 🧩 语法格式
 
 ```java
 son_className son=(son_className) father
 ```
 
-#### 📌 示例代码
+#### 💭 示例代码
 
 ```java
 class Animal {
@@ -244,7 +244,7 @@ public class Test {
 
 
 
-#### 💡 instance of关键字
+#### 📖 instanceof关键字
 
 判断对象是否符合指定的类型，结果要么是 true，要么是 false
 

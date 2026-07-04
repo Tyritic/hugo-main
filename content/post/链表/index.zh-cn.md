@@ -17,7 +17,7 @@ math : true
 
 ### 📚 经典例题
 
-#### 🧪 LeetCode 203. 移除链表元素
+#### 🎯 LeetCode 203. 移除链表元素
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/remove-linked-list-elements/)
 
@@ -56,7 +56,7 @@ public ListNode removeElements(ListNode head, int val) {
 }
 ```
 
-#### 🧪 LeetCode 24. 两两交换的节点
+#### 🔄 LeetCode 24. 两两交换的节点
 
 **题目描述**
 
@@ -103,7 +103,7 @@ class Solution {
 }
 ```
 
-#### 🧪 LeetCode 19. 删除链表的倒数第N个节点
+#### ⚙️ LeetCode 19. 删除链表的倒数第N个节点
 
 **题目描述**
 
@@ -172,7 +172,7 @@ class Solution {
 }
 ```
 
-#### 🧪 LeetCode 2. 两数相加
+#### 📊 LeetCode 2. 两数相加
 
 **题目描述**
 
@@ -190,7 +190,7 @@ class Solution {
   <img src="addtwonumber1.jpg" alt="示意图" width="82%">
 </div>
 
-```
+```text
 输入：l1 = [2,4,3], l2 = [5,6,4]
 输出：[7,0,8]
 解释：342 + 465 = 807.
@@ -198,14 +198,14 @@ class Solution {
 
 **示例 2：**
 
-```
+```text
 输入：l1 = [0], l2 = [0]
 输出：[0]
 ```
 
 **示例 3：**
 
-```
+```text
 输入：l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
 输出：[8,9,9,9,0,0,0,1]
 ```
@@ -259,7 +259,7 @@ class Solution {
 
 ## 🧩 反转操作
 
-### 💡 思路解析
+### 🔄 思路解析
 
 只需要改变链表的next指针的指向，直接将链表反转 ，而不用重新定义一个新的链表
 
@@ -282,7 +282,7 @@ class Solution {
 
 ### 📚 经典例题
 
-#### 🧪 LeetCode 206. 翻转链表
+#### 🔀 LeetCode 206. 翻转链表
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/reverse-linked-list/)
 
@@ -310,7 +310,7 @@ class Solution {
 }
 ```
 
-#### 🧪 **BM2** **链表内指定区间反转**
+#### 🔹 **BM2** **链表内指定区间反转**
 
 **题目描述**
 
@@ -395,7 +395,7 @@ public ListNode reverseBetween (ListNode head, int m, int n) {
 
 ## 🔗 判断链表是否相交
 
-### 💡 思路解析
+### 📐 思路解析
 
 - 求出A链表和B链表的长度
 - 让currB到currA对齐的位置
@@ -403,7 +403,7 @@ public ListNode reverseBetween (ListNode head, int m, int n) {
 
 ### 📚 经典例题
 
-#### 🧪 LeetCode 160. 链表相交
+#### 🔍 LeetCode 160. 链表相交
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/intersection-of-two-linked-lists-lcci/)
 
@@ -493,7 +493,7 @@ public class Solution {
 
 ## 🔗 环形链表
 
-### 💡 思路解析
+### 📖 思路解析
 
 #### 🔗 判断是否是环形链表
 
@@ -511,7 +511,7 @@ fast指针一定先进入环中，如果fast指针和slow指针相遇的话，�
 
 ### 📚 经典例题
 
-#### 🧪 LeetCode 142. 环形链表II
+#### ✨ LeetCode 142. 环形链表II
 
 **题目描述**
 

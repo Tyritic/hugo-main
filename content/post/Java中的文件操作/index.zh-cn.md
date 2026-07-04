@@ -6,7 +6,6 @@ image : ""
 categories : ["Java"]
 tags : ["Java基础"]
 description : "手写笔记转换"
-math : true
 ---
 
 ## 📦 File类
@@ -30,12 +29,12 @@ File类是文件的抽象表示，用于文件与目录的创建，查找，删�
 
 ## 📚 常见操作
 
-### 📑 判断文件/目录
+### 🔍 判断文件/目录
 
 - `public boolean isFile()`：判断是否是文件
 - `public boolean isDirectory()`：判断是否为目录
 
-### 📑 获取文件/目录的基本信息
+### ℹ️ 获取文件/目录的基本信息
 
 - `public String getName()`：获取文件名
 - `public String getAbsolutePath()`：获取绝对路径
@@ -47,7 +46,7 @@ File类是文件的抽象表示，用于文件与目录的创建，查找，删�
   - `public boolean canWrite()`
   - `public boolean canExecute()`
 
-### 📑 创建文件/目录
+### ✨ 创建文件/目录
 
 - `public boolean createNewFile() throws IOException`：创建文件
   - 原先文件不存在则创建成功返回`true`
@@ -56,11 +55,11 @@ File类是文件的抽象表示，用于文件与目录的创建，查找，删�
   - `public boolean mkdir()`：创建单级目录，父目录不存在则创建失败
   - `public boolean mkdirs()`：创建多级目录，父目录不存在则一并创建
 
-### 📑 删除文件目录
+### 🗑️ 删除文件目录
 
 - `public boolean delete()`
 
-### 📑 列举目录文件
+### 📋 列举目录文件
 
 - `public String[] list()`：列出目录中的文件名
 - `public File[] listFiles()`：列出目录中的`File`对象

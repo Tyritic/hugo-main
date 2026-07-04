@@ -9,7 +9,7 @@ description : "Kitex的基本特性"
 math : true
 ---
 
-## 📁 Go的项目结构
+## 🏗️ Go的项目结构
 
 ```text
 |--src（源代码）
@@ -44,7 +44,7 @@ math : true
 |	|--...(其他模块)
 ```
 
-### 📂 kitex_gen 代码结构
+### 🧩 kitex_gen 代码结构
 
 ```text
 |-- kitex_gen // Dir for Generated code, which should not be modified. 
@@ -67,7 +67,7 @@ math : true
 
 ---
 
-## ⚙️ 代码框架生成了什么
+## 🔨 代码框架生成了什么
 
 生成代码主要分为两个部分
 
@@ -93,7 +93,7 @@ service StockService {
 }
 ```
 
-### 📋 结构体桩代码
+### 📖 结构体桩代码
 
 ```go
 type Item struct {
@@ -153,7 +153,7 @@ var fieldIDToName_Item = map[int16]string{
 }
 ```
 
-### 📜 常见方法
+### 🔍 常见方法
 
 - **`Get/Set`**：作为 Getter 和 Setter，获取字段值
   - 被 option 修饰的字段会被转换为指针，Get 方法获取的是其值
@@ -175,7 +175,7 @@ var fieldIDToName_Item = map[int16]string{
 | FastRead/FastReadFieldX/FastWrite/FastWriteNocopy/BLength/fastWriteFieldX/fieldXLength |               FastCodec 编解码               |        长        |
 |                GetOrSetBase/GetOrSetBaseResp                 |      特殊的 Base 相关接口，框架内部使用      |        短        |
 
-### 🎯 脚手架
+### 🛠️ 脚手架
 
 ```text
 ── stockservice // kitex 封装代码主要在这里(Kitex Client/Server的脚手架)
@@ -215,7 +215,7 @@ Kitex 支持的消息类型、序列化协议和传输协议组合如下：
 
 Kitex 支持基于 **Thrift** 协议的 PingPong、Oneway 消息类型；同时支持 Thrift Streaming over HTTP2。
 
-### 📝 IDL 定义示例
+### 📚 IDL 定义示例
 
 首先，我们需要定义 Thrift IDL 文件来描述接口和数据结构：
 
@@ -236,7 +236,7 @@ service EchoService {
 }
 ```
 
-### 📁 生成的代码组织结构
+### 🗂️ 生成的代码组织结构
 
 使用 Kitex 工具生成代码后，目录结构如下：
 
@@ -254,7 +254,7 @@ service EchoService {
         └── k-echo.go
 ```
 
-### 🏛️ Server 处理代码
+### 🎪 Server 处理代码
 
 以下是 Server 端的处理代码示例：
 
@@ -289,7 +289,7 @@ func main() {
 }
 ```
 
-### 📡 PingPong Client 代码
+### 📞 PingPong Client 代码
 
 PingPong 方式的客户端调用示例：
 
@@ -328,7 +328,7 @@ func main() {
 }
 ```
 
-### ⚡ Oneway Client 代码
+### 💥 Oneway Client 代码
 
 Oneway 方式的客户端调用示例（不等待响应）：
 
@@ -379,7 +379,7 @@ func main() {
 
 StreamX 是 Kitex 在 v0.12.0 版本发布的新一代流式接口，旨在优化流式调用体验，提供更友好、更强大的流式通信能力。
 
-### 📋 StreamX 简介
+### 📖 StreamX 简介
 
 StreamX 是 Kitex 对原有流式接口的重构和优化，主要特点包括：
 
@@ -389,7 +389,7 @@ StreamX 是 Kitex 对原有流式接口的重构和优化，主要特点包括�
 - **更好的错误处理**：提供完善的流错误处理机制
 - **灵活的生命周期控制**：支持通过 context cancel 控制流式调用生命周期
 
-### 📈 版本演进
+### 📊 版本演进
 
 | 版本 | 主要变更 |
 |------|---------|
@@ -405,7 +405,7 @@ StreamX 是 Kitex 对原有流式接口的重构和优化，主要特点包括�
 
 {{</notice>}}
 
-### 🌐 协议选择
+### 🌍 协议选择
 
 StreamX 支持两种协议：
 
@@ -416,7 +416,7 @@ StreamX 支持两种协议：
 
 选定的协议只影响从 IDL 生成代码，无论哪种协议，使用方法均一致。
 
-### ⚙️ 快速开始
+### ⚡ 快速开始
 
 #### 📝 定义 IDL
 
@@ -448,7 +448,7 @@ service TestService {
 }
 ```
 
-#### ⚙️ 生成代码
+#### 💾 生成代码
 
 确保 Kitex Tool 已经升级到 v0.13.0+：
 
@@ -462,7 +462,7 @@ go install github.com/cloudwego/kitex/tool/cmd/kitex@latest
 kitex -streamx -module <go module> -service service echo.thrift
 ```
 
-#### 🚀 初始化 Client
+#### 💻 初始化 Client
 
 ```go
 import ".../kitex_gen/echo/testservice"
@@ -513,7 +513,7 @@ client.CloseAndRecv(res) === EOF ==> server.Recv(EOF)
                           <== res === server.SendAndClose(res)
 ```
 
-#### 🏗️ Server 端实现
+#### ⚙️ Server 端实现
 
 ```go
 import (
@@ -558,7 +558,7 @@ func (si *serviceImpl) EchoClient(
 - Server 必须在 handler 结束时调用 `SendAndClose` 返回一个 Response
 - 当收到 `io.EOF` 时表示客户端已发送完毕
 
-#### 👤 Client 端使用
+#### 🖱️ Client 端使用
 
 ```go
 import (
@@ -635,7 +635,7 @@ client.Recv(res)   <== res ===   server.Send(res)
 client.Recv(EOF)   <== EOF ===   server handler return
 ```
 
-#### 🔧 Server 端实现
+#### 🔨 Server 端实现
 
 ```go
 import (
@@ -677,7 +677,7 @@ func (si *serviceImpl) EchoServer(
 - Server 可以持续调用 `Send()` 发送多个响应
 - Handler 返回时会自动发送 EOF 给 Client
 
-#### 👤 Client 端使用
+#### 👁️ Client 端使用
 
 ```go
 import (
@@ -723,7 +723,7 @@ func serverStreamingExample(cli testservice.Client) {
 
 ### 🔄 双向流式 (Bidirectional Streaming)
 
-#### 📌 使用场景
+#### 🔍 使用场景
 
 Client 与 Server 都可以随时发送多条消息，双方可以独立地读写数据。
 
@@ -820,7 +820,7 @@ func (si *serviceImpl) Echo(
 - 通常使用两个 goroutine 分别处理发送和接收
 - 需要使用 context 来协调生命周期
 
-#### 👤 Client 端使用
+#### 🎯 Client 端使用
 
 ```go
 import (
@@ -899,7 +899,7 @@ func bidirectionalStreamingExample(cli testservice.Client) {
 
 ---
 
-### 🎯 StreamX 最佳实践
+### ✨ StreamX 最佳实践
 
 #### ⚠️ 流错误处理
 
@@ -974,7 +974,7 @@ resp, err := cli.StreamMethod(ctx, req, streaming.WithRecvTimeout(5*time.Second)
 
 StreamX 提供了强大的中间件机制，可以在流式调用的不同阶段注入自定义逻辑，实现日志记录、监控、限流、认证等功能。
 
-### 📋 中间件类型
+### 📑 中间件类型
 
 StreamX 支持三种中间件类型，分别在不同的触发时机执行：
 
@@ -984,7 +984,7 @@ StreamX 支持三种中间件类型，分别在不同的触发时机执行：
 | **Stream Recv/Send 中间件** | 流收发消息时 | 消息级别的处理，如监控、限流、日志 |
 | **Unary 中间件** | 非流式接口调用时 | 仅对非流式方法生效 |
 
-### 🛠️ 类型定义
+### 📐 类型定义
 
 #### 🌟 Stream 中间件
 
@@ -1029,7 +1029,7 @@ type StreamSendMiddleware func(next StreamSendEndpoint) StreamSendEndpoint
 - `stream`：直接获取当前的流对象
 - `message`：代表真实的请求和响应
 
-#### ⚙️ Unary 中间件
+#### 🎛️ Unary 中间件
 
 对所有非流式接口，提供 UnaryMiddleware 用于注入仅对所有 unary 方法生效的中间件：
 
@@ -1051,7 +1051,7 @@ type UnaryMiddleware func(next UnaryEndpoint) UnaryEndpoint
 
 {{</notice>}}
 
-### 📊 Next 函数调用前后行为
+### 📈 Next 函数调用前后行为
 
 | 中间件类型 | Next 调用前 | Next 调用后 |
 |-----------|------------|------------|
@@ -1163,7 +1163,7 @@ svr, err := testservice.NewServer(
 
 与 PingPong RPC 不同，流式 RPC 的错误可以发生在一个流处理的任何时候。例如 Server 可以在发送多条消息后，再返回一个错误。但是一旦一个流发送完错误后，就不能再发送任何消息。
 
-### 📑 错误类型
+### 📌 错误类型
 
 #### ❗ 框架异常
 
@@ -1176,7 +1176,7 @@ svr, err := testservice.NewServer(
 | `[canceled path: ServiceA]` | 表示由 ServiceA 主动发起 cancel |
 | `user code invoking stream RPC with context processed by context.WithCancel or context.WithTimeout, then invoking cancel() actively` | 上游主动使用 cancel() |
 
-#### 📊 TTHeader Streaming 错误码汇总
+#### 📋 TTHeader Streaming 错误码汇总
 
 | 错误码 | 错误描述 | 含义 | 备注 |
 |-------|---------|------|------|
@@ -1225,7 +1225,7 @@ func (si *streamingService) ServerStreamWithErr(
 }
 ```
 
-#### 🖥️ Client 端实现
+#### 👨‍💻 Client 端实现
 
 ```go
 import (
@@ -1276,7 +1276,7 @@ func (si *streamingService) ServerStreamWithErr(
 }
 ```
 
-#### 🖥️ Client 端实现
+#### 🖱️ Client 端实现
 
 ```go
 import (

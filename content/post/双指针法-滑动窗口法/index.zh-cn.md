@@ -19,11 +19,11 @@ math : true
 
 ### 🔍 最小滑动窗口
 
-#### ✅ 题目前提
+#### ⚡ 题目前提
 
 给定数组 nums，定义滑窗的左右边界 i, j，求满足某个条件的滑窗的最小长度。
 
-#### 💡 思路解析
+#### 🔬 思路解析
 
 - 先固定左指针不动
 - 一开始滑窗不满足条件，向右移动右指针直到窗口满足题目条件
@@ -54,11 +54,11 @@ class solution{
 
 ### 📈 最大滑动窗口
 
-#### ✅ 题目前提
+#### ⚡ 题目前提
 
 给定数组 nums，定义滑窗的左右边界 i, j，求满足某个条件的滑窗的最大长度。
 
-#### 💡 思路解析
+#### 🎯 思路解析
 
 - 先固定左指针不动
 - 一开始滑窗满足条件，向右移动右指针直到不满足条件
@@ -89,7 +89,7 @@ class solution{
 
 ### 📏 固定滑动窗口
 
-#### ✅ 题目前提
+#### ⚙️ 题目前提
 
 题目中出现显式的窗口长度或字符串长度可以考虑使用
 
@@ -115,13 +115,11 @@ class Solution {
 
 ---
 
----
-
 ## 📚 经典例题
 
-### 🧪 LeetCode 209. 长度最小的子数组
+### 🎨 LeetCode 209. 长度最小的子数组
 
-#### 📌 题目描述
+#### 📍 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/minimum-size-subarray-sum/)
 
@@ -139,7 +137,7 @@ class Solution {
 - 1 <= nums.length <= 10^5
 - 1 <= nums[i] <= 10^5
 
-#### 💡 思路解析
+#### 🧠 思路解析
 
 题目前提条件为
 
@@ -176,9 +174,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 904. 水果成篮
+### 🌳 LeetCode 904. 水果成篮
 
-#### 📌 题目描述
+#### 📍 题目描述
 
 [力扣题目链接](https://leetcode.cn/problems/fruit-into-baskets/description/)
 
@@ -233,7 +231,7 @@ class Solution {
 - `1 <= fruits.length <= 105`
 - `0 <= fruits[i] < fruits.length`
 
-#### 💡 思路解析
+#### 🔍 思路解析
 
 本题可以抽象为求解一个滑动窗口，滑动窗口内只有两种数字，求解滑动窗口长度的最大值
 
@@ -278,9 +276,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 76. 最小覆盖子串
+### 🔐 LeetCode 76. 最小覆盖子串
 
-#### 📌 题目描述
+#### 📍 题目描述
 
 给你一个字符串 `s` 、一个字符串 `t` 。返回 `s` 中涵盖 `t` 所有字符的最小子串。如果 `s` 中不存在涵盖 `t` 所有字符的子串，则返回空字符串 `""` 。
 
@@ -325,7 +323,7 @@ class Solution {
 - `1 <= m, n <= 105`
 - `s` 和 `t` 由英文字母组成
 
-#### 💡 思路解析
+#### 📖 思路解析
 
 本题可以将覆盖子串抽象为一个滑动窗口，求解该滑动窗口的最小值
 
@@ -390,9 +388,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 438. 找到字符串中所有的字母异位词
+### 🎭 LeetCode 438. 找到字符串中所有的字母异位词
 
-#### 📌 题目描述
+#### 📍 题目描述
 
 [题目链接](https://leetcode.cn/problems/find-all-anagrams-in-a-string/description/)
 
@@ -426,7 +424,7 @@ class Solution {
 - `1 <= s.length, p.length <= 3 * 104`
 - `s` 和 `p` 仅包含小写字母
 
-#### 💡 思路解析
+#### 🧠 思路解析
 
 可以考虑设置一个长度为字符串p的长度的滑动窗口，移动滑动窗口比较窗口内的子串是否是p的字母异位词
 
@@ -464,9 +462,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 3. 无重复字符的最长子串
+### 🔤 LeetCode 3. 无重复字符的最长子串
 
-#### 📌 题目描述
+#### 📍 题目描述
 
 [题目链接](https://leetcode.cn/problems/longest-substring-without-repeating-characters/description/)
 
@@ -497,7 +495,7 @@ class Solution {
      请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
 ```
 
-#### 💡 思路解析
+#### 📖 思路解析
 
 - 题目前提条件
 

@@ -5,7 +5,7 @@ title : 'OpenSpec的使用经验和最佳实践'
 image : ""
 categories : ["AI Coding"]
 tags : ["OpenSpec", "Spec Coding"]
-description: "在多个真实项目中沉淀下来的 OpenSpec 使用经验——从初始化到归档的六阶段最佳实践、常见踩坑与避坑指南，以及和 TDD、Claude Code 配合的进阶玩法。"
+description : "在多个真实项目中沉淀下来的 OpenSpec 使用经验——从初始化到归档的六阶段最佳实践、常见踩坑与避坑指南，以及和 TDD、Claude Code 配合的进阶玩法。"
 ---
 
 ## 🧭 引言：从"会跑"到"跑得稳"
@@ -67,7 +67,7 @@ AI也会提出它认为还不够明确的地方，可以和AI进行多轮沟通�
 
 `/opsx:propose` 是 OpenSpec 流程的"重头戏"——它决定后续 80% 的工作量。这一阶段的核心矛盾是：**人脑子里"大概想要的东西"** 和 **AI 需要的"可执行合同"** 之间，存在巨大的表达差。
 
-### 📋 需求描述的"黄金模板"
+### 📖 需求描述的"黄金模板"
 
 我用得最多的需求描述模板（**五段式**）：
 
@@ -106,7 +106,7 @@ AI也会提出它认为还不够明确的地方，可以和AI进行多轮沟通�
 
 > **关键判断**：**`specs/` 的 ROI 远高于其他三份**。一个反模式是把 proposal 写得很长、spec 写得很短。Spec 才是 AI 在 apply 阶段"读"得最多的文件，验收场景越具体，AI 跑偏的概率越低。
 
-### 🔍 提案 review checklist
+### 📋 提案 review checklist
 
 `/opsx:propose` 跑完后，**不要直接 `/opsx:apply`**。先用这张清单自检：
 
@@ -152,7 +152,7 @@ AI也会提出它认为还不够明确的地方，可以和AI进行多轮沟通�
 
 7 个子任务，每个独立可验证。AI 在任何一个上跑偏，review 时都能快速定位。
 
-### ✋ 中途打断：让 AI 慢下来
+### 🎬 中途打断：让 AI 慢下来
 
 `/opsx:apply` 的本质是"AI 自动跑完整个 tasks.md"。听起来很爽，但实战中**必须主动打断**。
 
@@ -171,7 +171,7 @@ AI也会提出它认为还不够明确的地方，可以和AI进行多轮沟通�
 
 这一招在长任务链里特别管用——AI 不会"闷头走到黑"，人在环路里始终能纠偏。
 
-### 🧪 与 TDD 工具的配合
+### 💡 与 TDD 工具的配合
 
 OpenSpec 管"做什么"，TDD 管"做得对不对"——两者缺一不可。
 
@@ -219,10 +219,10 @@ Superpowers test-driven-development  →  强制走 红-绿-重构
 - **WARNING 集中在同一模块时**，往往是设计本身有问题，应该改 `design.md` 而不是改代码。
 - **SUGGESTION 数量特别多时**，说明这个项目的 spec 风格没沉淀下来，应该在归档后顺手补一个 `AGENTS.md` 模板。
 
-### 🛡️ 双保险验证机制
+### 🔐 双保险验证机制
 
 强烈建议：新开一个 Agent 窗口专门执行 verify 指令。原因很简单——让写代码的 AI 和检查代码的 AI 是"两个人"，避免"自己查自己"的盲区。
-### 📦 archive 前的最终自检
+### 🎁 archive 前的最终自检
 
 archive 之前我会跑一张"四问清单"：
 
@@ -243,7 +243,7 @@ archive 的副作用要清楚——**整个 changes/xxx/ 目录会被移到 chan
 
 个人项目里 OpenSpec 是"自我约束"，团队项目里它是"协作协议"。两者用法差别很大。
 
-### 🌿 Git 工作流配合
+### 🌲 Git 工作流配合
 
 团队里推荐的工作流：
 
@@ -264,7 +264,7 @@ changes/archive/ 目录也提交到 Git，作为变更历史
 - **`.gitignore` 不要忽略 `openspec/changes/archive/`**——归档历史是审计资产。
 - **敏感场景**：用 `.openspec.yaml` 里的 `schema` 字段限制该变更允许的 spec 范围。
 
-### 👀 Code Review 节奏
+### 🔍 Code Review 节奏
 
 OpenSpec 改变了 Code Review 的"看什么"：
 
@@ -276,7 +276,7 @@ OpenSpec 改变了 Code Review 的"看什么"：
 
 **别让 PM 看代码、让工程师看 proposal**——OpenSpec 最大的好处就是让两类人用"各自的语言"协作。
 
-### 🐙 多 Agent 协作
+### 🤖 多 Agent 协作
 
 OpenSpec 最大的隐藏价值：**它是一份跨 Agent 的真相源**。
 
@@ -296,7 +296,7 @@ OpenSpec 最大的隐藏价值：**它是一份跨 Agent 的真相源**。
 
 经验如果不带血泪教训，就是空话。下面是我（和身边团队）真实踩过的坑，几乎每个 OpenSpec 新手都会撞上。
 
-### 🐘 需求膨胀：spec 越改越长
+### 🚫 需求膨胀：spec 越改越长
 
 **症状**：一个本应 2 天的变更，3 周还没 archive，spec 已经从 200 行膨胀到 1500 行。
 
@@ -308,7 +308,7 @@ OpenSpec 最大的隐藏价值：**它是一份跨 Agent 的真相源**。
 - 任务粒度拆到 2 小时内，超出 scope 的立刻打回。
 - 养成习惯——**"下个变更做"比"这次顺手做"健康得多**。
 
-### 📜 spec 变成伪代码
+### 💻 spec 变成伪代码
 
 **症状**：`specs/capability/spec.md` 写成了"半代码半文档"，Requirement 里全是 `if/else/function`。
 
@@ -320,7 +320,7 @@ OpenSpec 最大的隐藏价值：**它是一份跨 Agent 的真相源**。
 - Scenario 用"输入-输出"对，不用代码片段。
 - 验收点用 `SHALL` 不用 `def`——这是"AI 看的合同"，不是"AI 抄的模板"。
 
-### 💥 多变更并行冲突
+### 🔀 多变更并行冲突
 
 **症状**：两个 feature branch 同时改 `specs/auth/spec.md`，merge 时冲突无法解决。
 
@@ -332,7 +332,7 @@ OpenSpec 最大的隐藏价值：**它是一份跨 Agent 的真相源**。
 - 跨能力的变更完全独立（因为 `specs/auth/` 和 `specs/billing/` 不冲突）。
 - 实在有重叠，**先 archive 一个，再开第二个**。
 
-### 🪤 归档前漏掉 verify
+### 🎯 归档前漏掉 verify
 
 **症状**：直接 `/opsx:archive`，一周后线上出问题，回查才发现某个 Scenario 从来没实现过。
 
@@ -391,7 +391,7 @@ OpenSpec 最大的隐藏价值：**它是一份跨 Agent 的真相源**。
 
 **`AGENTS.md` 是项目的"AI 宪法"**——花一下午写好它，后面所有 Agent 的行为都会更一致。
 
-### 🧩 自定义工作流
+### 🎨 自定义工作流
 Custom schema 是 OpenSpec 中对 workflow 的自定义描述。它定义一次 change 从创建到实施、sync、archive 的 artifact 结构和依赖关系。通过 custom schema，团队可以把不同研发场景拆成多种 workflow，而不是强制所有 change 都走同一条路径。
 
 OpenSpec 的命令文件位于 `~/.claude/commands/opsx/`（以 Claude Code 为例）。你可以**自己加命令**：

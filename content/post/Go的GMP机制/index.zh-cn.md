@@ -30,12 +30,14 @@ math : true
 
 简单总结一下：线程是内核级的，重而稳；协程是用户级的，轻而快。
 
+---
+
 ### 🚀 goroutine
 
 Go语言选择的并发实现，就是我们所熟知的 **goroutine**。你可以把它看作是Go对协程的"超级魔改版"。它并不是一个孤立的概念，而是整个 **GMP调度体系** 的核心产物。
 
 <div align="center">
-  <img src="image-3.png" alt="image-3" width="82%">
+  <img src="image-3.png" alt="goroutine概念示意图" width="82%">
 </div>
 
 正是因为有了GMP这套精妙的架构，goroutine才拥有了超越原生协程的两大核心优势：
@@ -46,10 +48,10 @@ Go语言选择的并发实现，就是我们所熟知的 **goroutine**。你可�
 
 更牛的是，Go语言在顶层完全屏蔽了线程这个概念，所有的并发操作都是围绕着goroutine来的，就像秦始皇统一了度量衡，Go也用goroutine统一了并发江湖的秩序。
 
-#### 💻 具体使用
+#### 🎯 具体使用
 在具体使用上调用函数的时候在前面加上go关键字，就可以为一个函数创建一个goroutine。
 
-```Go
+```go
 func hello() {
     fmt.Println("Hello Goroutine!")
 }
@@ -93,7 +95,7 @@ goroutine 的阻塞和线程阻塞不是一回事。很多场景下，被挂起�
 
 - **通过参数传递数据到协程**
 
-```Go
+```go
 func hello(i int) {
     fmt.Println("Hello Goroutine!", i)
 }
@@ -110,7 +112,7 @@ func main() {
 
 - **定义临时变量**
 
-```Go
+```go
 func hello(i int) {
     fmt.Println("Hello Goroutine!", i)
 }
@@ -130,46 +132,7 @@ func main() {
 
 从调度视角看，goroutine 的生命周期可以概括为五个阶段：
 
-1. **创建**：分配初始栈空间，初始化状态和调度信息。
-2. **运行**：被某个 P 选中后，在绑定的 M 上执行。
-3. **阻塞**：等待 `channel`、锁、网络 I/O 等资源时让出 CPU。
-4. **唤醒**：等待条件满足后重新进入可运行队列，继续参与调度。
-5. **销毁**：执行完成或异常退出后回收栈和状态对象，等待复用。
-
-更细一点看，goroutine 通常会经历“创建 -> 可运行 -> 运行 -> 阻塞 / 再次可运行 -> 销毁”这样的状态流转。它不会一直绑定某个线程，而是交给调度器动态安排。
-
-#### ⚠️ panic 与 recover
-
-goroutine 里出现 `panic` 时，首先终止的是当前 goroutine，但如果这个 `panic` 没有被 `recover`，最终仍然会导致整个进程退出。因此，实际工程里通常建议在关键子协程的入口处做好兜底恢复。
-
-```go
-go func() {
-    defer func() {
-        if r := recover(); r != nil {
-            log.Println("goroutine panic:", r)
-        }
-    }()
-
-    // do something risky
-}()
-```
-
-这里还有两个容易忽略的点：
-
-- **子 goroutine 里的 `panic` 不会自动被其他 goroutine 处理**，必须在它自己的调用栈里 `recover`。
-- **`WaitGroup` 只能等待结束，不能处理 `panic`**。
-- **如果原函数已经 `panic`，而 `defer` 里又发生新的 `panic`，后者会覆盖前者**，最终看到的是 `defer` 里的异常。
-
-#### 📏 栈增长机制
-
-goroutine 之所以轻量，很大一部分原因就在栈。
-
-- **默认初始栈很小**：Go 1.19+ 的 64 位系统上，goroutine 初始栈通常为 `2 KB`，32 位系统通常为 `1 KB`。
-- **栈是动态伸缩的**：随着函数调用加深、局部变量变多，runtime 会在栈不足时分配更大的新栈，并把活跃栈帧迁移过去。
-- **扩栈通常按倍数增长**：常见做法是扩到原来的 `2` 倍，避免频繁扩容。
-- **线程栈通常是固定大栈**：OS 线程往往在创建时就预留 `1 MB` 到 `2 MB` 级别的栈空间，而 goroutine 不需要一开始就占这么多内存。
-
-也正因为 goroutine 的初始成本低、切换主要发生在用户态，所以 Go 才能在一个进程里轻松承载海量并发任务。
+---
 
 ### ⚙️ 调度模型
 
@@ -356,7 +319,9 @@ M0和G0
 
 {{</notice>}}
 
-### 🌐 GMP 生态圈
+---
+
+### 📚 GMP 生态圈
 
 在Go的世界里，GMP是绝对的基石。所有上层的建筑，比如内存管理、并发工具等，都是围绕着GMP模型来精心设计的。
 
@@ -390,6 +355,8 @@ Go的内存管理借鉴了Google自家的TCMalloc思想，并为GMP模型量身�
 
 可以说，不理解GMP，就无法真正理解Go语言的精髓。
 
+---
+
 ## 🔬 深入源码：GMP 的底层结构
 
 理论说了一大堆，我们现在就潜入源码，看看G、M、P在 `runtime/runtime2.go` 文件里到底长什么样。
@@ -414,37 +381,7 @@ Go的内存管理借鉴了Google自家的TCMalloc思想，并为GMP模型量身�
 
 * `atomicstatus`: G的生命周期状态，比如 `_Gidle`、`_Grunnable`、`_Grunning`、`_Gwaiting` 等。
 
-```go
-// g represents a goroutine.
-type g struct {
-        // stack describes the goroutine's stack. The bounds are
-        // [stack.lo, stack.hi).
-        stack       stack   // goroutine的执行栈空间
-        // stackguard0 is the stack pointer compared in the Go stack growth prologue.
-        // It is stack.lo + _StackGuard.
-        // It is also used to signal a request to preempt the goroutine.
-        stackguard0 uintptr // 栈空间保护区边界，也用于传递抢占标识
-
-        // ...
-
-        _panic       *_panic // 记录g执行过程中遇到的异常
-        _defer       *_defer // g中挂载的defer函数，是一个LIFO的链表结构
-        m            *m      // 当前执行本g的m
-        
-        // atomicstatus is the status of the goroutine.
-        // It is changed atomically with casgstatus.
-        // This field is read and written atomically, and the values are not in the
-        // GStatus enum.
-        atomicstatus uint32 // g的状态
-
-        // ...
-        
-        // schedlink is a link in the global run queue, idle g list, or gfree list.
-        schedlink guintptr // 进入全局队列grq时指向相邻g的next指针
-}
-```
-
-### 🔧 M 的结构（Machine）
+### 🔌 M 的结构（Machine）
 
 <div align="center">
   <img src="m的结构修改.png" alt="m的结构修改" width="82%">
@@ -460,26 +397,9 @@ type g struct {
 
 * `p`: 指向当前与M绑定的P。
 
-```go
-// m represents an OS thread.
-type m struct {
-        g0      *g     // 专门用于调度的g，每个M都有一个
-        // ...
-        procid  uint64 // M的唯一ID
-        gsignal *g     // 用于处理信号的g
-        
-        curg    *g     // M上正在运行的普通g
-        p       puintptr // M关联的p
-        
-        // ...
-        
-        schedlink muintptr // M在空闲链表中的下一个M
-}
-```
-
 你可以把M的运行过程想象成两个状态的切换：当它在执行 `g0` 时，它在扮演"调度者"的角色；当它在执行 `curg` 时，它在扮演"执行者"的角色。
 
-### 🔗 P 的结构（Processor）
+### 📦 P 的结构（Processor）
 
 <div align="center">
   <img src="p的结构修改.png" alt="p的结构修改" width="82%">
@@ -497,30 +417,7 @@ type m struct {
 
 * `runnext`: LRQ里的一个"VIP通道"。通过 `runqput` 放入的下一个G会优先放在这里，调度器会首先检查 `runnext` 是否有G，有的话直接拿来执行，可以省去操作`runq`队列的开销。
 
-```go
-// p represents a processor.
-type p struct {
-        id          int32  // P的ID
-        status      uint32 // P的状态 (pidle, prunning, etc.)
-        link        puintptr
-        schedtick   uint32   // 每执行一次schedule，该值+1
-        syscalltick uint32   // 每进行一次系统调用，该值+1
-        m           muintptr // 回指到关联的M (如果idle则为nil)
-        
-        // Queue of runnable goroutines. Accessed without lock.
-        runqhead uint32
-        runqtail uint32
-        runq     [256]guintptr // 本地G队列，即LRQ
-        // runnext, if non-nil, is a runnable G that was ready'd by
-        // the current G and should be run next instead of what's in
-        // runq.
-        runnext guintptr // 下一个要调度的G，可以看作是LRQ中的一个特权位置
-        
-        // ...
-}
-```
-
-### 🎛️ 全局调度器（schedt）
+### 📋 全局调度器（schedt）
 
 <div align="center">
   <img src="schedt修改.png" alt="schedt修改" width="82%">
@@ -538,31 +435,11 @@ type p struct {
 
 * `runqsize`: GRQ里G的数量。
 
-```go
-// 全局调度模块
-type schedt struct{
-    // ...
-    // 互斥锁
-    lock mutex
-
-    // 空闲 m 队列
-    midle        muintptr // idle m's waiting for work
-    // ...
-    // 空闲 p 队列
-    pidle      puintptr // idle p's
-    // ...
-
-    // 全局 g 队列——grq
-    runq     gQueue
-    // grq 中存量 g 的个数
-    runqsize int32
-    // ...
-}
-```
-
 > `midle`和 `pidle`\`的设计是为了资源的复用和节能。当系统不忙时，空闲的M和P会被放进这两个队列里"休眠"，避免CPU空转，等到有新任务时再被唤醒。
 
-## 🧭 正向追踪：一个 G 的诞生与调度
+---
+
+## 🔍 正向追踪：一个 G 的诞生与调度
 
 好了，基础结构我们都看完了。现在，让我们切换到第一人称视角，看看一个我们用 `go func(){...}` 创建的goroutine，是如何一步步被调度并执行的。这个过程，可以看作是从 `g0`到 `g`的转换。
 
@@ -599,26 +476,6 @@ func handle() {
 }
 ```
 
-编译器会把 `go func()` 转换成对 `runtime.newproc` 函数的调用。这个函数的核心逻辑如下：
-
-1. **切换到**`g0`**栈**：`newproc`会先通过`systemstack`把自己从当前的用户G栈切换到M的`g0`调度栈上。因为创建G是调度层面的工作，得由专业的`g0`来干。
-
-2. **创建G实例**：在`g0`栈上，调用`newproc1`来创建一个新的`g`结构体实例，并做好初始化工作，比如设置好要执行的函数入口地址、程序计数器等。
-
-3. **放入就绪队列**：新创建的G需要被放到一个就绪队列里，等待被调度。这里会调用`runqput`函数。
-
-4. `runqput`**的逻辑**：
-
-   * 它会优先尝试把新的G放到当前P的`runnext`这个VIP位置。
-
-   * 如果`runnext`被占了，它会尝试把G放到当前P的LRQ的队尾。
-
-   * 如果LRQ也满了，那没办法，只能加个全局锁，把这个G和LRQ里的一半G都转移到全局队列GRQ里去（这个操作叫`runqputslow`）。
-
-5. **唤醒休眠的P**：如果此时有P因为没事干而处于休眠状态，`wakep`函数会负责唤醒一个P来处理这个新任务。
-
-6. **切回用户G栈**：`systemstack`执行完毕，切回到原来的用户G，继续执行它自己的代码。
-
 ```go
 // 创建一个新的g，并将其投递到就绪队列中。fn是用户指定的函数。
 // 当前的执行者还是某个普通的g。
@@ -652,27 +509,17 @@ func newproc(fn *funcval) {
 
 ### 🔁 从 `g0` 到 `g` 的切换
 
-<div align="center">
-  <img src="g0与g修改.png" alt="g0与g修改" width="82%">
+<div align=”center”>
+  <img src=”g0与g修改.png” alt=”g0与g修改” width=”82%”>
 </div>
 
 每个M都有一个自己的`g0`，`g0`的工作就是不断地调用`schedule`函数来寻找可执行的G。所以，一个M的生命周期，就是在执行`g0`（找任务）和执行普通`g`（做任务）之间循环往复。
 
-这个切换过程有两个关键的"桩函数"：
+这个切换过程有两个关键的”桩函数”：
 
 * `mcall`, `systemstack`: 实现从 `g` 切换到 `g0`。
 
 * `gogo`: 实现从 `g0` 切换到 `g`。
-
-我们从`g0`的视角来看，它主要做两件事：
-
-1. `schedule()`: 调用`findrunnable()`方法，从各个队列里找到一个可执行的G。
-
-2. `execute()`: 找到G之后，更新上下文信息（比如把`m.curg`指向找到的G），然后调用`gogo`，把M的CPU执行权从`g0`交到这个G手上。
-
-也可以把 Go scheduler 直接理解成 Go runtime 内嵌的协程调度器。它不负责执行业务逻辑，只负责两件事：决定“下一个该跑哪个 G”，以及决定“什么时候把当前 G 切走”。因此 `schedule()` 更像“挑任务”，而 `execute()` 更像“正式切换执行权”。
-
-上述方法均实现于 runtime/proc.go 文件中：
 
 ```go
 // 执行方为g0
@@ -716,7 +563,7 @@ func execute(gp *g, inheritTime bool) {
 
 从栈切换角度看，`mcall()` 和 `gogo()` 并不是简单的函数调用，而是在用户 G 的栈和 `g0` 的调度栈之间切换 `SP`、`PC` 等寄存器，并把现场保存在 `gobuf` 里。也正因为如此，调度器既能安全地离开当前 G，又能在将来准确恢复到它之前停下的位置。
 
-### 🔍 寻找 G 的漫漫长路：`findrunnable`
+### 🔎 寻找 G 的漫漫长路：`findrunnable`
 
 `findrunnable`是调度循环中最核心的函数，它寻找G的策略体现了Go调度器的智慧。
 
@@ -748,168 +595,13 @@ func execute(gp *g, inheritTime bool) {
 
 这个过程设计得非常精妙，既保证了任务获取的高效性（优先无锁操作），又实现了负载均衡（work-stealing），还能在系统空闲时自动缩容，节省资源。
 
-### 📚 `findRunnable` 函数详解
+### 📖 `findRunnable` 函数详解
 
 Go调度器的核心在于`findRunnable`函数，这个函数负责为当前的处理器P找到一个可执行的goroutine。整个过程遵循着严格的优先级顺序，确保系统的公平性和效率。
-
-```go
-// 寻找可执行的goroutine，返回时必定已经找到目标g
-func findRunnable()(gp *g, inheritTime, tryWakeP bool){
-    // 获取当前P下的g0（调度协程）
-    _g_ := getg()
-    // ...
-top:
-    // 获取当前的处理器P
-    _p_ := _g_.m.p.ptr()
-    // ...
-    
-    // 防饥饿机制：每61次调度检查一次全局队列
-    if _p_.schedtick%61==0 && sched.runqsize > 0{
-        lock(&sched.lock)
-        gp = globrunqget(_p_, 1)
-        unlock(&sched.lock)
-        if gp != nil{
-            return gp, false, false
-        }
-    }
-    // ...
-    
-    // 第一优先级：从本地运行队列获取goroutine
-    if gp, inheritTime := runqget(_p_); gp != nil{
-        return gp, inheritTime, false
-    }
-    
-    // 第二优先级：从全局队列获取goroutine
-    if sched.runqsize != 0{
-        lock(&sched.lock)
-        gp := globrunqget(_p_, 0)
-        unlock(&sched.lock)
-        if gp != nil{
-            return gp, false, false
-        }
-    }
-    
-    // 第三优先级：处理网络I/O就绪的goroutine
-    if netpollinited() && atomic.Load(&netpollWaiters) > 0 &&
-       atomic.Load64(&sched.lastpoll) != 0{
-        if list := netpoll(0); !list.empty(){ // 非阻塞调用
-            gp := list.pop()
-            injectglist(&list)
-            casgstatus(gp, _Gwaiting, _Grunnable)
-            // ...
-            return gp, false, false
-        }
-    }
-    // ...
-    
-    // 第四优先级：从其他P的本地队列偷取goroutine
-    gp, inheritTime, tnow, w, newWork := stealWork(now)
-    if gp != nil{
-        return gp, inheritTime, false
-    }
-    
-    // 若有GC标记任务，参与协作而非直接回收P
-    // ...
-    
-    // 最后检查：再次确认全局队列
-    lock(&sched.lock)
-    // ...
-    if sched.runqsize != 0{
-        gp := globrunqget(_p_, 0)
-        unlock(&sched.lock)
-        return gp, false, false
-    }
-    // ...
-    
-    // 无事可做时：解绑P和M，将P放入空闲队列
-    releasep()
-    now = pidleput(_p_, now)
-    unlock(&sched.lock)
-    // ...
-    
-    // 网络轮询保障机制：确保有M专门处理I/O事件
-    if netpollinited() && (atomic.Load(&netpollWaiters) > 0 || pollUntil != 0) &&
-       atomic.Xchg64(&sched.lastpoll, 0) != 0{
-        atomic.Store64(&sched.pollUntil, uint64(pollUntil))
-        // ...
-        
-        // 阻塞模式执行网络轮询
-        delay := int64(-1)
-        // ...
-        list := netpoll(delay) // 阻塞直到有新任务
-        
-        // 恢复轮询标识
-        atomic.Store64(&sched.lastpoll, uint64(now))
-        // ...
-        
-        lock(&sched.lock)
-        // 尝试获取空闲的P
-        _p_, _ = pidleget(now)
-        unlock(&sched.lock)
-        
-        // 如果没有可用的P，将就绪的goroutine放入全局队列
-        if _p_ == nil{
-            injectglist(&list)
-        } else {
-            // 重新绑定P和M
-            acquirep(_p_)
-            // 取第一个goroutine用于调度，其余放入全局队列
-            if !list.empty(){
-                gp := list.pop()
-                injectglist(&list)
-                casgstatus(gp, _Gwaiting, _Grunnable)
-                // ...
-                return gp, false, false
-            }
-            // ...
-            goto top
-        }
-    }
-    // ...
-    
-    // 最终手段：阻塞当前M，加入空闲队列
-    stopm()
-    goto top
-}
-```
 
 #### 📍 本地队列获取策略
 
 从本地队列获取goroutine是最高效的方式，因为不需要加锁。`runqget`函数采用了巧妙的双重策略：
-
-```go
-// 无锁方式从P的本地队列获取goroutine
-func runqget(_p_ *p)(gp *g, inheritTime bool){
-    // 优先获取runnext位置的goroutine（高优先级位置）
-    next := _p_.runnext
-    if next != 0 && _p_.runnext.cas(next, 0){
-        return next.ptr(), true
-    }
-    
-    // 从队列头部获取普通goroutine
-    for{
-        // 原子操作获取头部索引
-        h := atomic.LoadAcq(&_p_.runqhead) // load-acquire语义，与其他消费者同步
-        // 获取尾部索引
-        t := _p_.runqtail
-        
-        // 队列为空的情况
-        if t == h {
-            return nil, false
-        }
-        
-        // 根据索引取出对应的goroutine
-        gp := _p_.runq[h%uint32(len(_p_.runq))].ptr()
-        
-        // CAS操作更新头部索引
-        if atomic.CasRel(&_p_.runqhead, h, h+1){ // cas-release语义，提交消费操作
-            return gp, false
-        }
-    }
-}
-```
-
-这里有个有趣的设计：`runnext`是一个特殊位置，专门存放高优先级的goroutine，比如刚刚创建的新goroutine。这样设计可以提高响应性。
 
 #### ⚖️ 全局队列的公平调度
 
@@ -966,47 +658,6 @@ func netpoll(delay int64) gList {
 
 当本地队列和全局队列都为空时，并且执行完 netpoll 流程后仍未获得 g，则会尝试从其他 p 的 lrq 中窃取半数 g 补充到当前 p 的 lrq 中。工作窃取算法是负载均衡的关键，它确保了系统中的处理器都能保持忙碌状态。
 
-```go
-func stealWork(now int64) (gp *g, inheritTime bool, rnow, pollUntil int64, newWork bool){
-    // 获取当前P
-    pp := getg().m.p.ptr()
-    // ...
-    
-    // 最多尝试4轮窃取
-    const stealTries = 4
-    for i := 0; i < stealTries; i++{
-        // ...
-        
-        // 随机选择窃取目标，避免热点竞争
-        for enum := stealOrder.start(fastrand()); !enum.done(); enum.next(){
-            // ...
-            
-            // 获取目标P
-            p2 := allp[enum.position()]
-            
-            // 不能从自己这里偷
-            if pp == p2 {
-                continue
-            }
-            // ...
-            
-            // 只要目标P不是空闲状态就尝试窃取
-            if !idlepMask.read(enum.position()){
-                // 窃取目标P本地队列中的一半goroutine
-                if gp := runqsteal(pp, p2, stealTimersOrRunNextG); gp != nil{
-                    return gp, false, now, pollUntil, ranTimer
-                }
-            }
-        }
-    }
-    
-    // 窃取失败
-    return nil, false, now, pollUntil, ranTimer
-}
-```
-
-#### ♻️ 回收空闲 P 和 M
-
 再执行完上述逻辑之后，如果还是未能获取到可运行的g，系统需要妥善处理空闲的P和M，此时会将 p 和 m 添加到 schedt 的 pidle 和 midle 队列中并停止 m 的运行，避免产生资源浪费
 
 ```go
@@ -1038,7 +689,9 @@ func stopm(){
 }
 ```
 
-## ↩️ 逆向追踪：G 的让渡艺术
+---
+
+## 🔙 逆向追踪：G 的让渡艺术
 
 有借有还，再借不难。G拿到了M的执行权，也得在适当的时候还回去。这个"还"的过程，我们称之为**让渡（yield）**。让渡是一个主动的行为，由G自己发起，目的是把执行权交还给`g0`，让`g0`可以去调度其他的G。这是一个从 `g` 到 `g0` 的转换。
 
@@ -1098,47 +751,6 @@ func goexit0(gp *g) {
 </div>
 
 我们可以通过在代码里调用 `runtime.Gosched()` 来手动让一个G让出CPU。这个函数会做和`goexit1`类似的事情：
-
-1. 调用`mcall(gosched_m)`，把执行权从当前G切换到`g0`。
-
-2. `g0`执行`gosched_m`函数，它的逻辑是：
-
-   * 把G的状态从`_Grunning`改回`_Grunnable`。
-
-   * 解除G和M的绑定。
-
-   * 把这个G直接扔到**全局队列GRQ**中，等待下一次被调度。
-
-   * 调用`schedule()`，开始新一轮调度。
-
-```go
-// 主动让渡出执行权，此时执行方还是普通g
-func Gosched() {
-        // 通过mcall，将执行方转为g0，调用gosched_m方法
-        mcall(gosched_m)
-}
-
-// 此时执行方为g0
-func gosched_m(gp *g) {
-        // ...
-        goschedImpl(gp)
-}
-
-func goschedImpl(gp *g) {
-        // 将g状态由running改为runnable就绪态
-        casgstatus(gp, _Grunning, _Grunnable)
-        // 解除g和m的关系
-        dropg()
-        // 将g添加到全局队列grq
-        lock(&sched.lock)
-        globrunqput(gp)
-        unlock(&sched.lock)
-        // 发起新一轮调度
-        schedule()
-}
-```
-
-### 💤 情非得已：阻塞让渡
 
 <div align="center">
   <img src="阻塞让渡修改.png" alt="阻塞让渡修改" width="82%">
@@ -1236,6 +848,8 @@ func ready(gp *g, traceskip int, next bool){
 }
 ```
 
+---
+
 ## ⚡ 第三方视角：抢占式调度
 
 前面说的"让渡"都是G的主动行为。但如果一个G是个"老赖"，执行一个超长的计算任务，一直不主动让出CPU怎么办？难道要让整个系统都等它一个吗？
@@ -1249,26 +863,6 @@ func ready(gp *g, traceskip int, next bool){
 </div>
 
 ### 🛰️ 幕后英雄：无处不在的 sysmon
-
-在我们的Go程序启动时，除了我们熟知的主线程外，runtime还会悄悄启动一个非常关键的后台线程——`sysmon`（System Monitor，系统监控）。
-
-你可以把它想象成一个永不休息的"巡逻兵"，它独立于普通的G-P-M调度模型，持续地在后台循环执行。这个线程在整个程序生命周期里是全局唯一的，就像一个大管家，不知疲倦地监视着整个Go程序的运行状态。
-
-<div align="center">
-  <img src="监控线程修改.png" alt="监控线程修改" width="82%">
-</div>
-
-`sysmon` 的工作是一个永不停歇的循环，它主要关心三件大事儿：
-
-* **网络轮询（netpoll）**：检查有没有已经完成IO操作的网络连接，唤醒那些等待IO的Goroutine。
-
-* **抢占（retake）**：找出那些运行时间太长的Goroutine，毫不留情地把它"踹"下CPU。
-
-* **GC触发检查**：看看是不是时候该进行垃圾回收（GC）了。
-
-这个 `sysmon` 线程是在哪里创建的呢？答案就在 `main` 函数启动的深处。Go运行时会通过 `newm` 创建一个新的系统线程（M）专门来跑 `sysmon` 这个函数。
-
-它的核心工作逻辑大致如下：
 
 ```go
 // The main goroutine.
@@ -1336,105 +930,6 @@ Go的策略非常聪明：**人走可以，但办公桌得留下！**
   <img src="系统调用修改.png" alt="系统调用修改" width="82%">
 </div>
 
-这个过程主要发生在 `reentersyscall` 函数中：
-
-```go
-// reentersyscall 在goroutine进入系统调用时被调用
-func reentersyscall(pc, sp uintptr) {
-        _g_ := getg() // 获取当前的goroutine
-
-        // ...
-        // 保存当前的程序计数器(PC)和栈指针(SP)等上下文信息
-        save(pc, sp)
-        // ...
-
-        // 1. 将goroutine的状态从 _Grunning 更新为 _Gsyscall
-        casgstatus(_g_, _Grunning, _Gsyscall)
-
-        // ...
-        // 2. 解除 P 和 M 的绑定关系
-        pp := _g_.m.p.ptr()
-        pp.m = 0          // P的m指针置空
-        _g_.m.p = 0       // M的p指针置空
-
-        // 3. 将P设置为M的oldp，建立一个弱引用关系
-        _g_.m.oldp.set(pp)
-        
-        // 4. 将P的状态更新为 _Psyscall
-        atomic.Store(&pp.status, _Psyscall)
-
-        // ...
-}
-```
-
-等系统调用结束，Goroutine从内核态返回时，会执行 `exitsyscall` 函数。这时它会尝试"复位归来"：
-
-* **快速路径**：先看看之前那个P（`oldp`）是不是还单身（没有和其他M结合）。如果是，太好了，直接拿回来用，光速恢复执行。
-
-* **慢速路径**：如果P已经被别的M"拐走"了，那就没办法了。当前Goroutine会被切换到`g0`栈，执行`exitsyscall0`，尝试为自己所在的M寻找一个新的空闲P。如果找到了，就继续执行；如果找不到，说明现在很忙，M就会被挂起，这个Goroutine则被放到全局队列中，等待下一次被调度
-
-```go
-// exitsyscall 在goroutine退出系统调用时执行
-func exitsyscall() {
-        _g_ := getg() // 获取当前goroutine
-
-        // ...
-        // 尝试快速路径：如果oldp没有被其他M绑定，就直接复用
-        oldp := _g_.m.oldp.ptr()
-        _g_.m.oldp = 0
-        if exitsyscallfast(oldp) {
-                // ...
-                // 快速恢复成功，将g的状态改回_Grunning
-                casgstatus(_g_, _Gsyscall, _Grunning)
-                // ...
-                return // 直接返回，继续执行g
-        }
-
-        // 快速路径失败，切换到g0栈，执行慢速路径逻辑
-        mcall(exitsyscall0)
-        // ...
-}
-
-// exitsyscall0 在g0栈上为当前M寻找一个新的P
-func exitsyscall0(gp *g) {
-        // 将goroutine的状态从 _Gsyscall 改为 _Grunnable 就绪态
-        casgstatus(gp, _Gsyscall, _Grunnable)
-        // 解除g和当前M的绑定
-        dropg()
-        lock(&sched.lock)
-        
-        // 尝试从空闲列表获取一个P
-        var _p_ *p
-        _p_, _ = pidleget(0)
-        // ...
-        
-        // 如果没有找到空闲的P
-        if _p_ == nil {
-                // 将g放入全局运行队列
-                globrunqput(gp)
-                // ...
-        }
-        // ...
-        unlock(&sched.lock)
-
-        // 如果找到了P
-        if _p_ != nil {
-                // 绑定P，然后立即执行这个goroutine
-                acquirep(_p_)
-                execute(gp, false) // 不会返回
-        }
-
-        // 如果没找到P，M只能进入休眠
-        stopm()
-        // 当M被唤醒后，重新开始调度循环
-        schedule() // 不会返回
-}
-```
-
-<div align="center">
-  <img src="retake方法修改.png" alt="retake方法修改" width="82%">
-</div>
-
 你可能会问，这和 `sysmon` 有什么关系？关系大了！`sysmon` 会在它的 `retake` 检查中，遍历所有的P。如果发现某个P长时间处于 `_Psyscall` 状态（默认超过10ms），或者这个P虽然在syscall，但它的本地队列里还有其他Goroutine在排队，`sysmon` 就会认为不能再等了，必须执行抢占。 它会调用 `handoffp`，强制把这个P从syscall的M那里"抢"过来，分配给一个新的或者空闲的M，去执行P本地队列里的其他任务。
 
 ```go
@@ -1471,7 +966,7 @@ func retake(now int64) uint32{
 }
 ```
 
-```javascript
+```go
 func handoffp(_p_ *p) {
     // 如果 p lrq 中还有 g 或者全局队列 grq 中还有 g，则立即分配一个新 m 与该 p 结合
     if!runqempty(_p_)|| sched.runqsize !=0{
@@ -1495,31 +990,6 @@ func handoffp(_p_ *p) {
 </div>
 
 `sysmon` 在 `retake` 函数中同样会检查每个处于 `_Prunning` 状态的P。它会看当前P上的Goroutine从何时开始执行（`schedwhen`），如果执行时间超过了一个阈值（`forcePreemptNS`，通常是10ms），`sysmon` 就会认为需要抢占了。
-
-```go
-// retake 函数的一部分
-func retake(now int64) uint32 {
-        // ...
-        for i := 0; i < len(allp); i++ {
-                _p_ := allp[i]
-                // ...
-                // 如果P正在运行
-                if s == _Prunning {
-                        // ...
-                        // 检查当前goroutine的执行时间是否超过了10ms
-                        if _p_.schedwhen+forcePreemptNS <= now {
-                                // 发起抢占
-                                preemptone(_p_)
-                        }
-                }
-        }
-        // ...
-}
-```
-
-这里的抢占又分为两种方式：一种是"好言相劝"，一种是"强行执法"。
-
-#### 🤲 协作式抢占
 
 这是Go早期版本就有的抢占方式，比较"温柔"。`sysmon` 在决定抢占后，会调用 `preemptone` 函数。这个函数首先会给目标Goroutine打上一个"抢占标记"。具体来说，就是把 `gp.preempt` 设置为 `true`，同时把 `gp.stackguard0` 设置为一个特殊值 `stackPreempt`。
 

@@ -88,7 +88,7 @@ go build -gcflags="-m -l" main.go
 go build -gcflags="-m" main.go
 ```
 
-#### ✂️ 削减无用代码
+#### 🧹 削减无用代码
 
 删除无用代码即通过代码静态分析工具，删除不可达的代码分支，或者移除无用的循环。
 
@@ -299,7 +299,7 @@ Use "go help mod <command>" for more information about a command.
 
 ### 📥 添加依赖
 
-#### 🔧 go get 命令
+#### ⌨️ go get 命令
 
 - **`go get`**：没有指定版本就会拉取最新版本，且不会自动添加间接依赖的版本
 - **`go get -u`**：除了拉取指定依赖版本外，还会拉取并添加间接依赖的最新版本，而不是直接依赖所依赖的版本，也不会回退间接依赖的版本

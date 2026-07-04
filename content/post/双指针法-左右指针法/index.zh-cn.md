@@ -30,7 +30,7 @@ math : true
 
 ### 💻 代码模板
 
-```
+```java
 class solution{
     public int solution(int[]nums,int val)
     {
@@ -48,9 +48,9 @@ class solution{
 
 ## 📚 经典例题
 
-### 🧪 LeetCode 977. 有序数组的平方
+### 💼 LeetCode 977. 有序数组的平方
 
-#### 📌 题目描述
+#### 🔍 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/squares-of-a-sorted-array/)
 
@@ -67,7 +67,7 @@ class solution{
 - 输入：nums = [-7,-3,2,3,11]
 - 输出：[4,9,9,49,121]
 
-#### 💡 思路解析
+#### 🧠 思路解析
 
 数组其实是有序的， 只不过负数平方之后可能成为最大数了。
 
@@ -104,9 +104,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 15. 三数之和
+### 🎯 LeetCode 15. 三数之和
 
-#### 📌 题目描述
+#### 📖 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/3sum/)
 
@@ -120,7 +120,7 @@ class Solution {
 
 满足要求的三元组集合为： [ [-1, 0, 1], [-1, -1, 2] ]
 
-#### 💡 思路解析
+#### 🧠 思路解析
 
 一开始的思路为，固定 **a+b** ，然后通过哈希法求出 **0-(a+b)** 是否在数组中出现过。但是题目中出现限制条件：**答案中不可以包含重复的三元组**。而使用哈希法进行去重比较困难。于是考虑先固定 **a** ,然后使用指针移动 **b** 和 **c** ,通过计算他们的和与0的大小关系来移动指针。同时题目不涉及数组下标，然后考虑使用排序+左右指针进行求解。
 
@@ -215,9 +215,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 18. 四数之和
+### 🔧 LeetCode 18. 四数之和
 
-#### 📌 题目描述
+#### 🔍 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/4sum/)
 
@@ -229,7 +229,7 @@ class Solution {
 
 示例： 给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。 满足要求的四元组集合为： [ [-1, 0, 0, 1], [-2, -1, 1, 2], [-2, 0, 0, 2] ]
 
-#### 💡 思路解析
+#### 🧠 思路解析
 
 基本思路与三数之和类似，但是在剪枝操作中存在注意点
 
@@ -292,9 +292,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 941. 有效的山脉数组
+### 📊 LeetCode 941. 有效的山脉数组
 
-#### 📌 题目描述
+#### 🔍 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/valid-mountain-array/)
 
@@ -308,9 +308,7 @@ class Solution {
   - arr[i] > arr[i+1] > ... > arr[arr.length - 1]
 
 <div align="center">
-<div align="center">
   <img src="20210729103604.png" alt="有效的山脉数组示意图" width="82%">
-</div>
 </div>
 
 示例 1：
@@ -328,7 +326,7 @@ class Solution {
 - 输入：arr = [0,3,2,1]
 - 输出：true
 
-#### 💡 思路解析
+#### 🧠 思路解析
 
 山脉数组保证从左边到山顶是单调递增，从右边到山顶时单调递增
 

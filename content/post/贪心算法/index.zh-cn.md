@@ -24,7 +24,7 @@ math : true
 
 ## 🧪 LeetCode 455. 分发饼干
 
-### 📌 题目描述
+### 📖 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/assign-cookies/)
 
@@ -49,13 +49,13 @@ math : true
 - 0 <= s.length <= 3 * 10^4
 - 1 <= g[i], s[j] <= 2^31 - 1
 
-### 💡 思路解析
+### 🎯 思路解析
 
 **局部最优就是大饼干喂给胃口大的，充分利用饼干尺寸喂饱一个，全局最优就是喂饱尽可能多的小孩**。
 
 因此可以将胃口数组和饼干数组进行预先排序。然后从后向前遍历小孩数组，用大饼干优先满足胃口大的，并统计满足小孩数量。
 
-### 💻 参考代码
+### ⌨️ 参考代码
 
 ```java
 class Solution {
@@ -79,11 +79,9 @@ class Solution {
 
 ---
 
----
+## 💡 LeetCode 376. 摆动序列
 
-## 🧪 LeetCode 376. 摆动序列
-
-### 📌 题目描述
+### 📖 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/wiggle-subsequence/)
 
@@ -110,7 +108,7 @@ class Solution {
 - 输入: [1,2,3,4,5,6,7,8,9]
 - 输出: 2
 
-### 💡 思路解析
+### 🎯 思路解析
 
 本题要求通过从原始序列中删除一些（也可以不删除）元素来获得子序列，剩下的元素保持其原始顺序。
 
@@ -158,7 +156,7 @@ class Solution {
 
   - 需要在 这个坡度 摆动变化的时候，更新 prediff 就行
 
-### 💻 参考代码
+### ⌨️ 参考代码
 
 ```java
 class Solution {
@@ -183,11 +181,9 @@ class Solution {
 
 ---
 
----
+## 📊 LeetCode 53. 最大子序和
 
-## 🧪 LeetCode 53. 最大子序和
-
-### 📌 题目描述
+### 📕 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/maximum-subarray/)
 
@@ -199,7 +195,7 @@ class Solution {
 - 输出: 6
 - 解释: 连续子数组  [4,-1,2,1] 的和最大，为  6。
 
-### 💡 思路解析
+### 🔍 思路解析
 
 如果 -2 1 在一起，计算起点的时候，一定是从 1 开始计算，因为负数只会拉低总和
 
@@ -207,7 +203,7 @@ class Solution {
 
 全局最优：选取最大“连续和”
 
-### 💻 参考代码
+### 🖥️ 参考代码
 
 ```java
 class Solution {
@@ -231,9 +227,9 @@ class Solution {
 
 ---
 
-## 🧪 LeetCode 122. 买卖股票的最佳时机 II
+## 📈 LeetCode 122. 买卖股票的最佳时机 II
 
-### 📌 题目描述
+### 📗 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/)
 
@@ -266,7 +262,7 @@ class Solution {
 - 1 <= prices.length <= 3 * 10 ^ 4
 - 0 <= prices[i] <= 10 ^ 4
 
-### 💡 思路解析
+### 🧩 思路解析
 
 **利润是可以分解的**
 
@@ -280,7 +276,7 @@ class Solution {
 
 **局部最优：收集每天的正利润，全局最优：求得最大利润**。
 
-### 💻 参考代码
+### ⚙️ 参考代码
 
 ```java
 class Solution {
@@ -298,11 +294,9 @@ class Solution {
 
 ---
 
----
+## ⚙️ LeetCode 55. 跳跃游戏
 
-## 🧪 LeetCode 55. 跳跃游戏
-
-### 📌 题目描述
+### 📘 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/jump-game/)
 
@@ -324,7 +318,7 @@ class Solution {
 - 输出: false
 - 解释: 无论怎样，你总会到达索引为 3 的位置。但该位置的最大跳跃长度是 0 ， 所以你永远不可能到达最后一个位置。
 
-### 💡 思路解析
+### 🗂️ 思路解析
 
 **问题就转化为跳跃覆盖范围究竟可不可以覆盖到终点！**
 
@@ -334,7 +328,7 @@ class Solution {
 
 每次在覆盖范围内移动指针，更新最大覆盖范围
 
-### 💻 参考代码
+### 🔧 参考代码
 
 ```java
 class Solution {
@@ -353,9 +347,9 @@ class Solution {
 
 ---
 
-## 🧪 LeetCode 45. 跳跃游戏 II
+## 🔄 LeetCode 45. 跳跃游戏 II
 
-### 📌 题目描述
+### 📙 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/jump-game-ii/)
 
@@ -373,7 +367,7 @@ class Solution {
 
 说明: 假设你总是可以到达数组的最后一个位置。
 
-### 💡 思路解析
+### 🔎 思路解析
 
 **要从覆盖范围出发，不管怎么跳，覆盖范围内一定是可以跳到的，以最小的步数增加覆盖范围，覆盖范围一旦覆盖了终点，得到的就是最少步数！**
 
@@ -381,7 +375,7 @@ class Solution {
 
 如果移动下标达到了当前这一步的最大覆盖最远距离了，还没有到终点的话，那么就必须再走一步来增加覆盖范围，直到覆盖范围覆盖了终点。
 
-### 💻 参考代码
+### 🛠️ 参考代码
 
 ```java
 class Solution {
@@ -405,11 +399,9 @@ class Solution {
 
 ---
 
----
+## 💎 LeetCode 1005. K 次取反后最大化的数组和
 
-## 🧪 LeetCode 1005. K 次取反后最大化的数组和
-
-### 📌 题目描述
+### 📓 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/maximize-sum-of-array-after-k-negations/)
 
@@ -441,11 +433,11 @@ class Solution {
 - 1 <= K <= 10000
 - -100 <= A[i] <= 100
 
-### 💡 思路解析
+### 🔬 思路解析
 
 将数组进行排序，其中负数部分直接使用转换变为正数。如果K次还没有用完则将数组再次排序，将剩下的次数全部用在绝对值最小的数上。
 
-### 💻 参考代码
+### 💾 参考代码
 
 ```java
 class Solution {
@@ -476,9 +468,9 @@ class Solution {
 
 ---
 
-## 🧪 LeetCode 134. 加油站
+## 🔧 LeetCode 134. 加油站
 
-### 📌 题目描述
+### 📔 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/gas-station/)
 
@@ -516,7 +508,7 @@ class Solution {
 - 输出: -1
 - 解释: 你不能从 0 号或 1 号加油站出发，因为没有足够的汽油可以让你行驶到下一个加油站。我们从 2 号加油站出发，可以获得 4 升汽油。 此时油箱有 = 0 + 4 = 4 升汽油。开往 0 号加油站，此时油箱有 4 - 3 + 2 = 3 升汽油。开往 1 号加油站，此时油箱有 3 - 3 + 3 = 3 升汽油。你无法返回 2 号加油站，因为返程需要消耗 4 升汽油，但是你的油箱只有 3 升汽油。因此，无论怎样，你都不可能绕环路行驶一周。
 
-### 💡 思路解析
+### 📐 思路解析
 
 #### 🔹 思路一
 
@@ -524,7 +516,7 @@ class Solution {
 - i从0开始累加rest[i]，和记为curSum，一旦curSum小于零，说明[0, i]区间都不能作为起始位置，因为这个区间选择任何一个位置作为起点，到i这里都会断油，那么起始位置从i+1算起，再从0计算curSum。
 - 若totalSum<0则说明断油了，返回-1
 
-#### 💻 参考代码（思路一）
+#### 🖨️ 参考代码（思路一）
 
 ```java
 class Solution {
@@ -557,7 +549,7 @@ class Solution {
 
 首先检查第0个加油站，并试图判断能否环绕一周；如果不能，就从第一个无法到达的加油站开始继续检查。
 
-#### 💻 参考代码（思路二）
+#### 📝 参考代码（思路二）
 
 ```java
 class Solution {
@@ -593,11 +585,9 @@ class Solution {
 
 ---
 
----
+## 💰 LeetCode 860. 柠檬水找零
 
-## 🧪 LeetCode 860. 柠檬水找零
-
-### 📌 题目描述
+### 📒 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/lemonade-change/)
 
@@ -646,13 +636,13 @@ class Solution {
 - 0 <= bills.length <= 10000
 - bills[i] 不是 5 就是 10 或是 20
 
-### 💡 思路解析
+### ∑ 思路解析
 
 - 情况一：账单是5，直接收下。
 - 情况二：账单是10，消耗一个5，增加一个10
 - 情况三：账单是20，优先消耗一个10和一个5，如果不够，再消耗三个5
 
-### 💻 参考代码
+### ✍️ 参考代码
 
 ```java
 class Solution {
@@ -703,7 +693,7 @@ class Solution {
 
 ### 🧪 LeetCode 135. 分发糖果
 
-#### 📌 题目描述
+#### 📑 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/candy/)
 
@@ -728,7 +718,7 @@ class Solution {
 - 输出: 4
 - 解释: 你可以分别给这三个孩子分发 1、2、1 颗糖果。第三个孩子只得到 1 颗糖果，这已满足上述两个条件。
 
-#### 💡 思路解析
+#### 🧮 思路解析
 
 本题一定是要确定一边之后，再确定另一边，例如比较每一个孩子的左边，然后再比较右边，**如果两边一起考虑一定会顾此失彼**。
 
@@ -742,7 +732,7 @@ class Solution {
   - 局部最优：取candyVec[i + 1] + 1 和 candyVec[i] 最大的糖果数量，保证第i个小孩的糖果数量既大于左边的也大于右边的。
   - 全局最优：相邻的孩子中，评分高的孩子获得更多的糖果。
 
-#### 💻 参考代码
+#### ⌨️ 参考代码
 
 ```java
 class Solution {
@@ -774,7 +764,7 @@ class Solution {
 
 ### 🧪 LeetCode 406. 根据身高重建队列
 
-#### 📌 题目描述
+#### 📖 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/queue-reconstruction-by-height/)
 
@@ -808,7 +798,7 @@ class Solution {
 
 题目数据确保队列可以被重建
 
-#### 💡 思路解析
+#### 🎯 思路解析
 
 本题有两个维度，一个维度是排序，另一个维度是身高。因此需要先确定一个维度再来确定另一个维度。
 
@@ -819,7 +809,7 @@ class Solution {
 - **局部最优：优先按身高高的people的k来插入。插入操作过后的people满足队列属性**
 - **全局最优：最后都做完插入操作，整个队列满足题目队列属性**
 
-#### 💻 参考代码
+#### 🖥️ 参考代码
 
 ```java
 class Solution {
@@ -863,7 +853,7 @@ class Solution {
 
 ### 🧪 LeetCode 452. 用最少数量的箭引爆气球
 
-#### 📌 题目描述
+#### 📕 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/)
 
@@ -905,11 +895,11 @@ class Solution {
 - points[i].length == 2
 - -2^31 <= xstart < xend <= 2^31 - 1
 
-#### 💡 思路解析
+#### 🔍 思路解析
 
 本题非重叠区间的个数就是箭的个数，套代码模板即可
 
-#### 💻 参考代码
+#### ⚙️ 参考代码
 
 ```java
 class Solution {
@@ -936,7 +926,7 @@ class Solution {
 
 ### 🧪 LeetCode 435. 无重叠区间
 
-#### 📌 题目描述
+#### 📗 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/non-overlapping-intervals/)
 
@@ -962,11 +952,11 @@ class Solution {
 - 输出: 0
 - 解释: 你不需要移除任何区间，因为它们已经是无重叠的了。
 
-#### 💡 思路解析
+#### 🧩 思路解析
 
 移除非重叠的区间即可，因此求出非重叠区间个数，然后数组长度-非重叠区间即可
 
-#### 💻 参考代码
+#### 🔧 参考代码
 
 ```java
 // 求解个数
@@ -1015,7 +1005,7 @@ class Solution {
 
 ### 🧪 LeetCode 763. 划分字母区间
 
-#### 📌 题目描述
+#### 📘 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/partition-labels/)
 
@@ -1031,14 +1021,14 @@ class Solution {
 - S的长度在[1, 500]之间。
 - S只包含小写字母 'a' 到 'z' 。
 
-#### 💡 思路解析
+#### 🗂️ 思路解析
 
 在遍历的过程中相当于是要找每一个字母的边界，**如果找到之前遍历过的所有字母的最远边界，说明这个边界就是分割点了**。此时前面出现过所有字母，最远也就到这个边界了。
 
 - 统计每一个字符最后出现的位置
 - 从头遍历字符，并更新字符的最远出现下标，如果找到字符最远出现位置下标和当前下标相等了，则找到了分割点
 
-#### 💻 参考代码
+#### 🛠️ 参考代码
 
 ```java
 class Solution {
@@ -1066,7 +1056,7 @@ class Solution {
 
 ### 🧪 LeetCode 56. 合并区间
 
-#### 📌 题目描述
+#### 📙 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/merge-intervals/)
 
@@ -1085,7 +1075,7 @@ class Solution {
 - 解释: 区间 [1,4] 和 [4,5] 可被视为重叠区间。
 - 注意：输入类型已于2019年4月15日更改。 请重置默认代码定义以获取新方法签名。
 
-#### 💡 思路解析
+#### 🔎 思路解析
 
 - 先按左边界排序，让所有的相邻区间尽可能的重叠在一起。
 - 先将第一个区间加入结果集合
@@ -1093,7 +1083,7 @@ class Solution {
   - 若不重叠则直接加入结果集合
   - 若重叠和结果集合的最后一个区间进行合并
 
-#### 💻 参考代码
+#### 💾 参考代码
 
 ```java
 class Solution {
@@ -1124,7 +1114,7 @@ class Solution {
 
 ### 🧪 LeetCode 738. 单调递增的数字
 
-#### 📌 题目描述
+#### 📓 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/monotone-increasing-digits/)
 
@@ -1149,11 +1139,11 @@ class Solution {
 
 说明: N 是在 [0, 10^9] 范围内的一个整数。
 
-#### 💡 思路解析
+#### 🔬 思路解析
 
 一旦出现strNum[i - 1] > strNum[i]的情况（非单调递增），首先想让strNum[i - 1]--，然后strNum[i]给为9。因此可以这样设计，从后向前遍历，遇到非单调递增的情况将strNum[i - 1]--，然后将转折点的下一个位置以后的位置全部设为9
 
-#### 💻 参考代码
+#### 🖨️ 参考代码
 
 ```java
 class Solution {

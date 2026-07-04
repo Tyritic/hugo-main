@@ -9,13 +9,13 @@ tags : ["Web开发框架"]
 description : "SpringBoot项目的基本结构"
 ---
 
-## 📂 如何读懂SpringBoot项目结构
+## 🧠 如何读懂SpringBoot项目结构
 
 SpringBoot 项目本质上是一个 Maven 项目，大体骨架与普通的 Maven 项目相同。
 
 普通 Maven 项目结构：
 
-```
+```text
 Maven-name/
 |--src（源代码）
 |	|--main（项目实际资源）
@@ -38,7 +38,7 @@ Maven-name/
 
 **作用**：该目录下存放 **入口启动类** 及程序的开发目录。在这个目录下进行业务开发、创建实体层、控制器层、数据连接层等。
 
-{{&lt;notice note&gt;}}
+{{<notice note>}}
 
 入口启动类：运行整个项目 **main** 方法的类。
 
@@ -53,9 +53,9 @@ public class UserApplication {
 
 其中 **`@SpringBootApplication`** 用于标识 SpringBoot 项目的入口类。
 
-{{&lt;/notice&gt;}}
+{{</notice>}}
 
-### 🎮 控制器层（controller)
+### 🔄 控制器层（controller)
 
 **根目录**：**src/main/java/controller**
 
@@ -75,7 +75,7 @@ public class UserController {
 
 ---
 
-### 🛠️ 业务逻辑层(service)
+### ⚙️ 业务逻辑层(service)
 
 **根目录**：**src/main/java/service**
 
@@ -117,7 +117,7 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 
 ---
 
-### 🫘 数据库实体层(pojo)
+### 🧩 数据库实体层(pojo)
 
 **根目录**：**src/main/java/pojo**
 
@@ -155,38 +155,38 @@ public interface DistrictMapper {
 
 ---
 
-### 📤 数据传输对象（dto）
+### 📊 数据传输对象（dto）
 
 **根目录**：**src/main/java/dto（或者放入pojo层中）**
 
 **作用**：对 **entity** 进行封装，不破坏实体类结构，进行层与层之间的数据传输。
 
-{{&lt;notice tip&gt;}}
+{{<notice tip>}}
 
 DTO 通常用于：
 
 1. 控制器（Controller）与服务层（Service）之间的数据传输：控制器通过 DTO 将请求参数传递给服务层，服务层返回 DTO 对象给控制器。
 2. 服务层与持久层（Mapper）之间的数据传输：服务层通过 DTO 将实体对象转换为需要的数据结构传递给持久层，持久层返回 DTO 对象给服务层。
 
-{{&lt;/notice&gt;}}
+{{</notice>}}
 
 ---
 
-### 🖼️ 视图包装对象（vo）
+### 🎯 视图包装对象（vo）
 
 **根目录**：**src/main/java/vo（或者放入pojo层中）**
 
 **作用**：用于封装客户端请求的数据同时不破坏原有的实体类结构。
 
-{{&lt;notice tip&gt;}}
+{{<notice tip>}}
 
 VO 在实际开发中通常作为 controller 类方法的返回值从而起到封装客户端请求数据的作用。
 
-{{&lt;/notice&gt;}}
+{{</notice>}}
 
 ---
 
-### ⚙️ 配置类（config)
+### 🔧 配置类（config)
 
 **根目录**：**src/main/java/config**
 
@@ -213,7 +213,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
 ---
 
-### 📋 参数配置类（properties）
+### 📌 参数配置类（properties）
 
 **根目录**：**src/main/java/properties**
 
@@ -236,13 +236,13 @@ public class AliyunOSSProperties {
 
 ---
 
-### 🛡️ 过滤器（filter）
+### 🚨 过滤器（filter）
 
 **根目录**：**src/main/java/filter**
 
 **作用**：**在 Servlet 处理请求之前或响应之后对数据进行某些处理，实现诸如日志记录、请求数据修改、响应数据修改、权限控制等功能**。
 
-{{&lt;notice tip&gt;}}
+{{<notice tip>}}
 
 过滤器工作在 Servlet 容器中，它拦截客户端的请求和服务器的响应。过滤器链（Filter Chain）是多个过滤器按照一定的顺序执行的集合，一个请求可以依次通过多个过滤器，然后到达目标 Servlet，响应也会按相反的顺序经过这些过滤器返回给客户端。
 
@@ -261,7 +261,7 @@ public class AliyunOSSProperties {
 
 1. [Filter（过滤器）和 Interceptor（拦截器）详解_过滤器和拦截器-CSDN博客](https://blog.csdn.net/weixin_52438357/article/details/135955373)
 
-{{&lt;/notice&gt;}}
+{{</notice>}}
 
 **功能实现**
 
@@ -316,7 +316,7 @@ public class ExampleFilter implements Filter {
 
 ---
 
-### 🚧 拦截器（interceptor）
+### ⚡ 拦截器（interceptor）
 
 **根目录**：**src/main/java/interceptor**
 
@@ -375,7 +375,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 ---
 
-## 📝 项目配置层
+## 📖 项目配置层
 
 **根目录**：**src/main/resource**
 

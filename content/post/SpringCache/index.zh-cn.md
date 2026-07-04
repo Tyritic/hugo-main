@@ -7,7 +7,6 @@ image : ""
 categories : ["Spring系列"]
 tags : ["Web开发框架"]
 description : "SpringBoot的缓存框架"
-math : true
 ---
 
 ## 🧠 SpringCache基础
@@ -28,22 +27,23 @@ Spring Cache是Spring框架提供的一种缓存解决方案，基于AOP原理�
 
 ## 🚀 与SpringBoot集成
 
-- 引入相关的依赖
+- ✅ 引入相关的依赖
 
   ```xml
   <dependency>
-  	<groupId>org.springframework.boot</groupId>
-  	<artifactId>spring-boot-starter-cache</artifactId>  		            		       	 			     <version>2.7.3</version>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-cache</artifactId>
+    <version>2.7.3</version>
   </dependency>
   ```
 
-- 在启动类上使用注解 **`@EnableCaching`** 表示开启缓存功能
+- ✅ 在启动类上使用注解 **`@EnableCaching`** 表示开启缓存功能
 
 ---
 
 ## 📝 常用注解
 
-- **`@Cacheable`**
+- ### 💻 @Cacheable
   - 作用：修饰方法，在方法执行前查看是否有缓存对应的数据，如果有直接返回数据，如果没有调用方法获取数据返回，并缓存起来。
   - 字段
     - value：指定缓存的名称（或名称数组）。缓存名称与CacheManager中配置的缓存对应。
@@ -51,7 +51,7 @@ Spring Cache是Spring框架提供的一种缓存解决方案，基于AOP原理�
     - condition：条件表达式（可选），用于决定是否执行缓存操作。
     - unless：否定条件表达式（可选），用于在方法执行后决定是否缓存返回值。
 
-- **`@CacheEvict`**
+- ### 🔧 @CacheEvict
   - 作用：将一条或多条数据从缓存中删除。
   - 字段
     - value：指定要删除的缓存的名称（或名称数组）。
@@ -59,7 +59,7 @@ Spring Cache是Spring框架提供的一种缓存解决方案，基于AOP原理�
     - allEntries：布尔值，指定是否删除缓存中的所有条目（而不是仅删除与指定键匹配的条目）。
     - beforeInvocation：布尔值，指定是否在方法执行之前删除缓存（默认为false，即在方法执行之后删除）。
 
-- **`@CachePut`**
+- ### ⌨️ @CachePut
   - **作用**：更新缓存中的数据，无论方法是否成功执行，都会将结果放入缓存。
   - 字段
     - value：指定缓存的名称（或名称数组）。缓存名称与CacheManager中配置的缓存对应。

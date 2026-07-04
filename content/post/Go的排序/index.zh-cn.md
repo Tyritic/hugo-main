@@ -9,7 +9,7 @@ description : "Go 中实现排序"
 math : true
 ---
 
-## 📦 标准库 sort
+## 🧠 标准库 sort
 
 Go 语言的标准库 **`sort`** 包提供了强大且易用的排序功能，能够对多种类型的数组进行排序。
 
@@ -60,7 +60,7 @@ sort.Sort(sort.Reverse(sort.IntSlice(nums)))
 
 **`sort.Slice`** 是 Go 标准库中一个非常强大且灵活的函数，用于对**任意类型的切片**进行排序，只需提供一个比较函数。
 
-### 📝 函数签名
+### 🔍 函数签名
 
 ```go
 func Slice(slice any, less func(i, j int) bool)
@@ -125,7 +125,7 @@ func (a ByAge) Less(i, j int) bool { return a[i].Age < a[j].Age }
 sort.Sort(sort.Reverse(ByAge(people)))
 ```
 
-### 📚 常见函数
+### 🔧 常见函数
 
 - **`func Sort(data sort.Interface)`**：根据接口实现进行排序
 - **`func Reverse(data Interface) Interface`**：需要配合 `sort.Sort` 使用，返回一个降序的包装器

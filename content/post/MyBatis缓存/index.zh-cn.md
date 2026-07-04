@@ -33,22 +33,22 @@ description : "MyBatis的缓存相关知识"
 
 ---
 
-### 🔍 一级缓存的工作流程
+### 📊 一级缓存的工作流程
 
-&lt;div align="center"&gt;
-  &lt;img src="微信截图_20241107163317.png" alt="一级缓存工作流程" width="82%"&gt;
-&lt;/div&gt;
+<div align="center">
+  <img src="微信截图_20241107163317.png" alt="一级缓存工作流程" width="82%">
+</div>
 
 1. 第一次发起查询用户id为1的用户信息，先去找缓存中是否有id为1的用户信息，如果没有，从数据库查询用户信息。
 2. 得到用户信息，将用户信息存储到一级缓存中。
 3. 如果sqlSession去执行commit操作(执行插入、更新、删除)，清空SqlSession中的一级缓存，这样做的目的为了让缓存中存储的是最新的信息，避免脏读。
 4. 第二次发起查询用户id为1的用户信息，先去找缓存中是否有id为1的用户信息，缓存中有，直接从缓存中获取用户信息。
 
-{{&lt;notice tip&gt;}}
+{{<notice tip>}}
 
 MyBatis的一级缓存默认开启
 
-{{&lt;/notice&gt;}}
+{{</notice>}}
 
 ---
 
@@ -67,11 +67,11 @@ MyBatis的一级缓存默认开启
 
 ---
 
-### 🔧 配置方式
+### ⚙️ 配置方式
 
 - 在核心配置文件中设置开启二级缓存：cacheEnabled=true
 
-- 在mapper.xml文件中添加开启二级缓存的标签：&lt;cache&gt;
+- 在mapper.xml文件中添加开启二级缓存的标签：<cache>
 
   - 可以设置属性readOnly
 
@@ -83,27 +83,27 @@ MyBatis的一级缓存默认开启
 - 查询的数据所转换的实体类类型必须实现序列化的接口
 
   ```xml
-  &lt;cache readOnly="true"&gt;&lt;/cache&gt;
+  <cache readOnly="true"></cache>
   ```
 
 ---
 
-### 🔍 二级缓存工作流程
+### 🏗️ 二级缓存工作流程
 
-&lt;div align="center"&gt;
-  &lt;img src="微信截图_20241107165832.png" alt="二级缓存工作流程" width="82%"&gt;
-&lt;/div&gt;
+<div align="center">
+  <img src="微信截图_20241107165832.png" alt="二级缓存工作流程" width="82%">
+</div>
 
 1. 当用户第一次查询某条数据时，会将查出来的数据放到一级缓存中
 2. 当sqlSession关闭时，会将一级缓存中的数据保存到二级缓存中
 3. 当用户第二次查询时，不会查询一级缓存，而是查询二级缓存
 4. 此时若其他的sqlSession查询，也会查询二级缓存
 
-{{&lt;notice tip&gt;}}
+{{<notice tip>}}
 
 二级缓存失效的原因：在两次查询之间执行了任意的增删改，会使一级和二级缓存同时失效
 
-{{&lt;/notice&gt;}}
+{{</notice>}}
 
 ---
 
@@ -127,40 +127,40 @@ MyBatis的一级缓存默认开启
 
 ---
 
-### 🔧 使用Ehcache
+### 🛠️ 使用Ehcache
 
 - 首先导入ehcache相关的依赖和mybatis整合ehcache的依赖
 
   ```xml
-  &lt;!--Mybatis提供的整合ehcache的包--&gt;
-  &lt;dependency&gt;
-      &lt;groupId&gt;org.mybatis.caches&lt;/groupId&gt;
-      &lt;artifactId&gt;mybatis-ehcache&lt;/artifactId&gt;
-      &lt;version&gt;1.2.1&lt;/version&gt;
-  &lt;/dependency&gt;
-  &lt;!-- slf4j日志门面--&gt;
-  &lt;dependency&gt;
-      &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
-      &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
-      &lt;version&gt;1.7.32&lt;/version&gt;
-  &lt;/dependency&gt;
-  &lt;!-- logback-classic--&gt;
-  &lt;dependency&gt;
-      &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
-      &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
-      &lt;version&gt;1.2.3&lt;/version&gt;
-  &lt;/dependency&gt;
+  <!--Mybatis提供的整合ehcache的包-->
+  <dependency>
+      <groupId>org.mybatis.caches</groupId>
+      <artifactId>mybatis-ehcache</artifactId>
+      <version>1.2.1</version>
+  </dependency>
+  <!-- slf4j日志门面-->
+  <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.32</version>
+  </dependency>
+  <!-- logback-classic-->
+  <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
+  </dependency>
   ```
 
 - 配置ehcache.xml配置文件
 
   ```xml
-  &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
-  &lt;ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  <?xml version="1.0" encoding="UTF-8" ?>
+  <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
-           updateCheck="false"&gt;
-  &lt;diskStore path="D:\rz\ehcache" /&gt;
-      &lt;defaultCache
+           updateCheck="false">
+  <diskStore path="D:\rz\ehcache" />
+      <defaultCache
               maxElementsInMemory="1000"
               maxElementsOnDisk="10000000"
               eternal="false"
@@ -168,15 +168,15 @@ MyBatis的一级缓存默认开启
               timeToIdleSeconds="120"
               timeToLiveSeconds="120"
               diskExpiryThreadIntervalSeconds="120"
-              memoryStoreEvictionPolicy="LRU"&gt;
-      &lt;/defaultCache&gt;
-  &lt;/ehcache&gt;
+              memoryStoreEvictionPolicy="LRU">
+      </defaultCache>
+  </ehcache>
   ```
 
 - 在mapper的xml文件中的cache标签中设置type属性
 
   ```xml
-  &lt;cache type="org.mybatis.caches.ehcache.EhcacheCache"&gt;&lt;/cache&gt;
+  <cache type="org.mybatis.caches.ehcache.EhcacheCache"></cache>
   ```
 
 ---
@@ -184,11 +184,11 @@ MyBatis的一级缓存默认开启
 ### 📝 配置文件说明
 
 - diskStore：指定数据在磁盘中的存储位置。
-- defaultCache：当借助CacheManager.add("demoCache")创建Cache时，EhCache便会采用`&lt;defalutCache/&gt;`指定的的管理策略
+- defaultCache：当借助CacheManager.add("demoCache")创建Cache时，EhCache便会采用`<defalutCache/>`指定的的管理策略
 
 ---
 
-### 🔧 常用配置属性
+### 📐 常用配置属性
 
 - maxElementsInMemory：在内存中缓存的element的最大数目
 - maxElementsOnDisk：在磁盘上缓存的element的最大数目，若是0表示无穷大

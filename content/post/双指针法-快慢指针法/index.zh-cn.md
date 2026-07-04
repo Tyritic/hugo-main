@@ -15,8 +15,6 @@ math : true
 
 ---
 
----
-
 ## 🧩 算法模板
 
 ### ⚙️ 方法步骤
@@ -30,7 +28,7 @@ math : true
 - 快指针：通过遍历旧数组来寻找新数组的元素 ，新数组就是不含有目标元素的数组
 - 慢指针：指向更新后新数组下标的位置
 
-### 💻 代码模板
+### 🔧 代码模板
 
 ```java
 class solution{
@@ -56,9 +54,9 @@ slowIndex是新数组的元素个数。
 
 ## 📚 经典例题
 
-### 🧪 LeetCode 27. 移除元素
+### 💡 LeetCode 27. 移除元素
 
-#### 📌 题目描述
+#### 📄 题目描述
 
 [力扣题目链接(opens new window)](https://leetcode.cn/problems/remove-element/)
 
@@ -74,11 +72,11 @@ slowIndex是新数组的元素个数。
 
 **你不需要考虑数组中超出新长度后面的元素。**
 
-#### 💡 思路解析
+#### 🔦 思路解析
 
 题目条件中**原地**一词提示使用快慢指针法，将$O(n^2)$的操作转变为$O(n)$的操作
 
-#### 💻 参考代码
+#### ⚡ 参考代码
 
 ```java
 class Solution {
@@ -96,9 +94,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 26. 删除有序数组的重复项
+### 🔍 LeetCode 26. 删除有序数组的重复项
 
-#### 📌 题目描述
+#### 📋 题目描述
 
 [力扣题目链接](https://leetcode.cn/problems/backspace-string-compare/description/)
 
@@ -113,7 +111,7 @@ class Solution {
 
 系统会用下面的代码来测试你的题解:
 
-```
+```java
 int[] nums = [...]; // 输入数组
 int[] expectedNums = [...]; // 长度正确的期望答案
 
@@ -153,7 +151,7 @@ for (int i = 0; i < k; i++) {
 - `-104 <= nums[i] <= 104`
 - `nums` 已按 **非严格递增** 排列
 
-#### 💡 思路解析
+#### 🎯 思路解析
 
 题目条件中**原地**一词提示使用快慢指针法，将$O(n^2)$的操作转变为$O(n)$的操作
 
@@ -163,7 +161,7 @@ for (int i = 0; i < k; i++) {
 
 根据题意，第一个元素 **`nums[0]`** 一定会被保留故 **`slow`** 从 **1** 开始，于是 **fast** 从 **1** 开始，当遇到与新数组的最后一个有效元素不重复的元素就更新数组
 
-#### 💻 参考代码
+#### 💎 参考代码
 
 ```java
 class Solution {
@@ -181,9 +179,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 283. 移动零
+### 🛠️ LeetCode 283. 移动零
 
-#### 📌 题目描述
+#### 📙 题目描述
 
 [力扣题目链接](https://leetcode.cn/problems/move-zeroes/)
 
@@ -212,12 +210,12 @@ class Solution {
 - `1 <= nums.length <= 104`
 - `-231 <= nums[i] <= 231 - 1`
 
-#### 💡 思路解析
+#### 🗝️ 思路解析
 
 - 将所有不等于0的元素放入原先的数组中
 - 在新数组的尾部全部置为零
 
-#### 💻 参考代码
+#### 🎲 参考代码
 
 ```java
 class Solution {
@@ -238,9 +236,9 @@ class Solution {
 }
 ```
 
-### 🧪 LeetCode 844. 比较含退格的字符串
+### ⚖️ LeetCode 844. 比较含退格的字符串
 
-#### 📌 题目描述
+#### 📗 题目描述
 
 [力扣题目链接](https://leetcode.cn/problems/backspace-string-compare/description/)
 
@@ -281,7 +279,7 @@ class Solution {
 - `1 <= s.length, t.length <= 200`
 - `s` 和 `t` 只含有小写字母以及字符 `'#'`
 
-#### 💡 思路解析
+#### 🎪 思路解析
 
 基本思路
 
@@ -295,7 +293,7 @@ class Solution {
   - 当遇到非退格符号时slowIndex正常记录数组元素
   - 当遇到退格符号时slowIndex向后退一位
 
-#### 💻 参考代码
+#### 🎭 参考代码
 
 ```java
 class Solution {
@@ -327,7 +325,7 @@ class Solution {
                     slowIndex--;
             }
         }
-        return new String(chars).substring(0,slow);
+        return new String(chars).substring(0,slowIndex);
     }
 }
 ```

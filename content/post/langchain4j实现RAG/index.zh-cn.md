@@ -91,7 +91,7 @@ List<TextSegment> segments = splitter.split(document);
 1. 为每个 `TextSegment` 生成向量（embedding）；
 2. 将"向量 + 原始文本 + 元数据"一起存入 `EmbeddingStore`。
 
-### 1️⃣ 选择 EmbeddingModel
+### 🎯 选择 EmbeddingModel
 
 langchain4j 对 **Embedding** 模型也做了统一抽象，常见实现有：
 
@@ -110,7 +110,7 @@ EmbeddingModel embeddingModel = OpenAiEmbeddingModel.builder()
 
 ---
 
-### 2️⃣ 选择并初始化 EmbeddingStore
+### 💾 选择并初始化 EmbeddingStore
 
 `EmbeddingStore` 是向量存储的抽象，你可以选择：
 
@@ -125,7 +125,7 @@ EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
 
 ---
 
-### 3️⃣ 把切好的片段向量化并入库
+### ⚙️ 把切好的片段向量化并入库
 
 一种方式是手动遍历并存储：
 
@@ -181,7 +181,7 @@ String context = String.join("\n\n", relevantSegments);
 
 拿到检索出来的相关片段后，我们需要把它们和用户问题一起组织成 Prompt，然后发给 **LLM** 生成回答。
 
-### 1️⃣ 使用 `PromptTemplate` 组装提示
+### 🧩 使用 `PromptTemplate` 组装提示
 
 ```java
 PromptTemplate promptTemplate = PromptTemplate.from(
@@ -208,7 +208,7 @@ System.out.println("最终回答：" + answer);
 
 ---
 
-### 2️⃣ 开箱即用的 `RetrievalChain`
+### 🔗 开箱即用的 `RetrievalChain`
 
 langchain4j 提供了 `DefaultRetrievalChain` 或 `RetrievalChain`，帮你把"检索 + 组装提示 + 调用模型"封装在一起：
 

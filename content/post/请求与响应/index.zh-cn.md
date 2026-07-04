@@ -8,18 +8,22 @@ tags : []
 description : "controller对请求和响应的操作"
 ---
 
-## 请求响应过程
+## 🔄 请求响应过程
 
-![微信截图_20241103001652](微信截图_20241103001652.png)
+<div align="center">
+  <img src="微信截图_20241103001652.png" alt="浏览器与Tomcat服务器请求响应流程图" width="82%">
+</div>
 
-### 基本流程
+### 💡 基本流程
 
 1. 浏览器向SpringBoot项目中内置的Tomcat服务器发送请求
 2. SpringBoot项目中的controller类接收浏览器发出的请求并发送响应
 
-## 控制器的定义
+---
 
-### 控制器的种类
+## 🏗️ 控制器的定义
+
+### 📊 控制器的种类
 
 - **`@Controller`**：用于定义一个传统的 Spring MVC 控制器，它处理客户端请求，返回视图名，通常用于返回 HTML 页面。
 - **`@RestController`**：专用于构建 RESTful API 的控制器，等同于 `@Controller` + `@ResponseBody`。返回的内容会直接作为 HTTP 响应体，通常用于返回 JSON 或 XML 格式的数据。
@@ -37,7 +41,7 @@ description : "controller对请求和响应的操作"
 
 {{</notice>}}
 
-### 路径参数的映射
+### 🔍 路径参数的映射
 
 使用 **`@RequestMapping`** 注解映射请求路径：在方法上使用 **`@RequestMapping`** 或其衍生注解（如 **`@GetMapping`**、**`@PostMapping`** 等）来映射 HTTP 请求。
 
@@ -46,7 +50,7 @@ description : "controller对请求和响应的操作"
 - **`@PutMapping`**：专用于处理 `PUT` 请求。
 - **`@DeleteMapping`**：专用于处理 `DELETE` 请求。
 
-### 具体实现
+### 💻 具体实现
 
 - 定义控制器类
 
@@ -88,13 +92,13 @@ description : "controller对请求和响应的操作"
 
 - 路径参数的映射：使用 **`@RequestMapping`** 注解映射请求路径：在方法上使用 **`@RequestMapping`** 或其衍生注解（如 **`@GetMapping`**、**`@PostMapping`** 等）来映射 HTTP 请求。
 
+---
 
+## 📥 请求参数的接收
 
-## 请求参数的接收
+### ⚙️ 简单参数
 
-### 简单参数
-
-#### 	方法一：设置controller类中的函数形参名和请求的参数名相同
+#### 🔹 方法一：设置controller类中的函数形参名和请求的参数名相同
 
 ```java
 @RequsetMapping("/simpleParam")
@@ -104,7 +108,7 @@ public String getParam(String param)
 }
 ```
 
-#### 方法二：参数名和形参名不匹配使用 `@RequestParam` 注解的name属性将参数名映射到形参
+#### 📌 方法二：参数名和形参名不匹配使用 `@RequestParam` 注解的name属性将参数名映射到形参
 
 ```java
 @RequestMapping("/simpleParam")
@@ -129,9 +133,9 @@ public String getParam(@RequestParam(name=“username")String param)
 
 {{</notice>}}
 
-### 实体对象参数
+### 🧩 实体对象参数
 
-#### 简单实体对象
+#### 📖 简单实体对象
 
 请求参数与形参对象属性名相同
 
@@ -143,21 +147,25 @@ public User getParam(User user)
 }
 ```
 
-![](微信截图_20241103123916.png)
+<div align="center">
+  <img src="微信截图_20241103123916.png" alt="简单实体对象参数接收示例" width="75%">
+</div>
 
-#### 复杂实体对象（对象的成员变量是对象）
+#### 🔗 复杂实体对象（对象的成员变量是对象）
 
 请求参数与形参对象属性名相同，按对象层次关系接收
 
-![](微信截图_20241103124235.png)
+<div align="center">
+  <img src="微信截图_20241103124235.png" alt="复杂实体对象参数接收示例" width="75%">
+</div>
 
-### 数组集合参数
+### 📚 数组集合参数
 
-#### 数组参数
+#### 🧮 数组参数
 
 请求参数名与形参数组名称相同且请求参数为多个，定义数组类型形参即可接收参数
 
-```
+```java
 @RequestMapping("/arrayParam")
 public User getParam(String[]array)
 {
@@ -165,13 +173,15 @@ public User getParam(String[]array)
 }
 ```
 
-![](微信截图_20241103124635.png)
+<div align="center">
+  <img src="微信截图_20241103124635.png" alt="数组参数接收示例" width="70%">
+</div>
 
-#### 集合参数
+#### ✅ 集合参数
 
 请求参数名与形参数组名称相同且请求参数为多个，**`@RequestParam`** 绑定参数关系
 
-```
+```java
 @RequestMapping("/listParam")
 public User getParam(@RequestParam List<String>param)
 {
@@ -179,9 +189,11 @@ public User getParam(@RequestParam List<String>param)
 }
 ```
 
-![](微信截图_20241103124951.png)
+<div align="center">
+  <img src="微信截图_20241103124951.png" alt="集合参数接收示例" width="70%">
+</div>
 
-### 日期参数
+### 📐 日期参数
 
 使用 **`@DateTimeFormat`** 注解完成日期格式转换
 
@@ -201,7 +213,7 @@ pattern属性用于指定时间格式
 
 {{</notice>}}
 
-### Json参数
+### 📤 Json参数
 
 JSON数据键名与形参对象属性名相同，定义pojo类型形参即可接收参数，需要使用 **`@RequestBody`** 标识
 
@@ -213,7 +225,9 @@ public String getParam(@RequestBody User user)
 }
 ```
 
-![](微信截图_20241103125759.png)
+<div align="center">
+  <img src="微信截图_20241103125759.png" alt="JSON参数接收示例" width="80%">
+</div>
 
 {{<notice tip>}}
 
@@ -228,11 +242,13 @@ public String getParam(@RequestBody User user)
 
 {{</notice>}}
 
-### 路径参数
+### 🛤️ 路径参数
 
 通过请求URL直接传递参数，使用{..}来标识该路径参数，需要使用 **`@PathVariable`** 获取路径参数
 
-![](微信截图_20241103131056.png)
+<div align="center">
+  <img src="微信截图_20241103131056.png" alt="路径参数示例" width="75%">
+</div>
 
 ```java
 @RequestMapping("/path/{id}")
@@ -253,7 +269,9 @@ public String getParam(@PathVariable Integer id)
 
 {{</notice>}}
 
-### 请求头和Cookie
+---
+
+### 🎯 请求头和Cookie
 
 **`@RequestHeader`** 注解用于提取 HTTP 请求头中的值，并将其注入到控制器方法的参数中。例如访问 Accept、Content-Type、User-Agent 等请求头信息。
 

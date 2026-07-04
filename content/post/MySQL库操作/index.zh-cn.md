@@ -19,7 +19,7 @@ use database_name;
 ## ➕ 创建数据库
 
 ```mysql
-create database[if not exists] database_name;
+create database [if not exists] database_name;
 ```
 
 ---
@@ -64,7 +64,7 @@ drop database [if exist] database_name
   - **Alteration**：允许在关系中添加或删除属性。
   - **Drop**：允许删除关系。
 
-### 👤 用户与角色
+### 👥 用户与角色
 
 **用户**是指可以连接到数据库并执行操作的实体。每个用户有一个唯一的用户名和密码，通过这些凭证来认证和识别该用户。用户具有访问数据库和执行某些操作的权限。通常情况下，用户是直接与权限绑定的。
 
@@ -95,7 +95,7 @@ create role 'developer';
 
 ### 📜 授权规范
 
-#### 授予权限
+#### ✅ 授予权限
 
 代码语法：
 
@@ -127,7 +127,7 @@ with grant option # 可选，表示被授予权限的用户／角色可以把得
 - 所有直接授予用户／角色的权限。
 - 所有授予给用户／角色所拥有角色的权限。
 
-#### 收回权限
+#### ❌ 收回权限
 
 代码语法：
 

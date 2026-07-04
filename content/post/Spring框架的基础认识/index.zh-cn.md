@@ -6,7 +6,6 @@ image : ""
 categories : ["Spring系列"]
 tags : ["Web开发框架"]
 description : "对Spring框架的基本认识"
-math : true
 ---
 
 ## 🧠 Spring框架的基本认识
@@ -25,7 +24,7 @@ Spring 通过控制反转实现了对象的创建和对象间的依赖关系管�
 
 而依赖注入则是控制反转的实现方式。
 
-### ✂️ 面向切面编程AOP
+### ⚙️ 面向切面编程AOP
 
 面向切面编程，允许开发者定义横切关注点，例如事务管理、安全控制等，独立于业务逻辑的代码。将那些与核心业务逻辑无关，但是对多个对象产生影响的公共行为封装起来，如日志记录、性能统计、事务等。通过AOP，可以将这些关注点模块化，提高代码的可维护性和可重用性。
 
@@ -39,9 +38,9 @@ Spring 提供了一致的事务管理接口，支持声明式和编程式事务�
 
 Spring 框架是分模块存在，除了最核心的 **`Spring Core Container`** 是必要模块之外，其他模块都是可选的。
 
-&lt;div align="center"&gt;
-  &lt;img src="spring-bb7c13ea-3174-4b32-84b8-821849ddc377.png" alt="Spring模块划分" width="82%"&gt;
-&lt;/div&gt;
+<div align="center">
+  <img src="spring-bb7c13ea-3174-4b32-84b8-821849ddc377.png" alt="Spring模块划分" width="82%">
+</div>
 
 ### 🔧 核心模块 Core Container
 
@@ -50,7 +49,7 @@ Spring 框架是分模块存在，除了最核心的 **`Spring Core Container`**
 - **Spring Context**：基于 Core 和 Beans 的高级容器，提供了类似 JNDI 的上下文功能，还包含了国际化、事件传播、资源访问等功能。
 - **Spring Expression Language（SpEL）**：一个强大的表达式语言，用于在运行时查询和操作对象的值。
 
-### ✂️ 面向切面编程模块 AOP
+### 🔍 面向切面编程模块 AOP
 
 - **Spring AOP**：提供面向切面编程的功能，可以在方法执行前后或抛出异常时动态插入额外的逻辑，比如日志记录、权限验证、事务管理等。
 - **spring-aspects**：该模块为与 AspectJ 的集成提供支持。
@@ -68,7 +67,7 @@ Spring 框架是分模块存在，除了最核心的 **`Spring Core Container`**
 - **Spring MVC**：实现了 Model-View-Controller（MVC）模式的框架，用于构建基于 HTTP 请求的 Web 应用。它是一个常用的模块，支持注解驱动的 Web 开发。
 - **Spring WebFlux**：提供基于 Reactive Streams 的响应式编程模型，专为高并发的异步非阻塞请求设计。
 
-{{&lt;notice tip&gt;}}
+{{<notice tip>}}
 
 Spring，SpringBoot，SpringMVC的关系和区别
 
@@ -76,7 +75,7 @@ Spring，SpringBoot，SpringMVC的关系和区别
 - **Spring MVC** 是 **Spring** 的 Web 组件，是 Spring 对 Web 框架的解决方案，主要用于构建基于 MVC 模式的 Web 应用。
 - **Spring Boot** 进一步简化了 Spring 和 Spring MVC 的使用，提供自动配置、嵌入式服务器、简化依赖管理，适用于快速开发 Web 和微服务应用。
 
-{{&lt;/notice&gt;}}
+{{</notice>}}
 
 ---
 
@@ -113,7 +112,7 @@ Spring，SpringBoot，SpringMVC的关系和区别
 - **`@Configuration`**：用于定义配置类，可替换 XML 配置文件。
 - **`@Value`**：用于将 Spring Boot 中 application.properties 配置的属性值赋值给变量。
 
-### ✂️ AOP
+### 🎯 AOP
 
 - **`@Aspect`** 用于声明一个切面，可以配合其他注解一起使用，比如：
   - **`@After`**：在方法执行之后执行。
@@ -143,7 +142,7 @@ ApplicationContext context = new ClassPathXmlApplicationContext("applicationCont
 MyBean myBean = context.getBean(MyBean.class);
 ```
 
-### 🎯 单例模式
+### ⚡ 单例模式
 
 在 Bean 对象的创建中使用了单例模式。**Spring 中 bean 的默认作用域就是 singleton（单例）的。**
 
@@ -151,9 +150,9 @@ Spring 中实现单例模式的核心代码：
 
 ```java
 // 通过 ConcurrentHashMap（线程安全） 实现单例注册表
-private final Map&lt;String, Object&gt; singletonObjects = new ConcurrentHashMap&lt;String, Object&gt;(64);
+private final Map<String, Object> singletonObjects = new ConcurrentHashMap<String, Object>(64);
 
-public Object getSingleton(String beanName, ObjectFactory&lt;?&gt; singletonFactory) {
+public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {
         Assert.notNull(beanName, "'beanName' must not be null");
         synchronized (this.singletonObjects) {
             // 检查缓存中是否存在实例
@@ -200,7 +199,7 @@ Spring 中的单例模式属于 **"注册式单例"**，广泛用于 **Spring �
 
 ### 🫘 Bean对象
 
-#### 📖 定义
+#### 🧩 定义
 
 任何通过 Spring 容器实例化、组装和管理的 Java 对象都是 **Bean对象**。Bean 可以在 Spring 容器中被定义并且通过依赖注入来与其他 Bean 进行互相依赖。
 
@@ -213,7 +212,7 @@ Spring 中的单例模式属于 **"注册式单例"**，广泛用于 **Spring �
 
 ### 📦 IOC容器
 
-#### 📖 定义
+#### 🗂️ 定义
 
 **IOC（Inversion of Control，控制反转）** 容器是 **Spring 框架的核心**，用于**管理 Java 对象（Bean）的创建、初始化、配置、依赖注入和生命周期管理**。
 

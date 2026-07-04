@@ -15,7 +15,7 @@ description : "SpringBoot框架的热部署和日志结构"
 
 ---
 
-### 🚀 开启热部署
+### ⚡ 开启热部署
 
 1. 引入相关依赖
 
@@ -44,7 +44,7 @@ description : "SpringBoot框架的热部署和日志结构"
 
 ---
 
-#### JCL
+#### 🔌 JCL
 
 用户可以自由选择第三方的日志组件作为具体实现，像log4j，或者jdk自带的jul， common-logging会通过动态查找的机制，在程序运行时自动找出真正使用的日志库。
 
@@ -70,7 +70,7 @@ JCL使用原则：如果有log4j，优先使用log4j，如果没有任何第三�
 
 ---
 
-#### SLF4J
+#### 🎯 SLF4J
 
 简单日志门面(Simple Logging Facade For Java) SLF4J主要是为了给Java日志访问提供一套标准、规范的API框架，
 
@@ -115,7 +115,7 @@ JCL使用原则：如果有log4j，优先使用log4j，如果没有任何第三�
 
 ---
 
-#### 📊 日志实现和对应的日志门面
+#### 📈 日志实现和对应的日志门面
 
 |         日志实现         | 日志门面  |
 | :----------------------: | :-------: |
@@ -134,7 +134,7 @@ JCL使用原则：如果有log4j，优先使用log4j，如果没有任何第三�
 
 ### 🔧 日志实现
 
-#### JUL
+#### 🖨️ JUL
 
 JUL全称 **Java Util Logging**，核心类在java.util.logging包下，它是java原生的日志框架，使用时不需要另外引用第三方的类库，相对其他的框架使用方便，学习简单，主要是使用在小型应用中。
 
@@ -254,7 +254,7 @@ public class userController{
 
 ### 🎨 日志格式
 
-#### 默认格式
+#### ✨ 默认格式
 
 &lt;div align="center"&gt;
   &lt;img src="微信截图_20241110184311.png" alt="日志默认格式" width="82%"&gt;
@@ -268,7 +268,7 @@ public class userController{
 - 记录器名称:这通常是源类名称(通常缩写)。
 - 日志消息。
 
-#### 修改默认格式
+#### ⚙️ 修改默认格式
 
 可以在application.yml中修改logging.pattern.console属性来修改格式详情常见SpringBoot官方文档
 
@@ -286,7 +286,7 @@ logging:
 
 日志默认在控制台输出，可以通过修改applicaiton.yml中的logging.file.name和logging.file.path来输出日志文件
 
-```
+```yml
 logging:
 	file:
 		#只指定name属性不指定path属性则默认日志文件输出在项目的根目录中

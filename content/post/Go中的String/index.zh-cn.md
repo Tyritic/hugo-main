@@ -142,7 +142,7 @@ func main() {
 
 - **`strings.Trim("#hello #go#", "#")`**：去除字符串两端的指定字符
 
-### 🔄 字符数组转换
+### 🔀 字符数组转换
 
 string 可以被转换为 **`[]byte`** 和 **`[]rune`**：
 
@@ -153,7 +153,7 @@ string 可以被转换为 **`[]byte`** 和 **`[]rune`**：
 
 - **`s[i]`**：直接访问底层字符数组的第 i 个 **byte**
 
-### 📝 字符串声明方式
+### 💬 字符串声明方式
 
 Go 语言中以字面量来声明字符串有两种方式，**双引号**和**反引号**：
 
@@ -181,7 +181,7 @@ json := `{"hello": "golang", "name": ["zhangsan"]}`
 
 ---
 
-## 🔄 string 与 []byte 的转换原理
+## 🔀 string 与 []byte 的转换原理
 
 ### 📖 转换语法
 
@@ -225,7 +225,7 @@ HAllo
   <img src="byte-to-string.png" alt="byte转string过程示意图" width="60%">
 </div>
 
-#### 🔁 string 转 []byte
+#### 🔀 string 转 []byte
 
 `string` 转化为 `byte` 数组同样简单，大致分为两步：
 
@@ -236,7 +236,7 @@ HAllo
   <img src="string-to-byte.png" alt="string转byte过程示意图" width="60%">
 </div>
 
-### ⚡ 转换优化场景
+### ⚙️ 转换优化场景
 
 很多场景中会用到 `[]byte` 转化为 `string`，但是并不是每一次转化，都会像上述过程一样，发生一次内存拷贝。在什么情况下不会发生拷贝呢？
 
@@ -256,7 +256,7 @@ HAllo
 
 ### 📊 五种拼接方式对比
 
-#### ➕ 使用 `+` 运算符
+#### ➕ 使用 + 运算符
 
 ```go
 s1 := "Hello"
@@ -286,7 +286,7 @@ result := fmt.Sprintf("Language: %s, Version: %.2f", name, version)
 
 ---
 
-#### 🏗️ 使用 `strings.Builder`（推荐）
+#### 🔨 使用 `strings.Builder`（推荐）
 
 ```go
 var builder strings.Builder
@@ -369,9 +369,9 @@ result := string(buf)
 3. **预分配内存**：如果知道最终字符串的大致长度，使用 `Grow()` 预分配内存
 4. **格式化输出**：需要格式化时使用 `fmt.Sprintf`，否则优先使用 `strings.Builder`
 
-### 🧪 性能测试详解
+### 🔍 性能测试详解
 
-#### 🧪 测试代码
+#### 💻 测试代码
 
 采用 `testing` 包下的 `benchmark` 测试其性能：
 
@@ -468,7 +468,7 @@ func BenchmarkJoin(b *testing.B) {
 }
 ```
 
-#### 📊 测试结果
+#### 📈 测试结果
 
 ```
 goos: windows
@@ -529,7 +529,7 @@ PASS
 
 ## 📚 总结
 
-### 🎯 核心要点
+### 💎 核心要点
 
 - string 是**不可变**的只读字符数组，采用 **UTF-8** 编码
 - 底层通过 `StringHeader` 结构体实现，包含数据指针和长度

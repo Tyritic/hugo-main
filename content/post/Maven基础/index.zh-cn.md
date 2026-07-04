@@ -32,17 +32,17 @@ Maven-name/
 |--target（打包后的jar包存放地）
 ```
 
-&lt;div align="center"&gt;
-  &lt;img src="Maven项目结构图.png" alt="Maven项目结构图" width="82%"&gt;
-&lt;/div&gt;
+<div align="center">
+  <img src="Maven项目结构图.png" alt="Maven项目结构图" width="82%">
+</div>
 
 ---
 
 ## 🏗️ Maven项目模型
 
-&lt;div align="center"&gt;
-  &lt;img src="Maven项目模型.png" alt="Maven项目模型" width="82%"&gt;
-&lt;/div&gt;
+<div align="center">
+  <img src="Maven项目模型.png" alt="Maven项目模型" width="82%">
+</div>
 
 **仓库**：用于存储资源以及各种JAR包
 
@@ -70,26 +70,26 @@ Maven坐标是依赖资源的唯一标识，可以唯一定位资源的位置，
 - **artifactId**：项目名称/模块名称
 - **version**：版本号
 
-&lt;div align="center"&gt;
-  &lt;img src="Maven坐标.png" alt="Maven坐标" width="82%"&gt;
-&lt;/div&gt;
+<div align="center">
+  <img src="Maven坐标.png" alt="Maven坐标" width="82%">
+</div>
 
 ---
 
 ### ⚙️ 依赖配置
 
-#### 配置方法
+#### 🔧 配置方法
 
-1. 在pom.xml文件中使用标签&lt; dependencies &gt;
-2. 单个依赖在&lt; dependencies &gt;中被&lt; dependency &gt; 包围
+1. 在pom.xml文件中使用标签 `<dependencies>`
+2. 单个依赖在 `<dependencies>` 中被 `<dependency>` 包围
 3. 定义依赖的坐标
 4. 刷新Maven文件
 
-{{&lt;notice tip&gt;}}
+{{< notice tip >}}
 
 若本地仓库不存在依赖则会连接私服或者中央仓库进行下载
 
-{{&lt; /notice &gt;}}
+{{< /notice >}}
 
 ---
 
@@ -115,33 +115,33 @@ Maven坐标是依赖资源的唯一标识，可以唯一定位资源的位置，
 
 实现形式
 
-1. 在pom.xml文件中使用标签&lt; exclusions &gt;包围
+1. 在pom.xml文件中使用标签 `<exclusions>` 包围
 
-2. 对于要排除的单个依赖使用标签&lt; exclusion &gt;包围
+2. 对于要排除的单个依赖使用标签 `<exclusion>` 包围
 
-   {{&lt; notice tip&gt;}}
+   {{< notice tip >}}
 
    排除依赖的时候无须指定版本号
 
-   {{&lt; /notice &gt;}}
+   {{< /notice >}}
 
-   &lt;div align="center"&gt;
-     &lt;img src="依赖排除.png" alt="依赖排除" width="82%"&gt;
-   &lt;/div&gt;
+   <div align="center">
+     <img src="依赖排除.png" alt="依赖排除" width="82%">
+   </div>
 
 ---
 
-### 🎯 依赖范围
+### ⚡ 依赖范围
 
-依赖的jar包，默认情况下，可以在任何地方使用。但是可以通过&lt; scope &gt; 手动指定其使用范围
+依赖的jar包，默认情况下，可以在任何地方使用。但是可以通过 `<scope>` 手动指定其使用范围
 
-#### 作用范围
+#### 📊 作用范围
 
 - 主程序范围有效。(main文件夹范围内)
 - 测试程序范围有效。(test文件夹范围内)
 - 是否参与打包运行。(package指令范围内)
 
-#### &lt;scope&gt;标签的取值
+#### 📋 <scope>标签的取值
 
 | scope的取值   | 主程序 | 测试程序 | 打包运行 | 举例                   |
 | ------------- | ------ | -------- | -------- | ---------------------- |
@@ -162,21 +162,21 @@ Maven中有三套独立的生命周期
 
 ---
 
-#### 生命周期的阶段
+### 🔄 生命周期的阶段
 
-&lt;div align="center"&gt;
-  &lt;img src="Maven生命周期.png" alt="Maven生命周期" width="82%"&gt;
-&lt;/div&gt;
+<div align="center">
+  <img src="Maven生命周期.png" alt="Maven生命周期" width="82%">
+</div>
 
-{{&lt; notice tip &gt;}}
+{{< notice tip >}}
 
 同一套生命周期，后面的阶段要依托前面的阶段来执行
 
-{{&lt; /notice &gt;}}
+{{< /notice >}}
 
 ---
 
-##### 重要阶段
+#### ✅ 重要阶段
 
 - **clean**:移除上一次构建生成的文件
 - **compile**:编译项目源代码

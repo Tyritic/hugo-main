@@ -4,19 +4,25 @@ draft : false
 title : '博客使用指南'
 image : ""
 categories : ["博客相关"]
-tags : [""]
+tags : []
 description : "博客的使用指南"
 ---
 
-## 文章存储位置
+## 📁 文章存储位置
 
-本博客的所有文章都存放在E/MyBlog/content/post文件夹中![image-20241031190526917](image-20241031190526917.png)
+本博客的所有文章都存放在E/MyBlog/content/post文件夹中
 
-## 如何添加文章
+<div align="center">
+  <img src="image-20241031190526917.png" alt="博客文章存储目录结构" width="85%">
+</div>
+
+---
+
+## 🛠️ 如何添加文章
 
 在 `content/tags/文章名` 下新建文件 `index.zh-cn.md`
 
-### 命令行操作
+### 💻 命令行操作
 
 在MyBlog主文件夹的cmd中运行以下命令
 
@@ -24,7 +30,7 @@ description : "博客的使用指南"
 hugo new content post/<FileName>/index.zh-cn.md
 ```
 
-#### 参数解释
+#### 📝 参数解释
 
 **post**：所有文章保存的文件路径
 
@@ -35,17 +41,19 @@ hugo new content post/<FileName>/index.zh-cn.md
 - **index.en.md**：英文文章
 - **index.zh-cn.md**：中文文章
 
-<img src="微信截图_20241031192624.png" alt="微信截图_20241031192624" style="zoom: 80%;" />
+<div align="center">
+  <img src="微信截图_20241031192624.png" alt="Hugo命令行操作界面" width="82%">
+</div>
 
+---
 
+## ✏️ 文章内修改
 
-## 文章内修改
-
-###  插入照片
+###  🖼️ 插入照片
 
 将需要的图片放入文章的文件夹中即可
 
-### 头文字参数
+### 🔧 头文字参数
 
 - **data**：创建时间
 
@@ -61,9 +69,11 @@ hugo new content post/<FileName>/index.zh-cn.md
 
 - **description**：文章的描述
 
-### 短代码
+---
 
-#### 文章引用
+### 🔤 短代码
+
+#### 💬 文章引用
 
 在markdown文件中插入以下短代码，使用时将{}改为{{}}
 
@@ -73,7 +83,7 @@ hugo new content post/<FileName>/index.zh-cn.md
 {< /quote >}
 ```
 
-#### 插入B站视频
+#### 🎬 插入B站视频
 
 在markdown文件中插入以下短代码，使用时将{}改为{{}}
 
@@ -85,7 +95,7 @@ hugo new content post/<FileName>/index.zh-cn.md
 
 其中VIDEO_ID：BV1BPSdYHEbj
 
-#### 插入hugo notice
+#### ⚙️ 插入hugo notice
 
 hugo notice有以下几个类别
 
@@ -96,7 +106,7 @@ hugo notice有以下几个类别
 
 创建方法为在markdown文件中插入短代码，使用时将{}改为{{}}
 
-##### 创建Tip
+##### 🌟 创建Tip
 
 ```markdown
 {< notice tip >}
@@ -108,7 +118,7 @@ This is a very good tip.
 This is a very good tip.
 {{< /notice >}}
 
-##### 创建Info
+##### ℹ️ 创建Info
 
 ```markdown
 {< notice info >}
@@ -120,7 +130,7 @@ This is a very good info.
 This is a very good info.
 {{< /notice >}}
 
-##### 创建Warning
+##### ⚠️ 创建Warning
 
 ```markdown
 {< notice warning >}
@@ -132,9 +142,9 @@ This is a very bad warning.
 This is a very bad warning.
 {{< /notice >}}
 
-##### 创建Note
+##### 📌 创建Note
 
-```
+```markdown
 {< notice note >}
 This is a very good note.
 {< /notice >}
@@ -144,15 +154,17 @@ This is a very good note.
 This is a very bad note.
 {{< /notice >}}
 
+---
 
-
-### 插入参考博客
+### 🔗 插入参考博客
 
 直接将参考博客的网址复制到markdown文件中
 
 [Tyritic的个人博客](https://tyritic.github.io/)
 
-## 创建分组（categories）
+---
+
+## 🏷️ 创建分组（categories）
 
 在 `content/categories/分类名` 下新建文件 `_index.md`
 
@@ -162,9 +174,11 @@ This is a very bad note.
 hugo new content categories/<分组名>/_index.md
 ```
 
-<img src="微信截图_20241031214934.png" alt="微信截图_20241031214934" style="zoom:80%;" />
+<div align="center">
+  <img src="微信截图_20241031214934.png" alt="Hugo分组创建界面" width="82%">
+</div>
 
-### 参数解释
+### 📖 参数解释
 
 - **categories**：所有分组的所在目录
 - **_index.md**：分组的配置文件
@@ -172,7 +186,9 @@ hugo new content categories/<分组名>/_index.md
   - **_index.zh-cn.md**：中文分组
 
 
-## 创建标签（Tags)
+---
+
+## 🏷️ 创建标签（Tags）
 
 在 `content/tags/分类名` 下新建文件 `_index.md`
 
@@ -182,7 +198,7 @@ hugo new content categories/<分组名>/_index.md
 hugo new content tags/<标签名>/_index.md
 ```
 
-### 参数解释
+### 📖 参数解释
 
 - **tags**：所有标签所在的目录
 - **_index.md**：分组的配置文件
@@ -190,19 +206,19 @@ hugo new content tags/<标签名>/_index.md
   - **index.zh-cn.md**：中文标签
 
 
-## 创建友情链接（Links)
+---
+
+## 🔗 创建友情链接（Links）
 
 在 `content/page/links` 下修改文件 `_index.md`，创建与GitHub同级的元素
 
-<img src="微信截图_20241101170036.png" alt="微信截图_20241101170036" style="zoom: 150%;" />
+<div align="center">
+  <img src="微信截图_20241101170036.png" alt="Hugo友情链接配置界面" width="92%">
+</div>
 
-### 参数列表
+### 📋 参数列表
 
 - **title**：博客显示该网站的名字
 - **description**：博客对该网站的描述
 - **website**：网站链接
 - **image**：网站的icon
-
-  
-
-  

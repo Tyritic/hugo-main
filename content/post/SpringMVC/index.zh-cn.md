@@ -49,7 +49,7 @@ MVC 模式的优点是可以将代码分离成三个独立的组件，使得应�
 
 ### 🏗️ 结构组件
 
-#### 🎮 控制器controller
+#### ⚙️ 控制器controller
 
 控制器是一种由 Spring 管理的 Bean 对象，赋予角色是"控制器"。
 
@@ -64,7 +64,7 @@ MVC 模式的优点是可以将代码分离成三个独立的组件，使得应�
 - **`@RestController`** 包含了 **`@Controller`** 的功能，同时加入了 **`@ResponseBody`** 的注解。
 - 表示当前控制器类中的方法，都会默认加入 **`@ResponseBody`** 的功能。方法的返回值是数据可以通过 HttpServletResponse 输出给浏览器。
 
-{{notice tip}}
+{{/notice}}
 
 **接收请求**
 
@@ -174,13 +174,13 @@ MVC 模式的优点是可以将代码分离成三个独立的组件，使得应�
 
 ---
 
-## ⚙️ Spring Boot中配置Spring MVC
+## 🛠️ Spring Boot中配置Spring MVC
 
 ### 📝 配置方法
 
 因为 Spring Boot 自动装配机制的存在，一般来说我们不需要对 Spring MVC 进行配置，如果要进行特别定制化的配置，Spring Boot 也支持配置文件或者编写代码的两种方式来进行配置。
 
-#### 🔧 方法一：修改application.yml
+#### 📋 方法一：修改application.yml
 
 可以通过修改 application.yml 的 spring.mvc 属性来修改 SpringBoot 对 SpringMVC 的默认配置。
 
@@ -332,7 +332,7 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
 }
 ```
 
-{{&lt;notice tip&gt;}}
+{{notice tip}}
 
 - 使用 Springboot 框架对 SpringMVC 的默认设置：直接编写控制器逻辑。
 
@@ -342,5 +342,5 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
 
   使用 @EnableWebMvc 会完全覆盖 SpringBoot 对 SpringMVC 的自动配置，因此如果使用了 @EnableWebMvc，就需要自己配置 Spring MVC 的全部内容，包括视图解析器、资源处理、异常处理等。通常情况下，只有在需要非常精细的控制 Spring MVC 配置时才会使用 @EnableWebMvc。
 
-{{&lt;/notice&gt;}}
+{{/notice}}
 

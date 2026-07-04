@@ -52,8 +52,10 @@ description: "把 OpenSpec 的规范驱动与 Superpowers 的工程工作流结�
 > **不是让 AI 多会写代码，而是尽量让它少在错误的时机写代码。**
 
 ---
-## 两者的关系
-## 协同关系：契约 + 纪律
+
+## ⚖️ 两者的关系
+
+### 💼 协同关系：契约 + 纪律
 
 把两个工具叠在一起看，它们的边界其实非常清楚：
 
@@ -77,7 +79,10 @@ description: "把 OpenSpec 的规范驱动与 Superpowers 的工程工作流结�
 
 组合价值：OpenSpec 将设计固化为文件资产，Superpowers 在执行中强制 TDD、调试、审查等纪律。
 
-## 冲突关系：职责重叠
+---
+
+### ⚠️ 冲突关系：职责重叠
+
 <div align="center">
   <img src="b47764ec715011f18fad76775b9f00d8.png" alt="OpenSpec 与 Superpowers 冲突关系图" width="82%">
 </div>
@@ -87,10 +92,13 @@ description: "把 OpenSpec 的规范驱动与 Superpowers 的工程工作流结�
 - OpenSpec 里的验收标准，后面又会被 Superpowers 的 TDD plan 转成 test case，原来的 spec 反而不再是主要验证手段,职责重叠。
 - 两层审批互不信任，开发者经常不知道到底该以哪一层为准。
 
-## 方案一:superpowers-openspec-team-skills
-superpowers-openspec-team-skills 是 github上的一个解决方案，用于管理 OpenSpec 和 Superpowers 项目的开发流程。官方仓库地址：[superpowers-openspec-team-skills](https://github.com/SYZ-Coder/superpowers-openspec-team-skills)
+---
 
-### 具体使用
+## 🎯 方案一：superpowers-openspec-team-skills
+
+superpowers-openspec-team-skills 是 github 上的一个解决方案，用于管理 OpenSpec 和 Superpowers 项目的开发流程。官方仓库地址：[superpowers-openspec-team-skills](https://github.com/SYZ-Coder/superpowers-openspec-team-skills)
+
+### 📦 具体使用
 
 1）安装
 ```bash
@@ -101,8 +109,8 @@ npm install -g superpowers-openspec-team
 ```bash
 sot init /path/to/your/project
 ```
-3）工作流
-选择具体的工作流
+
+3）⚙️ 工作流选择
 - superpowers-openspec-superpowers：先用 Superpowers 把问题想透，再用 OpenSpec 把事实锁准，最后回到 Superpowers 把实现、验证和归档做稳
 - openspec-superpowers：先完成 OpenSpec 变更产物，再交给 Superpowers 继续实现、验证和归档
 - superpowers-feature：只使用 Superpowers 的设计、计划、TDD、验证纪律(等价于单独使用superpowers)
@@ -123,23 +131,23 @@ sot init /path/to/your/project
 请使用 $superpowers-openspec-superpowers-workflow 处理这个功能。
 ```
 
-4）预计产物
-1.  docs/superpowers/specs/ 下的 Superpowers 设计草稿
-2.  openspec/changes/<change-name>/ 下的 proposal、design、specs、tasks
-3.  docs/superpowers/plans/ 下的实现计划
-4.  已验证的代码变更
-5.  完成后的 OpenSpec change 归档
+4）📋 预计产物
+1.  docs/superpowers/specs/ 下的 Superpowers 设计草稿
+2.  openspec/changes/<change-name>/ 下的 proposal、design、specs、tasks
+3.  docs/superpowers/plans/ 下的实现计划
+4.  已验证的代码变更
+5.  完成后的 OpenSpec change 归档
 
-### 工作流
+### 🔄 工作流详解
 
-#### 工作流的选取逻辑
+#### 🎯 工作流的选取逻辑
 - 想先用 Superpowers 做探索、再用 OpenSpec 锁定、最后回到 Superpowers 执行，用 `superpowers-openspec-superpowers`
 - 想先从 OpenSpec 产物起步，再交给 Superpowers 继续交付，用 `openspec-superpowers`
 - 只想要 Superpowers 工程纪律，不需要 OpenSpec change 产物，用 `superpowers-feature`
 - 工作已经做完，想把这次经验、状态和可复用知识沉淀下来，并让下一次会话直接接上，用 `superpowers-learning`
 - 只想先补齐 OpenSpec 变更文档，用 `openspec-feature`
 
-其中 `superpowers-learning` 需要特别注意：它更像其他 workflow 的“增强收尾层”，不是一条替代开发流程的主入口。通常是在 `superpowers-feature`、`superpowers-openspec-superpowers`、`openspec-superpowers` 这类交付型 workflow 完成之后，再用它把本次会话里真正值得长期保留的内容写回 `.superpowers-memory/`，包括稳定项目事实、当前状态、简短会话记录，以及后续可沉淀成 skill、checklist 或知识库条目的经验。
+其中 `superpowers-learning` 需要特别注意：它更像其他 workflow 的"增强收尾层"，不是一条替代开发流程的主入口。通常是在 `superpowers-feature`、`superpowers-openspec-superpowers`、`openspec-superpowers` 这类交付型 workflow 完成之后，再用它把本次会话里真正值得长期保留的内容写回 `.superpowers-memory/`，包括稳定项目事实、当前状态、简短会话记录，以及后续可沉淀成 skill、checklist 或知识库条目的经验。
 
 对持续协作的项目，推荐这样串联：
 
@@ -147,8 +155,8 @@ sot init /path/to/your/project
 2. 完成实现与验证
 3. 再运行 `superpowers-learning`，把这次工作的稳定事实、当前状态、会话记录和可复用经验写回项目记忆
 
-#### openspec-superpowers 工作流
-openspec-superpowers-workflow 是完整功能交付的总入口。它把 Superpowers 的探索、设计确认、实现计划、TDD、验证纪律，与 OpenSpec 的 proposal、design、spec、tasks 产物组合在一起。适合用于“既要想清楚、又要留下正式规范记录、最后还要可靠实现”的功能开发。
+#### 📊 openspec-superpowers 工作流
+openspec-superpowers-workflow 是完整功能交付的总入口。它把 Superpowers 的探索、设计确认、实现计划、TDD、验证纪律，与 OpenSpec 的 proposal、design、spec、tasks 产物组合在一起。适合用于"既要想清楚、又要留下正式规范记录、最后还要可靠实现"的功能开发。
 
 适用场景
 - 用户明确要求使用 OpenSpec + Superpowers。
@@ -169,7 +177,8 @@ openspec-superpowers-workflow 是完整功能交付的总入口。它把 Superpo
 ```text
 请使用 $openspec-superpowers-workflow 处理这个功能。在 OpenSpec 的 tasks 生成后，先展示给我，并等待我确认后再进入实现。
 ```
-#### superpowers-openspec-superpowers 工作流
+
+#### 🔁 superpowers-openspec-superpowers 工作流
 superpowers-openspec-superpowers-workflow 适合那些不想靠猜、不想抢跑、也不想把复杂功能做着做着做乱掉的团队。
 
 工作流顺序
@@ -188,29 +197,34 @@ superpowers-openspec-superpowers-workflow 适合那些不想靠猜、不想抢�
 请使用 $superpowers-openspec-superpowers-workflow 处理这个功能。在 OpenSpec 的 tasks 生成后，先展示给我，并等待我确认后再进入实现。
 ```
 
-#### superpowers-feature 工作流
+#### 🏗️ superpowers-feature 工作流
 superpowers-feature-workflow 覆盖 Superpowers 侧的功能交付流程：需求探索、设计确认、实现计划、worktree、TDD 和最终验证。
 
 它不会创建 OpenSpec 产物。适合只需要严谨实现流程，但不需要正式 OpenSpec change 记录的场景。
 
-#### openspec-feature 工作流
+#### 📝 openspec-feature 工作流
 openspec-feature-workflow 用于创建并补齐实现前需要的 OpenSpec change 产物：proposal、design、specs 和 tasks。
-它专注于“把变更正式化”。它本身不负责 TDD、worktree 或实现后的验证流程。
+它专注于"把变更正式化"。它本身不负责 TDD、worktree 或实现后的验证流程。
 
-#### superpowers-learning 工作流
+#### 💾 superpowers-learning 工作流
 superpowers-learning-workflow 是一个在重要工作结束后使用的反思型 workflow，用来把当前会话真正值得保留下来的内容沉淀到仓库里。
 适合接在这些 workflow 后面使用：
 - superpowers-feature-workflow
 - superpowers-openspec-superpowers-workflow
 - openspec-superpowers-workflow
+
 它会帮助团队把最近的工作整理成四类内容：
 - 稳定的项目事实
 - 当前工作状态
 - 简短的会话记录
 - 未来可能沉淀成 workflow、skill 或 checklist 的可复用经验
 
-## 方案二:Comet
-Comet：github开源工具，1.7kstar，可以看作是OpenSpec + Superpowers 的流程编排层。它做的是流程调度：什么时候用 OpenSpec，什么时候用 Superpowers，什么时候验证，什么时候归档。
+---
+
+## 🔧 方案二：Comet
+
+Comet：github 开源工具，1.7k star，可以看作是 OpenSpec + Superpowers 的流程编排层。它做的是流程调度：什么时候用 OpenSpec，什么时候用 Superpowers，什么时候验证，什么时候归档。
+
 <div align="center">
   <img src="263cabd2c73448dc796455b3993ebbbb.png" alt="Comet 流程" width="88%">
 </div>
@@ -228,6 +242,8 @@ Comet：github开源工具，1.7kstar，可以看作是OpenSpec + Superpowers �
 - 流程可以恢复。长任务中途关闭会话后，Comet 可以根据状态文件识别当前阶段，让 Agent 不需要重新猜测进度。
 - 文档可以衔接。OpenSpec 的 proposal、spec、tasks，和 Superpowers 的 design doc、plan，不再是几份分散文档，而是被流程串起来。
 - 验证更可靠。不是 AI 说完成就完成，而是要经过 verify 阶段，检查任务、测试和归档条件是否满足。
+
+---
 
 ## 🚀 标准 SOP：六阶段配合流程
 

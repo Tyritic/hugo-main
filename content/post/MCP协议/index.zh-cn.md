@@ -43,9 +43,9 @@ Function Call 于 **2023 年** 由 OpenAI 推出。在此之前，LLM 主要只�
 
 ---
 
-## 🔌 MCP 是什么
+## 🔗 MCP 是什么
 
-MCP 全称是 **Model Context Protocol（模型上下文协议）**，它由 Anthropic 在2024年11月推出，目标是为 LLM 与外部数据源、工具之间的交互提供一种更标准化的方式，旨在使AI模型，尤其是大型语言模型(LLMs)，能够更容易地与外部数据(如文件、数据库或API)连接。它就像一个通用插头，可以让AI"与”不同的系统交流，而不需要为每个系统进行定制设置。官方文档见：[MCP Introduction](https://modelcontextprotocol.io/introduction)。
+MCP 全称是 **Model Context Protocol（模型上下文协议）**，它由 Anthropic 在2024年11月推出，目标是为 LLM 与外部数据源、工具之间的交互提供一种更标准化的方式，旨在使AI模型，尤其是大型语言模型(LLMs)，能够更容易地与外部数据(如文件、数据库或API)连接。它就像一个通用插头，可以让AI”与”不同的系统交流，而不需要为每个系统进行定制设置。官方文档见：[MCP Introduction](https://modelcontextprotocol.io/introduction)。
 
 官方对 MCP 的描述是：
 
@@ -67,7 +67,7 @@ MCP 全称是 **Model Context Protocol（模型上下文协议）**，它由 Ant
 
 ---
 
-## 🧩 MCP 相比 Function Call 带来了什么
+## 🎯 MCP 相比 Function Call 带来了什么
 
 MCP 的核心改进，可以从三个能力对象来理解：
 
@@ -88,17 +88,17 @@ MCP 的核心改进，可以从三个能力对象来理解：
 
 ---
 
-## 🆚 MCP 和 Function Call 的区别
+## ⚖️ MCP 和 Function Call 的区别
 
 二者的核心区别就一句话：Function Call 是 LLM 的一项**单轮工具调用能力**，而 MCP 是一套**标准化 LLM 与外部世界交互的完整通信协议**——Function Call 只是 MCP 的能力子集，二者根本不是一个维度的东西。
 
-- **LLM 的基础工具调用能力**：Function Call 的本质，是 LLM 提供的单轮、无状态、单向的工具调用机制，解决的核心问题是"让 LLM 不要瞎编答案，而是通过调用外部工具获取准确数据"。Function Call 就像 HTTP 接口的单次调用，你发一次请求、传一次参数、拿一次结果，无状态、单向通信，每次调用都要重新认证、重新传参，只能你主动调用接口，接口不能主动给你推消息。
-- **MCP 的完整协议设计**：MCP 就是给二者建了一条稳定的、全双工的、持久化的通信管道。它不仅包含了 Function Call 的工具调用能力，还提供了 Function Call 完全不具备的核心能力。MCP 就像 TCP 长连接 + 完整的 RPC 协议，它不仅能实现单次调用，还能保持长连接、持久化会话状态、支持双向实时通信，有完整的资源管理、上下文同步、异常处理机制，能支撑复杂的、持久化的业务场景。
+- **📞 LLM 的基础工具调用能力**：Function Call 的本质，是 LLM 提供的单轮、无状态、单向的工具调用机制，解决的核心问题是"让 LLM 不要瞎编答案，而是通过调用外部工具获取准确数据"。Function Call 就像 HTTP 接口的单次调用，你发一次请求、传一次参数、拿一次结果，无状态、单向通信，每次调用都要重新认证、重新传参，只能你主动调用接口，接口不能主动给你推消息。
+- **🌐 MCP 的完整协议设计**：MCP 就是给二者建了一条稳定的、全双工的、持久化的通信管道。它不仅包含了 Function Call 的工具调用能力，还提供了 Function Call 完全不具备的核心能力。MCP 就像 TCP 长连接 + 完整的 RPC 协议，它不仅能实现单次调用，还能保持长连接、持久化会话状态、支持双向实时通信，有完整的资源管理、上下文同步、异常处理机制，能支撑复杂的、持久化的业务场景。
 
 
 ## 🏗️ 核心架构与运行方式
 
-### 🗂️ 核心架构
+### 🧠 核心架构
 
 MCP 采用 **客户端 - 服务器架构**，通信层通常使用 [JSON-RPC 2.0](https://www.jsonrpc.org/) 来交换消息。
 
@@ -109,9 +109,10 @@ MCP 采用 **客户端 - 服务器架构**，通信层通常使用 [JSON-RPC 2.0
 架构中的关键角色如下：
 
 - **主机（Host）**：发起连接的 LLM 应用程序，主要是人工智能应用程序(例如，Claude桌面、集成开发环境或Agent 框架)，负责管理MCP
-- **客户端（MCP Client）**：Host内部专门用于与MCP Server建立和维持一对一连接的模块。它负责按照MCP协议的规范发送请求、接收响应和处理数据。简单来说，MCP Client是Host内部处理RPC通信的“代理”，专注于与一个MCP Server进行标准化的数据、工具或prompt的交换
-<div align="center">
-  <img src="MCP Client.png" alt="MCP Client" width="82%" />
+- **客户端（MCP Client）**：Host内部专门用于与MCP Server建立和维持一对一连接的模块。它负责按照MCP协议的规范发送请求、接收响应和处理数据。简单来说，MCP Client是Host内部处理RPC通信的”代理”，专注于与一个MCP Server进行标准化的数据、工具或prompt的交换
+
+<div align=”center”>
+  <img src=”MCP Client.png” alt=”MCP Client” width=”82%”>
 </div>
 
 - **服务器（MCP Server）**：对接具体的数据源或工具，向客户端暴露能力。
@@ -120,7 +121,7 @@ MCP 采用 **客户端 - 服务器架构**，通信层通常使用 [JSON-RPC 2.0
   - **Prompts**：预定义的提示模板，帮助用户更高效地完成特定任务。指导 AI 响应或任务的模板消息或工作流，增强互动
 
 <div align="center">
-  <img src="MCP Server.png" alt="MCP Server" width="82%" />
+  <img src="MCP Server.png" alt="MCP Server" width="82%">
 </div>
 
 - **资源来源**：既可以是本地资源，也可以是远程资源。

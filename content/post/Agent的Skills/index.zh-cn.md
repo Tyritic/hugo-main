@@ -62,7 +62,7 @@ Function Calling 只是 Agent 执行某些动作时可能用到的底层手段�
 
 ## ⚖️ Skills与相关概念的区别
 
-### Skills vs Prompt
+### 📊 Skills vs Prompt
 
 | 维度 | Prompt | Skills |
 |------|--------|--------|
@@ -81,7 +81,7 @@ Function Calling 只是 Agent 执行某些动作时可能用到的底层手段�
 
 ---
 
-### 🔌 Skills vs MCP
+### 🔗 Skills vs MCP
 
 这是最容易产生误解的地方。
 
@@ -103,7 +103,7 @@ Function Calling 只是 Agent 执行某些动作时可能用到的底层手段�
 
 ---
 
-### 🎯 Function Calling vs Skills
+### 💻 Function Calling vs Skills
 
 | 维度 | Function Calling | Skills |
 |------|-----------------|--------|
@@ -133,7 +133,7 @@ Agent 读取 `SKILL.md`，将规则和流程注入推理上下文。根据上下
 
 ## 💡 Skills实例
 
-### 📁 Skill的目录结构
+### 📂 Skill的目录结构
 
 从结构上看，Skill 核心就是一个 `SKILL.md` 文件，包含元数据（描述什么时候用）和正文（具体的执行 SOP）。
 
@@ -151,7 +151,7 @@ skill-name/
 
 ---
 
-### 🧪 SKILL.md示例结构
+### 📋 SKILL.md示例结构
 
 ```markdown
 # code-review-expert
@@ -201,7 +201,7 @@ skill-name/
 
 ---
 
-### 🌐 推荐Skills资源
+### 🎓 推荐Skills资源
 
 - [skills.sh](https://skills.sh/)：查找热门和所需的 Skills
 - [Superpowers](https://github.com/obra/superpowers)：内置多种开箱即用的开发 Skills
@@ -209,7 +209,7 @@ skill-name/
 
 ---
 
-## 📝 总结
+## 📌 总结
 
 **Skills 的本质**：用自然语言定义的、具有特定领域上下文的逻辑指令集，通过延迟加载优化 Token 消耗，本质上是 sub-agent。
 

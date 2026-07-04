@@ -49,44 +49,44 @@ math : true
 
 ## 🔨 HashMap的常用方法
 
-### 🔨 构造方法
+### ⚙️ 构造方法
 
 - **`public HashMap()`**：默认构造方法
 - **`public HashMap(int initialCapacity)`**：指定初始容量的构造方法
 - **`public HashMap(int initialCapacity, float loadFactor)`**：指定初始容量和加载因子的构造方法
 - **`public HashMap(Map<? extends K, ? extends V> m)`**：从其他 `Map` 初始化的构造方法
 
-### 📌 添加键值对
+#### 📝 添加键值对
 
 - **`public V put(K key, V value)`**：添加或更新键值对 
 - **`public void putAll(Map<? extends K, ? extends V> m)`**：批量添加键值对
 
-### 📌 删除键值对
+### 🗑️ 删除键值对
 
 - **`public V remove(Object key)`**：移除键值对
 - **`public boolean remove(Object key, Object value)`**：按键值同时匹配移除
 
-### 📌 查询键值对
+### 🔍 查询键值对
 
 - **`public V get(Object key)`**：获取值
 - **`public boolean containsKey(Object key)`**：检查是否包含键
 - **`public boolean containsValue(Object value)`**：检查是否包含值
 - **`public V getOrDefault(Object key, V defaultValue)`**：获取默认值
 
-### 📌 视图操作
+### 👁️ 视图操作
 
 - **`public Set<K> keySet()`**：获取所有键的集合
 - **`public Collection<V> values()`**：获取所有值的集合
 - **`public Set<Map.Entry<K, V>> entrySet()`**：获取所有键值对的集合
 
-### 📌 替换操作
+### 🔄 替换操作
 
 - **`public V replace(K key, V value)`**：替换值
 - **`public boolean replace(K key, V oldValue, V newValue)`**：条件替换值
 
-### 📌 遍历操作
+### 🔁 遍历操作
 
-#### 🔨 使用for-each循环和entrySet()方法
+#### 💻 使用for-each循环和entrySet()方法
 
 ```java
 import java.util.HashMap;
@@ -107,7 +107,7 @@ public class MapTraversalExample {
 }
 ```
 
-#### 🔨 使用for-each循环和keySet()方法
+#### 🔑 使用for-each循环和keySet()方法
 
 ```java
 import java.util.HashMap;
@@ -128,7 +128,7 @@ public class MapTraversalExample {
 }
 ```
 
-#### 🔨 使用 Lambda 表达式和forEach()方法
+#### 🎬 使用 Lambda 表达式和forEach()方法
 
 ```java
 import java.util.HashMap;
@@ -151,13 +151,15 @@ public class MapTraversalExample {
 
 ## 🔧 HashMap的底层原理
 
-### 🔧 存储原理
+### 📖 存储原理
 
-#### 🛠️ JDK 1.7 以前
+#### 🔧 JDK 1.7 以前
 
 在 JDK 1.7 版本之前， **`HashMap`** 数据结构是数组和链表，**`HashMap`** 通过哈希算法将元素的键映射到数组中的槽位。如果多个键映射到同一个槽位，它们会以链表的形式存储在同一个槽位上，因为链表的查询时间是$O(n)$，所以冲突很严重，一个索引上的链表非常长，效率就很低了。
 
-**`HashMap`** 的默认初始容量为 **16**，负载因子为 **0.75**。也就是说，当存储的元素数量超过 16 × 0.75 = 12 个时，**`HashMap`** 会触发扩容操作，<div align="center">
+**`HashMap`** 的默认初始容量为 **16**，负载因子为 **0.75**。也就是说，当存储的元素数量超过 16 × 0.75 = 12 个时，**`HashMap`** 会触发扩容操作。
+
+<div align="center">
   <img src="1719565480532-57a14329-c36b-4514-8e7d-2f2f1df88a82.webp" alt="示意图" width="82%">
 </div>
 
@@ -175,7 +177,7 @@ public class MapTraversalExample {
 
 
 
-#### 🛠️ JDK 1.8以后
+#### ⚙️ JDK 1.8以后
 
 在 JDK 1.8 版本的时候做了优化，当一个链表的长度超过 **8** 且数组大小大于等于 **64** 的时候就转换数据结构，不再使用链表存储，而是使用**红黑树**，查找时使用红黑树，时间复杂度为$O(log n)$，可以提高查询性能，但是在红黑树节点数量较少时，即数量小于**6** 时，会将红黑树转换回链表。
 
@@ -189,7 +191,7 @@ public class MapTraversalExample {
   <img src="20220219202916_mianshiya.png" alt="示意图" width="82%">
 </div>
 
-### 🔨 hash方法的底层实现
+### 📐 hash方法的底层实现
 
 ```java
 static final int hash(Object key) {
@@ -206,14 +208,14 @@ static final int hash(Object key) {
 
 **示例**
 
-```
+```bash
 原始: 0001 0010 0011 0100 0101 0110 0111 1000
 右移: 0000 0000 0000 0000 0001 0010 0011 0100
 异或: ---------------------------------------
 结果: 0001 0010 0011 0100 0100 0100 0100 1100
 ```
 
-### 🔧 数组索引计算原理
+### 🔍 数组索引计算原理
 
 通常基于哈希值计算数组下标使用该公式：**`hash % length`**，其中 **`hash`** 为以经过 **`hash()`** 方法优化后的哈希值， **`length`** 为数组容量
 
@@ -246,7 +248,7 @@ static final int hash(Object key) {
 
 {{</ notice>}}
 
-### 🔨 哈希碰撞的解决方法
+### ⚠️ 哈希碰撞的解决方法
 
 Hash 碰撞是指在使用哈希算法时，不同的输入数据通过哈希函数计算后，得到了相同的哈希值（即散列值）。因为哈希值相同，所以这些键会被映射到哈希表的同一个位置，从而引发“碰撞”。
 
@@ -256,7 +258,7 @@ Hash 碰撞是指在使用哈希算法时，不同的输入数据通过哈希函
 - **开放寻址法（开散列法）**：如果出现碰撞，寻找哈希表中的下一个可用位置。
 - **再哈希法（双重哈希）**：在出现碰撞时，使用第二个哈希函数计算新的索引位置，减少碰撞的概率。
 
-#### 💡 拉链法（开散列法）
+#### 📌 拉链法（开散列法）
 
 使用链表来处理冲突，每个哈希表的槽不仅存储单个元素，而是存储指向链表头部的指针。所有具有相同哈希值的元素都会被放入到同一个链表中。!
 
@@ -274,7 +276,7 @@ Hash 碰撞是指在使用哈希算法时，不同的输入数据通过哈希函
   <img src="ndrY3lLs_image_mianshiya.png" alt="示意图" width="82%">
 </div>
 
-#### 💡 开放寻址法（闭散列法）
+#### 🔲 开放寻址法（闭散列法）
 
 在哈希表中寻找下一个空闲的槽位以存储发生碰撞的元素。
 
@@ -290,11 +292,13 @@ Hash 碰撞是指在使用哈希算法时，不同的输入数据通过哈希函
 缺点：
 
 - 随着哈希表的填充度增加，探查的次数会增加，导致性能下降。
-- 删除元素时候，不能真的删除，只能打标，否则会导致查找错误。只能在下一个元素插入时，发现标记后才能替换原来的元素。<div align="center">
+- 删除元素时候，不能真的删除，只能打标，否则会导致查找错误。只能在下一个元素插入时，发现标记后才能替换原来的元素。
+
+<div align="center">
   <img src="snEDo77X_image_mianshiya.png" alt="示意图" width="82%">
 </div>
 
-#### 💡 再哈希法（双重哈希）
+#### 🔀 再哈希法（双重哈希）
 
 在出现碰撞时，使用第二个哈希函数计算新的索引位置，减少碰撞的概率
 
@@ -302,7 +306,7 @@ Hash 碰撞是指在使用哈希算法时，不同的输入数据通过哈希函
   <img src="3A87Qnvx_image_mianshiya.png" alt="image.png" width="82%">
 </div>
 
-### ⚙️ 扩容机制
+### 📊 扩容机制
 
 **`HashMap`**的默认负载因子为**0.75**，初始长度为**16**（初始化时可以指定容量，**`HashMap`** 会将这个值转换为大于或等于 17 的最小的 2 的幂。）
 
@@ -312,7 +316,9 @@ Hash 碰撞是指在使用哈希算法时，不同的输入数据通过哈希函
 
 JDK 1.7以前，所有元素的哈希值，并将它们重新分配到新的哈希桶中
 
-JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。因为元素的新位置只与高位有关<div align="center">
+JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。因为元素的新位置只与高位有关
+
+<div align="center">
   <img src="1713514753772-9467a399-6b18-4a47-89d4-957adcc53cc0.webp" alt="n由16拓展到32的示例" width="82%">
 </div>
 
@@ -322,7 +328,7 @@ JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。�
 
 若为1则被移动到原来的位置加上旧数组长度的地方（hash 2 被移动到 5+16=21 处）
 
-### 🔧 插入原理（put方法）
+### 💾 插入原理（put方法）
 
 - 根据要添加的键的哈希码（ **`hashcode()`** 方法+ **`hash`** 方法）计算在数组中的位置（索引）
 - 检查该位置是否为空（即没有键值对存在）
@@ -340,7 +346,7 @@ JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。�
 
 ---
 
-## 🔨 equals方法和hashcode方法
+## 🔐 equals方法和hashcode方法
 
  **`HashMap`** 在比较元素时
 
@@ -354,7 +360,7 @@ JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。�
 
 ---
 
-## 🛠️ JDK 1.8 的改动
+## 📢 JDK 1.8 的改动
 
 - **改进了哈希函数的计算**：JDK 1.8 中优化了哈希函数，使得哈希值的分布更加均匀，减少了哈希冲突的发生。通过在生成哈希值时使用“扰动函数”，确保哈希值的高低位都能参与到桶的选择中。
 - **扩容机制优化**：JDK 1.8 改进了扩容时的元素迁移机制。在扩容过程中不再对每个元素重新计算哈希值，而是根据原数组长度的高位来判断元素是留在原位置，还是迁移到新数组中的新位置。这一改动减少了不必要的计算，提升了扩容效率。
@@ -362,7 +368,7 @@ JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。�
 
 ---
 
-## ❓ HashMap的线程安全问题
+## ❗ HashMap的线程安全问题
 
 - JDK1.7中的 **`HashMap`** 使用头插法插入元素，在多线程的环境下，扩容的时候有可能导致环形链表的出现，形成死循环。因此，JDK1.8使用尾插法插入元素，在扩容时会保持链表元素原本的顺序，不会出现环形链表的问题。
 - 多线程同时执行 **`put`** 操作，如果计算出来的索引位置是相同的，那会造成前一个 key 被后一个 key 覆盖，从而导致元素的丢失。
@@ -370,7 +376,7 @@ JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。�
 
 ---
 
-## 🗺️ 自定义HashMap
+## 🎨 自定义HashMap
 
 ### 📦 内部节点类
 
@@ -402,7 +408,7 @@ JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。�
     }
 ```
 
-### 📌 成员变量
+### 📋 成员变量
 
 ```java
  	//默认容量
@@ -415,7 +421,7 @@ JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。�
     Node<K, V>[] buckets;
 ```
 
-### 🔨 构造方法
+### 🏗️ 构造方法
 
 ```java
  	/**
@@ -437,7 +443,7 @@ JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。�
     }
 ```
 
-### 📌 哈希函数
+### 🔢 哈希函数
 
 ```java
  /**
@@ -455,7 +461,7 @@ JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。�
     }
 ```
 
-### 📌 添加键值对
+### 📥 添加键值对
 
 - 获取元素插入位置
 - 当前位置为空，直接插入
@@ -510,7 +516,7 @@ JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。�
     }
 ```
 
-### ⚙️ 扩容机制
+### 🔁 扩容机制
 
 - 创建两倍容量的新数组
 - 将当前桶数组的元素重新散列到新的数组
@@ -552,7 +558,7 @@ JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。�
     }
 ```
 
-### 📌 获取键值对的值
+### 🔎 获取键值对的值
 
 ```java
  /**
@@ -582,13 +588,13 @@ JDK 1.7以后，进行了优化。不需要每个节点重新 hash 算下标。�
 
 ---
 
-## 📦 HashMap的衍生类——LinkedHashMap类
+## 📚 HashMap的衍生类——LinkedHashMap类
 
 **`LinkedHashMap`** 是 Java 集合框架中的一个实现类，它继承自 **`HashMap`**，并且**保留了键值对的插入顺序或访问顺序**。
 
 它内部是通过维护了一个双向链表来记录元素的插入顺序或访问顺序。
 
-### ✅ 底层实现
+### 📖 底层实现
 
 **`LinkedHashMap`** 内部追加了双向链表，来维护元素的插入顺序
 
@@ -621,7 +627,7 @@ private void linkNodeLast(LinkedHashMap.Entry<K,V> p) {
 }
 ```
 
-### 📌 访问顺序
+### 🔁 访问顺序
 
 **`LinkedHashMap`** 不仅能够维持插入顺序，还能够维持访问顺序。访问包括调用 **`get()`** 方法、**`remove()`** 方法和 **`put()`** 方法。
 
@@ -729,7 +735,7 @@ public class LRUCache<K,V> {
 
 ---
 
-## 📦 HashMap的衍生类——TreeMap类
+## 🌳 HashMap的衍生类——TreeMap类
 
 TreeMap 内部是通过红黑树实现的，可以让 key 的实现 **`Comparable`** 接口或者自定义实现一个 **`comparator`** 传入构造函数，这样塞入的节点就会根据你定义的规则进行排序。
 
@@ -739,7 +745,7 @@ TreeMap 内部是通过红黑树实现的，可以让 key 的实现 **`Comparabl
 - 键的有序性：**`TreeMap`** 中的键是有序的，默认按自然顺序（键的 **`Comparable`** 实现）排序，也可以通过构造时提供的 **`Comparator`** 进行自定义排序。
 - 不允许 **`null`** 键：**`TreeMap`** 不允许键为 **`null`**，但允许值为 **`null`**。
 
-### 🗺️ 与HashMap的区别
+### ⚖️ 与HashMap的区别
 
 - **`HashMap`** 是基于数组+链表+红黑树实现的，加入元素的时候会先计算 key 的哈希值，然后通过哈希值计算出元素在数组中的存放下标，然后将元素插入到指定的位置，如果发生哈希冲突，会使用链表来解决，如果链表长度大于 **8**，会转换为红黑树。
 
@@ -749,7 +755,7 @@ TreeMap 内部是通过红黑树实现的，可以让 key 的实现 **`Comparabl
 
 - **`TreeMap`** 的查找效率是 $O(logn)$。并且保证了元素的顺序，因此适用于需要大量范围查找或者有序遍历的场景。
 
-### 📌 示例
+### 💼 示例
 
 ```java
 import java.util.Comparator;
@@ -789,11 +795,11 @@ public class TreeSetExample2 {
 
 ---
 
-## 📦 HashMap的衍生类——ConcurrentHashMap类
+## 🔐 HashMap的衍生类——ConcurrentHashMap类
 
 **`ConcurrentHashMap`** 是 Java 提供的一种线程安全的哈希表实现，位于 **`java.util.concurrent`** 包中，广泛用于高并发环境下。它与传统的 **`HashMap`** 不同，能够在多个线程并发操作时保持高效性和一致性。
 
-### ✨ 特点
+### 💎 特点
 
 - **线程安全**：
   - 多线程可以同时操作不同的桶，提高并发性能。
@@ -805,7 +811,7 @@ public class TreeSetExample2 {
   - 可以在迭代期间执行插入或删除操作，不会抛出 **`ConcurrentModificationException`**。
 - **不支持键或值为null**：
 
-### 🔨 构造方法
+### ⚙️ 构造方法
 
 - **`public ConcurrentHashMap()`**：创建一个默认的 **`ConcurrentHashMap`** 实例
 
@@ -814,7 +820,7 @@ public class TreeSetExample2 {
   - **`loadFactor`**：负载因子。
   - **`concurrencyLevel`**：并发级别（用于估计并发线程数，JDK 1.8 后不再显式使用）。
 
-### ✅ 底层实现
+### 🏭 底层实现
 
 #### 🛠️ JDK 1.7之前
 
@@ -850,7 +856,7 @@ public class TreeSetExample2 {
 
  **`Segment`** 数组一旦初始化了之后不会扩容，只有 **`HashEntry`** 数组会扩容，这就导致并发度过于死板，不能随着数据的增加而提高并发度
 
-#### 🛠️ JDK 1.7以后
+#### 🎪 JDK 1.7以后
 
 **`ConcurrentHashMap`** 做了更细粒度的锁控制，可以理解为 **`HashMap`** 的节点数组的每个位置都是一把锁，这样扩容了锁也会变多，并发度也会增加。
 
@@ -858,9 +864,9 @@ public class TreeSetExample2 {
   <img src="1721807523128-7b1419e7-e6ba-47e6-aba0-8b29423a8ce7.webp" alt="内存示意图" width="82%">
 </div>
 
-### ⚙️ 加锁机制
+### 🔐 加锁机制
 
-#### ⚙️ **分段锁加锁机制（JDK 1.7以前）**
+#### 🔒 **分段锁加锁机制（JDK 1.7以前）**
 
 在 **`ConcurrentHashMap`** 中，将整个数据结构分为多个 **`Segment`**，每个 **`Segment`** 都类似于一个小的 **`HashMap`**，每个 **`Segment`** 都有自己的锁，不同 **`Segment`** 之间的操作互不影响，从而提高并发性能。
 
@@ -892,7 +898,7 @@ public class TreeSetExample2 {
 - **基于 Segment**：**`ConcurrentHashMap`**是由多个 **`Segment`** 组成的，每个 **`Segment`** 中包含一个 **`HashMap`**。当某个**`Segment`** 内的 **`HashMap`** 达到扩容阈值时，单独为该 **`Segment`** 进行扩容，而不会影响其他 **`Segment`**。
 - **扩容过程**：每个 **`Segment`** 维护自己的负载因子，当 **`Segment`** 中的元素数量超过阈值时，该 **`Segment`** 的 **`HashMap`** 会扩容，整体的  **`ConcurrentHashMap`** 并不是一次性全部扩容。
 
-#### 🔒 **悲观锁和乐观锁（JDK 1.7以后）**
+#### 🎭 **悲观锁和乐观锁（JDK 1.7以后）**
 
 JDK 1.8 移除了 **`Segment`**，锁的粒度变得更加细化，锁只在链表或红黑树的**节点级别**上进行。通过 CAS 进行插入操作，只有在更新链表或红黑树时才使用 **`synchronized`** ，并且只锁住链表或树的**头节点**，进一步减少了锁的竞争，并发度大大增加。只要 hash 不冲突，就不会产生并发，就不会影响其他 Node 的读写，效率大幅提升。
 
@@ -919,7 +925,7 @@ JDK 1.8 移除了 **`Segment`**，锁的粒度变得更加细化，锁只在链�
 - **基于 CAS 的扩容**：在扩容时，**`ConcurrentHashMap`** 采用了类似 **`HashMap`** 的方式，但通过**CAS 操作**确保线程安全，避免了锁住整个数组。在扩容时，多个线程可以同时帮助完成扩容操作。
 - **渐进式扩容**：JDK 1.8 的 **`ConcurrentHashMap`** 引入了渐进式扩容机制，扩容时并不是一次性将所有数据重新分配，而是多个线程共同参与，逐步迁移旧数据到新数组中，降低了扩容时的性能开销。
 
-### 📌 为什么不允许键和值为 null
+### ❔ 为什么不允许键和值为 null
 
 **`ConcurrentHashMap`** 的 key 和 value 不能为 **`null`** 主要是为了避免二义性。**`null`** 是一个特殊的值，表示没有对象或没有引用。如果你用 **`null`** 作为键，那么你就无法区分这个键是否存在于 `ConcurrentHashMap` 中，还是根本没有这个键。
 
@@ -927,7 +933,7 @@ JDK 1.8 移除了 **`Segment`**，锁的粒度变得更加细化，锁只在链�
 
 ---
 
-## 🔨 synchronizedMap方法
+## 🛡️ synchronizedMap方法
 
 **`Collections.synchronizedMap()`** 是 **Java 提供的线程安全 `Map`**，它包装一个普通 `Map`（如 `HashMap`），并在 **所有操作上加锁**，确保线程安全。
 
