@@ -2,10 +2,10 @@
 date : '2025-03-15T20:49:08+08:00'
 draft : false
 title : '识物探趣（五）内容生成模块'
-image : “”
+image : ""
 categories : ["个人项目"]
 tags : []
-description : “”
+description : ""
 math : true
 ---
 
@@ -75,9 +75,9 @@ public EmbeddingStoreIngestor embeddingStoreIngestor(EmbeddingModel embeddingMod
 @Bean
 public EmbeddingStore<TextSegment> embeddingStore() {
     return QdrantEmbeddingStore.builder()
-            .host(“xxx”)
+            .host("xxx")
             .port(6334)
-            .collectionName(“xxx”)
+            .collectionName("xxx")
             .build();
 }
 
@@ -85,8 +85,8 @@ public EmbeddingStore<TextSegment> embeddingStore() {
 @Bean
 public EmbeddingModel embeddingModel() {
      return OllamaEmbeddingModel.builder()
-            .baseUrl(“http://127.0.0.1:11434”)
-            .modelName(“quentinz/bge-small-zh-v1.5”)
+            .baseUrl("http://127.0.0.1:11434")
+            .modelName("quentinz/bge-small-zh-v1.5")
             .build();
 }
 ```
@@ -112,7 +112,7 @@ public EmbeddingStoreContentRetriever contentRetriever(EmbeddingModel embeddingM
             .embeddingModel(embeddingModel)
             .dynamicFilter(query -> {
                 String userId = getUserId(query.metadata().chatMemoryId());
-                return metadataKey(“userId”).isEqualTo(userId);
+                return metadataKey("userId").isEqualTo(userId);
             })
             .minScore(0.75)
             .maxResults(2)
@@ -123,7 +123,7 @@ public EmbeddingStoreContentRetriever contentRetriever(EmbeddingModel embeddingM
 @Bean
 public WebSearchEngine webSearchEngine(){
     return TavilyWebSearchEngine.builder()
-            .apiKey(“XXX”)
+            .apiKey("XXX")
             .build();
 }
 
@@ -178,15 +178,15 @@ public DefaultRetrievalAugmentor defaultRetrievalAugmentor(EmbeddingStoreContent
 
 出于对用户使用体验的考虑，使用流式响应比一次性响应在用户体验上表现更好。
 
-langchain4j提供了实现流式响应的方法，**`Flux<String> chat(@V(“question”) String question)`**
+langchain4j提供了实现流式响应的方法，**`Flux<String> chat(@V("question") String question)`**
 
 可以使用Flux流式响应+SSE协议实现
 
 ```java
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = “*”)
-@RequestMapping(“/common”)
+@CrossOrigin(origins = "*")
+@RequestMapping("/common")
 public class DemoController {
     @Autowired
     private final StreamChatAssistant chatAssistant;
@@ -197,9 +197,9 @@ public class DemoController {
     @Autowired
     EmbeddingModel embeddingModel;
 
-    @GetMapping(value=”/chat”, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> chat(@RequestParam(“message”) String message) {
-        Document document = FileSystemDocumentLoader.loadDocument(“xxxxxx”);
+    @GetMapping(value="/chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> chat(@RequestParam("message") String message) {
+        Document document = FileSystemDocumentLoader.loadDocument("xxxxxx");
         EmbeddingStoreIngestor.ingest(document, embeddingStore);
         return chatAssistant.chat(message);
     }
@@ -245,7 +245,7 @@ public ChatMemoryProvider chatMemory(){
 
 ### 📌 目前的解决方案
 
-经过和师兄和老师的研讨，初次迭代考虑采用限流算法实现”削峰填谷”的作用。目前常用的限流算法有以下两种
+经过和师兄和老师的研讨，初次迭代考虑采用限流算法实现"削峰填谷"的作用。目前常用的限流算法有以下两种
 
 - **令牌桶算法**：维护一个固定容量的令牌桶，每秒钟会向令牌桶中放入一定数量的令牌。当有请求到来时，如果令牌桶中有足够的令牌，则请求被允许通过并从令牌桶中消耗一个令牌，否则请求被丢弃
 - **漏桶算法**：对于每个到来的请求，都将其加入到漏桶中，并检查漏桶中当前的水量是否超过了漏桶的容量。如果超过了容量，就将多余的数据包丢弃。如果漏桶中还有水，就以一定的速率从桶底输出请求，保证输出的速率不超过预设的速率，从而达到限流的目的。
