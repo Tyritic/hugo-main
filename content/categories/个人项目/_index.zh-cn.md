@@ -1,5 +1,5 @@
 ---
-title: "个人项目"
+title: 个人项目
 image: "OIP-C.jpg"
 style:
     background: "#2a9d8f"
