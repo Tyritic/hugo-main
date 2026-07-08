@@ -4,7 +4,7 @@ draft : false
 title : 'Superpowers与OpenSpec的配合使用'
 image : 
 categories : ["AI Coding"]
-tags : ["Vibe Coding","Superpowers"]
+tags : ["Superpowers"]
 description: "把 OpenSpec 的规范驱动与 Superpowers 的工程工作流结合起来，让 AI 编程从'自由发挥'走向'先立规矩、再干活'。"
 ---
 
