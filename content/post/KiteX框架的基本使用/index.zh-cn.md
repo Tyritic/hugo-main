@@ -9,43 +9,181 @@ description : "Kitex框架的初步使用"
 math : true
 ---
 
-## 📘 Kitex框架介绍
+## 🏗️ Go的项目结构
 
-Kitex [kaɪt'eks] 是字节跳动内部的 Golang 微服务 **RPC** 框架，已经在 GitHub 上开源，具有高性能、强可扩展的特点，在字节内部已广泛使用。支持 **Thrift**、**gRPC**、**Kitex Protobuf** 协议
+```text
+|--src（源代码）
+|	|--app（项目的主要服务，通常使用Hertz框架生成暴露的HTTP服务）
+|		|---api
+|			|----go_api(HTTP服务)
+|		|----faas(faas服务)
+|		|----rpc(RPC服务)
+|
+|	|--biz(业务逻辑代码)
+|   |--dao(数据库交互)
+|	|--...(其他模块)
+
+```
+
+---
+
+## 🗂️ RPC服务的项目结构
+
+```text
+|--rpc（rpc服务集合）
+|	|--service_name（单个RPC服务）
+|		|---client(RPC客户端)
+|		|---dal(数据交互层)
+|		|----headlers(RPC服务的具体实现)
+|		|----model(数据类型)
+|		|----tool(工具层)
+|		|----handler.go
+|		|----kitex_gen
+|	|--biz(业务逻辑代码)
+|   |--dao(数据库交互)
+|	|--...(其他模块)
+```
+
+### 🧩 kitex_gen 代码结构
+
+```text
+|-- kitex_gen // Dir for Generated code, which should not be modified. 
+|   |-- base
+|   |   |-- base.go
+|   |   |-- k-base.go
+|   |   |-- k-consts.go
+|   |-- P
+|       |-- S
+|           |-- M
+│               ├── k-consts.go
+│               ├── k-stock.go // kitex 专用的一些拓展内容,FastCodec 序列化代码
+│               ├── stock.go // 根据 IDL 生成的编解码文件，由 IDL 编译器生成（结构体桩代码和普通的序列化）
+│               └── stockservice // kitex 封装代码主要在这里(Kitex Client/Server的脚手架)
+│                   ├── client.go
+│                   ├── invoker.go
+│                   ├── server.go
+│                   └── stockservice.go
+```
 
 ---
 
-## ⭐ Kitex框架特点
+## 🔨 代码框架生成了什么
 
-- **高性能**
+生成代码主要分为两个部分
 
-使用自研的高性能网络库 **Netpoll**，性能相较 go net 具有显著优势，性能情况详见 [Kitex-benchmark](https://github.com/cloudwego/kitex-benchmark)。
+- **结构体桩代码 + 普通的序列化代码**
+- **创建 Kitex Client/Server 的脚手架**
 
-- **多消息协议**
+以 `stock.thrift` 为例
 
-RPC 消息协议默认支持 **Thrift**、**Kitex Protobuf**、**gRPC**。Thrift 支持 Buffered 和 Framed 二进制协议；Kitex Protobuf 是 Kitex 自定义的 Protobuf 消息协议，协议格式类似 Thrift；gRPC 是对 gRPC 消息协议的支持，可以与 gRPC 互通。除此之外，使用者也可以扩展自己的消息协议。
+```thrift
+namespace go example.shop.stock
+include "base.thrift"
+struct GetStockReq {
+    1: required i64 item_id
+}
 
-- **多传输协议**
+struct GetStockResp {
+    1: required i64 stock,
+    2: base.BaseResp baseResp
+}
 
-传输协议封装消息协议进行 RPC 互通，传输协议可以额外透传元信息，用于服务治理，Kitex 支持的传输协议有 **TTHeader**、**HTTP2**。TTHeader 可以和 Thrift、Kitex Protobuf 结合使用；HTTP2 目前主要是结合 gRPC 协议使用，后续也会支持 Thrift。
+service StockService {
+    GetStockResp GetStock(1: GetStockReq req)
+}
+```
 
-- **多种消息类型**
+### 📖 结构体桩代码
 
-支持 **PingPong**、**Oneway**、**双向 Streaming**。其中 Oneway 目前只对 Thrift 协议支持，双向 Streaming 支持 gRPC 和 Thrift（[Kitex - Thrift over gRPC streaming 使用说明](https://bytedance.larkoffice.com/wiki/HfwVw8nXWizuNwkxzmTcrzPtnMe) ）。
+```go
+type Item struct {
+	Id          int64  `thrift:"id,1" frugal:"1,default,i64" json:"id"`
+	Title       string `thrift:"title,2" frugal:"2,default,string" json:"title"`
+	Description string `thrift:"description,3" frugal:"3,default,string" json:"description"`
+	Stock       int64  `thrift:"stock,4" frugal:"4,default,i64" json:"stock"`
+}
 
-- **服务治理**
+func NewItem() *Item {
+	return &Item{}
+}
 
-支持服务注册/发现、负载均衡、熔断、限流、重试、监控、链路跟踪、日志、诊断等服务治理模块，以上能力均与内部的基础设施打通，内部使用者直接使用即可，详细可见[用户使用指南](https://bytedance.feishu.cn/wiki/wikcnl64glyMqlUf4V1kJrlrEnb)。
+func (p *Item) InitDefault() {
+}
 
-- **代码生成**
+func (p *Item) GetId() (v int64) {
+	return p.Id
+}
 
-Kitex 内置代码生成工具，可支持生成 **Thrift**、**Protobuf** 以及脚手架代码。
+func (p *Item) GetTitle() (v string) {
+	return p.Title
+}
 
-- **扩展性**
+func (p *Item) GetDescription() (v string) {
+	return p.Description
+}
 
-提供了较多的扩展接口以及默认扩展实现，使用者也可以根据需要自行定制扩展。
+func (p *Item) GetStock() (v int64) {
+	return p.Stock
+}
+func (p *Item) SetId(val int64) {
+	p.Id = val
+}
+func (p *Item) SetTitle(val string) {
+	p.Title = val
+}
+func (p *Item) SetDescription(val string) {
+	p.Description = val
+}
+func (p *Item) SetStock(val int64) {
+	p.Stock = val
+}
 
----
+func (p *Item) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("Item(%+v)", *p)
+}
+
+var fieldIDToName_Item = map[int16]string{
+	1: "id",
+	2: "title",
+	3: "description",
+	4: "stock",
+}
+```
+
+### 🔍 常见方法
+
+- **`Get/Set`**：作为 Getter 和 Setter，获取字段值
+  - 被 option 修饰的字段会被转换为指针，Get 方法获取的是其值
+- **`String`**：输出对象的字符串
+
+|                            方法名                            |                  描述&用途                   | CodeGen 内容长度 |
+| :----------------------------------------------------------: | :------------------------------------------: | :--------------: |
+|                         InitDefault                          |               Frugal 场景需要                |        短        |
+|              GetXXXField/SetXXXField/IsSetXXXX               |      GetterSetter，部分 interface 需要       |        短        |
+|              Read/ReadFieldX/Write/writeFieldX               |              原生 Apache Codec               |        长        |
+|                            String                            |                   Stringer                   |        短        |
+|                 DeepEqual/FieldXXXDeepEqual                  |                 set 去重提速                 |        长        |
+|                           DeepCopy                           |                RPAL 场景需要                 |        短        |
+|                      ThriftService 模板                      |        ServiceInterface 描述接口定义         |        短        |
+|             XXXClientFactory、XXXClientProtocol              |       旧的 ThriftClient 代码，不再有用       |       较长       |
+|                         XXXProcessor                         |     旧的 Thrift Processor 代码，不再有用     |       较长       |
+|                 XXXServiceMethodArgs/Result                  | Thrift 为Method 的入参和返回值单独生成的类型 |        短        |
+|                  GetFirstArgument/GetResult                  |              args、result 专用               |        短        |
+| FastRead/FastReadFieldX/FastWrite/FastWriteNocopy/BLength/fastWriteFieldX/fieldXLength |               FastCodec 编解码               |        长        |
+|                GetOrSetBase/GetOrSetBaseResp                 |      特殊的 Base 相关接口，框架内部使用      |        短        |
+
+### 🛠️ 脚手架
+
+```text
+── stockservice // kitex 封装代码主要在这里(Kitex Client/Server的脚手架)
+│              ├── client.go // 远程调用
+│              ├── invoker.go
+│              ├── server.go
+│              └── stockservice.go
+```
 
 ## 🚀 单RPC服务开发流程
 
@@ -55,6 +193,13 @@ Kitex 内置代码生成工具，可支持生成 **Thrift**、**Protobuf** 以�
 
 ```bash
 go install github.com/cloudwego/kitex/tool/cmd/kitex@latest
+```
+
+安装成功后，执行 `kitex --version` 可以看到具体版本号的输出（版本号有差异，以 x.x.x 示例）：
+
+```bash
+$ kitex --version
+vx.x.x
 ```
 
 ### 📄 编写idl文件
