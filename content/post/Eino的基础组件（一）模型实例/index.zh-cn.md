@@ -1,7 +1,7 @@
 ---
 date : '2026-08-11T14:00:00+08:00'
 draft : false
-title : 'Eino 的基础组件（一）ToolCallingChatModel 和 AgenticModel'
+title : 'Eino 的基础组件（一）模型实例'
 image : ""
 categories : ["Eino框架"]
 tags : []
