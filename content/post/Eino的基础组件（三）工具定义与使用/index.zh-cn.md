@@ -16,9 +16,7 @@ Eino 对此做了非常清晰的分层设计。工具的定义、参数推理、
 
 ---
 
-## 🧠 工具在 Eino 中的分层
-
-### 👁️ 概念模型
+## 🧠 工具体系的分层
 
 Eino 的工具体系分为三个明确的层次：
 
@@ -42,11 +40,11 @@ Eino 的工具体系分为三个明确的层次：
 
 ---
 
-## 🏗️ BaseTool、ToolInfo 与接口层次
+## 🏗️ 工具接口体系
 
 ### 🔑 BaseTool 接口
 
-所有工具必须实现 `BaseTool` 接口：
+所有工具必须实现 `BaseTool` 接口：这个接口定义了"工具长什么样"
 
 ```go
 // BaseTool is the base interface for tools.
@@ -67,7 +65,7 @@ type BaseTool interface {
 
 关键点：
 
-- **Info() 返回 ToolInfo**：这个方法极其关键。框架会调用它来了解工具的元信息。为了性能，通常应该缓存结果而不是每次都重新计算。
+- **Info() 返回 ToolInfo**：这个方法极其关键。框架会调用它来了解工具的元信息。为了性能，通常应该缓存结果而不是每次都重新计算。模型根据这些元信息来判断什么时候该调用哪个工具。
 - **Info 是不可变的**：一旦工具创建，它的 ToolInfo 不应该改变。这保证了整个流程的可预测性。
 
 ### 📖 ToolInfo 结构
@@ -75,6 +73,19 @@ type BaseTool interface {
 `ToolInfo` 是工具的身份证，告诉模型这个工具是什么、有什么参数。当前 Eino 将参数模式封装在 `ParamsOneOf` 中，通常使用 `schema.NewParamsOneOfByJSONSchema` 创建：
 
 ```go
+type ToolInfo struct {
+    // 工具的唯一名称，用于清晰地表达其用途
+    Name string
+    // 用于告诉模型如何/何时/为什么使用这个工具
+    // 可以在描述中包含少量示例
+    Desc string
+    // 工具接受的参数定义
+    // 可以通过两种方式描述：
+    // 1. 使用 ParameterInfo：schema.NewParamsOneOfByParams(params)
+    // 2. 使用 OpenAPIV3：schema.NewParamsOneOfByOpenAPIV3(openAPIV3)
+    *ParamsOneOf
+}
+
 info := &schema.ToolInfo{
 	Name: "get_weather",
 	Desc: "Get current weather for a location",
@@ -82,19 +93,92 @@ info := &schema.ToolInfo{
 }
 ```
 
-上面的 `weatherParamsSchema` 是一个 JSON Schema。实际代码中应按所使用的 `eino-contrib/jsonschema` 版本构造它；不要把 `ParamsOneOf` 直接写成 `[]*jsonschema.Schema`。
+上面的 `weatherParamsSchema` 是一个 JSON Schema。实际代码中应按所使用的 `eino-contrib/jsonschema` 版本构造它；不要把 `ParamsOneOf` 直接写成 `[]*jsonschema.Schema`。核心三个字段的含义：
 
-核心三个字段的含义：
+- **Name**：工具的唯一标识符。模型会输出这个名字，框架据此找到对应的工具实现。约定用 `snake_case`，比如 `get_weather`、`query_order`。
 
-**Name**：工具的唯一标识符。模型会输出这个名字，框架据此找到对应的工具实现。约定用 `snake_case`，比如 `get_weather`、`query_order`。
+- **Desc**：对工具功能的自然语言描述。模型会读这个描述来决定是否需要使用这个工具。好的描述应该包含工具的主要功能、输入输出等，比如："Get current weather and forecast for a location in temperature unit (C or F)"。
 
-**Desc**：对工具功能的自然语言描述。模型会读这个描述来决定是否需要使用这个工具。好的描述应该包含工具的主要功能、输入输出等，比如："Get current weather and forecast for a location in temperature unit (C or F)"。
+- **ParamsOneOf**：参数模式的封装对象，描述工具接受的 JSON 参数结构。通常使用 `schema.NewParamsOneOfByJSONSchema` 从 JSON Schema 构造；需要支持多种调用方式时，可以在这个封装对象中表达多个参数模式。
 
-**ParamsOneOf**：参数模式的封装对象，描述工具接受的 JSON 参数结构。通常使用 `schema.NewParamsOneOfByJSONSchema` 从 JSON Schema 构造；需要支持多种调用方式时，可以在这个封装对象中表达多个参数模式。
+在大模型的 function call 调用过程中，由大模型生成需要调用的 function call 的参数，这就要求大模型能理解生成的参数是否符合约束。在 Eino 中，根据开发者的使用习惯和领域标准两方面因素，提供了 `params map[string]*ParameterInfo` 和 `*jsonschema.Schema` 两种参数约束的表达方式。
 
-### 🔨 InvokableTool 与 StreamableTool
+**方式 1 - map[string]\*ParameterInfo**
 
-定义了工具如何被执行：
+在很多开发者的直观习惯中，对于参数的描述方式可以用一个 map 来表示，key 即为参数名，value 则是这个参数的详细约束。Eino 中定义了 ParameterInfo 来表示一个参数的描述，如下：
+
+```go
+// 结构定义详见: https://github.com/cloudwego/eino/blob/main/schema/tool.go
+type ParameterInfo struct {
+    Type DataType    // The type of the parameter.
+    ElemInfo *ParameterInfo    // The element type of the parameter, only for array.
+    SubParams map[string]*ParameterInfo    // The sub parameters of the parameter, only for object.
+    Desc string    // The description of the parameter.
+    Enum []string    // The enum values of the parameter, only for string.
+    Required bool    // Whether the parameter is required.
+}
+```
+
+比如，一个表示 User 的参数可以表示为：
+
+```go
+map[string]*schema.ParameterInfo{
+    "name": &schema.ParameterInfo{
+        Type: schema.String,
+        Required: true,
+    },
+    "age": &schema.ParameterInfo{
+        Type: schema.Integer,
+    },
+    "gender": &schema.ParameterInfo{
+        Type: schema.String,   
+        Enum: []string{"male", "female"},
+    },
+}
+```
+
+**方式 2 - JSON Schema**
+
+另一种常用于表示参数约束的方式是 JSON Schema（[https://json-schema.org/draft/2020-12](https://json-schema.org/draft/2020-12)）。
+
+JSON Schema 的标准中对参数的约束方式非常丰富。在实际的使用中，一般不由开发者自行构建此结构体，而是使用一些方法来生成。
+
+Eino 提供了在结构体中通过 go tag 描述参数约束的方式，并提供了 GoStruct2ParamsOneOf 方法来生成一个 struct 的参数约束，其函数签名如下：
+
+```go
+func GoStruct2ParamsOneOf[T any](opts ...Option) (*schema.ParamsOneOf, error)
+```
+
+其中从 T 中提取参数的字段名称和描述，提取时所用的 Tag 如下：
+
+- `jsonschema_description:"xxx"`[推荐] 或者`jsonschema:"description=xxx"`
+  - description 中一般会有逗号，且 tag 中逗号是不同字段的分隔符，且不可被转义，强烈推荐使用 jsonschema_description 这个单独的 Tag 标签
+- `jsonschema:"enum=xxx,enum=yyy,enum=zzz"`
+- `jsonschema:"required"`
+- `json:"xxx,omitempty"` => 可用 json tag 的 omitempty 代表非 required
+
+```go
+package main
+
+import (
+    "context"
+    "github.com/cloudwego/eino/components/tool/utils"
+)
+
+type User struct {
+    Name   string `json:"name" jsonschema_description:"the name of the user" jsonschema:"required"`
+    Age    int    `json:"age" jsonschema_description:"the age of the user"`
+    Gender string `json:"gender" jsonschema:"enum=male,enum=female"`
+}
+
+func main() {
+    params, err := utils.GoStruct2ParamsOneOf[User]()
+}
+```
+
+### 🔨 标准工具接口
+
+标准工具接口返回字符串类型的结果：
 
 ```go
 // InvokableTool represents a tool that can be invoked with JSON parameters.
@@ -143,75 +227,220 @@ type StreamableTool interface {
 - **结果是字符串**：通常是 JSON 序列化后的结果，或者纯文本。模型会读这个字符串作为工具的返回值。
 - **Error 会反馈给模型**：如果你的工具返回 error，框架会把错误消息发给模型，模型可能会重新调用或使用其他工具。
 
+#### ⚡ 增强型工具接口（Enhanced Tool）
+
+增强型工具接口支持返回结构化的多模态结果（`*schema.ToolResult`），可以包含文本、图片、音频、视频和文件等多种类型的内容：
+
+```go
+// EnhancedInvokableTool 是支持返回结构化多模态结果的工具接口
+// 与返回字符串的 InvokableTool 不同，此接口返回 *schema.ToolResult
+// 可以包含文本、图片、音频、视频和文件
+type EnhancedInvokableTool interface {
+    BaseTool
+    InvokableRun(ctx context.Context, toolArgument *schema.ToolArgument, opts ...Option) (*schema.ToolResult, error)
+}
+
+// EnhancedStreamableTool 是支持返回结构化多模态结果的流式工具接口
+// 提供流式读取器以逐步访问多模态内容
+type EnhancedStreamableTool interface {
+    BaseTool
+    StreamableRun(ctx context.Context, toolArgument *schema.ToolArgument, opts ...Option) (*schema.StreamReader[*schema.ToolResult], error)
+}
+```
+
+相关的数据结构如下
+
+```go
+// ToolArgument 包含工具调用的输入信息
+type ToolArgument struct {
+    // TextArgument 包含 JSON 格式的工具调用参数
+    TextArgument string
+}
+
+// ToolResult 表示工具执行的结构化多模态输出
+// 当工具需要返回不仅仅是简单字符串时使用，
+// 例如图片、文件或其他结构化数据
+type ToolResult struct {
+    // Parts 包含多模态输出部分。每个部分可以是不同类型的内容，
+    // 如文本、图片或文件
+    Parts []ToolOutputPart `json:"parts,omitempty"`
+}
+
+// ToolPartType 定义工具输出部分的内容类型
+type ToolPartType string
+
+const (
+    ToolPartTypeText  ToolPartType = "text"   // 文本
+    ToolPartTypeImage ToolPartType = "image"  // 图片
+    ToolPartTypeAudio ToolPartType = "audio"  // 音频
+    ToolPartTypeVideo ToolPartType = "video"  // 视频
+    ToolPartTypeFile  ToolPartType = "file"   // 文件
+)
+
+// ToolOutputPart 表示工具执行输出的一部分
+type ToolOutputPart struct {
+    Type  ToolPartType     `json:"type"`            // 内容类型
+    Text  string           `json:"text,omitempty"`  // 文本内容
+    Image *ToolOutputImage `json:"image,omitempty"` // 图片内容
+    Audio *ToolOutputAudio `json:"audio,omitempty"` // 音频内容
+    Video *ToolOutputVideo `json:"video,omitempty"` // 视频内容
+    File  *ToolOutputFile  `json:"file,omitempty"`  // 文件内容
+    Extra map[string]any   `json:"extra,omitempty"` // 扩展信息
+}
+
+// 多媒体内容结构体，都包含 URL 或 Base64 数据以及 MIME 类型信息
+type ToolOutputImage struct { MessagePartCommon }
+type ToolOutputAudio struct { MessagePartCommon }
+type ToolOutputVideo struct { MessagePartCommon }
+type ToolOutputFile  struct { MessagePartCommon }
+```
+
 ---
 
 ## 🔧 InferTool 与 NewTool：工具的两种创建方式
 
-### 🌐 设计哲学
-
 Eino 提供两种方式来创建工具，分别针对不同的使用场景：
 
-**InferTool**：从一个 Go 函数的签名**自动推断**参数 Schema 和执行逻辑。非常方便，但需要遵循特定的函数签名约束。
+- **InferTool**：从一个 Go 函数的签名**自动推断**参数 Schema 和执行逻辑。非常方便，但需要遵循特定的函数签名约束。
 
-**NewTool**：手工构造 `ToolInfo` 和执行函数，给你最大的灵活性。
+- **NewTool**：手工构造 `ToolInfo` 和执行函数，给你最大的灵活性。
 
 两者都在 `github.com/cloudwego/eino/components/tool/utils` 包中。
 
-### 🧪 InferTool：自动推断工具
+### ⚙️ NewTool：手工构造工具
 
-`InferTool[T, D]` 接收工具名、描述和一个符合 `InvokeFunc[T, D]` 的函数。它会根据输入类型推导参数 Schema，并负责 JSON 参数解析和返回值序列化：
+当一个函数满足下面这种函数签名时，就可以用 NewTool 把其变成一个 InvokableTool：
 
 ```go
-import "github.com/cloudwego/eino/components/tool/utils"
+type InvokeFunc[T, D any] func(ctx context.Context, input T) (output D, err error)
+```
 
-// 定义工具的参数结构体
-type GetWeatherRequest struct {
-	Location string `json:"location" description:"The city or region name"` // 💡 description 标签会进入 Schema
-	Unit     string `json:"unit" description:"Temperature unit: C or F"`
-}
+NewTool 的方法如下：
 
-// 定义工具的返回值结构体
-type GetWeatherResponse struct {
-	Location    string  `json:"location"`
-	Temperature float64 `json:"temperature"`
-	Condition   string  `json:"condition"`
-	Unit        string  `json:"unit"`
-}
+```go
+// 代码见: github.com/cloudwego/eino/components/tool/utils/invokable_func.go
+func NewTool[T, D any](desc *schema.ToolInfo, i InvokeFunc[T, D], opts ...Option) tool.InvokableTool
+```
 
-// 工具的执行函数 - 这个函数的签名会被 InferTool 使用
-func GetWeatherImpl(ctx context.Context, req *GetWeatherRequest) (*GetWeatherResponse, error) {
-	// ✅ 参数已经由框架解析为结构体，直接使用
-	// ✅ 返回值会由框架自动序列化为 JSON
-	
-	if req.Location == "" {
-		return nil, fmt.Errorf("location is required")
-	}
-	if req.Unit != "C" && req.Unit != "F" {
-		return nil, fmt.Errorf("unit must be C or F, got: %s", req.Unit)
-	}
+同理 NewStreamTool 可创建 StreamableTool。
 
-	// 这里是真实的工具逻辑
-	temp := 25.0
-	if req.Unit == "F" {
-		temp = 77.0
-	}
+```go
+package main
 
-	return &GetWeatherResponse{
-		Location:    req.Location,
-		Temperature: temp,
-		Condition:   "Sunny",
-		Unit:        req.Unit,
-	}, nil
-}
+import (
+    "context"
+    "encoding/json"
+    "fmt"
+    "log"
 
-// 创建工具
-weatherTool, err := utils.InferTool[*GetWeatherRequest, *GetWeatherResponse](
-	"get_weather",
-	"Get current weather for a given location",
-	GetWeatherImpl,
+    "github.com/cloudwego/eino/components/tool/utils"
+    "github.com/cloudwego/eino/schema"
 )
-if err != nil {
-	log.Fatal(err)
+
+// 工具的入参结构体
+type WeatherRequest struct {
+    City string `json:"city"`
+}
+
+// 工具的返回结构体
+type WeatherResponse struct {
+    City    string `json:"city"`
+    Temp    string `json:"temp"`
+    Weather string `json:"weather"`
+}
+
+// 工具的实际执行逻辑
+func getWeather(ctx context.Context, req *WeatherRequest) (*WeatherResponse, error) {
+    // 这里用硬编码模拟，实际项目中你会去调天气 API
+    mockData := map[string]WeatherResponse{
+       "北京": {City: "北京", Temp: "22°C", Weather: "晴"},
+       "上海": {City: "上海", Temp: "26°C", Weather: "多云"},
+       "深圳": {City: "深圳", Temp: "30°C", Weather: "阵雨"},
+    }
+
+    if data, ok := mockData[req.City]; ok {
+       return &data, nil
+    }
+    return &WeatherResponse{City: req.City, Temp: "未知", Weather: "未知"}, nil
+}
+
+func main() {
+    ctx := context.Background()
+
+    // 用 NewTool 创建 InvokableTool
+    weatherTool := utils.NewTool(
+       &schema.ToolInfo{
+          Name: "get_weather",
+          Desc: "查询指定城市的实时天气信息，包括温度和天气状况",
+          ParamsOneOf: schema.NewParamsOneOfByParams(map[string]*schema.ParameterInfo{
+             "city": {
+                Type:     schema.String,
+                Desc:     "要查询天气的城市名称，如：北京、上海、深圳",
+                Required: true,
+             },
+          }),
+       },
+       getWeather,
+    )
+
+    // 验证工具信息
+    info, _ := weatherTool.Info(ctx)
+    fmt.Printf("工具名: %s\n", info.Name)
+    fmt.Printf("工具描述: %s\n", info.Desc)
+
+    // 模拟模型生成的工具调用参数（JSON 字符串）
+    args := `{"city": "北京"}`
+
+    // 执行工具
+    result, err := weatherTool.InvokableRun(ctx, args)
+    if err != nil {
+       log.Fatal(err)
+    }
+
+    fmt.Printf("执行结果: %s\n", result)
+
+    // 解析结果
+    var resp WeatherResponse
+    json.Unmarshal([]byte(result), &resp)
+    fmt.Printf("城市: %s, 温度: %s, 天气: %s\n", resp.City, resp.Temp, resp.Weather)
+}
+```
+
+### 🧪 InferTool：自动推断工具
+
+从 NewTool 中可以看出，构建一个 tool 的过程需要分别传入 ToolInfo 和 InvokeFunc，其中，ToolInfo 中包含 ParamsOneOf 的部分，这代表着函数的入参约束，同时，InvokeFunc 的函数签名中也有 input 的参数，这就意味着：ParamsOneOf 的部分和 InvokeFunc 的 input 参数需要保持一致。
+
+当一个函数完全由开发者自行实现的时候，就需要开发者手动维护 input 参数和 ParamsOneOf 以保持一致。更优雅的解决方法是 “参数约束直接维护在 input 参数类型定义中”，可参考上方 GoStruct2ParamsOneOf 的介绍。
+
+当参数约束信息包含在 input 参数类型定义中时，就可以使用 InferTool 来实现，函数签名如下：
+
+```go
+func InferTool[T, D any](toolName, toolDesc string, i InvokeFunc[T, D], opts ...Option) (tool.InvokableTool, error)
+```
+
+```go
+import (
+    "github.com/cloudwego/eino/components/tool"
+    "github.com/cloudwego/eino/components/tool/utils"
+    "github.com/cloudwego/eino/schema"
+)
+
+type User struct {
+    Name   string `json:"name" jsonschema:"required,description=the name of the user"`
+    Age    int    `json:"age" jsonschema:"description=the age of the user"`
+    Gender string `json:"gender" jsonschema:"enum=male,enum=female"`
+}
+
+type Result struct {
+    Msg string `json:"msg"`
+}
+
+func AddUser(ctx context.Context, user *User) (*Result, error) {
+    // some logic
+}
+
+func createTool() (tool.InvokableTool, error) {
+    return utils.InferTool("add_user", "add user", AddUser)
 }
 ```
 
@@ -234,85 +463,6 @@ func(ctx context.Context, params T) (D, error)
 - 返回值为两个：返回数据和 error
 - 参数结构体的字段名 **必须是 public 的**（大写开头）
 
-### ⚙️ NewTool：手工构造工具
-
-当 InferTool 的约束无法满足时（比如你需要可变参数、或者参数结构复杂），可以用 `NewTool` 手工定义：
-
-```go
-// NewTool creates an InvokableTool from an explicit ToolInfo and typed function.
-func NewTool[T, D any](
-	info *schema.ToolInfo,
-	impl func(ctx context.Context, params T) (D, error),
-	opts ...Option,
-) tool.InvokableTool
-```
-
-一个完整的例子——订单查询工具，展示如何手工处理复杂参数：
-
-```go
-// 定义灵活的参数（允许部分参数可选）
-type QueryOrderRequest struct {
-	OrderID    string                 `json:"order_id"`
-	UserID     string                 `json:"user_id"`
-	Filters    map[string]interface{} `json:"filters"`      // 灵活的额外过滤条件
-}
-
-type QueryOrderResponse struct {
-	OrderID    string  `json:"order_id"`
-	UserID     string  `json:"user_id"`
-	Status     string  `json:"status"`
-	TotalPrice float64 `json:"total_price"`
-	CreatedAt  string  `json:"created_at"`
-}
-
-// 手工实现工具的执行逻辑
-func queryOrderImpl(ctx context.Context, params QueryOrderRequest) (*QueryOrderResponse, error) {
-	// ✅ 这里接收的是已经反序列化的结构体，不是 JSON 字符串
-	if params.OrderID == "" && params.UserID == "" {
-		return nil, fmt.Errorf("either order_id or user_id must be provided")
-	}
-
-	// 模拟数据库查询
-	order := &QueryOrderResponse{
-		OrderID:    params.OrderID,
-		UserID:     params.UserID,
-		Status:     "completed",
-		TotalPrice: 99.99,
-		CreatedAt:  "2026-08-18T10:30:00Z",
-	}
-
-	return order, nil
-}
-
-// 手工定义参数 Schema（使用 JSON Schema）
-orderParamsSchema := &jsonschema.Schema{
-	Type: jsonschema.Object,
-	Properties: map[string]*jsonschema.Schema{
-		"order_id": {
-			Type:        jsonschema.String,
-			Description: "The order ID to query",
-		},
-		"user_id": {
-			Type:        jsonschema.String,
-			Description: "The user ID to filter orders",
-		},
-		"filters": {
-			Type:        jsonschema.Object,
-			Description: "Additional filters (optional)",
-		},
-	},
-}
-
-orderTool := utils.NewTool[QueryOrderRequest, QueryOrderResponse](
-	&schema.ToolInfo{
-		Name: "query_order",
-		Desc: "Query order details by order ID or user ID",
-		ParamsOneOf: schema.NewParamsOneOfByJSONSchema(orderParamsSchema),
-	},
-	queryOrderImpl,
-)
-```
-
 ### 🆚 InferTool vs NewTool 选择标准
 
 | 场景 | 推荐 | 理由 |
@@ -322,6 +472,73 @@ orderTool := utils.NewTool[QueryOrderRequest, QueryOrderResponse](
 | 需要自定义参数校验逻辑 | NewTool | 可以在执行函数中自定义 |
 | 需要多种调用方式（ParamsOneOf 多个 Schema） | NewTool | InferTool 只生成一个 Schema |
 | 快速原型、Demo | InferTool | 效率高 |
+
+---
+
+## 📋 关键方法
+
+- **Info 方法**
+
+  - 功能：获取工具的描述信息
+
+  - 参数：
+    - ctx：上下文对象
+
+  - 返回值：
+    - `*schema.ToolInfo`：工具的描述信息
+    - error：获取信息过程中的错误
+
+- **InvokableRun 方法（标准工具）**
+
+  - 功能：同步执行工具
+
+  - 参数：
+    - ctx：上下文对象，用于传递请求级别的信息，同时也用于传递 Callback Manager
+    - `argumentsInJSON`：JSON 格式的参数字符串
+    - opts：工具执行的选项
+
+  - 返回值：
+    - string：执行结果
+    - error：执行过程中的错误
+
+- **InvokableRun 方法（增强型工具）**
+
+  - 功能：同步执行工具，返回多模态结果
+
+  - 参数：
+    - ctx：上下文对象
+    - `toolArgument`：包含 JSON 格式参数的 `*schema.ToolArgument`
+    - opts：工具执行的选项
+
+  - 返回值：
+    - `*schema.ToolResult`：包含多模态内容的执行结果
+    - error：执行过程中的错误
+
+- **StreamableRun 方法（标准工具）**
+
+  - 功能：以流式方式执行工具
+
+  - 参数：
+    - ctx：上下文对象
+    - `argumentsInJSON`：JSON 格式的参数字符串
+    - opts：工具执行的选项
+
+  - 返回值：
+    - `*schema.StreamReader[string]`：流式执行结果
+    - error：执行过程中的错误
+
+- **StreamableRun 方法（增强型工具）**
+
+  - 功能：以流式方式执行工具，返回多模态结果流
+
+  - 参数：
+    - ctx：上下文对象
+    - `toolArgument`：包含 JSON 格式参数的 `*schema.ToolArgument`
+    - opts：工具执行的选项
+
+  - 返回值：
+    - `*schema.StreamReader[*schema.ToolResult]`：流式多模态执行结果
+    - error：执行过程中的错误
 
 ---
 
@@ -712,6 +929,7 @@ func main() {
 
 ```go
 weatherTool, err := utils.InferTool[*GetWeatherRequest, *GetWeatherResponse](
+    "get_weather",
     "Get current weather for a given location in temperature unit (C or F)",
     GetWeatherImpl,
 )
